@@ -1,0 +1,68 @@
+<기업 무료사용 가능 폰트>
+
+나눔
+서울
+대한체
+빙그레체
+고도체
+고도마음체
+포천막걸리체
+야놀자야체
+제주한라산체
+제주고딕체
+미생체
+대한민국독도체
+배달의민족 주아체
+배달의민족 도현체
+배달의민족 한나체
+연성체
+고양체
+더페이스샵 잉크립퀴드체
+아리따 돋움
+어도비 본고딕
+구글 노토산스
+스포카 한 산스 poqa han sans
+티몬 몬소리체
+스웨거체
+다음체
+함초롱바탕
+봄바람체 2.0
+gamja flower
+한글누리체 (국립한글박물관)
+김제시
+롯데마트레
+만화진흥원체
+전라북도체
+한돈삼겹살체
+
+------------------
+윤고딕 안됨!!
+헬베티카 안됨!!
+AVenir 안됨!!
+------------------
+
+<구글폰트>
+
+Alegreya sans
+Changa one
+chakra petch
+anton
+advent Pro
+el messiri
+Bungee
+Bungee Shade
+bangers
+dancing script
+Days one
+fredericka the great
+kelly slab
+shrikhand
+monoton
+kalam
+lobster two
+lobster
+righteous
+gamja flower
+
+
+
