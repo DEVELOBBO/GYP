@@ -11,6 +11,14 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 	<!--  여기에 본인 mapper파일위치등록-->
 	<mappers>
 		<!--  <mapper resource="com/exe/mybatis/noticeMapper.xml"/> -->
+		<!-- 로그인 Mapper 추가 -->
+		<mapper resource="com/exe/mybatis/loginMapper.xml"/>
+		
+		<!-- 유저 회원 Mapper 추가 -->
+		<mapper resource="com/exe/mybatis/customerMapper.xml"/>
+		
+		<!-- 체육관 회원 Mapper 추가 -->
+		<mapper resource="com/exe/mybatis/gymMapper.xml"/>
 		
 	</mappers>
 </configuration>

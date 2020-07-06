@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="gymMapper">
+
+<!-- 체육관 회원 데이터 불러오기 -->
+<select id="getgymReadData" parameterType="hashMap" resultType="com.exe.dto.GymDTO"> 
+	select gymId,gymName,gymPwd,gymEmail,gymTel,gymAddr,gymCreated from GYM where gymId=#{sessionId}
+</select>
+
+
+<!-- 회원정보 수정(비밀번호) -->
+<!--  
+<update id="updateData" parameterType="com.exe.dto.CustomerDTO">
+	update CUSTOMER set cusPwd=#{cusPwd} where cusId=#{cusId}
+</update>
+
+회원정보 삭제
+<delete id="deleteData" parameterType="com.exe.dto.CustomerDTO">
+	delete from customer where cusId=#{cusId}
+</delete>
+ -->
+ 
+</mapper>
