@@ -27,7 +27,10 @@
 	
 	<jsp:include page="/WEB-INF/views/layout/floating.jsp" />
 	<jsp:include page="/WEB-INF/views/layout/header_over.jsp" />
-	<jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
+	<!-- 메인 : header_main.jsp / 그외 : header_below.jsp -->
+	<jsp:include page="/WEB-INF/views/layout/header_main.jsp" />
+	
+	
 
 
 	<!-- ★★★★★★★★★★★★★★★★★★★★★ -->
