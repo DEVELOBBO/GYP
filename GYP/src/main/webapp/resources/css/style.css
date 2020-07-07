@@ -1018,7 +1018,7 @@ img {
   .single-blog-post .blog-post-thumb .post-date {
     width: 77px;
     height: 77px;
-    position: absolute;
+    /*position: absolute;*/
     top: 15px;
     left: 15px;
     z-index: 10;

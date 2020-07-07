@@ -1,24 +1,24 @@
 package com.exe.dto;
 // 체육관 정보 테이블 GYM
 public class GymDTO {
-   private String gymId;   // 체육관 ID
-   private String gymType;   // 체육관 타입 (헬스, 요가, 필라테스)
-   private String gymName;   // 체육관 이름
-   private String gymPwd;   // 체육관 비밀번호
-   private String gymEmail;   // 체육관 이메일
-   private String gymTel;   // 체육관 전화번호
-   private String gymAddr;   // 체육관 주소
-   private float gymLongitude;   // 체육관 경도
+   private String gymId;		// 체육관 ID
+   private String gymType;  	// 체육관 타입 (헬스, 요가, 필라테스)
+   private String gymName;   	// 체육관 이름
+   private String gymPwd;   	// 체육관 비밀번호
+   private String gymEmail;   	// 체육관 이메일
+   private String gymTel;   	// 체육관 전화번호
+   private String gymAddr;   	// 체육관 주소
+   private float gymLongitude;  // 체육관 경도
    private float gymLatitude;   // 체육관 위도
    private String gymTrainer;   // 체육관 트레이너 (1,2,3,4) - 파싱해서 사용
-   private String gymTrainerPic;   // 체육관 트레이너 사진 (1,2,3,4) - 위와 같은 순서대로 매칭해서 파싱해 사용
-   private String gymPic;   // 체육관 사진 (1,2,3,4) - 파싱해서 사용
+   private String gymTrainerPic;// 체육관 트레이너 사진 (1,2,3,4) - 위와 같은 순서대로 매칭해서 파싱해 사용
+   private String gymPic;   	// 체육관 사진 (1,2,3,4) - 파싱해서 사용
    private String gymProgram;   // 체육관의 프로그램
-   private String gymFacility;   // 체육관 시설
-   private String gymHour;   // 체육관 운영시간
+   private String gymFacility;  // 체육관 시설
+   private String gymHour;   	// 체육관 운영시간
    private String gymCreated;   // 체육관 가입일
-   private int gymPass;   // 체육관 소유 패스 (벌어들이는 돈)
-   private String gymOk;
+   private int gymPass;   		// 체육관 소유 패스 (벌어들이는 돈)
+   private String gymOk; 		// true: 승인 /false: 거부
    
    
    public String getGymOk() {

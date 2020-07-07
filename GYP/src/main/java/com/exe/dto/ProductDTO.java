@@ -2,11 +2,11 @@ package com.exe.dto;
 // 상품 테이블 PRODUCT
 public class ProductDTO {
 
-   private String productId;   // 상품 ID
-   private String productName;   // 상품 이름
-   private String productImg;   // 상품 이미지
-   private int productPrice;   // 상품 가격
-   private int productHit;   // 상품 조회수
+   private String productId;   		// 상품 ID
+   private String productName;   	// 상품 이름
+   private String productImg;  		// 상품 이미지
+   private int productPrice;  		// 상품 가격
+   private int productHit;  		// 상품 조회수
    private String productContent;   // 상품 설명(내용)
    
    public String getProductId() {

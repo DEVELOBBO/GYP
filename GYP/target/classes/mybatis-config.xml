@@ -20,5 +20,11 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<!-- 체육관 회원 Mapper 추가 -->
 		<mapper resource="com/exe/mybatis/gymMapper.xml"/>
 		
+		
+		
+		<!-- ********************김세이*********************** -->
+		<mapper resource="com/exe/mybatis/gymDetailMapper.xml"/>
+		
+		
 	</mappers>
 </configuration>
