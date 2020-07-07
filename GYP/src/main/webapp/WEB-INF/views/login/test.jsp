@@ -12,16 +12,7 @@
 </head>
 <body>
 
-<h2>로그인 성공</h2>
-<c:if test="${type==1 }">
-<a href="<%=cp%>/customerMyPage.action">마이페이지</a>
-</c:if>
 
-<c:if test="${type==0 }">
-<a href="<%=cp%>/gymMyPage.action">마이페이지</a>
-</c:if>
-
-<a href="<%=cp%>/logout.action">로그아웃</a>
 
 </body>
 </html>

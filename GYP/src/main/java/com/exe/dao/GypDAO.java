@@ -19,6 +19,8 @@ private SqlSessionTemplate sessionTemplate;
 		this.sessionTemplate = sessionTemplate; 
 	}
 	
+	//*******************원도현*******************
+	
 	//일반유저 로그인
 	public CustomerDTO getLoginReadData(String cusId) {//비밀번호 찾기
 		CustomerDTO dto = sessionTemplate.selectOne("loginMapper.getLoginReadData", cusId);

@@ -42,44 +42,54 @@ String cp = request.getContextPath();
 
 </head>
 <body>
-
-	<div class="col-12 col-lg-6" style="position:absolute; left:25%; top:25%";>
-
-		<div class="our-newsletter-area mb-100">
-			<div class="section-heading">
-				<h6>Fitness Gym</h6>
-				<h2>로그인</h2>
+	
+	<jsp:include page="/WEB-INF/views/layout/floating.jsp" />
+	<jsp:include page="/WEB-INF/views/layout/header_over.jsp" />
+	<jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
+	<div style="height: 100px;"></div>
+	
+	<div style="position: relative;  margin-left: auto; margin-right: auto;">
+		<div class="col-12 col-lg-6" 
+			 style="position:relative; margin-left: auto; margin-right: auto;">
+			<div class="our-newsletter-area mb-100" style="" >
+				<div class="section-heading">
+					<h6>Fitness Gym</h6>
+					<h2>로그인</h2>
+				</div>
+	
+				<form action="" method="post" name="myForm">
+					<div class="form-group">
+						<input type="text" class="form-control" name="sessionId" id="name"
+							placeholder="아이디" style="width: 400px;">
+					</div>
+					<div class="form-group mb-0">
+						<input type="password" class="form-control" name="sessionpwd" id="name"
+							placeholder="패스워드" style="width: 400px;">
+						<font color="red"><b>${message }</b></font>
+						
+					</div>
+					<button type="button" class="btn fitness-btn btn-white mt-50"
+						onclick="">체크박스(임시)</button>
+					<button type="button" class="btn fitness-btn btn-white mt-50"
+						onclick="sendIt();">로그인</button>
+				</form>
+				<br>
+				<table style="width: 400px" >
+				<tr style="text-align: center">
+					<td style="padding: 10px;"><a>회원가입</a></td>
+					<td style="padding: 10px;"><a href="<%=cp%>/searchid.action">아이디 찾기</a></td>
+					<td style="padding: 10px;"><a href="<%=cp%>/searchpw.action">비밀번호 찾기</a></td>
+				</tr>
+				</table>
 			</div>
-
-			<form action="" method="post" name="myForm">
-				<div class="form-group">
-					<input type="text" class="form-control" name="sessionId" id="name"
-						placeholder="아이디" style="width: 400px;">
-				</div>
-				<div class="form-group mb-0">
-					<input type="password" class="form-control" name="sessionpwd" id="name"
-						placeholder="패스워드" style="width: 400px;">
-					<font color="red"><b>${message }</b></font>
-					
-				</div>
-				<button type="button" class="btn fitness-btn btn-white mt-50"
-					onclick="">체크박스(임시)</button>
-				<button type="button" class="btn fitness-btn btn-white mt-50"
-					onclick="sendIt();">로그인</button>
-			</form>
-			<br>
-			<table style="width: 400px" >
-			<tr style="text-align: center">
-				<td style="padding: 10px;"><a>회원가입</a></td>
-				<td style="padding: 10px;"><a href="<%=cp%>/searchid.action">아이디 찾기</a></td>
-				<td style="padding: 10px;"><a href="<%=cp%>/searchpw.action">비밀번호 찾기</a></td>
-			</tr>
-			</table>
 		</div>
 	</div>
+	
+	
+	<div style="height: 70px;">&nbsp;</div>
+	<jsp:include page="/WEB-INF/views/layout/footer.jsp" />
 
-
- <!-- ##### Footer Area Start ##### -->
+ 	<!-- ##### Footer Area Start ##### -->
 
 	<!-- ##### All Javascript Script ##### -->
     <!-- jQuery-2.2.4 js -->

@@ -10,7 +10,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 	<!-- DML을 가지고 있는 곳 위치 -->
 	<!--  여기에 본인 mapper파일위치등록-->
 	<mappers>
-		<!--  <mapper resource="com/exe/mybatis/noticeMapper.xml"/> -->
+		<!-- ********************원도현*********************** -->
 		<!-- 로그인 Mapper 추가 -->
 		<mapper resource="com/exe/mybatis/loginMapper.xml"/>
 		

@@ -1,0 +1,112 @@
+@charset "UTF-8";
+
+/************************************************************************/
+/*floating*/
+
+
+      .section_floating {
+      }
+      
+      /* NAVIGATION */
+      .nav {
+        font-size : 12pt;
+        font-family: 'Noto Sans KR', sans-serif;
+        width: 70px!important;
+        height: 70px!important;
+        position : fixed;
+		z-index: 100000000000;
+        bottom: 865px;
+        right: 50px;
+        margin: 10px auto 0;
+        background: linear-gradient(to right bottom, #F361A6, #C72F7A); /* 그라데이션 */
+        background: linear-gradient(to right bottom, #FFE400, #FFBB00);
+        padding:10px 5px 10px 5px; /* 맨 위아래 여백 */
+        border-radius: 35px; /* 전체 위아래 둥글 */
+        
+      }
+      .nav ul {
+        list-style: none;
+        text-align: center;
+        margin-block-end: 16px;
+        margin-block-start: 16px;
+      }
+      .nav ul li {
+        display: inline-block;
+      }
+      .nav ul li a {
+        display: block;
+        padding: 10px;  /* 박스 높이 조정 */
+        text-decoration: none;
+        color: #7a7ebf;
+        font-weight: 800;
+        text-transform: uppercase;
+        margin: 0 5px;
+      }
+      .nav ul li a,
+      .nav ul li a:after,
+      .nav ul li a:before {
+        transition: all .5s;
+      }
+      .nav ul li a:hover {
+        color: #2E338C;
+      }
+      
+      
+      /* stroke */
+      .nav.fill ul li a {
+        position: relative;
+      }
+      .nav.fill ul li a:after {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+        width: 0%;
+        content: '.';
+        color: transparent;
+        background: #aaa;
+        height: 1px;
+      }
+      
+      .nav.fill ul li a {
+        transition: all 2s;
+      }
+      
+      .nav.fill ul li a:after {
+        text-align: left;
+        content: '.';
+        margin: 0;
+        opacity: 0;
+      }
+      .nav.fill ul li a:hover {
+        color: #fff; /*효과 : 글자색*/
+        z-index: 1;
+      }
+      .nav.fill ul li a:hover:after {
+        z-index: -10;
+        animation: fill 1s forwards;
+        -webkit-animation: fill 1s forwards;
+        -moz-animation: fill 1s forwards;
+        opacity: 1;
+        border-radius: 60px; /* 박스 radius */
+      }
+      
+      /* Keyframes */
+      @-webkit-keyframes fill {
+        0% {
+          width: 0%;
+          height: 1px;
+        }
+        50% {
+          width: 100%;
+          height: 1px;
+        }
+        100% {
+          width: 100%;
+          height: 100%;
+          background: #2E338C; /*효과 : 박스 색*/
+        }
+      }
+      
+/************************************************************************/

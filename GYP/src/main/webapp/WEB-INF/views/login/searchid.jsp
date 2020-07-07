@@ -43,8 +43,13 @@
 </head>
 <body>
 
+	<jsp:include page="/WEB-INF/views/layout/floating.jsp" />
+	<jsp:include page="/WEB-INF/views/layout/header_over.jsp" />
+	<jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
+	<div style="height: 100px;"></div>
 
-<div class="col-12 col-lg-6" style="position:absolute; left:25%; top:25%";>
+
+<div class="col-12 col-lg-6" style="position:relative; left:25%; top:25%";>
 
 		<div class="our-newsletter-area mb-100" >
 			<div class="section-heading">
@@ -71,7 +76,8 @@
 		</div>
 	</div>
 	
-	
+	<div style="height: 70px;">&nbsp;</div>
+	<jsp:include page="/WEB-INF/views/layout/footer.jsp" />
 	
 	<!-- ##### Footer Area Start ##### -->
 
