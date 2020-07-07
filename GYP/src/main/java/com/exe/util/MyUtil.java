@@ -83,4 +83,50 @@ public class MyUtil {
 		return sb.toString();
 		
 	}
+	
+// ***************************************************************************************
+
+    // 자바 스크립트(listPage 함수)에 의한 페이지 처리 메서드 ***********************
+    public String pageIndexList(int current_page, int total_page) {
+        int numPerBlock = 5;   // 리스트에 나타낼 페이지 수
+        int currentPageSetUp;
+        int n;
+        int page;
+        String strList="";
+        
+        if(current_page == 0)
+        	return "";
+
+        // 표시할 첫 페이지
+        currentPageSetUp = (current_page / numPerBlock) * numPerBlock;
+        if (current_page % numPerBlock == 0)
+            currentPageSetUp = currentPageSetUp - numPerBlock;
+
+        // [Prev] : 총 페이지수가 numPerBlock 이상인 경우 이전 numPerBlock 보여줌
+        n = current_page - numPerBlock;
+        if (total_page > numPerBlock && currentPageSetUp > 0) {
+            strList = strList + "[<a onclick='listPage("+n+");'>◀</a>] ";
+        }
+
+        // 바로가기 페이지 구현
+        page = currentPageSetUp + 1;
+        while((page <= total_page) && (page <= currentPageSetUp + numPerBlock)) {
+           if(page == current_page) {
+               strList = strList + "<font color='Fuchsia'>"+page+" </font>";
+           }
+           else {
+               strList = strList +"<a onclick='listPage("+page+");'>"+page+"</a> ";
+           }
+           page++;
+        }
+
+        // [Next] : 총 페이지수가 numPerBlock 페이지 이상인 경우 다음 numPerBlock 페이지를 보여줌
+        // n = currentPageSetUp + numPerBlock + 1;
+        n = current_page + numPerBlock;
+        if (total_page - currentPageSetUp > numPerBlock) {
+            strList = strList + "[<a onclick='listPage("+n+");'>▶</a>] ";
+        }
+
+        return strList;
+    }
 }

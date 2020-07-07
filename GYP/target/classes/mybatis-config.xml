@@ -5,12 +5,11 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-config.dtd">
 
 <configuration>
-
 	
 	<!-- DML을 가지고 있는 곳 위치 -->
 	<!--  여기에 본인 mapper파일위치등록-->
 	<mappers>
 		<!--  <mapper resource="com/exe/mybatis/noticeMapper.xml"/> -->
-		
+		<mapper resource="com/exe/mybatis/gymDetailMapper.xml"/>
 	</mappers>
 </configuration>
