@@ -32,6 +32,7 @@
 	<jsp:include page="/WEB-INF/views/layout/header_over.jsp" />
 	<jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
 	
+	
     <!-- ##### Blog Area Start ##### -->
     <div class="blog-area mt-50 section-padding-100">
         <div class="container">

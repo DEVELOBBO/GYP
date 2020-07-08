@@ -7,13 +7,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<!-- Favicon -->
-<link rel="icon" href="/gyp/resources/img/core-img/favicon.ico">
-<!-- Core Stylesheet -->
-<link rel="stylesheet" href="/gyp/resources/css/style.css">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<!-- Favicon -->
+	<link rel="icon" href="/gyp/resources/img/core-img/favicon.ico">
+	<!-- Core Stylesheet -->
+	<link rel="stylesheet" href="/gyp/resources/css/style.css">
+	<!-- 플로팅 -->
+	<link rel="stylesheet" href="/gyp/resources/css/floating.css">
+	<!-- font -->
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400&display=swap" rel="stylesheet">
 	
 <title>GYP</title>
 
@@ -41,14 +45,16 @@
 </script>
 
 </head>
-<body>
+<body style="font-family: 'Noto Sans KR', sans-serif;">
 
 	<jsp:include page="/WEB-INF/views/layout/floating.jsp" />
 	<jsp:include page="/WEB-INF/views/layout/header_over.jsp" />
 	<jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
 	<div style="height: 100px;"></div>
 
-<div class="col-12 col-lg-6" style="position:relative; left:25%; top:25%">
+
+
+	<div class="col-12 col-lg-6" style="position:relative; left:25%; top:25%">
 
 		<div class="our-newsletter-area mb-100" >
 			<div class="section-heading">
@@ -74,6 +80,8 @@
 			
 		</div>
 	</div>
+	
+	
 	
 	<div style="height: 70px;">&nbsp;</div>
 	<jsp:include page="/WEB-INF/views/layout/footer.jsp" />

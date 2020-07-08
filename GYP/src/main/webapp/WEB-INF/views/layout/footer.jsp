@@ -14,9 +14,9 @@
                                 <a href="#"><img src="/gyp/resources/img/core-img/logo.png" alt="" style="width: 100px;"></a>
                             </div>
                             <p class="mb-30">언.제. 어.디.서.나. 다양한 종목을
-                            합리적으로 이용해보세요!
+                            합리적인 가격으로 이용해보세요! 당신과 
                             멀지 않은 곳에 GYP 제휴시설이 있습니다. 
-                            "제휴시설 찾기"에서 확인하세요!</p>
+                            홈페이지 상단의 "제휴시설 찾기"에서 확인하세요!</p>
                             <!-- Social Info -->
                             <div class="footer-social-info">
                                 <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
@@ -82,7 +82,7 @@
                                 <div class="single-slide">
                                     <!-- Single Testimonial -->
                                     <div class="single-testimonial">
-                                        <p>스포츠를 사랑하는 사람들은 어서 GYP에 가입하세요</p>
+                                        <p>운동을 즐기고 싶은 분들은 어서 GYP에 가입하세요</p>
                                         <span>최원식</span>
                                     </div>
                                 </div>

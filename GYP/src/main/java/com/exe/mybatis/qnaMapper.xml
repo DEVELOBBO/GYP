@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="qna">
+
+<select id="maxNum" resultType="int">
+	select nvl(max(qnaNum),0) from qna
+</select>
+
+<insert id="insertData" parameterType="com.exe.dto.QnaDTO">
+	insert into qna (qnaNum,qnaType,cusId,qnaTitle,qnaContent,qnaCreated,
+	qnaGroupNum,qnaDepth,qnaOrderNo,qnaParent) 
+	values (#{qnaNum},#{qnaType},#{cusId},#{qnaTitle},#{notiContent},sysdate,
+	#{qnaCreated},#{qnaGroupNum},#{qnaDepth},#{qnaOrderNo},#{qnaParent})
+</insert>
+
+<select id="getDataCount"  resultType="int" parameterType="HashMap">
+	select nvl(count(*),0) from qna 
+	where ${searchKey} like '%' || #{searchValue} || '%'
+</select>
+
+<select id="getLists" parameterType="HashMap" resultType="com.exe.dto.QnaDTO">
+	select * from (
+	select rownum rnum,data.* from (
+	select qnaNum,qnaTitle,qnaContent,to_char(qnaCreated,'YYYY-MM-DD') qnaCreated
+	from qna where ${searchKey} like '%' || #{searchValue} || '%' 
+	order by qnaNum desc) data) 
+<![CDATA[
+	where rnum>=#{start} and rnum<=#{end}
+]]>	
+</select>
+
+<select id="getReadData" parameterType="int" resultType="com.exe.dto.QnaDTO">
+	select qnaNum,qnaType,cusId,qnaTitle,qnaContent,qnaCreated,
+	qnaGroupNum,qnaDepth,qnaOrderNo,qnaParent 
+	from qna where qnaNum=#{qnaNum}
+</select>
+
+<select id="preReadData" resultType="com.exe.dto.QnaDTO" >
+<![CDATA[
+	select rownum, data.* from (
+	select qnaNum,qnaTitle from qna 
+	where (${searchKey} like '%' || #{searchValue} || '%') 
+	and (qnaNum > #{qnaNum}) order by qnaNum asc,qnaOrderNo desc) data 
+	where rownum=1
+]]>	
+</select>
+
+<select id="nextReadData" resultType="com.exe.dto.QnaDTO">
+<![CDATA[
+	select rownum, data.* from (
+	select qnaNum,qnaTitle from qna 
+	where (${searchKey} like '%' || #{searchValue} || '%') 
+	and (qnaNum < #{qnaNum}) order by qnaNum desc,qnaOrderNo asc) data 
+	where rownum=1
+]]>	
+</select>
+
+<update id="orderNoUpdate" parameterType="map">
+	update qna set qnaOrderNo = qnaOrderNo + 1
+	where qnaGroupNum = #{qnaGroupNum} and qnaOrderNo > #{qnaOrderNo}
+</update>
+
+<update id="updateData" parameterType="com.exe.dto.QnaDTO">
+	update qna set qnaTitle=#{qnaTitle},qnaContent=#{qnaContent} 
+	where qnaNum=#{qnaNum}
+</update>
+
+<delete id="deleteData" parameterType="int">
+	delete qna where qnaNum in 
+	(select qnaNum from qna start with qnaNum=#{qnaNum}
+	connect by prior qnaNum=qnaParent)
+</delete>
+
+</mapper>
+
+

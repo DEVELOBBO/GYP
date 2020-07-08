@@ -7,13 +7,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<!-- Favicon -->
-<link rel="icon" href="/gyp/resources/img/core-img/favicon.ico">
-<!-- Core Stylesheet -->
-<link rel="stylesheet" href="/gyp/resources/css/style.css">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<!-- Favicon -->
+	<link rel="icon" href="/gyp/resources/img/core-img/favicon.ico">
+	<!-- Core Stylesheet -->
+	<link rel="stylesheet" href="/gyp/resources/css/style.css">
+	<!-- 플로팅 -->
+	<link rel="stylesheet" href="/gyp/resources/css/floating.css">
+	<!-- font -->
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400&display=swap" rel="stylesheet">
 	
 <title>GYP</title>
 
@@ -50,7 +54,7 @@
 
 
 </head>
-<body>
+<body style="font-family: 'Noto Sans KR', sans-serif;">
 
 	<div class="col-12 col-lg-6" style="position:absolute; left:25%; top:25%";>
 
@@ -91,9 +95,10 @@
 		</div>
 	</div>
 
-
- <!-- ##### Footer Area Start ##### -->
-
+	
+ 	<!-- ##### Footer Area Start ##### -->
+	<jsp:include page="/WEB-INF/views/layout/footer.jsp" />
+	
 	<!-- ##### All Javascript Script ##### -->
     <!-- jQuery-2.2.4 js -->
     <script src="/gyp/resources/js/jquery/jquery-2.2.4.min.js"></script>

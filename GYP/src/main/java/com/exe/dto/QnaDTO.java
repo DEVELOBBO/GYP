@@ -2,6 +2,8 @@ package com.exe.dto;
 // Q&A 테이블
 public class QnaDTO {
 	
+	private int listNum; //리스트넘
+	
 	private int qnaNum;	// QNA 번호
 	private String qnaType;	// QNA 타입 (체육관/상품)
 	private String cusId;	// 회원번호
@@ -12,6 +14,12 @@ public class QnaDTO {
 	private int qnaDepth;	//  깊이 : 답변시 사용
 	private int qnaOrderNo;	// 그룹 내의 순서
 	private int qnaParent;	// QNA 게시글 부모
+	
+	private String searchKey;
+	private String searchValue;
+	private String pageNum;
+	
+	private String mode;
 	
 	public int getQnaNum() {
 		return qnaNum;
@@ -72,6 +80,36 @@ public class QnaDTO {
 	}
 	public void setQnaParent(int qnaParent) {
 		this.qnaParent = qnaParent;
+	}
+	public int getListNum() {
+		return listNum;
+	}
+	public void setListNum(int listNum) {
+		this.listNum = listNum;
+	}
+	public String getSearchKey() {
+		return searchKey;
+	}
+	public void setSearchKey(String searchKey) {
+		this.searchKey = searchKey;
+	}
+	public String getSearchValue() {
+		return searchValue;
+	}
+	public void setSearchValue(String searchValue) {
+		this.searchValue = searchValue;
+	}
+	public String getPageNum() {
+		return pageNum;
+	}
+	public void setPageNum(String pageNum) {
+		this.pageNum = pageNum;
+	}
+	public String getMode() {
+		return mode;
+	}
+	public void setMode(String mode) {
+		this.mode = mode;
 	}
 	
 	

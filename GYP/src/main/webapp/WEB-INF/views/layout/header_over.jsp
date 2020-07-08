@@ -41,9 +41,8 @@
                                 <ul>
                                     <li><a href="#">제휴시설 찾기</a></li>
                                     <li><a href="#">이용방법</a></li>
-                                    <li><a href="#">공지사항</a></li>
-                                    <li><a href="#">Q&A</a></li>
-                                    
+                                    <li><a href="/gyp/noticeList.action">공지사항</a></li>
+                                    <li><a href="/gyp/qnaList.action">Q&A</a></li>
                                     
                                     
                                     <c:if test="${empty info.sessionId}">

@@ -8,24 +8,22 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<!-- Favicon -->
+	<link rel="icon" href="/gyp/resources/img/core-img/favicon.ico">
+	<!-- Core Stylesheet -->
+	<link rel="stylesheet" href="/gyp/resources/css/style.css">
+	<!-- 플로팅 -->
+	<link rel="stylesheet" href="/gyp/resources/css/floating.css">
+	<!-- font -->
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400&display=swap" rel="stylesheet">
+	
+	<!-- 마이페이지 ★ -->
+	<link rel="stylesheet" href="/gyp/resources/css/myPage.css">
 
 <title>GYP</title>
-<!-- 파비콘 -->
-<%-- 
-   <link rel="shortcut icon" href="<%=cp %>/image/favicon.ico">
-   <link rel="icon" href="<%=cp %>/image/favicon.ico">
-   <!-- css -->
-   <link rel="stylesheet" href="<%=cp%>/css/style.css" type="text/css">
-   <link rel="stylesheet" href="<%=cp%>/css/myPage.css" type="text/css">
-    --%>
-<!-- Favicon -->
-<link rel="icon" href="/gyp/resources/img/core-img/favicon.ico">
-<!-- Core Stylesheet -->
-<link rel="stylesheet" href="/gyp/resources/css/style.css">
-<link rel="stylesheet" href="/gyp/resources/css/myPage.css">
    
    <script type="text/javascript">
    
@@ -57,7 +55,7 @@
       }
    </script>
 </head>
-<body>
+<body style="font-family: 'Noto Sans KR', sans-serif;">
 <!-- header jsp-->
 
 <div id="myPage_wrapper">

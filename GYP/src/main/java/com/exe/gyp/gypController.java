@@ -1,14 +1,12 @@
 package com.exe.gyp;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import javax.naming.spi.DirStateFactory.Result;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -17,8 +15,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.exe.dao.GypDAO;
@@ -27,6 +23,9 @@ import com.exe.dto.CustomerDTO;
 import com.exe.dto.GymDTO;
 import com.exe.dto.ReviewDTO;
 import com.exe.util.MyUtil;
+import com.exe.dto.NoticeDTO;
+import com.exe.dto.ProductDTO;
+import com.exe.dto.QnaDTO;
 
 @Controller
 public class gypController {
@@ -59,7 +58,7 @@ public class gypController {
 		return "login/login";
 	}
 	
-	//로그인시 
+	//로그인시
 	@RequestMapping(value = "/login_ok.action" , method = {RequestMethod.GET,RequestMethod.POST})
 	public String login_ok(HttpServletRequest request) throws Exception{
 		
@@ -361,110 +360,425 @@ public class gypController {
 		return "gymDetail/reviewList";
 	}
 	
+	//*******************서예지*******************
+	//-------------------notice-------------------
 	
-	//*******************채종완*******************
+	@RequestMapping(value="/noticeList.action",method = {RequestMethod.GET,RequestMethod.POST})
+	public String noticeList(HttpServletRequest request,HttpSession session) throws Exception{
+		
+		String cp = request.getContextPath();
+		session = request.getSession();
+		String pageNum = request.getParameter("pageNum");
+		int currentPage = 1;
+		
+		//페이징처리
+		if(pageNum == null) {
+			pageNum = (String)session.getAttribute("pageNum");
+		}
+		
+		session.removeAttribute("pageNum");
+		if(pageNum != null) {
+			currentPage = Integer.parseInt(pageNum);
+		}
+		
+		int dataCount = dao.getNoticeDataCount();
+		int numPerPage = 10; //한 페이지에 10개
 	
-	@RequestMapping(value = "/customer.action")
-	public ModelAndView customer() {
+		int totalPage = myUtil.getPageCount(numPerPage, dataCount);
+		if(currentPage > totalPage)
+			currentPage = totalPage;
+		
+		int start = (currentPage-1)*numPerPage+1;
+		int end = currentPage*numPerPage;
+		
+		//한 페이지에 뿌릴 리스트 가져옴
+		List<NoticeDTO> lists = dao.getNoticeList(start, end); 
+		
+		//listNum
+		int n = 0;
+		int listNum = 0;
+		Iterator<NoticeDTO> it = lists.iterator();
+		while(it.hasNext()) {
+			NoticeDTO data = (NoticeDTO)it.next();
+			listNum = dataCount - (start + n - 1);
+			data.setListNum(listNum);
+			n++;
+		}
+		
+		String listUrl = cp + "/noticeList.action";
+		String pageIndexList = myUtil.pageIndexList(currentPage, totalPage, listUrl);
+		String articleUrl = cp + "/noticeArticle.action?pageNum=" + currentPage;
+		
+		request.setAttribute("lists", lists);
+		request.setAttribute("pageIndexList",pageIndexList);
+		request.setAttribute("pageNum",pageNum);
+		request.setAttribute("dataCount",dataCount);
+		request.setAttribute("articleUrl",articleUrl);
+		
+		return "notice/noticeList";
+	}
+	
+	//공지사항 등록 페이지로 가기
+	@RequestMapping(value="/noticeCreated.action",method = {RequestMethod.GET,RequestMethod.POST})
+	public ModelAndView noticeCreated(HttpServletRequest request,NoticeDTO dto,
+			ProductDTO dto1,HttpSession session) throws Exception{
 		
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("customer/customer");
+		mav.setViewName("notice/noticeCreated");
+		request.setAttribute("dto", dto);
+		request.setAttribute("mode", "insert");
+		return mav;
+	}
+	
+	//공지사항 등록 삽입
+	@RequestMapping(value="/noticeCreated_ok.action",method = {RequestMethod.GET,RequestMethod.POST})
+	public String noticeCreated_ok(HttpServletRequest request,NoticeDTO dto, HttpSession session) throws Exception{
 		
+		int noticeNumMax = dao.getNoticeMaxNum();
+		dto.setNotiNum(noticeNumMax + 1); 
+		dao.insertNotice(dto);
+		return "redirect:/noticeList.action";
+	}	
+	
+	//공지사항 게시글
+	@RequestMapping(value="/noticeArticle.action",method = {RequestMethod.GET,RequestMethod.POST})
+	public String noticeArticle(HttpServletRequest request) throws Exception{
+		
+		String cp = request.getContextPath();
+		
+		//넘어오는 값 받아옴
+		int notiNum = Integer.parseInt(request.getParameter("notiNum"));
+		String pageNum = request.getParameter("pageNum");
+		
+		//notiNum으로 게시글 DTO 가져옴
+		NoticeDTO dto = (NoticeDTO)dao.getNoticeReadData(notiNum);
+		
+		if(dto == null) {
+			return "redirect:/noticeList.action";
+		}
+		
+		//줄바꿈 변형
+		dto.setNotiContent(dto.getNotiContent().replaceAll("\r\n", "<br/>"));
+		
+		//이전글
+		NoticeDTO preReadData = (NoticeDTO)dao.getNoticePreReadData(notiNum);
+		int preNotiNum = 0;
+		String preNotiTitle = "";
+		if(preReadData!=null) {
+			preNotiNum = preReadData.getNotiNum();
+			preNotiTitle = preReadData.getNotiTitle();
+		}
+		
+		//다음글
+		NoticeDTO nextReadData = (NoticeDTO)dao.getNoticeNextReadData(notiNum);
+		int nextNotiNum = 0;
+		String nextNotiTitle = "";
+		if(nextReadData!=null) {
+			nextNotiNum = nextReadData.getNotiNum();
+			nextNotiTitle = nextReadData.getNotiTitle();
+		}
+		
+		String params = "pageNum="+pageNum;
+		
+		request.setAttribute("dto", dto);
+		request.setAttribute("preNotiNum", preNotiNum);
+		request.setAttribute("preNotiTitle", preNotiTitle);
+		request.setAttribute("nextNotiNum", nextNotiNum);
+		request.setAttribute("nextNotiTitle", nextNotiTitle);
+		request.setAttribute("pageNum", pageNum);
+		request.setAttribute("params", params);
+		
+		return "notice/noticeArticle";
+	}
+	
+	//공지사항 수정페이지로 이동
+	@RequestMapping(value="/noticeUpdated.action",method = {RequestMethod.GET,RequestMethod.POST})
+	public String noticeUpdate(HttpServletRequest request,NoticeDTO dto) throws Exception{
+		
+		//넘어오는 값 받음
+		int notiNum = Integer.parseInt(request.getParameter("notiNum"));
+		String pageNum = request.getParameter("pageNum");
+		
+		//디비에서 수정할 notice객체 받아옴
+		dto = (NoticeDTO)dao.getNoticeReadData(notiNum);
+		if(dto==null) {
+			return "redirect:/noticeList.action?pageNum=" + pageNum;
+		}
+		request.setAttribute("mode", "update");
+		request.setAttribute("pageNum", pageNum);
+		request.setAttribute("dto", dto);
+		
+		return "notice/noticeCreated";
+	}
+	
+	//공지사항 수정 처리
+	@RequestMapping(value="/noticeUpdated_ok.action",method = {RequestMethod.GET,RequestMethod.POST})
+	public String noticeUpdated_ok(NoticeDTO dto,HttpServletRequest request,HttpSession session) throws Exception{
+		
+		//넘어오는 값
+		String pageNum = request.getParameter("pageNum");
+		//수정
+		dao.updateNoticeData(dto);
+		
+		return "redirect:/noticeList.action?pageNum="+pageNum;
+	}	
+	
+	//공지사항 삭제
+	@RequestMapping(value="/noticeDeleted.action",method = {RequestMethod.GET,RequestMethod.POST})
+	public String noticeDeleted(HttpServletRequest request) throws Exception{
+
+		//넘어오는 값
+		String pageNum = request.getParameter("pageNum");
+		int notiNum = Integer.parseInt(request.getParameter("notiNum"));
+		//삭제
+		dao.deleteNoticeData(notiNum);
+		
+		return "redirect:/noticeList.action?pageNum="+pageNum;
+	}	
+		
+	//-------------------qna-------------------
+	
+	//질문게시판 리스트
+	@RequestMapping(value="/qnaList.action",method = {RequestMethod.GET,RequestMethod.POST})
+	public String qnaList(HttpServletRequest request,HttpSession session) throws Exception{
+		
+		String cp = request.getContextPath();
+		//넘어오는값
+		String pageNum = request.getParameter("pageNum");
+		String searchKey = request.getParameter("searchKey");
+		String searchValue = request.getParameter("searchValue");
+		
+		
+		//검색
+		if(searchValue == null) {
+			searchKey = "qnaType";
+			searchValue = "";
+		}else if(request.getMethod().equalsIgnoreCase("GET")){
+			searchValue = URLDecoder.decode(searchValue,"UTF-8");
+		}
+		
+		//페이징
+		int currentPage = 1;
+		int numPerPage = 3;
+		int dataCount = dao.getQnaDataCount(searchKey,searchValue);
+		
+		if(pageNum != null)
+			currentPage = Integer.parseInt(pageNum);
+	
+		int totalPage = myUtil.getPageCount(numPerPage, dataCount);
+		if(currentPage > totalPage)
+			currentPage = totalPage;
+		
+		int start = (currentPage-1)*numPerPage+1;
+		int end = currentPage*numPerPage;
+		
+		//검색 + 한페이지에 뿌릴 qna객체 리스트
+		List<QnaDTO> lists = dao.getQnaList(start, end,searchKey,searchValue);
+		
+		int n=0;
+		int listNum=0;
+		Iterator<QnaDTO> it = lists.iterator();
+		while(it.hasNext()) {
+			QnaDTO data = (QnaDTO)it.next();
+			listNum = dataCount - (start + n - 1);
+			data.setListNum(listNum);
+			n++;
+		}
+		
+		String params = "";
+		String listUrl = "";
+		String articleUrl = "";
+		
+		if(!searchValue.equals("")) {
+			searchValue = URLEncoder.encode(searchValue,"UTF-8");
+			params = "searchKey=" + searchKey + "&searchValue=" + searchValue;
+		}
+		
+		if(params.equals("")) {
+			listUrl = cp + "/qnaList.action";
+			articleUrl = cp + "/qnaArticle.action?pageNum=" + currentPage;
+		}else {
+			listUrl = cp + "/qnaList.action?" + params;
+			articleUrl = cp + "/qnaArticle.action?pageNum=" + currentPage + "&" + params;
+		}
+		
+		String pageIndexList = myUtil.pageIndexList(currentPage, totalPage, listUrl);
+		
+		request.setAttribute("lists", lists);
+		request.setAttribute("pageIndexList",pageIndexList);
+		request.setAttribute("pageNum",pageNum);
+		request.setAttribute("dataCount",dataCount);
+		request.setAttribute("articleUrl",articleUrl);
+		
+		return "qna/qnaList";
+	}
+	
+	//질문게시판 작성 페이지로 이동
+	@RequestMapping(value="/qnaCreated.action",method = {RequestMethod.GET,RequestMethod.POST})
+	public ModelAndView qnaCreated(HttpServletRequest request,QnaDTO dto,
+			HttpSession session) throws Exception{
+
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("/qna/qnaCreated");
+		request.setAttribute("dto", dto);
+		request.setAttribute("mode", "insert");
 		return mav;
 		
 	}
 	
-	@RequestMapping(value = "/customer_ok.action",
-			method = {RequestMethod.GET,RequestMethod.POST})
-	public String created_ok(HttpServletRequest request,CustomerDTO dto)
-		throws Exception{
+	//질문게시판 작성 삽입 처리
+	@RequestMapping(value="/qnaCreated_ok.action",method = {RequestMethod.GET,RequestMethod.POST})
+	public String qnaCreated_ok(HttpServletRequest request,QnaDTO dto) throws Exception{
 		
-
-		dao.cusCreated(dto);
+		int qnaNumMax = dao.getQnaMaxNum();
+		dto.setQnaNum(qnaNumMax + 1);
+		dao.insertQna(dto);
+		return "redirect:/qnaList.action";
 		
-		return "redirect:/";
-		
-
-		
-	}
+	}	
 	
-	@RequestMapping(value = "/gym.action")
-	public ModelAndView gym() {
+	//질문게시글 페이지로 이동
+	@RequestMapping(value="/qnaArticle.action",method = {RequestMethod.GET,RequestMethod.POST})
+	public String qnaArticle(HttpServletRequest request,QnaDTO dto) throws Exception{
 		
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName("customer/gym");
+		int qnaNum = Integer.parseInt(request.getParameter("qnaNum"));
+		String pageNum = request.getParameter("pageNum");
+		String searchKey = request.getParameter("searchKey");
+		String searchValue = request.getParameter("searchValue");
 		
-		return mav;
-	}
-	@RequestMapping(value = "/gym_ok.action",
-			method = {RequestMethod.GET,RequestMethod.POST})
-	public String gym_ok(HttpServletRequest 
-			request,GymDTO dto,String hidden1, MultipartHttpServletRequest multiReq, String str)
-		throws Exception{
-		
-	
-		String path = multiReq.getSession().getServletContext().getRealPath("/WEB-INF/imagefiles");
-		String fileName = ""; //업로드 되는 파일명 
-		
-		File dir = new File(path);
-		if(!dir.isDirectory()) {
-			dir.mkdir();
+		if(searchValue==null) {
+			searchKey = "gym";
+			searchValue = "";
 		}
 		
+		//검색값 인코딩
+		if(request.getMethod().equalsIgnoreCase("GET")) {
+			searchValue = URLDecoder.decode(searchValue,"UTF-8");
+		}
 		
-		Iterator<String> files = multiReq.getFileNames();
-		MultipartFile mfile = multiReq.getFile(files.next());
+		//qna 객체 가져오기
+		dto = (QnaDTO)dao.getQnaReadData(qnaNum);
+		if(dto == null) {
+			return "redirect:/qnaList.action";
+		}
 		
+		//줄바꿈
+		dto.setQnaContent(dto.getQnaContent().replaceAll("\r\n", "<br/>"));
+		
+		//이전글
+		QnaDTO preReadData = (QnaDTO)dao.getQnaPreReadData(qnaNum,searchKey,searchValue);
+		int preQnaNum = 0;
+		String preQnaTitle = "";
+		if(preReadData!=null) {
+			preQnaNum = preReadData.getQnaNum();
+			preQnaTitle = preReadData.getQnaTitle();
+		}
+		
+		//다음글
+		QnaDTO nextReadData = (QnaDTO)dao.getQnaNextReadData(qnaNum,searchKey,searchValue);
+		int nextQnaNum = 0;
+		String nextQnaTitle = "";
+		if(nextReadData!=null) {
+			nextQnaNum = nextReadData.getQnaNum();
+			nextQnaTitle = nextReadData.getQnaTitle();
+		}
+		
+		//파람 생성
+		String params = "pageNum=" +pageNum;
+		if(!searchValue.equals("")) {
+			searchValue = URLEncoder.encode(searchValue,"UTF-8");
+			params += "&searchKey=" + searchKey + "&searchValue=" + searchValue; 
+		}
+		
+		request.setAttribute("dto", dto);
+		request.setAttribute("preQnaNum", preQnaNum);
+		request.setAttribute("preQnaTitle", preQnaTitle);
+		request.setAttribute("nextQnaNum", nextQnaNum);
+		request.setAttribute("nextQnaTitle", nextQnaTitle);
+		request.setAttribute("pageNum", pageNum);
+		request.setAttribute("params", params);
+		
+		return "qna/qnaArticle";
+	}
 	
-		if(mfile == null || mfile.getSize() <= 0) {
-			System.out.println("파일용량 x");
-			return "redirect:/";
+	//질문게시판 수정페이지로 이동
+	@RequestMapping(value="/qnaUpdated.action",method = {RequestMethod.GET,RequestMethod.POST})
+	public String qnaUpdate(HttpServletRequest request,QnaDTO dto) throws Exception{
+
+		//넘어오는 값
+		int qnaNum = Integer.parseInt(request.getParameter("qnaNum"));
+		String pageNum = request.getParameter("pageNum");
+		
+		//수정할 객체 가져옴
+		dto = (QnaDTO)dao.getQnaReadData(qnaNum);
+		if(dto==null) {
+			return "redirect:/qnaList.action?pageNum=" + pageNum;
 		}
+		request.setAttribute("mode", "update");
+		request.setAttribute("pageNum", pageNum);
+		request.setAttribute("dto", dto);
 		
+		return "qna/qnaCreated";
+	}
+	
+	//질문게시판 수정 처리
+	@RequestMapping(value="/qnaUpdated_ok.action",method = {RequestMethod.GET,RequestMethod.POST})
+	public String qnaUpdated_ok(QnaDTO dto,HttpServletRequest request,HttpSession session) throws Exception{
+
+		String pageNum = request.getParameter("pageNum");
+		dao.updateQnaData(dto);
+		return "redirect:/qnaList.action?pageNum="+pageNum;
+	}	
+	
+	//질문게시판 삭제
+	@RequestMapping(value="/qnaDeleted.action",method = {RequestMethod.GET,RequestMethod.POST})
+	public String qnaDeleted(HttpServletRequest request) throws Exception{
+
+		String pageNum = request.getParameter("pageNum");
+		int qnaNum = Integer.parseInt(request.getParameter("qnaNum"));
+		dao.deleteQnaData(qnaNum);
+		return "redirect:/qnaList.action?pageNum="+pageNum;
+	}	
+	
+	//질문게시판 답글쓰기
+	@RequestMapping(value="/qnaReply.action",method = {RequestMethod.GET,RequestMethod.POST})
+	public String qnaReply(HttpServletRequest request,QnaDTO dto) throws Exception{
 		
-		List<MultipartFile> fileList = multiReq.getFiles("upload");
-		for (MultipartFile filePart : fileList) {
+		//넘어오는값
+		String pageNum = request.getParameter("pageNum");
+		int qnaNum = Integer.parseInt(request.getParameter("qnaNum"));
 		
-			 fileName = filePart.getOriginalFilename();
-			 
-			 
-			 
-			 System.out.println("실제 파일이름: " + fileName);
-			long fileSize = filePart.getSize();
+		//따로 넘어오지 않으면, qnaNum으로 디비에서 가져온다
+		if(dto==null || dto.getMode()==null || dto.getMode().equals("")) {
 			
+			dto = (QnaDTO)dao.getQnaReadData(qnaNum);
 			
+			String temp = "\r\n\r\n----------------------------------------\r\n\r\n";
+			temp += "[답변]\r\n";
 			
-			if(!fileName.equals("")) {
-			try {
-				FileOutputStream fs = new FileOutputStream(path+fileName);
-				fs.write(filePart.getBytes());
-				fs.close();
-				 
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			//상단에 sb 선언//확장 for문안에서 sb.append (filename + ",")
-			dto.setGymTrainerPic(filePart.getOriginalFilename());
-			}
+			//답변 데이터 읽어옴 " 부모 데이터 밑줄 후 답변
+			dto.setQnaTitle("[답변]" + dto.getQnaTitle());
+			dto.setQnaContent(dto.getQnaContent() + temp);
+				
+			return "redirect:/qnaCreated.action?pageNum="+pageNum; //created.jsp창으로 넘어감
+		}	
 		
-		}
-		
-		
-		//완성된 sb를 toString변환해서 String 변수에 넣고, => 마지막 쉼표 빼고 => dto에 set
-	         System.out.println(dto.getGymCreated());
-	         System.out.println(dto.getGymFacility());
-	         System.out.println(dto.getGymHour());
-	         System.out.println(dto.getGymLatitude());
-	         System.out.println(dto.getGymLongitude());
-	         System.out.println(dto.getGymOk());
-	         System.out.println(dto.getGymPass());
-	         System.out.println(dto.getGymTrainer());
-	         System.out.println(dto.getGymTrainerPic());
-	         
-	         dao.gymCreated(dto);
-		
-		return "redirect:/";
+		//--------------답변처리---------------
+		//orderNo 변경
+		String qnaGroupNum = request.getParameter("qnaGroupNum");
+		String qnaOrderNo = request.getParameter("qnaOrderNo");
+		dao.orderNoUpdate(qnaGroupNum,qnaOrderNo);
+				
+		//답변 입력
+		int maxNum = dao.getQnaMaxNum();
+		dto.setQnaNum(maxNum + 1);
+		dto.setQnaDepth(dto.getQnaDepth()+1);
+		dto.setQnaOrderNo(dto.getQnaOrderNo() + 1); //자신의 orderNo 업데이트
+		dao.insertQna(dto);
+				
+		return "redirect:/qnaList.action?pageNum="+pageNum;
 	}
 
+	
 	
 }

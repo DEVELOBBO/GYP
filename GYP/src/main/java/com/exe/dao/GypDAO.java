@@ -11,6 +11,8 @@ import org.mybatis.spring.SqlSessionTemplate;
 import com.exe.dto.CustomInfo;
 import com.exe.dto.CustomerDTO;
 import com.exe.dto.GymDTO;
+import com.exe.dto.NoticeDTO;
+import com.exe.dto.QnaDTO;
 import com.exe.dto.ReviewDTO;
 
 public class GypDAO {
@@ -102,18 +104,144 @@ private SqlSessionTemplate sessionTemplate;
 	// deleteReviewData : 리뷰 삭제
 	public void deleteReviewData(int gymId) {
 		sessionTemplate.delete("gymDetailMapper.deleteReviewData",gymId);
-		
 	}
 	
+	//*******************서예지*******************
 	
-	//*******************채종완*******************
-	public void cusCreated(CustomerDTO dto) {
-		sessionTemplate.insert("cusMapper.insertCus",dto);
+	// 공지사항 최댓값
+	public int getNoticeMaxNum(){
+		
+		int maxNum = 0;
+		maxNum = sessionTemplate.selectOne("notice.maxNum");
+		return maxNum;
+	}
+	
+	// 공지사항 추가
+	public void insertNotice(NoticeDTO dto){
+		sessionTemplate.insert("notice.insertData",dto);
+	}
+	
+	// 공지사항 데이터 갯수
+	public List<NoticeDTO> getNoticeList(int start, int end){
+		HashMap<String,Object> params = new HashMap<String,Object>();
+		params.put("start", start);
+		params.put("end", end);
+		List<NoticeDTO> lists = sessionTemplate.selectList("notice.getLists",params);
+		return lists;
+	}
+	
+	//공지사항 1개 가져오기
+	public NoticeDTO getNoticeReadData(int notiNum){
+		NoticeDTO dto = sessionTemplate.selectOne("notice.getReadData",notiNum);
+		return dto;
+	}
+	
+	//공지사항 이전글
+	public NoticeDTO getNoticePreReadData(int notiNum){
+		NoticeDTO dto = sessionTemplate.selectOne("notice.preReadData",notiNum);
+		return dto;
+	}
+	
+	//공지사항 다음글
+	public NoticeDTO getNoticeNextReadData(int notiNum){
+		NoticeDTO dto = sessionTemplate.selectOne("notice.nextReadData",notiNum);
+		return dto;
+	}
+	
+	// 공지사항 데이터 리스트 가져오기
+	public int getNoticeDataCount(){
+		int result = sessionTemplate.selectOne("notice.getDataCount");
+		return result;
+	}
+	
+	//공지사항 삭제
+	public void deleteNoticeData(int notiNum){
+		sessionTemplate.delete("notice.deleteData",notiNum);
+	}
+	
+	//공지사항 수정
+	public void updateNoticeData(NoticeDTO dto){
+		sessionTemplate.update("notice.updateData",dto);
 	}
 
-	public void gymCreated(GymDTO dto) {
-		sessionTemplate.insert("cusMapper.insertGym",dto);
+	//-------------qna--------------------
+	
+	// Q&A 최댓값
+	public int getQnaMaxNum(){
+		int maxNum = 0;
+		maxNum = sessionTemplate.selectOne("qna.maxNum");
+		return maxNum;
 	}
 	
+	// Q&A 추가
+	public void insertQna(QnaDTO dto){
+		sessionTemplate.insert("qna.insertData",dto);
+	}
+	
+	// Q&A 데이터 갯수
+	public List<QnaDTO> getQnaList(int start, int end,String searchKey,String searchValue){
+		HashMap<String,Object> params = new HashMap<String,Object>();
+		params.put("start", start);
+		params.put("end", end);
+		params.put("searchKey", searchKey);
+		params.put("searchValue", searchValue);
+		List<QnaDTO> lists = sessionTemplate.selectList("qna.getLists",params);
+		return lists;
+	}
+	
+	//Q&A 데이터 1개
+	public QnaDTO getQnaReadData(int qnaNum){
+		QnaDTO dto = sessionTemplate.selectOne("qna.getReadData",qnaNum);
+		return dto;
+	}
+	
+	//Q&A 이전글
+	public QnaDTO getQnaPreReadData(int qnaNum,String searchKey,String searchValue){
+		HashMap<String,Object> params = new HashMap<String,Object>();
+		params.put("searchKey", searchKey);
+		params.put("searchValue", searchValue);
+		params.put("qnaNum", qnaNum);
+		
+		QnaDTO dto = sessionTemplate.selectOne("qna.preReadData",params);
+		return dto;
+	}
+
+	//Q&A 다음글
+	public QnaDTO getQnaNextReadData(int qnaNum,String searchKey,String searchValue){
+		HashMap<String,Object> params = new HashMap<String,Object>();
+		params.put("searchKey", searchKey);
+		params.put("searchValue", searchValue);
+		params.put("qnaNum", qnaNum);
+		
+		QnaDTO dto = sessionTemplate.selectOne("qna.nextReadData",params);
+		return dto;
+	}
+	
+	// Q&A 데이터 갯수 가져오기
+	public int getQnaDataCount(String searchKey,String searchValue){
+			HashMap<String,Object> params = new HashMap<String,Object>();
+			params.put("searchKey", searchKey);
+			params.put("searchValue", searchValue);
+			int result = sessionTemplate.selectOne("qna.getDataCount",params);
+			return result;
+		}
+
+	//orderNo 정렬
+	public void orderNoUpdate(String qnaGroupNum,String qnaOrderNo) {
+		HashMap<String,Object> params = new HashMap<String,Object>();
+		params.put("qnaGroupNum", qnaGroupNum);
+		params.put("qnaOrderNo", qnaOrderNo);
+		sessionTemplate.update("qna.orderNoUpdate",params);
+	}
+	
+	//QnA삭제
+	public void deleteQnaData(int qnaNum){
+		sessionTemplate.delete("qna.deleteData",qnaNum);
+	}
+	
+	//QnA수정
+	public void updateQnaData(QnaDTO dto){
+		sessionTemplate.update("qna.updateData",dto);
+	}
 	
 }
