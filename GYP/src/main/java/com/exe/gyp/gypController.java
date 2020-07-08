@@ -1,5 +1,7 @@
 package com.exe.gyp;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.net.URLDecoder;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -15,6 +17,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.exe.dao.GypDAO;
 import com.exe.dto.CustomInfo;
@@ -355,4 +360,111 @@ public class gypController {
 		
 		return "gymDetail/reviewList";
 	}
+	
+	
+	//*******************채종완*******************
+	
+	@RequestMapping(value = "/customer.action")
+	public ModelAndView customer() {
+		
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("customer/customer");
+		
+		return mav;
+		
+	}
+	
+	@RequestMapping(value = "/customer_ok.action",
+			method = {RequestMethod.GET,RequestMethod.POST})
+	public String created_ok(HttpServletRequest request,CustomerDTO dto)
+		throws Exception{
+		
+
+		dao.cusCreated(dto);
+		
+		return "redirect:/";
+		
+
+		
+	}
+	
+	@RequestMapping(value = "/gym.action")
+	public ModelAndView gym() {
+		
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("customer/gym");
+		
+		return mav;
+	}
+	@RequestMapping(value = "/gym_ok.action",
+			method = {RequestMethod.GET,RequestMethod.POST})
+	public String gym_ok(HttpServletRequest 
+			request,GymDTO dto,String hidden1, MultipartHttpServletRequest multiReq, String str)
+		throws Exception{
+		
+	
+		String path = multiReq.getSession().getServletContext().getRealPath("/WEB-INF/imagefiles");
+		String fileName = ""; //업로드 되는 파일명 
+		
+		File dir = new File(path);
+		if(!dir.isDirectory()) {
+			dir.mkdir();
+		}
+		
+		
+		Iterator<String> files = multiReq.getFileNames();
+		MultipartFile mfile = multiReq.getFile(files.next());
+		
+	
+		if(mfile == null || mfile.getSize() <= 0) {
+			System.out.println("파일용량 x");
+			return "redirect:/";
+		}
+		
+		
+		List<MultipartFile> fileList = multiReq.getFiles("upload");
+		for (MultipartFile filePart : fileList) {
+		
+			 fileName = filePart.getOriginalFilename();
+			 
+			 
+			 
+			 System.out.println("실제 파일이름: " + fileName);
+			long fileSize = filePart.getSize();
+			
+			
+			
+			if(!fileName.equals("")) {
+			try {
+				FileOutputStream fs = new FileOutputStream(path+fileName);
+				fs.write(filePart.getBytes());
+				fs.close();
+				 
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			//상단에 sb 선언//확장 for문안에서 sb.append (filename + ",")
+			dto.setGymTrainerPic(filePart.getOriginalFilename());
+			}
+		
+		}
+		
+		
+		//완성된 sb를 toString변환해서 String 변수에 넣고, => 마지막 쉼표 빼고 => dto에 set
+	         System.out.println(dto.getGymCreated());
+	         System.out.println(dto.getGymFacility());
+	         System.out.println(dto.getGymHour());
+	         System.out.println(dto.getGymLatitude());
+	         System.out.println(dto.getGymLongitude());
+	         System.out.println(dto.getGymOk());
+	         System.out.println(dto.getGymPass());
+	         System.out.println(dto.getGymTrainer());
+	         System.out.println(dto.getGymTrainerPic());
+	         
+	         dao.gymCreated(dto);
+		
+		return "redirect:/";
+	}
+
+	
 }

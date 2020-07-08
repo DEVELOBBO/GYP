@@ -26,5 +26,8 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<mapper resource="com/exe/mybatis/gymDetailMapper.xml"/>
 		
 		
+		<!-- ********************채종완*********************** -->
+		<mapper resource="com/exe/mybatis/createMapper.xml"/>
+		
 	</mappers>
 </configuration>

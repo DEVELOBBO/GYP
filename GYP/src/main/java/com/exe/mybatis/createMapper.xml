@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cusMapper">
+
+<insert id="insertCus" parameterType="com.exe.dto.CustomerDTO">
+	insert into CUSTOMER(cusId,cusName,cusPwd,cusEmail,cusTel,cusAddr,cusPass,cusCreated)
+	values (#{cusId},#{cusName},#{cusPwd},#{cusEmail},#{cusTel},#{cusAddr},0,sysdate)
+</insert>
+
+<insert id="insertGym" parameterType="com.exe.dto.GymDTO">
+	insert into GYM (gymId,gymType,gymName,gymPwd,gymEmail,gymTel,gymAddr,gymLongitude,gymLatitude
+	,gymTrainer,gymTrainerPic,gymPic,gymProgram,gymFacility,gymHour,gymCreated,gymPass,gymOk)
+	values (#{gymId},#{gymType},#{gymName},#{gymPwd},#{gymEmail},#{gymTel},#{gymAddr},1,1,
+	#{gymTrainer},#{gymTrainerPic},'aa','aa','aa','aa',sysdate,1,'true')
+</insert>
+
+</mapper>

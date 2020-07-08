@@ -105,4 +105,15 @@ private SqlSessionTemplate sessionTemplate;
 		
 	}
 	
+	
+	//*******************채종완*******************
+	public void cusCreated(CustomerDTO dto) {
+		sessionTemplate.insert("cusMapper.insertCus",dto);
+	}
+
+	public void gymCreated(GymDTO dto) {
+		sessionTemplate.insert("cusMapper.insertGym",dto);
+	}
+	
+	
 }
