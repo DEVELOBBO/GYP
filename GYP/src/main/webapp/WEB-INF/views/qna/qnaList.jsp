@@ -41,13 +41,13 @@
 	<div id="">
 		<br><br><br>
 		<h5>FITNESS GYM</h5><br>
-		<h1>WORKING HOUR &nbsp;&nbsp; Q&A</h1>
+		<h1>WORKING HOURS &nbsp;&nbsp; Q&A</h1>
 		<br>
 		
 		<div id="bbsList_header">
 			<div id="leftHeader">
 				<form action="/gyp/qnaList.action" name="searchForm" method="post">
-					<select name="searchKey" class="selectField">
+					<select name="searchValue" class="selectField">
 						<option value="gym">체육관</option>
 						<option value="pass">이용권</option>
 						<option value="shopping">쇼핑몰</option>				
@@ -91,6 +91,7 @@
 			
 	</div>
 
+	<div style="height: 70px;">&nbsp;</div>
 	<jsp:include page="/WEB-INF/views/layout/footer.jsp" />
 
     <!-- ##### All Javascript Script ##### -->

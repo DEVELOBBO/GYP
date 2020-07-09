@@ -493,14 +493,14 @@ public class gypController {
 	
 	//공지사항 수정페이지로 이동
 	@RequestMapping(value="/noticeUpdated.action",method = {RequestMethod.GET,RequestMethod.POST})
-	public String noticeUpdate(HttpServletRequest request,NoticeDTO dto) throws Exception{
+	public String noticeUpdate(HttpServletRequest request) throws Exception{
 		
 		//넘어오는 값 받음
 		int notiNum = Integer.parseInt(request.getParameter("notiNum"));
 		String pageNum = request.getParameter("pageNum");
 		
 		//디비에서 수정할 notice객체 받아옴
-		dto = (NoticeDTO)dao.getNoticeReadData(notiNum);
+		NoticeDTO dto = (NoticeDTO)dao.getNoticeReadData(notiNum);
 		if(dto==null) {
 			return "redirect:/noticeList.action?pageNum=" + pageNum;
 		}
@@ -545,13 +545,11 @@ public class gypController {
 		String cp = request.getContextPath();
 		//넘어오는값
 		String pageNum = request.getParameter("pageNum");
-		String searchKey = request.getParameter("searchKey");
 		String searchValue = request.getParameter("searchValue");
-		
+		String searchKey = "qnaType";
 		
 		//검색
 		if(searchValue == null) {
-			searchKey = "qnaType";
 			searchValue = "";
 		}else if(request.getMethod().equalsIgnoreCase("GET")){
 			searchValue = URLDecoder.decode(searchValue,"UTF-8");
@@ -560,6 +558,10 @@ public class gypController {
 		//페이징
 		int currentPage = 1;
 		int numPerPage = 3;
+		
+		System.out.println("0000000000000");
+		System.out.println(searchKey);
+		
 		int dataCount = dao.getQnaDataCount(searchKey,searchValue);
 		
 		if(pageNum != null)
@@ -615,14 +617,20 @@ public class gypController {
 	
 	//질문게시판 작성 페이지로 이동
 	@RequestMapping(value="/qnaCreated.action",method = {RequestMethod.GET,RequestMethod.POST})
-	public ModelAndView qnaCreated(HttpServletRequest request,QnaDTO dto,
+	public String qnaCreated(HttpServletRequest request,QnaDTO dto,
 			HttpSession session) throws Exception{
 
-		ModelAndView mav = new ModelAndView();
+		String cusId = session.getId();//세션에서 cusId를 불러온다.
+		request.setAttribute("mode", "insert");
+		request.setAttribute("dto", dto);
+		session.setAttribute("cusId", cusId);//cusId를 보낸다.
+		return "qna/qnaCreated";
+		
+		/*ModelAndView mav = new ModelAndView();
 		mav.setViewName("/qna/qnaCreated");
 		request.setAttribute("dto", dto);
 		request.setAttribute("mode", "insert");
-		return mav;
+		return mav;*/
 		
 	}
 	
@@ -647,7 +655,7 @@ public class gypController {
 		String searchValue = request.getParameter("searchValue");
 		
 		if(searchValue==null) {
-			searchKey = "gym";
+			searchKey = "qnaType";
 			searchValue = "";
 		}
 		

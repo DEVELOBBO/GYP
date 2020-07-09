@@ -91,9 +91,16 @@
 	}
 </script>
 </head>
-<body>
-	<h2>공지사항 등록</h2>
+<body style="font-family: 'Noto Sans KR', sans-serif;">
 	
+	<c:if test="${mode=='insert'}">
+	<h2>공지사항 등록</h2>
+	</c:if>
+	
+	<c:if test="${mode=='update'}">
+	<h2>공지사항 수정</h2>
+	</c:if>
+		
 	<br><br>
 	
 	<form method="post" action="/notice/noticeCreated.action" name="myForm">
@@ -101,7 +108,7 @@
 	<table>
 		<tr>
 			<td>번호</td>
-			<td><input type="text" name="notiNum" size="74" maxlength="100" value="${dto.notiNum }"/></td>
+			<td><input type="text" name="notiNum" size="74" maxlength="100" value="${dto.notiNum }" disabled="disabled"/></td>
 		</tr>
 	<%-- 	<tr>
 			<td>작성자</td>
@@ -143,6 +150,7 @@
 	</div>
 	</form>
 	
+	<div style="height: 70px;">&nbsp;</div>
 	<jsp:include page="/WEB-INF/views/layout/footer.jsp" />
 
 	

@@ -19,6 +19,45 @@
 	<!-- font -->
 	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400&display=swap" rel="stylesheet">
 	
+	
+	<style type="text/css">
+	#noticeList{
+		width:500px;
+		height:800px;
+		margin:30px auto;
+		text-align:center;
+	}
+	h5{
+		color:green;
+		text-align:left;
+	}
+	#noticeList_title{
+		width:664px;   /* 690px - (padding-left+border:3px+border:3px) */
+		padding-left:20px;
+		height:40px;
+		text-align:left;
+		font-weight: bold;
+		line-height:40px;
+		font-size:30pt;
+		margin-bottom:30px;
+	}
+	
+	#noticeList_list #right{
+		float:right;
+		width:345px;
+		text-align:right;
+	}
+	hr{}
+
+	td{
+		width: 500px;
+		margin: auto;
+	}
+	
+	</style>
+		
+	
+	
 <title>GYP</title>
 </head>
 <body style="font-family: 'Noto Sans KR', sans-serif;">
@@ -30,9 +69,9 @@
 	
 	
 	<div id="noticeList">
-		<br><br><br>
-		<h5 style="color:green;">FITNESS GYM</h5>
-		<h1>WORKING HOUR &nbsp;&nbsp; 공지사항</h1>
+		<br><br>
+		<h5>FITNESS GYM</h5>
+		<div id="noticeList_title">WORKING HOURS &nbsp;&nbsp; 공지사항</div>
 		<br>
 		<a href=/gyp/noticeCreated.action>테스트용 글올리기</a>		
 		
@@ -47,14 +86,14 @@
 							${dto.notiTitle }
 						</a>
 					</td>
-					<td>${dto.notiCreated }</td>
+					<td id="right">${dto.notiCreated }</td>
 					</tr>
 				</table>
 			</div>	
 			</c:forEach>
 		
 				
-			<div id="footer">
+			<div>
 				<c:if test="${dataCount!=0 }">
 					${pageIndexList }
 				</c:if>
