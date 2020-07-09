@@ -4,7 +4,6 @@ package com.exe.dto;
 public class CustomInfo {
 
 	private String sessionId;
-	private String sessionpwd;
 	private String loginType;
 	
 	public String getSessionId() {
@@ -12,12 +11,6 @@ public class CustomInfo {
 	}
 	public void setSessionId(String sessionId) {
 		this.sessionId = sessionId;
-	}
-	public String getSessionpwd() {
-		return sessionpwd;
-	}
-	public void setSessionpwd(String sessionpwd) {
-		this.sessionpwd = sessionpwd;
 	}
 	public String getLoginType() {
 		return loginType;

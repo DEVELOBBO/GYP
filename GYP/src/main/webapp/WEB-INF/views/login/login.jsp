@@ -38,7 +38,9 @@ String cp = request.getContextPath();
 			return;
 		}
 		
-		f.action = "<%=cp%>/login_ok.action";
+		var referrer = document.referrer;
+		
+		f.action = "/gyp/login_ok.action?history=" + referrer;
 		f.submit();
 	}
 </script>

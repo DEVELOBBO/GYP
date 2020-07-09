@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
 	request.setCharacterEncoding("UTF-8");
-String cp = request.getContextPath();
+	String cp = request.getContextPath();
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -99,7 +99,7 @@ String cp = request.getContextPath();
 			이전글:
 			<c:if test="${!empty preQnaTitle  }">
 				<a
-					href="<%=cp%>/qnaArticle.action?pageNum=${pageNum }&qnaNum=${preQnaNum}">
+					href="/gyp/qnaArticle.action?pageNum=${pageNum }&qnaNum=${preQnaNum}">
 					${preQnaTitle } </a>
 			</c:if>
 		</div>

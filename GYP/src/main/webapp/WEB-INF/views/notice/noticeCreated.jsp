@@ -27,7 +27,7 @@
 		var notiNum = "${dto.notiNum}";
 		var pageNum = "${pageNum}";
 		var params = "?notiNum=" + notiNum + "&pageNum=" + pageNum;
-		var url = "<%=cp%>/noticeDeleted.action" + params;
+		var url = "/gyp/noticeDeleted.action" + params;
 		
 		location.replace(url);
 		
@@ -38,7 +38,7 @@
 		var notiNum = "${dto.notiNum}";
 		var pageNum = "${pageNum}";
 		var params = "?notiNum=" + notiNum + "&pageNum=" + pageNum;
-		var url = "<%=cp%>/noticeUpdated.action" + params;
+		var url = "/gyp/noticeUpdated.action" + params;
 		
 		location.replace(url);
 		

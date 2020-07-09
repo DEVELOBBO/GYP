@@ -32,5 +32,9 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<!-- Q&A Mapper 추가 -->
 		<mapper resource="com/exe/mybatis/qnaMapper.xml"/>
 		
+		<!-- ********************서예지*********************** -->
+		<!-- 회원가입 Mapper 추가 -->
+		<mapper resource="com/exe/mybatis/createMapper.xml"/>
+		
 	</mappers>
 </configuration>

@@ -244,4 +244,21 @@ private SqlSessionTemplate sessionTemplate;
 		sessionTemplate.update("qna.updateData",dto);
 	}
 	
+	//*******************채종완*******************
+	 
+	//cusCreated : 개인회원가입정보 삽입
+	public void cusCreated(CustomerDTO dto) {
+		sessionTemplate.insert("createMapper.insertCus",dto);
+	}
+	
+	// gymCreated : 체육관 회원가입정보 삽입
+	public void gymCreated(GymDTO dto) {
+		sessionTemplate.insert("createMapper.insertGym",dto);
+	}
+	
+	//아이디 체크
+	public void idCheck(CustomerDTO dto) {
+		sessionTemplate.selectOne("createMapper.idCheck", dto);
+	}
+	
 }

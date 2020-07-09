@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
 	request.setCharacterEncoding("UTF-8");
-String cp = request.getContextPath();
+	String cp = request.getContextPath();
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -31,7 +31,7 @@ String cp = request.getContextPath();
 		var notiNum = "${dto.notiNum}";
 		var pageNum = "${pageNum}";
 		var params = "?notiNum=" + notiNum + "&pageNum=" + pageNum;
-		var url = "<%=cp%>/noticeDeleted.action" + params;
+		var url = "/gyp/noticeDeleted.action" + params;
 		
 		location.replace(url);
 		
@@ -42,8 +42,7 @@ String cp = request.getContextPath();
 		var notiNum = "${dto.notiNum}";
 		var pageNum = "${pageNum}";
 		var params = "?notiNum=" + notiNum + "&pageNum=" + pageNum;
-		var url = "<%=cp%>";
-	/noticeUpdated.action" + params;
+		var url = "/gyp/noticeUpdated.action" + params;
 
 		location.replace(url);
 
@@ -92,7 +91,7 @@ String cp = request.getContextPath();
 			이전글:
 			<c:if test="${!empty preNotiTitle  }">
 				<a
-					href="<%=cp%>/noticeArticle.action?pageNum=${pageNum }&notiNum=${preNotiNum}">
+					href="/gyp/noticeArticle.action?pageNum=${pageNum }&notiNum=${preNotiNum}">
 					${preNotiTitle } </a>
 			</c:if>
 		</div>
@@ -101,7 +100,7 @@ String cp = request.getContextPath();
 			다음글:
 			<c:if test="${!empty nextNotiTitle  }">
 				<a
-					href="<%=cp%>/noticeArticle.action?pageNum=${pageNum }&notiNum=${nextNotiNum}">
+					href="/gyp/noticeArticle.action?pageNum=${pageNum }&notiNum=${nextNotiNum}">
 					${nextNotiTitle } </a>
 			</c:if>
 		</div>
@@ -115,7 +114,7 @@ String cp = request.getContextPath();
 			</div>
 			<div id="rightFooter">
 				<input type="button" value="돌아가기"
-					onclick="javascript:location.href='<%=cp%>/noticeList.action?pageNum=${pageNum }';" />
+					onclick="javascript:location.href='/gyp/noticeList.action?pageNum=${pageNum }';" />
 			</div>
 		</div>
 

@@ -44,9 +44,15 @@
 		<beans:property name="url" value="jdbc:oracle:thin:@192.168.16.26:1521:TestDB"/>
 		<beans:property name="username" value="angelina"/>
 		<beans:property name="password" value="a123"/>
-	
-	
 	</beans:bean>
+
+	<!-- for file upload ,CHAEJONG -->
+	<beans:bean id="multipartResolver" 
+            class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+            <beans:property name="maxUploadSize" value="10240000" /><!-- fileSize -->
+            <beans:property name="maxInMemorySize" value="1024000"/><!-- bufferSize -->
+            <beans:property name="defaultEncoding" value="utf-8"/>
+    </beans:bean>
 	
 	<beans:bean id="myUtil" class="com.exe.util.MyUtil"/>
 	

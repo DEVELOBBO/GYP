@@ -45,17 +45,17 @@
                                     <li><a href="/gyp/qnaList.action">Q&A</a></li>
                                     
                                     
-                                    <c:if test="${empty info.sessionId}">
+                                    <c:if test="${empty sessionScope.customInfo.sessionId }">
                                     <li><a href="/gyp/login.action">로그인</a></li></c:if>
                                    
-                                    <c:if test="${!empty info.sessionId}">
+                                    <c:if test="${!empty sessionScope.customInfo.sessionId }">
                                     <li><a href="/gyp/logout.action">로그아웃</a></li></c:if>
                                     
                                     
-                                    <c:if test="${empty info.sessionId}">
-                                    	<li><a href="#">회원가입</a></li></c:if>
+                                    <c:if test="${empty sessionScope.customInfo.sessionId }">
+                                    	<li><a href="/gyp/create.action">회원가입</a></li></c:if>
                                     
-                                    <c:if test="${info.loginType =='customer' }">
+                                    <c:if test="${sessionScope.customInfo.loginType =='customer' }">
                                     	<li><a href="/gyp/customerMyPage.action">마이페이지</a>
                                     	 <ul class="dropdown" style="width: 100px;">
                                             <li><a href="/">회원정보</a></li>
@@ -65,7 +65,7 @@
                                         </ul>
                                     </li></c:if>
                                     
-                                    <c:if test="${info.loginType =='gym' }">
+                                    <c:if test="${sessionScope.customInfo.loginType =='gym' }">
                                     	<li><a href="/gyp/gymMyPage.action">마이페이지</a>
                                     	 <ul class="dropdown" style="width: 100px;">
                                             <li><a href="/">회원정보</a></li>
@@ -85,7 +85,15 @@
                                 </ul>
 
                                 <!-- Call Button -->
-                                <a href="#" class="fitness-btn menu-btn ml-30" style="min-width: 100px;">이용권 구입</a>
+                                <a href="#" class="fitness-btn menu-btn ml-30" style="min-width: 100px;">
+                                	이용권 구입</a>
+                                
+                                <!-- 수업하기 Button -->
+                                <c:if test="${!empty sessionScope.customInfo.sessionId }">
+                                <a href="#" class="fitness-btn menu-btn ml-30" style="min-width: 100px; 
+                                			margin-left: 20px!important; ">
+                                	수업하기</a>
+                                </c:if>
 
                             </div>
                             <!-- Nav End -->
