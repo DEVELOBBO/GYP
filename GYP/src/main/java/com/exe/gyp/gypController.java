@@ -2,7 +2,7 @@ package com.exe.gyp;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.PrintWriter;
+import java.io.IOException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Arrays;
@@ -20,7 +20,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -74,6 +73,12 @@ public class gypController {
 		String history = request.getParameter("history"); //로그인 이전 페이지 기록
 		history = history.substring(history.lastIndexOf("/"), history.length()); //주소의 마지막 슬래시 추출
 		
+		//회원가입 후, 바로 로그인했을 때, 돌아가기 방지
+		if(history.equals("/createCustomer.action")) {
+			history = "/";
+		}
+		
+		
 		String sessionId = request.getParameter("sessionId");//input 입력한값 
 		String sessionpwd = request.getParameter("sessionpwd");
 		
@@ -102,14 +107,13 @@ public class gypController {
 		session.setAttribute("customInfo", info); // 세션에 info에 들어가있는정보(userid,username)이 올라간다.
 		
 		if(loginType=="customer") {
-			return "redirect:" + history;//로그인 성공 
+	        return "redirect:" + history; //로그인 성공
 			
 		}else{
 			return "redirect:/gymMyPage.action";
 		}
 		
 	}
-	
 	
 	//유저 로그아웃
 	@RequestMapping(value = "/logout.action" , method = {RequestMethod.GET,RequestMethod.POST})
@@ -213,7 +217,8 @@ public class gypController {
 	
 	// 유저 정보 수정 (비밀번호 변경)
 	@RequestMapping(value = "/customerUpdate_ok.action" , method = {RequestMethod.GET,RequestMethod.POST})
-	public String customerUpdate_ok(HttpServletRequest request,HttpSession session,CustomerDTO dto) {
+	public String customerUpdate_ok(HttpServletRequest request,HttpSession session,
+			CustomerDTO dto, HttpServletResponse response) throws IOException {
 		
 		dao.updateData(dto);
 		request.setAttribute("dto", dto);
@@ -223,14 +228,15 @@ public class gypController {
 	
 	// 유저 정보 수정 (삭제)
 	@RequestMapping(value = "/customerDeleted_ok.action" , method = {RequestMethod.GET,RequestMethod.POST})
-	public String customerDeleted_ok(HttpServletRequest request,CustomerDTO dto,HttpSession session) {
+	public String customerDeleted_ok(HttpServletRequest request,CustomerDTO dto,
+			HttpSession session, HttpServletResponse response) throws IOException {
 		
 		dao.deleteData(dto);
 		
 		//삭제시 세션제거
 		session.removeAttribute("customInfo"); // customInfo 안에 있는 데이터를 지운다
 		session.invalidate(); // customInfo 라는 변수도 지운다.
-
+		
 		// 임시 회원탈퇴시 로그인창으로 넘어가기 
 		return "login/login";
 	}
@@ -809,7 +815,8 @@ public class gypController {
 	//개인 회원가입 완료 (삽입)
 	//@ResponseBody
 	@RequestMapping(value = "/createCustomer_ok.action", method = {RequestMethod.GET,RequestMethod.POST})
-	public String createCustomer_ok(HttpServletRequest request,CustomerDTO dto) throws Exception{
+	public String createCustomer_ok(HttpServletRequest request,CustomerDTO dto,
+			HttpServletResponse response) throws Exception{
 		
 		dao.cusCreated(dto);
 		return "redirect:/login.action";
@@ -826,12 +833,17 @@ public class gypController {
 	//체육관 회원가입 완료 (삽입 + 파일업로드)
 	//체육관 회원가입 완료 후 처리
 	@RequestMapping(value = "/createGym_ok.action",method = {RequestMethod.GET,RequestMethod.POST})
-	public String createGym_ok(HttpServletRequest request,GymDTO dto,
+	public String createGym_ok(HttpServletRequest request,GymDTO dto, HttpServletResponse response,
 			String hidden1, MultipartHttpServletRequest multiReq, String str)throws Exception{
 		
-		String path = multiReq.getSession().getServletContext().getRealPath("/WEB-INF/imagefiles");
-		StringBuffer sb = new StringBuffer();
+		//경로생성	
+		String path = multiReq.getSession().getServletContext().getRealPath("/resources/img/gymTrainerPic/");
+		File dir = new File(path);
+		if(!dir.exists()) {
+			dir.mkdir();//경로 체크 후, 없으면 생성
+		}
 		
+		//---------트레이너 이름 합치기---------
 		String gymTrainer1 = request.getParameter("gymTrainer1");
 		String gymTrainer2 = request.getParameter("gymTrainer2");
 		String gymTrainer3 = request.getParameter("gymTrainer3");
@@ -851,77 +863,69 @@ public class gypController {
 			gymTrainer += gymTrainer4;
 		}
 		
-		System.out.println("★" + gymTrainer.substring(gymTrainer.length()-1, gymTrainer.length()));
-		System.out.println(gymTrainer.substring(0, gymTrainer.length()-1));
-		
+		//마지막글자
 		String lastWord = gymTrainer.substring(gymTrainer.length()-1, gymTrainer.length());
-		System.out.println(lastWord);
 		
-		//마지막 쉼표 빼고 setting
-		while(lastWord == ",") {
-			System.out.println("시발");
+		//마지막 쉼표면, 쉼표 빼고 dto에 setting
+		while(lastWord.equals(",")) {
 			gymTrainer = gymTrainer.substring(0, gymTrainer.length()-1);
+			lastWord = gymTrainer.substring(gymTrainer.length()-1, gymTrainer.length());//마지막 글자 다시 세팅
 		}
-		
-		System.out.println("??" + gymTrainer);
 		dto.setGymTrainer(gymTrainer);
-		
-//안됨
-		//경로 체크 후, 없으면 생성
-		File dir = new File(path);
-		if(!dir.isDirectory()) {
-			dir.mkdir();
-		}
-		
+
+		//---------트레이너 파일 합치기---------
+
 		//파일 리스트 생성
 		Iterator<String> files = multiReq.getFileNames();
 		MultipartFile mfile = multiReq.getFile(files.next());
 		
 		//파일 용량 없음 검사
 		if(mfile == null || mfile.getSize() <= 0) {
-			System.out.println("파일용량 x");
+			System.out.println("파일용량 x"); //v파일 alert
 			return "redirect:/";
 		}
 		
 		//html의 upload 가져와서 파일 리스트 생성
 		List<MultipartFile> fileList = multiReq.getFiles("upload");
 		String gymTrainerPic = "";
+		String newFileName = ""; 
 		
 		//확장 for문으로 하나씩 처리
 		for (MultipartFile fileShowOne : fileList) {
-			
-			gymTrainerPic += fileShowOne.getOriginalFilename() + ","; //파일이름 합침
-			//long fileSize = fileShowOne.getSize(); //파일 사이즈 //어디다 씀?
-			
 			try {
-				if(!fileShowOne.getOriginalFilename().equals("")) {
-					FileOutputStream fs = new FileOutputStream(path+fileShowOne.getOriginalFilename());
+				if(!fileShowOne.getOriginalFilename().equals("")) { //파일 이름이 null이 아니면
+					
+					//로컬저장용 이름 생성
+					newFileName = dto.getGymId() + "-" + fileShowOne.getOriginalFilename();
+					
+					//DB저장용 파일이름 합침 (아이디로 사진명 중복되지 않게) (예) suzi-트레이너1.jpg
+					gymTrainerPic += newFileName + ",";
+					
+					//fs 생성 및 저장
+					FileOutputStream fs = new FileOutputStream(path + newFileName); 
 					fs.write(fileShowOne.getBytes());
 					fs.close();
 				}
 			} catch (Exception e) {
 				e.toString();
 			}
-
-			
-			//파일 savefilename, originalfilename	
-			
 		}
 		
-		//마지막 쉼표 빼고 setting
-		while(gymTrainerPic.substring(gymTrainerPic.length()-1, gymTrainerPic.length()) == ",") {
+		//마지막글자
+		lastWord = gymTrainerPic.substring(gymTrainerPic.length()-1, gymTrainerPic.length());
+				
+		//마지막 쉼표면, 쉼표 빼고 dto에 setting
+		while(lastWord.equals(",")) {
 			gymTrainerPic = gymTrainerPic.substring(0, gymTrainerPic.length()-1);
+			lastWord = gymTrainerPic.substring(gymTrainerPic.length()-1, gymTrainerPic.length());//마지막 글자 다시 세팅
 		}
 		dto.setGymTrainerPic(gymTrainerPic);
-		
-		
-		
-		System.out.println(dto.getGymTrainer()); 
-		System.out.println(dto.getGymTrainerPic());
 
-////////////디비에 삽입	//dao.gymCreated(dto);
-			
-			 		return "redirect:/login.action";
+		
+		//디비 삽입
+		dao.gymCreated(dto);
+        
+ 		return "redirect:/login.action";
 			 	
 	}
 }
