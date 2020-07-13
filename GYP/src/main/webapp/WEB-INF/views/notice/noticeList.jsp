@@ -14,8 +14,6 @@
 	<link rel="icon" href="/gyp/resources/img/core-img/favicon.ico">
 	<!-- Core Stylesheet -->
 	<link rel="stylesheet" href="/gyp/resources/css/style.css">
-	<!-- 플로팅 -->
-	<link rel="stylesheet" href="/gyp/resources/css/floating.css">
 	<!-- font -->
 	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400&display=swap" rel="stylesheet">
 	
@@ -62,7 +60,6 @@
 </head>
 <body style="font-family: 'Noto Sans KR', sans-serif;">
 	
-	<jsp:include page="/WEB-INF/views/layout/floating.jsp" />
 	<jsp:include page="/WEB-INF/views/layout/header_over.jsp" />
 	<!-- 메인 : header_main.jsp / 그외 : header_below.jsp -->
 	<jsp:include page="/WEB-INF/views/layout/header_below.jsp" />

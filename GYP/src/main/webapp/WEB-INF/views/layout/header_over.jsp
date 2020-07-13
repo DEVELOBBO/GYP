@@ -58,19 +58,21 @@
                                     <c:if test="${sessionScope.customInfo.loginType =='customer' }">
                                     	<li><a href="/gyp/customerMyPage.action">마이페이지</a>
                                     	 <ul class="dropdown" style="width: 100px;">
-                                            <li><a href="/">회원정보</a></li>
-                                            <li><a href="/">내 이용권</a></li>
-                                            <li><a href="/">예약 내역</a></li>
-                                            <li><a href="/">찜목록</a></li>
+                                            <li><a href="/gyp/customerMyPage.action#">회원정보</a></li>
+                                            <li><a href="/gyp/customerMyPage.action#1">이용권</a></li>
+                                            <li><a href="/gyp/customerMyPage.action#2">예약 내역</a></li>
+                                            <li><a href="/gyp/customerMyPage.action#3">리뷰 목록</a></li>
+                                            <li><a href="/gyp/customerMyPage.action#4">찜 목록</a></li>
                                         </ul>
                                     </li></c:if>
                                     
                                     <c:if test="${sessionScope.customInfo.loginType =='gym' }">
                                     	<li><a href="/gyp/gymMyPage.action">마이페이지</a>
                                     	 <ul class="dropdown" style="width: 100px;">
-                                            <li><a href="/">회원정보</a></li>
-                                            <li><a href="/">누적 이용권</a></li>
-                                            <li><a href="/">예약 내역</a></li>
+                                            <li><a href="/gyp/gymMyPage.action#">회원정보</a></li>
+                                            <li><a href="/gyp/gymMyPage.action#1">누적 매출</a></li>
+                                            <li><a href="/gyp/gymMyPage.action#2">예약 현황</a></li>
+                                            <li><a href="/gyp/gymMyPage.action#3">리뷰 목록</a></li>
                                         </ul>
                                     </li></c:if>
                                     
@@ -91,7 +93,7 @@
                                 <!-- 수업하기 Button -->
                                 <c:if test="${!empty sessionScope.customInfo.sessionId }">
                                 <a href="#" class="fitness-btn menu-btn ml-30" style="min-width: 100px; 
-                                			margin-left: 20px!important; ">
+                                			margin-left: 20px!important; background: linear-gradient(to right, #38b143, #00B38F); ">
                                 	수업하기</a>
                                 </c:if>
 

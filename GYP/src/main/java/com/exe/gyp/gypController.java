@@ -5,7 +5,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.text.ParseException;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -24,9 +26,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.exe.dao.GypDAO;
+import com.exe.dto.BookDTO;
 import com.exe.dto.CustomInfo;
 import com.exe.dto.CustomerDTO;
 import com.exe.dto.GymDTO;
+import com.exe.dto.JjimDTO;
 import com.exe.dto.ReviewDTO;
 import com.exe.util.MyUtil;
 import com.exe.dto.NoticeDTO;
@@ -43,16 +47,45 @@ public class gypController {
 	@Autowired
 	MyUtil myUtil;
 	
+	//*******************최보경*******************
+	
 	//home
 	@RequestMapping(value="/", 
 					method = {RequestMethod.GET, RequestMethod.POST})
 	public String home(HttpServletRequest request,HttpSession session) {
 		
-		//세션에 올라온값 확인
+		//세션에 올라온값 받기
 		CustomInfo info = (CustomInfo)session.getAttribute("customInfo");
-				
+		
+		//체육관 추천 리스트 선언
+		List<GymDTO> gymRecommendLists = null;
+		
+		//로그인되어 있지 않으면 "강남구" 리스트
+		if(info==null) {
+			gymRecommendLists = dao.getGymRecommendDefault();
+		
+		}else if(info!=null) {//로그인 되어 있으면 "회원주소 주변" 리스트
+			String customerAddr = dao.getCusAddr(info.getSessionId()); //회원주소 추출
+			customerAddr = customerAddr.substring(0, customerAddr.indexOf("구")+1); //"구"까지 자름
+			gymRecommendLists = dao.getGymRecommend(customerAddr);
+		}
+		
+		//확장for문, 하나씩 꺼내서 수정
+		for(GymDTO show : gymRecommendLists) {
+			
+			int start = show.getGymName().indexOf("(");
+			
+			if(start>0) { //괄호가 존재하면
+				show.setGymName(show.getGymName().substring(0, start)); //괄호부터 끝까지 자르고 다시 set
+			}
+			if(show.getGymProgram().length() > 13) { //프로그램 길면 자르기
+				show.setGymProgram(show.getGymProgram().substring(0, 13) + " ...");
+			}
+		}
+		
 		//값에 따라 마이페이지 타입을 바꾸기 위해
 		request.setAttribute("info", info);
+		request.setAttribute("gymRecommendLists", gymRecommendLists);
 		return "home";
 	}
 	
@@ -108,11 +141,9 @@ public class gypController {
 		
 		if(loginType=="customer") {
 	        return "redirect:" + history; //로그인 성공
-			
 		}else{
 			return "redirect:/gymMyPage.action";
 		}
-		
 	}
 	
 	//유저 로그아웃
@@ -122,7 +153,7 @@ public class gypController {
 		//로그아웃시 세션 제거 
 		session.removeAttribute("customInfo"); // customInfo 안에 있는 데이터를 지운다
 		session.invalidate(); // customInfo 라는 변수도 지운다.
-		return "home";
+		return "redirect:/";
 	}
 	
 	//유저 패스워드 보여주기창
@@ -182,25 +213,142 @@ public class gypController {
 		return "login/login";
 	}
 	
-	//User 마이페이지
-	@RequestMapping(value = "/customerMyPage.action" , method = {RequestMethod.GET,RequestMethod.POST})
-	public String customerMyPage(HttpServletRequest request,HttpSession session) {
-		
-		CustomInfo info = (CustomInfo)session.getAttribute("customInfo");
-		CustomerDTO dto = dao.getReadData(info);//디비에서 불러옴
-		
-		request.setAttribute("dto", dto);
+	// User 마이페이지
+	@RequestMapping(value = "/customerMyPage.action", method = { RequestMethod.GET, RequestMethod.POST })
+	public String customerMyPage(HttpServletRequest request, HttpSession session) {
+
+		CustomInfo info = (CustomInfo) session.getAttribute("customInfo");
+
+		// 유저정보
+		CustomerDTO cusdto = dao.getReadData(info);
+
+		// 리뷰 아이디값 검색하기 위해
+		String reviewId = info.getSessionId();
+		// 찜 아이디값 검색하기 위해
+		String jjimId = info.getSessionId();
+		// 예약 아이디값 검색하기 위해
+		String bookId = info.getSessionId();
+
+		// 리뷰리스트
+		List<ReviewDTO> reviewlists = dao.reviewgetList(reviewId);
+		// 찜리스트
+		List<JjimDTO> jjimlists = dao.jjimgetList(jjimId);
+		// 예약 리스트
+		List<BookDTO> booklists = dao.bookgetList(bookId);
+
+		request.setAttribute("booklists", booklists);
+		request.setAttribute("reviewlists", reviewlists);
+		request.setAttribute("jjimlists", jjimlists);
+		request.setAttribute("cusdto", cusdto);
+
 		return "myPage/customerMyPage";
 	}
 	
-	//GYM 마이페이지
-	@RequestMapping(value = "/gymMyPage.action" , method = {RequestMethod.GET,RequestMethod.POST})
-	public String gymMyPage(HttpServletRequest request,HttpSession session) {
-			
-		CustomInfo info = (CustomInfo)session.getAttribute("customInfo");
-		GymDTO dto = dao.getgymReadData(info);
+	// GYM 마이페이지
+	@RequestMapping(value = "/gymMyPage.action", method = { RequestMethod.GET, RequestMethod.POST })
+	public String gymMyPage(HttpServletRequest request, HttpSession session) throws ParseException {
+
+		CustomInfo info = (CustomInfo) session.getAttribute("customInfo");
 		
-		request.setAttribute("dto", dto);
+		// 리뷰 아이디값 검색하기 위해
+		String reviewId = info.getSessionId();
+		// 예약 아이디값 검색하기 위해
+		String bookId = info.getSessionId();
+		// 체육관 아이디
+		String gymId = info.getSessionId();
+		//넘어오는값
+		String strYear = request.getParameter("year");
+		//넘어오는값
+		String strMonth = request.getParameter("month");
+
+		
+		//캘린더 사용
+		Calendar cal = Calendar.getInstance();
+		//현재 년도
+		int year = cal.get(Calendar.YEAR);
+		//현재 월
+		int month = cal.get(Calendar.MONTH) + 1;
+
+		
+		//넘어오는 값이 없을 경우에, 현재 날짜 넣어줌
+		if (strYear == null || strYear.equals(""))
+			strYear = Integer.toString(year);
+		if (strMonth == null || strMonth.equals(""))
+			strMonth = Integer.toString(month);
+		
+		//숫자로 변환
+		year = Integer.parseInt(strYear);
+		month = Integer.parseInt(strMonth);
+			
+
+		//book타입
+		String type = "true";
+
+		//범위 검색하기위한 변수 생성
+		String beforemonthdate = "";
+		String aftermonthdate = "";
+
+		//달이 7이렇게 넘어오면 안되므로 07 이렇게 넘어와야 하므로 해준 조건식
+		if (strMonth.length() == 2) {
+			beforemonthdate = year + "-" + (month-1);
+		} else if (strMonth.length() == 1) {
+			beforemonthdate = year + "-0" + (month-1);
+		}
+		if (strMonth.length() == 2) {
+			aftermonthdate = year + "-" + month;
+		} else if (strMonth.length() == 1) {
+			aftermonthdate = year + "-0" + month;
+		}
+
+		// 체육관 정보
+		GymDTO gymdto = dao.getgymReadData(info);
+
+		//데이터 넘겨주기
+		Map<String, Object> hMap = new HashMap<String, Object>();
+		hMap.put("gymId", gymId);
+		hMap.put("beforemonthdate", beforemonthdate);
+		hMap.put("aftermonthdate", aftermonthdate);
+		hMap.put("type", type);// 타입 값 검색하기위해
+
+		// 예약 데이터 개수
+		int bookdataCount = dao.bookgetDataCount(hMap);
+
+		// 예약 리스트
+		List<BookDTO> gymbooklists = dao.gymbookgetList(bookId);
+		// 리뷰리스트
+		List<ReviewDTO> gymreviewlists = dao.gymreviewgetList(reviewId);
+
+		////////////////////////////////////////////////////////////////////////
+
+		// 오늘 날짜 구하기
+		// 이전버튼키(◀)
+		int preYear = year;
+		int preMonth = month - 1;
+		if (preMonth < 1) {
+			preYear = year - 1;
+			preMonth = 12;
+		}
+		// 다음버튼키(▶)
+		int nextYear = year;
+		int nextMonth = month + 1;
+		if (nextMonth > 12) {
+			nextYear = year + 1;
+			nextMonth = 1;
+		}
+
+		////////////////////////////////////////////////////////////////////////
+
+		request.setAttribute("gymbooklists", gymbooklists);
+		request.setAttribute("gymreviewlists", gymreviewlists);
+		request.setAttribute("gymdto", gymdto);
+		request.setAttribute("bookdataCount", bookdataCount);
+		request.setAttribute("year", year);
+		request.setAttribute("month", month);
+		request.setAttribute("preMonth", preMonth);
+		request.setAttribute("nextMonth", nextMonth);
+		request.setAttribute("preYear", preYear);
+		request.setAttribute("nextYear", nextYear);
+
 		return "myPage/gymMyPage";
 	}
 	
@@ -241,6 +389,69 @@ public class gypController {
 		return "login/login";
 	}
 	
+	// 체육관 수정창
+	@RequestMapping(value = "/gymUpdate.action", method = { RequestMethod.GET, RequestMethod.POST })
+	public String gymUpdate(HttpServletRequest request, HttpSession session) {
+		// 세션에 올라온값
+		CustomInfo info = (CustomInfo) session.getAttribute("customInfo");
+		
+		GymDTO gymdto = dao.getgymReadData(info);
+		request.setAttribute("gymdto", gymdto);
+		return "myPage/gymUpdate";
+	}
+
+	// 체육관 정보 수정 (비밀번호 변경)
+	@RequestMapping(value = "/gymUpdate_ok.action", method = { RequestMethod.GET, RequestMethod.POST })
+	public String gymUpdate_ok(HttpServletRequest request, HttpSession session, GymDTO gymdto) {
+		dao.gymupdateData(gymdto);
+		
+		//캘린더 사용
+		Calendar cal = Calendar.getInstance();
+
+		//현재 년도
+		int nowYear = cal.get(Calendar.YEAR);
+		//현재 월
+		int nowMonth = cal.get(Calendar.MONTH) + 1;
+		
+		request.setAttribute("gymdto", gymdto);
+		return "redirect:/gymMyPage.action?year="+nowYear+"&month="+nowMonth;
+	}
+	
+	// 체육관 정보 수정 (삭제)
+	@RequestMapping(value = "/gymDeleted_ok.action", method = { RequestMethod.GET, RequestMethod.POST })
+	public String gymDeleted_ok(HttpServletRequest request, GymDTO dto, HttpSession session) {
+		dao.gymdeleteData(dto);
+		// 삭제시 세션제거
+		session.removeAttribute("customInfo"); // customInfo 안에 있는 데이터를 지운다
+		session.invalidate(); // customInfo 라는 변수도 지운다.
+		// 임시 회원탈퇴시 로그인창으로 넘어가기
+		return "login/login";
+	}
+	
+	
+	// 리뷰 삭제
+	@RequestMapping(value = "/reviewDelete.action", method = { RequestMethod.GET, RequestMethod.POST })
+	public String reviewDelete(HttpServletRequest request, HttpSession session) {
+		int reNum = Integer.parseInt(request.getParameter("reNum"));
+		dao.reviewdeleteData(reNum);
+		return "redirect:/customerMyPage.action";
+	}
+
+	// 찜 삭제
+	@RequestMapping(value = "/jjimDelete.action", method = { RequestMethod.GET, RequestMethod.POST })
+	public String jjimDelete(HttpServletRequest request, HttpSession session) {
+		String gymId = request.getParameter("gymId");
+		dao.jjimdeleteData(gymId);
+		return "redirect:/customerMyPage.action";
+	}
+
+	// 예약 삭제
+	@RequestMapping(value = "/bookDelete.action", method = { RequestMethod.GET, RequestMethod.POST })
+	public String bookDelete(HttpServletRequest request, HttpSession session) {
+		int bookNum = Integer.parseInt(request.getParameter("bookNum"));
+		dao.bookdeleteData(bookNum);
+		return "redirect:/gymMyPage.action";
+	}
 	
 	
 	//*******************김세이*******************

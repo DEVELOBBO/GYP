@@ -4,13 +4,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpSession;
-
 import org.mybatis.spring.SqlSessionTemplate;
 
+import com.exe.dto.BookDTO;
 import com.exe.dto.CustomInfo;
 import com.exe.dto.CustomerDTO;
 import com.exe.dto.GymDTO;
+import com.exe.dto.JjimDTO;
 import com.exe.dto.NoticeDTO;
 import com.exe.dto.QnaDTO;
 import com.exe.dto.ReviewDTO;
@@ -22,6 +22,7 @@ private SqlSessionTemplate sessionTemplate;
 	public void setSessionTemplate(SqlSessionTemplate sessionTemplate) throws Exception{
 		this.sessionTemplate = sessionTemplate; 
 	}
+	
 	
 	//*******************원도현*******************
 	
@@ -42,9 +43,14 @@ private SqlSessionTemplate sessionTemplate;
 		return dto;
 	}
 	
-	//회원정보 수정
+	//회원정보 수정 (유저)
 	public void updateData(CustomerDTO dto) {
 		sessionTemplate.update("customerMapper.updateData", dto);
+	}
+	
+	// 회원정보 수정(체육관)
+	public void gymupdateData(GymDTO gymdto) {
+		sessionTemplate.update("gymMapper.gymupdateData", gymdto);
 	}
 	
 	//회원정보 불러오기 (유저)
@@ -59,17 +65,75 @@ private SqlSessionTemplate sessionTemplate;
 		return dto;
 	}
 	
-	//회원정보 삭제(user)
+	//회원정보 삭제(유저)
 	public void deleteData(CustomerDTO dto) {
 		sessionTemplate.delete("customerMapper.deleteData", dto);
+	}
+	
+	// 회원정보 삭제(체육관)
+	public void gymdeleteData(GymDTO dto) {
+		sessionTemplate.delete("gymMapper.gymdeleteData", dto);
 	}
 	
 	//로그인시 값이 존재하는지 확인
 	public int getDataCount(String cusId) {
 		int result = sessionTemplate.selectOne("loginMapper.getDataCount", cusId);
 		return result;
-
 	}
+	
+	// 리뷰 리스트(유저)
+	public List<ReviewDTO> reviewgetList(String reviewId) {
+		List<ReviewDTO> reviewlists = sessionTemplate.selectList("customerMapper.reviewgetLists", reviewId);
+		return reviewlists;
+	}
+	
+	// 리뷰 리스트(체육관)
+	public List<ReviewDTO> gymreviewgetList(String reviewId) {
+		List<ReviewDTO> gymreviewlists = sessionTemplate.selectList("gymMapper.gymreviewgetLists", reviewId);
+		return gymreviewlists;
+	}
+	
+	// 리뷰 삭제
+	public void reviewdeleteData(int reNum) {
+		sessionTemplate.delete("customerMapper.reviewdeleteData", reNum);
+	}
+	
+	// 찜 리스트
+	public List<JjimDTO> jjimgetList(String jjimId) {
+		List<JjimDTO> jjimlists = sessionTemplate.selectList("customerMapper.jjimgetLists", jjimId);
+		return jjimlists;
+	}
+	
+	// 찜 삭제
+	public void jjimdeleteData(String gymId) {
+		sessionTemplate.delete("customerMapper.jjimdeleteData", gymId);
+	}
+	
+	// 예약 리스트(유저)
+	public List<BookDTO> bookgetList(String bookId) {
+		List<BookDTO> booklists = sessionTemplate.selectList("customerMapper.bookgetLists", bookId);
+		return booklists;
+	}
+	
+	// 예약 리스트(체육관)
+	public List<BookDTO> gymbookgetList(String bookId) {
+		List<BookDTO> gymbooklists = sessionTemplate.selectList("gymMapper.gymbookgetLists", bookId);
+		return gymbooklists;
+	}
+	
+	// 예약 삭제
+	public void bookdeleteData(int bookNum) {
+		sessionTemplate.delete("customerMapper.bookdeleteData", bookNum);
+	}
+	
+	//예약 데이터 개수
+	public int bookgetDataCount(Map<String, Object> hMap) {
+		int result = sessionTemplate.selectOne("gymMapper.getDataCount",hMap);
+		return result;
+	}
+	
+	
+	
 	
 	//*******************김세이*******************
 	// getGymList : 체육관 하나의 정보 받아오기
@@ -261,4 +325,50 @@ private SqlSessionTemplate sessionTemplate;
 		sessionTemplate.selectOne("createMapper.idCheck", dto);
 	}
 	
+	
+	//*******************최보경*******************
+	
+	//getCusAddr : 로그인한 회원의 주소 가져오기
+	public String getCusAddr(String sessionId) {
+		String customerAddr = sessionTemplate.selectOne("recommend.customerAddr", sessionId);
+		return customerAddr;
+	}
+	
+	//gymRecommend : 회원 주소를 기반으로 메인화면에서 체육관 추천 
+	public List<GymDTO> getGymRecommend(String customerAddr){
+		List<GymDTO> nearGymLists = sessionTemplate.selectList("recommend.nearGymList", customerAddr);
+		return nearGymLists;
+	}
+	
+	//gymRecommendDefault : 로그인하지 않은 화면에서 체육관 추천
+	public List<GymDTO> getGymRecommendDefault(){
+		List<GymDTO> nearGymDefaultLists = sessionTemplate.selectList("recommend.nearGymDefaultLists");
+		return nearGymDefaultLists;
+	}
+	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

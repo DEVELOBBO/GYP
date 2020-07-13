@@ -5,7 +5,7 @@ public class CustomerDTO {
 	private String cusId;	// 회원 ID
 	private String cusName;	// 회원 이름
 	private String cusPwd;	// 회원 비밀번호
-	private String cusEmail;	// 회원 이메일
+	private String cusEmail;// 회원 이메일
 	private String cusTel;	// 회원 전화번호
 	private String cusAddr;	// 회원 주소
 	private int cusPass;	// 회원 소유 패스 갯수

@@ -25,13 +25,13 @@
 		
 		f = document.myForm;
 		
-		if(!f.cusPwd.value){
+		if(!f.gymPwd.value){
 			alert("패스워드를 입력하세요!");
-			f.cusPwd.focus();
+			f.gymPwd.focus();
 			return;
 		}
 		
-		f.action = "<%=cp%>/customerUpdate_ok.action";
+		f.action = "<%=cp%>/gymUpdate_ok.action";
 		f.submit();
 	}
 	
@@ -39,9 +39,9 @@
 		
 		f = document.myForm;
 		
-		if(!f.cusPwd.value){
+		if(!f.gymPwd.value){
 			alert("패스워드를 입력하세요!");
-			f.cusPwd.focus();
+			f.gymPwd.focus();
 			return;
 		}
 		if(confirm("정말 GYP서비스를 탈퇴하시겠습니까?"))
@@ -49,7 +49,7 @@
 			alert('그동안 GYP서비스를 이용해 주셔서 감사합니다.');
 
 			//로그인화면으로 이동
-			f.action = "<%=cp%>/customerDeleted_ok.action";
+			f.action = "<%=cp%>/gymDeleted_ok.action";
 			f.submit();
 		}
 		
@@ -75,11 +75,11 @@
 
 			<form action="" method="post" name="myForm">
 				<div class="form-group">
-					<input type="" class="form-control" name="cusId" 
-						placeholder="아이디" style="width: 400px;" value="${dto.cusId }" readonly="readonly">
+					<input type="" class="form-control" name="gymId" 
+						placeholder="아이디" style="width: 400px;" value="${gymdto.gymId }" readonly="readonly">
 				</div>
 				<div class="form-group mb-0">
-					<input type="password" class="form-control" name="cusPwd" 
+					<input type="password" class="form-control" name="gymPwd" 
 						placeholder="패스워드" style="width: 400px;">
 						<font color="red"><b>${message }</b></font>
 				</div>

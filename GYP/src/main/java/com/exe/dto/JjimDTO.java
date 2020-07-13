@@ -2,8 +2,8 @@ package com.exe.dto;
 // 찜한 체육관 테이블 JJIM
 public class JjimDTO {
 
-	private String cusId;	// 회원 ID
-	private String gymId;	// 체육관 ID
+	private String cusId;		// 회원 ID
+	private String gymId;		// 체육관 ID
 	private String jjimCreated;	// 찜한 날짜
 	
 	public String getCusId() {

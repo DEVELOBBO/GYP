@@ -2,10 +2,10 @@ package com.exe.dto;
 // 장바구니 테이블 CART
 public class CartDTO {
 
-	private int cartNum;	// 장바구니 번호
-	private String cusId;	// 회원 아이디
+	private int cartNum;		// 장바구니 번호
+	private String cusId;		// 회원 아이디
 	private String productId;	// 상품 번호
-	private int count;	// 
+	private int count;			// 상품 갯수 
 	
 	public int getCartNum() {
 		return cartNum;

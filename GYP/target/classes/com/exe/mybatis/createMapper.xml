@@ -17,7 +17,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	insert into GYM (gymId,gymType,gymName,gymPwd,gymEmail,gymTel,gymAddr,gymLongitude,gymLatitude
 	,gymTrainer,gymTrainerPic,gymPic,gymProgram,gymFacility,gymHour,gymCreated,gymPass,gymOk)
 	values (#{gymId},#{gymType},#{gymName},#{gymPwd},#{gymEmail},#{gymTel},#{gymAddr},1,1,
-	#{gymTrainer},#{gymTrainerPic},'aa','aa','aa','aa',sysdate,1,'true')
+	#{gymTrainer},#{gymTrainerPic},'aa','aa','aa','aa',sysdate,1,'false')
 </insert>
 
 

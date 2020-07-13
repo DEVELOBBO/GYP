@@ -3,8 +3,8 @@ package com.exe.dto;
 //세션에 올릴 아이디,패스워드
 public class CustomInfo {
 
-	private String sessionId;
-	private String loginType;
+	private String sessionId; //아이디
+	private String loginType; //회원유형
 	
 	public String getSessionId() {
 		return sessionId;

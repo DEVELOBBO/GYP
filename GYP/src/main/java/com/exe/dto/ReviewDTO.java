@@ -2,14 +2,15 @@ package com.exe.dto;
 // 리뷰 테이블 (체육관 리뷰 + 상품 리뷰)
 public class ReviewDTO {
 	
-	private int reNum;	// 리뷰 번호
-	private String reType;	// 리뷰 타입 (체육관/상품)
-	private String cusId;	// 회원 ID
-	private String gymId;	// 체육관 ID
+	private int reNum;			// 리뷰 번호
+	private String reType;		// 리뷰 타입 (체육관/상품)
+	private String cusId;		// 회원 ID
+	private String gymId;		// 체육관 ID
 	private String productId;	// 상품 ID
-	private int star;	// 평가 점수 (0~10)
+	private int star;			// 평가 점수 (0~10)
 	private String reContent;	// 리뷰 내용
 	private String reCreated;	// 리뷰 작성일
+	private String gymName; 	//체육관 이름
 	
 	public int getReNum() {
 		return reNum;

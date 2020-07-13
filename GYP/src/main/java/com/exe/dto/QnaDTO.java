@@ -2,18 +2,18 @@ package com.exe.dto;
 // Q&A 테이블
 public class QnaDTO {
 	
-	private int listNum; //리스트넘
+	private int listNum; 		//리스트넘
 	
-	private int qnaNum;	// QNA 번호
-	private String qnaType;	// QNA 타입 (체육관/상품)
-	private String cusId;	// 회원번호
+	private int qnaNum;			// QNA 번호
+	private String qnaType;		// QNA 타입 (체육관/상품)
+	private String cusId;		// 회원번호
 	private String qnaTitle;	// QNA 제목
 	private String qnaContent;	// QNA 내용
 	private String qnaCreated;	// QNA 생성일
 	private String qnaGroupNum;	// QNA 그룹 Num
-	private int qnaDepth;	//  깊이 : 답변시 사용
-	private int qnaOrderNo;	// 그룹 내의 순서
-	private int qnaParent;	// QNA 게시글 부모
+	private int qnaDepth;		//  깊이 : 답변시 사용
+	private int qnaOrderNo;		// 그룹 내의 순서
+	private int qnaParent;		// QNA 게시글 부모
 	
 	private String searchKey;
 	private String searchValue;

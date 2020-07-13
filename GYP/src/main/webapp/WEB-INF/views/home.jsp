@@ -16,34 +16,39 @@
 	<link rel="icon" href="/gyp/resources/img/core-img/favicon.ico">
 	<!-- Core Stylesheet -->
 	<link rel="stylesheet" href="/gyp/resources/css/style.css">
-	<!-- 플로팅 -->
-	<link rel="stylesheet" href="/gyp/resources/css/floating.css">
 	<!-- font -->
 	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400&display=swap" rel="stylesheet">
+	
+	
+	<!-- 추천 슬라이드 -->
+	<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+
+	<style type="text/css">
+	.ads_sponsors div img{
+		width:340px;
+		height:200px;
+		}
+	</style>
+	
+	
 	
 <title>GYP</title>
 </head>
 <body style="font-family: 'Noto Sans KR', sans-serif;">
 	
-	<jsp:include page="/WEB-INF/views/layout/floating.jsp" />
 	<jsp:include page="/WEB-INF/views/layout/header_over.jsp" />
 	<!-- 메인 : header_main.jsp / 그외 : header_below.jsp -->
 	<jsp:include page="/WEB-INF/views/layout/header_main.jsp" />
 	
 	
-
+	<!-- 추천 슬라이드 -->
+	<jsp:include page="/WEB-INF/views/layout/body_recommend.jsp" />
+	
 
 	<!-- ★★★★★★★★★★★★★★★★★★★★★ -->
  	<!-- ★★★이곳에 본인 코드를 작성해주세요★★★ -->
 	<!-- ★★★★★★★★★★★★★★★★★★★★★ -->
 	<br><br><br><br><br><br><br><br><br><br><br><br><br>
-	
-	<c:if test="${!empty info }">
-		<h2>로그인 성공</h2>
-		${info.sessionId }
-		${info.loginType }
-	</c:if>
-	
 	<br><br><br><br><br><br><br><br><br><br><br><br><br>
 	
 	
@@ -63,6 +68,21 @@
     <!-- Active js -->
     <script src="/gyp/resources/js/active.js"></script>
     
+    
+    <!-- 추천슬라이드 -->
+    <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+	<script src="https://static.codepen.io/assets/common/stopExecutionOnTimeout-157cd5b220a5c80d4ff8e0e70ac069bffd87a61252088146915e8726e5d9f147.js"></script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.5.9/slick.min.js'></script>
+	
+	<script type="text/javascript">
+		 $('.ads_sponsors').slick({
+			 autoplay: true,
+			 autoplaySpeed: 2000,
+			 slidesToShow: 3,
+		   slidesToScroll: 1,
+		   arrows: false
+		 });
+	</script>
 
 
 </body>

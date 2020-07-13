@@ -4,7 +4,7 @@ public class NoticeDTO {
 
 	private int listNum; //글 번호
 	
-	private int notiNum;	 // 공지 번호
+	private int notiNum;	 	// 공지 번호
 	private String notiTitle;	// 공지 제목
 	private String notiContent;	// 공지 내용
 	private String notiCreated;	// 공지 생성일

@@ -2,11 +2,11 @@ package com.exe.dto;
 // 패스 결제(충전) 테이블 CHARGE
 public class ChargeDTO {
 	
-	private String chargeNum;	// 결제 번호
-	private String cusId;	// 회원 번호
-	private int chargePass;	// 충전 패스 (5)
+	private String chargeNum;		// 결제 번호
+	private String cusId;			// 회원 번호
+	private int chargePass;			// 충전 패스 (5)
 	private String chargeCreated;	// 결제 일시 (날짜 + 시간)
-	private String chargeType;	// 결제 방법
+	private String chargeType;		// 결제 방법
 	
 	public String getChargeNum() {
 		return chargeNum;

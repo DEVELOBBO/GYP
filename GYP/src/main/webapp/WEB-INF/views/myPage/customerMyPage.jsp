@@ -8,22 +8,18 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<!-- Favicon -->
-	<link rel="icon" href="/gyp/resources/img/core-img/favicon.ico">
-	<!-- Core Stylesheet -->
-	<link rel="stylesheet" href="/gyp/resources/css/style.css">
-	<!-- 플로팅 -->
-	<link rel="stylesheet" href="/gyp/resources/css/floating.css">
-	<!-- font -->
-	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400&display=swap" rel="stylesheet">
-	
-	<!-- 마이페이지★ -->
-	<link rel="stylesheet" href="/gyp/resources/css/myPage.css">
-	
-<title>GYP</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- Favicon -->
+<link rel="icon" href="/gyp/resources/img/core-img/favicon.ico">
+<!-- Core Stylesheet -->
+<link rel="stylesheet" href="/gyp/resources/css/style.css">
+<!-- font -->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400&display=swap" rel="stylesheet">
+
+<!-- 마이페이지 -->
+<link rel="stylesheet" href="/gyp/resources/css/myPage.css">
    
    <script type="text/javascript">
    
@@ -56,176 +52,182 @@
    </script>
 </head>
 <body style="font-family: 'Noto Sans KR', sans-serif;">
-<!-- header jsp-->
-
-	<div id="myPage_wrapper">
-	   <div id="content">
-	      <h2>마이 페이지(User)</h2>
-	      
-	      <!-- 회원정보 -->
-	      <div class="containter">
-	      
-	         <span class="mp_title">회원정보</span>
-	         <table class="table01" border="0" cellpadding="10" cellspacing="10">
-	            <tr>
-	               <th>아이디</th>
-	               <td>${dto.cusId }</td>
-	            </tr>
-	            <tr>
-	               <th>이름</th>
-	               <td>${dto.cusName }</td>
-	            </tr>
-	            <tr>
-	               <th>연락처</th>
-	               <td>${dto.cusTel }</td>
-	            </tr>
-	            <tr>
-	               <th>주소</th>
-	               <td>${dto.cusAddr }</td>
-	            </tr>
-	         </table> 
-	         
-	         <div class="right_float">
-	            <form action="" name="myForm">
-	               <input type="hidden" name="cusPwdck" value=${dto.cusPwd }>
-	               비밀번호 입력: &nbsp;
-	               <input type="password" name="cusPwd" class="bokyung_mypage_text"/>&nbsp;&nbsp;
-	               <input type="button" value="회원정보 수정" onclick="javascript:toUpdate()" class="bokyung_mypage_button"/>
-	            </form>
-	         </div>
-	      
-	      </div>
-      
-	      <%-- 
-	      <br><br>
-	      <!-- 관심상품 -->
-	      <div class="container">
-	         <span class="mp_title">관심상품</span>
-	         <table class="table01" border="0" cellpadding="10" cellspacing="10">
-	            <c:forEach var="dto" items="${jjimLists }">
-	               <tr>
-	                  <th>상품번호</th><td>${dto.pid }</td>
-	                  <th>상품명</th><td>${dto.pname }</td>
-	                  <th>가격</th><td>${dto.price }</td>
-	                  <td><a href="<%=cp %>/fatale/jjim_delete.do?pid=${dto.pid}" class="bokyung_mypage_link_D">삭제</a></td>
-	               </tr>
-	            </c:forEach>
-	         </table>
-	         <div class="check">
-	            <c:if test="${empty jjimLists }">
-	               찜한 상품이 없습니다.
-	            </c:if>
-	         </div>
-	         
-	      </div>
-	       --%>
-	      <%-- 
-	      <br><br>
-	      <!-- 리뷰 -->
-	      <div class="container">
-	         <span class="mp_title">리뷰</span>
-	         <table class="table01" border="0" cellpadding="10" cellspacing="10">
-	            <tr align="left">
-	               <th width="70">리뷰번호</th>
-	               <th>상품명</th>
-	               <th width="180">제목</th>
-	               <th width="170">등록일</th>
-	               <th>내용</th>
-	               <th colspan="2" align="left">&nbsp;게시글 관리</th>
-	            </tr>
-	            
-	            <c:forEach var="dto" items="${ reviewLists }">
-	               <tr class="tr_white">
-	                  <td align="center">${dto.num }</td>
-	                  <td>${dto.pname }</td>
-	                  <td>${dto.title }</td>
-	                  <td>${dto.rCreated }</td>
-	                  <td width="350" style="padding-right: 20px">${dto.content }</td>
-	                  <td><a href="<%=cp %>/fatale/reviewWrite.do?num=${dto.num}" class="bokyung_mypage_link">수정</a></td>
-	                  <td><a href="<%=cp %>/fatale/reviewDelete.do?num=${dto.num}" class="bokyung_mypage_link_D">삭제</a></td>
-	               </tr>
-	            </c:forEach>
-	         </table>
-	         <div class="check">
-	            <c:if test="${empty reviewLists }">
-	               등록된 리뷰 게시물이 없습니다.
-	            </c:if>
-	         </div>
-	      </div>
-	       --%>
-	      
-	      
-	      <%-- 
-	      <br><br>
-	      <!-- Q&A -->
-	      <div class="container">
-	         <span class="mp_title">Q&amp;A</span>
-	         <table class="table01" border="0" cellpadding="10" cellspacing="10">
-	            <tr align="left">
-	               <th align="center">번호</th>
-	               <th>제목</th>
-	               <th>내용</th>
-	               <th>등록일</th>
-	            </tr>
-	            
-	            <c:forEach var="dto" items="${ qnaLists }">
-	               <tr class="tr_white">
-	                  <td align="center">${dto.num }</td>
-	                  <td>${dto.title }</td>
-	                  <td>${dto.content }</td>
-	                  <td>${dto.qcreated }</td>
-	               </tr>
-	            </c:forEach>
-	         </table>
-	         <div class="check">
-	            <c:if test="${empty qnaLists }">
-	               등록된 Q&amp;A 게시물이 없습니다.
-	            </c:if>
-	         </div>
-	      </div>
-	      
-	      <br><br>
-	      <!-- 주문내역 -->
-	      <div class="container">
-	         <span class="mp_title" id="link_order">주문내역</span>
-	         <table class="table01" border="0" cellpadding="10" cellspacing="10">
 	
-	            <c:forEach var="dto" items="${orderdLists }">
-	               <c:if test="${oCreated!=dto.oCreated}">
-	               <tr>
-	                  <th>주문번호</th><td>${dto.oid}</td>
-	                  <th></th><td width="220" align="center">
-	                        <font color="#0F168C">주문일</font>&nbsp;&nbsp;&nbsp;&nbsp;${dto.oCreated}</td>
-	                  <td colspan="2" align="center" style="padding-left: 25px;" >
-	                        <font color="#0F168C">총가격</font>&nbsp;&nbsp;&nbsp;&nbsp;${dto.hap}</td>
-	                  <th align="center">리뷰 관리</th>
-	               </tr>
-	               </c:if>
-	               <tr class="tr_white">
-	                  <td style="padding: 5px;"><a href="<%=cp %>/fatale/article.do/?pid=${dto.pid}&pageNum=1&searchKey=gname&searchValue=${dto.gid}"><img alt="그림" src="<%=cp%>/image/${dto.img}"
-	                  width="100" height="100"></a></td>
-	                  <td colspan="2">${dto.pname}</td>
-	                  <td align="center">${dto.count}개</td>
-	                  <td align="right" style="padding-right: 35px">${dto.price}원</td>
-	                  <td>${dto.color}</td>
-	                  <td align="center">
-	                  <a href="<%=cp %>/fatale/review.do?searchKey=pname&searchValue=${dto.pname}" class="bokyung_mypage_link_see">리뷰 보기</a><br/>
-	                  <a href="<%=cp %>/fatale/reviewWrite.do?odNum=${dto.num}" class="bokyung_mypage_link">리뷰 쓰기</a>
-	                  </td>
-	               </tr>
-	               <c:set var="oCreated" value="${dto.oCreated}"/>
-	            </c:forEach>
-	         </table>
-	         <div class="check">
-	            <c:if test="${empty qnaLists }">
-	               등록된 주문내역이 없습니다.
-	            </c:if>
-	         </div>
-	      </div>
-	    --%>
-	   
-	   
-	   </div>
-	</div>
+	<jsp:include page="/WEB-INF/views/layout/header_over.jsp" />
+	<jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
+
+<div id="myPage_wrapper" style="font-family: 'Noto Sans KR', sans-serif;">
+   <div id="content">
+   	  <h5 style="color: green;">CUSTOMER MY PAGE</h5>
+      <h2>마이 페이지</h2>
+      
+      <!-- 회원정보 -->
+      <div class="container" id="1">
+      
+         <span class="mp_title" style="font-size: 19px;">회원정보</span>
+         <table  border="0" cellpadding="10" cellspacing="10" style="padding: 2em; text-align: center" >
+            <tr>
+               <th style="font-size: 20px;" >아이디</th>
+               <td style="text-align: left;"> ${cusdto.cusId }</td>
+            </tr>
+            <tr>
+               <th style="font-size: 20px;" >이름</th>
+               <td style="text-align: left;">${cusdto.cusName }</td>
+            </tr>
+            <tr>
+               <th style="font-size: 20px;" >연락처</th>
+               <td style="text-align: left;">${cusdto.cusTel }</td>
+            </tr>
+            <tr>
+               <th style="font-size: 20px;" >주소</th>
+               <td style="text-align: left;">${cusdto.cusAddr }</td>
+            </tr>
+         </table> 
+         
+         <div class="right_float">
+            <form action="" name="myForm">
+               <input type="hidden" name="cusPwdck" value=${cusdto.cusPwd }>
+               비밀번호 입력: &nbsp;
+               <input type="password" name="cusPwd" class="bokyung_mypage_text"/>&nbsp;&nbsp;
+               <input type="button" value="회원정보 수정" onclick="javascript:toUpdate()" 
+               class="btn fitness-btn btn-white mt-10" style="min-width: 50px;"/>
+            </form>
+         </div>
+      
+      </div>
+      
+      
+      <br><br>
+      <!-- 이용권 -->
+      <div class="container" id="2">
+         <span class="mp_title">이용권</span>
+         <table class="table01" border="0" cellpadding="10" cellspacing="10">
+            <tr>
+               
+               <td><font color="blue" size="5" >잔여 패스: ${cusdto.cusPass } PASS  (${cusdto.cusPass*5000 }원)</font></td>
+            </tr>
+            
+         </table>
+         <div class="check">
+            <c:if test="${cusdto.cusPass==0 }">
+               잔여 패스가 없습니다.
+            </c:if>
+         </div>
+         
+      </div>
+      
+      
+      <br><br>
+      <!-- 예약 -->
+      <div class="container" id="3">
+         <span class="mp_title">예약내역</span>
+         <table class="table01" border="0" cellpadding="10" cellspacing="10">
+            <tr style="text-align: center">
+               <th width="70">번호</th>
+               <th>예약타입</th>
+               <th width="180">체육관</th>
+               <th width="180">트레이너</th>
+               <th width="170">등록일</th>
+               <th colspan="2" align="left">&nbsp;게시글 관리</th>
+            </tr>
+            
+            <c:forEach var="bookdto" items="${ booklists }">
+               <tr class="tr_white" align="center">
+                  <td>${bookdto.bookNum }</td>
+                  <td>${bookdto.bookType }</td>
+                  <td>${bookdto.gymName }</td>
+                  <td>${bookdto.gymTrainerPick }</td>
+                  <td>${bookdto.bookCreated }</td>
+                  <td style="text-align: center;"><a href="" class="bokyung_mypage_link">수정(임시)</a></td>
+                  <td style="text-align: left;"><a href="<%=cp %>/bookDelete.action?bookNum=${bookdto.bookNum}" class="bokyung_mypage_link_D">삭제</a></td>
+               </tr>
+            </c:forEach>
+         </table>
+         <div class="check">
+            <c:if test="${empty booklists }">
+               등록된 예약이 없습니다.
+            </c:if>
+         </div>
+      </div>
+      
+      
+      <br><br>
+      <!-- 리뷰 -->
+      <div class="container" id="4">
+         <span class="mp_title">리뷰 목록</span>
+         <table class="table01" border="0" cellpadding="10" cellspacing="10">
+            <tr align="left" style="text-align: center;">
+               <th width="70">리뷰번호</th>
+               <th width="180">체육관</th>
+               <th width="170">등록일</th>
+               <th width="170">평점</th>
+               <th>내용</th>
+               <th colspan="2" align="left">&nbsp;게시글 관리</th>
+            </tr>
+            
+            <c:forEach var="reviewdto" items="${ reviewlists }">
+               <tr class="tr_white" style="text-align: center;">
+                  <td>${reviewdto.reNum }</td>
+                  <td>${reviewdto.gymName }</td>
+                  <td>${reviewdto.reCreated }</td>
+                  <td>${reviewdto.star }</td>
+                  <td width="350" style="padding-right: 20px">${reviewdto.reContent }</td>
+                  <td><a href="" class="bokyung_mypage_link">수정(임시)</a></td>
+                  <td style="text-align: left;"><a href="<%=cp %>/reviewDelete.action?reNum=${reviewdto.reNum}" class="bokyung_mypage_link_D">삭제</a></td>
+               </tr>
+            </c:forEach>
+         </table>
+         <div class="check">
+            <c:if test="${empty reviewlists }">
+               등록된 리뷰 게시물이 없습니다.
+            </c:if>
+         </div>
+      </div>
+      
+      
+      <br><br>
+      <!-- Q&A -->
+      <div class="container5" id="5">
+         <span class="mp_title">제휴시설 찜목록</span>
+         <table class="table01" border="0" cellpadding="10" cellspacing="10">
+            <tr style="text-align: center;">
+               <th align="center">체육관</th>
+               <th>주소</th>
+               <th>전화번호</th>
+               <th colspan="2" align="left">&nbsp;게시글 관리</th>
+            </tr>
+            
+            <c:forEach var="jjimdto" items="${ jjimlists }">
+               <tr class="tr_white" style="text-align: center;">
+                  <td>${jjimdto.gymName}</td>
+                  <td>${jjimdto.gymAddr}</td>
+                  <td>${jjimdto.gymTel}</td>
+                  <td><a href="<%=cp %>/jjimDelete.action?gymId=${jjimdto.gymId}" class="bokyung_mypage_link_D">삭제</a></td>
+               </tr>
+            </c:forEach>
+         </table>
+         <div class="check">
+            <c:if test="${empty jjimlists }">
+               등록된 찜 게시물이 없습니다.
+            </c:if>
+         </div>
+      </div>
+   </div>
+</div>
+
+<div style="height: 70px;">&nbsp;</div>
+	<jsp:include page="/WEB-INF/views/layout/footer.jsp" />
+
+ <!-- ##### All Javascript Script ##### -->
+    <!-- jQuery-2.2.4 js -->
+    <script src="/gyp/resources/js/jquery/jquery-2.2.4.min.js"></script>
+    <!-- Popper js -->
+    <script src="/gyp/resources/js/bootstrap/popper.min.js"></script>
+    <!-- Bootstrap js -->
+    <script src="/gyp/resources/js/bootstrap/bootstrap.min.js"></script>
+    <!-- All Plugins js -->
+    <script src="/gyp/resources/js/plugins/plugins.js"></script>
+    <!-- Active js -->
+    <script src="/gyp/resources/js/active.js"></script>
 </body>
 </html>
