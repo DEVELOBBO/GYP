@@ -12,6 +12,7 @@ import com.exe.dto.CustomerDTO;
 import com.exe.dto.GymDTO;
 import com.exe.dto.JjimDTO;
 import com.exe.dto.NoticeDTO;
+import com.exe.dto.ProductDTO;
 import com.exe.dto.QnaDTO;
 import com.exe.dto.ReviewDTO;
 
@@ -166,9 +167,78 @@ private SqlSessionTemplate sessionTemplate;
 	}
 	
 	// deleteReviewData : 리뷰 삭제
-	public void deleteReviewData(int gymId) {
-		sessionTemplate.delete("gymDetailMapper.deleteReviewData",gymId);
+	public void deleteReviewData(int reNum) {
+		sessionTemplate.delete("gymDetailMapper.deleteReviewData",reNum);
 	}
+
+	// getAvgReview : 체육관 평점 평균
+	public int getAvgReview(String gymId) {
+		int result = sessionTemplate.selectOne("gymDetailMapper.getAvgReview", gymId);
+		return result;
+	}
+
+	// getTimesCusBookedGym : 체육관 예약 횟수 확인 : 세션의 사용자의 해당 체육관 이용 횟수
+	public int getTimesCusBookedGym(Map<String, Object> hMap) {
+		int result = sessionTemplate.selectOne("gymDetailMapper.getTimesCusBookedGym",hMap);
+		return result;
+	}
+	
+	// getTimesCusReviewedGym : 체육관 리뷰 횟수 확인 : 세션의 사용자의 해당 체육관 리뷰 횟수
+	public int getTimesCusReviewedGym(Map<String, Object> hMap) {
+		int result = sessionTemplate.selectOne("gymDetailMapper.getTimesCusReviewedGym",hMap);
+		return result;
+	}
+
+	// getCusPassLeft : 사용자 잔여 pass 수
+	public int getCusPassLeft(String cusId) {
+		int result = sessionTemplate.selectOne("gymDetailMapper.getCusPassLeft",cusId);
+		return result;
+	}
+	
+	// checkDuplicateBook : 예약 중복확인
+	public int checkDuplicateBook(BookDTO checkDto) {
+		int result = sessionTemplate.selectOne("gymDetailMapper.checkDuplicateBook", checkDto);
+		return result;
+	}
+
+	// insertBookData : 예약 삽입
+	public void insertBookData(BookDTO dto) {
+		sessionTemplate.insert("gymDetailMapper.insertBookData", dto);
+	}
+	
+	// getBookNumMax : 예약 최댓값 : 삽입에 필요
+	public int getBookNumMax() {
+		int result = sessionTemplate.selectOne("gymDetailMapper.getBookNumMax");
+		return result;
+	}
+
+	// updateCusPass : 예약시 사용자 잔여 pass update
+	public void updateCusPass(Map<String, Object> hMap) {
+		sessionTemplate.update("gymDetailMapper.updateCusPass", hMap);
+	}
+
+	// countJjimData : 체육관 찜 여부 파악을 위한 찜 횟수 count
+	public int countJjimData(Map<String, Object> hMap) {
+		int result = sessionTemplate.selectOne("gymDetailMapper.countJjimData", hMap);
+		return result;
+	}
+
+	// insertJjimData : 체육관 찜하기
+	public void insertJjimData(JjimDTO dto) {
+		sessionTemplate.insert("gymDetailMapper.insertJjimData", dto);
+	}
+
+	// deleteJjimData : 체육관 찜 삭제하기
+	public void deleteJjimData(String gymId) {
+		sessionTemplate.delete("gymDetailMapper.deleteJjimData", gymId);
+	}
+
+	// getProductListForGym : 체육관 상세페이지에 뿌릴 관련 인기 상품 품목 3가지
+	public List<ProductDTO> getProductListForGym(String c) {
+		List<ProductDTO> productListForGym  = sessionTemplate.selectList("gymDetailMapper.getProductListForGym",c);
+		return productListForGym;
+	}
+
 	
 	//*******************서예지*******************
 	
@@ -328,24 +398,103 @@ private SqlSessionTemplate sessionTemplate;
 	
 	//*******************최보경*******************
 	
-	//getCusAddr : 로그인한 회원의 주소 가져오기
+	//로그인한 회원의 주소 가져오기
 	public String getCusAddr(String sessionId) {
 		String customerAddr = sessionTemplate.selectOne("recommend.customerAddr", sessionId);
 		return customerAddr;
 	}
 	
-	//gymRecommend : 회원 주소를 기반으로 메인화면에서 체육관 추천 
+	//회원 주소를 기반으로 메인화면에서 체육관 추천 
 	public List<GymDTO> getGymRecommend(String customerAddr){
 		List<GymDTO> nearGymLists = sessionTemplate.selectList("recommend.nearGymList", customerAddr);
 		return nearGymLists;
 	}
 	
-	//gymRecommendDefault : 로그인하지 않은 화면에서 체육관 추천
+	//로그인하지 않은 화면에서 체육관 추천
 	public List<GymDTO> getGymRecommendDefault(){
 		List<GymDTO> nearGymDefaultLists = sessionTemplate.selectList("recommend.nearGymDefaultLists");
 		return nearGymDefaultLists;
 	}
+
+	//최신 예약한 체육관 타입 추출
+	public String getCusRecentBookType(String sessionId) {
+		String gymType = sessionTemplate.selectOne("recommend.customerRecentBookType", sessionId);
+		return gymType;
+	}
 	
+	//최신 예약을 기반으로 메인화면에서 제품 추천
+	public List<ProductDTO> getProductRecommend(String productType) {
+		List<ProductDTO> productRecommendLists = sessionTemplate.selectList("recommend.productRecommend", productType);
+		return productRecommendLists;
+	}
+	
+	//로그인 하지 않은 화면에서 제품추천
+	public List<ProductDTO> getProductRecommendDefault() {
+		List<ProductDTO> productRecommendLists = sessionTemplate.selectList("recommend.productRecommendDefault");
+		return productRecommendLists;
+	}
+
+
+	// *******************경기민*******************
+	// 체육관 검색
+	public List<GymDTO> getMapList(int start, int end, String searchKey, String searchValue) {
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("start", start);
+		params.put("end", end);
+		params.put("searchKey", searchKey);
+		params.put("searchValue", searchValue);
+		List<GymDTO> lists = sessionTemplate.selectList("mapMapper.getMapList", params);
+		return lists;
+	}
+
+	// 체육관의 갯수
+	public int getMapDataCount(String searchKey, String searchValue) {
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("searchKey", searchKey);
+		params.put("searchValue", searchValue);
+		int result = sessionTemplate.selectOne("mapMapper.getMapDataCount", params);
+		return result;
+	}
+
+	// 이름 검색어 추천(DB 내용 기반)
+	public List<GymDTO> getSearchName(int start, int end, String searchValue) {
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("start", start);
+		params.put("end", end);
+		params.put("searchValue", searchValue);
+		List<GymDTO> lists = sessionTemplate.selectList("mapMapper.getSearchName", params);
+		return lists;
+	}
+
+	// 지역 검색어 추천(DB 내용 기반)
+	public List<GymDTO> getSearchGoo(int start, int end, String searchValue) {
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("start", start);
+		params.put("end", end);
+		params.put("searchValue", searchValue);
+		List<GymDTO> lists = sessionTemplate.selectList("mapMapper.getSearchGoo", params);
+
+		return lists;
+	}
+
+	// 종목 검색어 추천(DB 내용 기반)
+	public List<GymDTO> getSearchType(int start, int end, String searchValue) {
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("start", start);
+		params.put("end", end);
+		params.put("searchValue", searchValue);
+		List<GymDTO> lists = sessionTemplate.selectList("mapMapper.getSearchType", params);
+		return lists;
+	}
+	
+	// 회원 주소 정보로 검색(DB 내용 기반)
+	public CustomerDTO getCustomerGoo(String sessionId) {
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("sessionId", sessionId);
+		CustomerDTO dto = sessionTemplate.selectOne("mapMapper.getCustomerGoo", params);
+		return dto;
+	}
+
 }
 
 

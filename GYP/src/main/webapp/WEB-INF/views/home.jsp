@@ -31,7 +31,6 @@
 	</style>
 	
 	
-	
 <title>GYP</title>
 </head>
 <body style="font-family: 'Noto Sans KR', sans-serif;">
@@ -44,13 +43,51 @@
 	<!-- 추천 슬라이드 -->
 	<jsp:include page="/WEB-INF/views/layout/body_recommend.jsp" />
 	
-
-	<!-- ★★★★★★★★★★★★★★★★★★★★★ -->
- 	<!-- ★★★이곳에 본인 코드를 작성해주세요★★★ -->
-	<!-- ★★★★★★★★★★★★★★★★★★★★★ -->
-	<br><br><br><br><br><br><br><br><br><br><br><br><br>
-	<br><br><br><br><br><br><br><br><br><br><br><br><br>
 	
+	<div style="margin: 0 auto; width:1070px;">
+		<img  alt="브랜드 소개" align="middle" src="resources/img/imagePage/gyp_main.jpg">
+			
+		<div style="margin: 0 auto; width:250px; ">
+             <div class="elements-title mb-50">
+   		         <div class="fitness-buttons-area mb-100">
+                   	  <a href="#" class="btn fitness-btn btn-2 m-2"
+                   	 	 style="width: 250px; height: 60px; justify-content: center;
+                   	 	 padding-top : 6px;
+                   	 	 font-size:15pt; margin: 0 auto;">
+                   	 	 이용권 구입</a>
+                  </div>
+              </div>
+         </div>
+	</div>
+	
+      
+      <!-- 상품추천 -->  
+      <br/><br/>
+      <div style="margin: 0 auto; width: 1140px; ">
+	      <h4 style="padding-left: 40px;">${gymDto.gymType }인기 상품<span>&nbsp;
+	      <a href="/gyp/productList.action">더보기</a></span></h4>
+	      <br><br><br>
+	      
+	      <c:forEach var="productDTO" items="${productRecommendLists }">
+		        <div class="single-price-table mb-100" style="width: 282px; display: inline-block;">
+		             <div class="price-table-content">
+		             	 <!-- image -->
+		             	 <img src="/gyp/resources/img/product/${productDTO.productImg}" alt="${productDTO.productName }"
+		             	 	style="width: 282px;">
+		                 <!-- price -->
+		                 <h4 class="price"><span>${productDTO.productId }(조회수: ${productDTO.productHit })</span></h4>
+		                 <h6>${productDTO.productName }</h6>
+		                 <!-- Price Data -->
+		                 <ul class="price-data">
+		                     <li><i class="fa fa-circle" aria-hidden="true"></i> &#8361;${productDTO.productPrice }</li>
+		                     <li><i class="fa fa-circle" aria-hidden="true"></i>${productDTO.productContent }</li>
+		                 </ul>
+		                 <!-- btn -->
+		                 <a href="/gyp/productDetail.action?productId=${productDTO.productId }" class="btn fitness-btn mt-30">자세히 보기</a>
+		             </div>
+		         </div>
+	      </c:forEach>
+      </div>
 	
 
 	<jsp:include page="/WEB-INF/views/layout/footer.jsp" />

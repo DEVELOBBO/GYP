@@ -13,13 +13,10 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<!-- ********************원도현*********************** -->
 		<!-- 로그인 Mapper 추가 -->
 		<mapper resource="com/exe/mybatis/loginMapper.xml"/>
-		
 		<!-- 유저 회원 Mapper 추가 -->
 		<mapper resource="com/exe/mybatis/customerMapper.xml"/>
-		
 		<!-- 체육관 회원 Mapper 추가 -->
 		<mapper resource="com/exe/mybatis/gymMapper.xml"/>
-		
 		
 		
 		<!-- ********************김세이*********************** -->
@@ -31,6 +28,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<mapper resource="com/exe/mybatis/noticeMapper.xml"/>
 		<!-- Q&A Mapper 추가 -->
 		<mapper resource="com/exe/mybatis/qnaMapper.xml"/>
+
 		
 		<!-- ********************채종완*********************** -->
 		<!-- 회원가입 Mapper 추가 -->
@@ -39,6 +37,10 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		
 		<!-- ********************최보경*********************** -->
 		<mapper resource="com/exe/mybatis/recommendMapper.xml"/>
+		
+		
+		<!-- ********************경기민*********************** -->
+		<mapper resource="com/exe/mybatis/mapMapper.xml"/>
 		
 	</mappers>
 </configuration>

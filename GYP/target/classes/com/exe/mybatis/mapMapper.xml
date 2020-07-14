@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapMapper">
+
+<select id="getMapList" parameterType="hashMap" resultType="com.exe.dto.GymDTO">
+	select * from (
+	select rownum rnum, data.* from (
+	select gymId, gymType,gymName,gymTel,gymAddr,gymPic,gymHour,gymPass,gymOk
+	from gym where ${searchKey} like '%' || #{searchValue} || '%') data)
+<![CDATA[
+	where rnum>=#{start} and rnum<=#{end}
+]]>
+</select>
+
+<select id="getMapDataCount" parameterType="hashMap" resultType="int">
+	select nvl(count(*),0) from gym
+	where ${searchKey} like '%' || #{searchValue} || '%'
+</select>
+
+<select id="getSearchName" parameterType="hashMap" resultType="com.exe.dto.GymDTO">
+	select * from (
+	select rownum rnum, data.* from (
+	select distinct gymName from gym where (gymName like '%' || #{searchValue} || '%')) data)
+<![CDATA[
+	where rnum>=#{start} and rnum<=#{end}
+]]>
+</select>
+
+<select id="getSearchGoo" parameterType="hashMap" resultType="com.exe.dto.GymDTO">
+	select * from(
+	select rownum rnum, gymAddr from (
+	select distinct RTRIM(substr(
+	gymAddr,7,instr(gymAddr,'구 ')-5)) gymAddr from gym)
+	where (gymAddr like #{searchValue} || '%구%' or gymAddr like #{searchValue}))
+<![CDATA[
+	where rnum>=#{start} and rnum<=#{end}
+]]>
+</select>
+
+<select id="getSearchType" parameterType="hashMap" resultType="com.exe.dto.GymDTO">
+	select * from (
+	select rownum rnum, data.* from (
+	select distinct gymType	from gym where (gymType like '%' || #{searchValue} || '%')) data)
+<![CDATA[
+	where rnum>=#{start} and rnum<=#{end}
+]]>
+</select>
+
+<select id="getCustomerGoo" parameterType="hashMap" resultType="com.exe.dto.CustomerDTO">
+	select RTRIM(substr(
+	cusAddr,7,instr(cusAddr,'구 ')-5)) cusAddr from(
+	select cusId,cusAddr from customer
+	where cusId = #{sessionId})
+</select>
+
+</mapper>

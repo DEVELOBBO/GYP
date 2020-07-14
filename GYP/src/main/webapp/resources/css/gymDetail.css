@@ -90,7 +90,7 @@ span.gymName-type {
 .modal {
   display: none;
   position: fixed;
-  z-index: 1;
+  z-index: 100000000001;
   padding-top: 100px;
   left: 0;
   top: 0;
@@ -112,7 +112,6 @@ span.gymName-type {
 
 /* The Close Button */
 .close {
-  color: white;
   position: absolute;
   top: 10px;
   right: 25px;
@@ -205,18 +204,18 @@ img.hover-shadow {
 /*------------------------ 리뷰 별점(평점) ------------------------*/
 @import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
 
-fieldset, label { margin: 0; padding: 0; }
-h1 { font-size: 1.5em; margin: 10px; }
+fieldset{margin: 0; padding: 0;}
 
-/****** Style Star Rating Widget *****/
-
-.rating { 
+.ratingT, .ratingP, .ratingM { 
   border: none;
   float: left;
 }
 
-.rating > input { display: none; } 
-.rating > label:before { 
+.ratingT > input,.ratingP > input,.ratingM > input { display: none; } 
+
+.ratingT > label, .ratingP > label, .ratingM > label { margin: 0; padding: 0; }
+
+.ratingT > label:before, .ratingP > label:before, .ratingM > label:before { 
   margin: 5px;
   font-size: 1.25em;
   font-family: FontAwesome;
@@ -224,23 +223,173 @@ h1 { font-size: 1.5em; margin: 10px; }
   content: "\f005";
 }
 
-.rating > .half:before { 
+.ratingT > .half:before, .ratingP > .half:before, .ratingM > .half:before { 
   content: "\f089";
   position: absolute;
 }
 
-.rating > label { 
+.ratingT > label, .ratingP > label, .ratingM > label { 
   color: #ddd; 
  float: right; 
 }
 
-/***** CSS Magic to Highlight Stars on Hover *****/
+/* **** CSS Magic to Highlight Stars on Hover **** */
 
-.rating > input:checked ~ label, /* show gold star when clicked */
-.rating:not(:checked) > label:hover, /* hover current star */
-.rating:not(:checked) > label:hover ~ label { color: #FFD700;  } /* hover previous stars in list */
+.ratingT > input:checked ~ label, show gold star when clicked
+.ratingT:not(:checked) > label:hover, hover current star
+.ratingT:not(:checked) > label:hover ~ label { color: #FFD700;  } hover previous stars in list
 
-.rating > input:checked + label:hover, /* hover current star when changing rating */
-.rating > input:checked ~ label:hover,
-.rating > label:hover ~ input:checked ~ label, /* lighten current selection */
-.rating > input:checked ~ label:hover ~ label { color: #FFED85;  } 
+.ratingT > input:checked + label:hover, hover current star when changing rating
+.ratingT > input:checked ~ label:hover,
+.ratingT > label:hover ~ input:checked ~ label, lighten current selection
+.ratingT > input:checked ~ label:hover ~ label { color: #FFED85;  } 
+
+.ratingP > input:checked ~ label, show gold star when clicked
+.ratingP:not(:checked) > label:hover, hover current star
+.ratingP:not(:checked) > label:hover ~ label { color: #FFD700;  } hover previous stars in list
+
+.ratingP > input:checked + label:hover, hover current star when changing rating
+.ratingP > input:checked ~ label:hover,
+.ratingP > label:hover ~ input:checked ~ label, lighten current selection
+.ratingP > input:checked ~ label:hover ~ label { color: #FFED85;  } 
+
+.ratingM > input:checked ~ label, show gold star when clicked
+.ratingM:not(:checked) > label:hover, hover current star
+.ratingM:not(:checked) > label:hover ~ label { color: #FFD700;  } hover previous stars in list
+
+.ratingM > input:checked + label:hover, hover current star when changing rating
+.ratingM > input:checked ~ label:hover,
+.ratingM > label:hover ~ input:checked ~ label, lighten current selection
+.ratingM > input:checked ~ label:hover ~ label { color: #FFED85;  } 
+ 
+
+/*------------------------ 추천 상품 ------------------------*/
+.single-price-table img{
+	width: 220px;
+	height: 170px;
+	overflow: hidden;
+}
+
+.single-price-table .price-table-content {
+    padding: 20px;
+}
+
+
+/*------------------------ 예약(모달) 버튼 ------------------------*/
+.single-blog-post .blog-post-thumb .post-date1 {
+ 	width: 77px;
+  	height: 77px;
+	top: 15px;
+	left: 15px;
+	z-index: 10;
+	background-color: #38b143;
+	border-radius: 50%;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	-ms-grid-row-align: center;
+	align-items: center;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
+	justify-content: center;
+	box-shadow: 0 2px 50px rgba(0, 0, 0, 0.2); 
+}
+.single-blog-post .blog-post-thumb .post-date1 p {
+	  color: #ffffff;
+	  font-weight: 600;
+	  margin-bottom: 0;
+	  font-size: 24px;
+	  line-height: 1;
+	  text-align: center; 
+}
+.single-blog-post .blog-post-thumb .post-date1 p span {
+	    font-size: 12px;
+	    text-transform: uppercase;
+	    display: block; 
+}
+    
+ 
+/*------------------------ 찜 버튼 ------------------------*/    
+.single-blog-post .blog-post-thumb .post-date2 {
+	width: 77px;
+	height: 77px;
+	top: 15px;
+	left: 15px;
+	z-index: 10;
+	background-color: #101214;
+	border-radius: 50%;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	-ms-grid-row-align: center;
+	align-items: center;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
+	justify-content: center;
+	box-shadow: 0 2px 50px rgba(0, 0, 0, 0.2); 
+}
+.single-blog-post .blog-post-thumb .post-date2 p  {
+	color: #ffffff;
+	font-weight: 600;
+	margin-bottom: 0;
+	font-size: 24px;
+	line-height: 1;
+	text-align: center;
+}
+
+/*------------------------ 날짜 선택 ------------------------*/
+/* label{margin-left: 20px;}*/
+#datepicker{width:180px; margin: 0 20px 20px 20px;}
+#datepicker > span:hover{cursor: pointer;}
+/* 시간 선택 select box */
+.time-select-style {
+    padding: 0;
+    margin: 0;
+    border: 1px solid #ccc;
+    width: 120px;
+    border-radius: 3px;
+    overflow: hidden;
+    background-color: #fff;
+
+    background: #fff url("http://www.scottgood.com/jsg/blog.nsf/images/arrowdown.gif") no-repeat 90% 50%;
+}
+
+.time-select-style select {
+    padding: 5px 8px;
+    width: 130%;
+    border: 1px solid #ccc;
+    width: 120px;
+    border-radius: 3px;
+    box-shadow: none;
+    background-color: transparent;
+    background-image: none;
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
+}
+
+.time-select-style select:focus {
+    outline: none;
+}
+
+.select-options{
+	display:none;
+} 
+
+#select-options-wdays{
+	display:block;
+}
+
+
+/*------------------------ 체육관 시설물 ------------------------*/
+.facility-rect {
+    width: 70px;
+    height: 70px;
+    overflow: hidden;
+    border:none;
+}
+

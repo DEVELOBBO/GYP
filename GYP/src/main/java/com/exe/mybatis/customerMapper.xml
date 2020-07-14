@@ -22,36 +22,4 @@ PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
 	delete from customer where cusId=#{cusId}
 </delete>
 
-<!-- 리뷰 리스트 -->
-<select id="reviewgetLists" resultType="com.exe.dto.ReviewDTO">
-	select DISTINCT REVIEW.reNum,REVIEW.reType,REVIEW.cusId,GYM.gymName,REVIEW.gymId,GYM.gymId,REVIEW.productId,REVIEW.star,REVIEW.reContent,to_char(REVIEW.reCreated,'YYYY-MM-DD') reCreated
-	from REVIEW,GYM where REVIEW.cusId=#{reviewId} and REVIEW.gymId=GYM.gymId order by REVIEW.reNum desc
-</select>
-
-<!-- 리뷰 삭제-->
-<delete id="reviewdeleteData" parameterType="int">
-	delete from REVIEW where reNum=#{reNum}
-</delete>
-
-<!-- 찜 리스트 -->
-<select id="jjimgetLists" resultType="com.exe.dto.GymDTO">
-	select DISTINCT GYM.gymId,GYM.gymName,GYM.gymTel,GYM.gymAddr,GYM.gymCreated,JJIM.gymId,JJiM.cusId from GYM,JJIM where JJIM.gymId=GYM.gymId and JJIM.cusId=#{jjimId}
-</select>
-
-<!-- 찜 삭제-->
-<delete id="jjimdeleteData" parameterType="String">
-	delete from JJIM where gymId=#{gymId}
-</delete>
-
-<!-- 예약 리스트 -->
-<select id="bookgetLists" resultType="com.exe.dto.BookDTO">
-	select DISTINCT GYM.gymName,BOOK.gymId,BOOK.bookNum,BOOK.cusId,GYM.gymId,BOOK.gymTrainerPick,BOOK.bookType,BOOK.faceLink,BOOK.faceLinkCreated,BOOK.bookHour,to_char(BOOK.bookCreated,'YYYY-MM-DD') bookCreated 
-	from BOOK,GYM where GYM.gymId=BOOK.gymId and Book.cusId=#{bookId} order by BOOK.bookNum desc
-</select>
-
-<!-- 예약 삭제-->
-<delete id="bookdeleteData" parameterType="int">
-	delete from BOOK where bookNum=#{bookNum}
-</delete>
-
 </mapper>

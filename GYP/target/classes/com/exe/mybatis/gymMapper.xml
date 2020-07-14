@@ -8,38 +8,20 @@ PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
 
 <!-- 체육관 회원 데이터 불러오기 -->
 <select id="getgymReadData" parameterType="hashMap" resultType="com.exe.dto.GymDTO"> 
-	select gymId,gymType,gymName,gymPwd,gymEmail,gymTel,gymAddr,gymCreated,gymPass from GYM where gymId=#{sessionId}
+	select gymId,gymName,gymPwd,gymEmail,gymTel,gymAddr,gymCreated,gymPass from GYM where gymId=#{sessionId}
 </select>
 
 
 <!-- 회원정보 수정(비밀번호) -->
-<update id="gymupdateData" parameterType="com.exe.dto.GymDTO">
-	update GYM set gymPwd=#{gymPwd} where gymId=#{gymId}
+<!--  
+<update id="updateData" parameterType="com.exe.dto.CustomerDTO">
+	update CUSTOMER set cusPwd=#{cusPwd} where cusId=#{cusId}
 </update>
 
-<!-- 회원정보 삭제 -->
-<delete id="gymdeleteData" parameterType="com.exe.dto.GymDTO">
-	delete from GYM where gymId=#{gymId}
+회원정보 삭제
+<delete id="deleteData" parameterType="com.exe.dto.CustomerDTO">
+	delete from customer where cusId=#{cusId}
 </delete>
-
-<!-- 예약 리스트 -->
-<select id="gymbookgetLists" resultType="com.exe.dto.BookDTO">
-	select DISTINCT GYM.gymName,BOOK.gymId,BOOK.bookNum,BOOK.cusId,GYM.gymId,BOOK.gymTrainerPick,BOOK.bookType,BOOK.faceLink,BOOK.faceLinkCreated,BOOK.bookHour,to_char(BOOK.bookCreated,'YYYY-mm-DD(HH24)') bookCreated 
-	from BOOK,GYM where GYM.gymId=BOOK.gymId and Book.gymId=#{bookId} order by BOOK.bookNum desc
-</select>
-
-<!-- 리뷰 리스트 -->
-<select id="gymreviewgetLists" resultType="com.exe.dto.ReviewDTO">
-	select DISTINCT REVIEW.reNum,REVIEW.reType,REVIEW.cusId,GYM.gymName,REVIEW.gymId,GYM.gymId,REVIEW.productId,REVIEW.star,REVIEW.reContent,to_char(REVIEW.reCreated,'YYYY-MM-DD') reCreated
-	from REVIEW,GYM where REVIEW.gymId=#{reviewId} and REVIEW.gymId=GYM.gymId order by REVIEW.reNum desc
-</select>
-
-<!-- 예약 데이터 개수 -->
-<select id="getDataCount"  parameterType="hashMap" resultType="int">
-	select nvl(count(*),0) from BOOK
-	<![CDATA[
-	where bookOk=#{type} and gymId=#{gymId} and bookCreated <= sysdate and to_char(bookCreated,'YYYY-MM')<= '${aftermonthdate}' and to_char(bookCreated,'YYYY-MM')> '${beforemonthdate}'
-	]]>
-</select>
+ -->
  
 </mapper>
