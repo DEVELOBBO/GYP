@@ -276,10 +276,10 @@ function mapMake() {
 	            '        </div>' + 
 	            '        <div class="body">' + 
 	            '            <div class="desc">' + 
-	            '                <img src="/gyp/resources/img/map-img/default1.png" width="90" height="70">' +
-	            '                <img src="/gyp/resources/img/map-img/default2.png" width="90" height="70">' +
-	            '                <img src="/gyp/resources/img/map-img/default3.png" width="90" height="70">' +
-	            '                <img src="/gyp/resources/img/map-img/default4.png" width="90" height="70">' +
+	            '                <img src="/gyp/resources/img/gymPic/default1.png" width="90" height="70">' +
+	            '                <img src="/gyp/resources/img/gymPic/default2.png" width="90" height="70">' +
+	            '                <img src="/gyp/resources/img/gymPic/default3.png" width="90" height="70">' +
+	            '                <img src="/gyp/resources/img/gymPic/default4.png" width="90" height="70">' +
 	            '                <div class="ellipsis">${dto.gymAddr}</div>' + 
 	            '                <div>'+
 	            '				 <a href="<%=cp%>/gymDetail.action?gymId=${dto.gymId}" target="_self" class="link">상세페이지</a>' +

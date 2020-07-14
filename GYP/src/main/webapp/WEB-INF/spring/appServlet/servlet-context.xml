@@ -55,6 +55,7 @@
     </beans:bean>
 	
 	<beans:bean id="myUtil" class="com.exe.util.MyUtil"/>
+	<beans:bean id="myUtilMap" class="com.exe.util.MyUtil_Map"/>
 	
 </beans:beans>
 	
