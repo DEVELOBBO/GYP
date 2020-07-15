@@ -168,7 +168,6 @@ public class gypController {
 			history = "/";
 		}
 		
-		
 		String sessionId = request.getParameter("sessionId");//input 입력한값 
 		String sessionpwd = request.getParameter("sessionpwd");
 		
@@ -197,7 +196,13 @@ public class gypController {
 		session.setAttribute("customInfo", info); // 세션에 info에 들어가있는정보(userid,username)이 올라간다.
 		
 		if(loginType=="customer") {
-	        return "redirect:" + history; //로그인 성공
+	        
+			//관리자 로그인
+			if(sessionId.equals("admin") || info.getSessionId().equals("admin")) {
+				return "redirect:/adminHome.action";
+			}
+			return "redirect:" + history; //로그인 성공
+
 		}else{
 			return "redirect:/gymMyPage.action";
 		}
@@ -1599,6 +1604,389 @@ public class gypController {
 
 		return "map/map_ok";
 	}
+
+	
+	//*******************최원식*******************
+	
+	//관리자 페이지로 이동
+	@RequestMapping(value = "/adminHome.action", method = { RequestMethod.GET, RequestMethod.POST })
+	public String adminHome(HttpServletRequest request, HttpSession session) {
+		
+		//세션에 올라온값 받기
+		CustomInfo info = (CustomInfo)session.getAttribute("customInfo");
+		System.out.println(info.getSessionId());
+		request.setAttribute("info", info);
+		return "admin/adminHome";
+	}
+	
+	//체육관(매장) 리스트
+	@RequestMapping(value = "/adminGymList.action", method = { RequestMethod.GET, RequestMethod.POST })
+	public String gymList(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
+		String cp = request.getContextPath();
+
+		String pageNum = request.getParameter("pageNum");
+		int currentPage = 1;
+
+		if (pageNum != null)
+			currentPage = Integer.parseInt(pageNum);
+
+		String searchKey = request.getParameter("searchKey");
+		String searchValue = request.getParameter("searchValue");
+
+		if (searchKey == null) {//아무것도 없이 검색만 눌럿을떄
+			searchKey = "gymName";
+			searchValue = "";
+
+		} else {
+			if (request.getMethod().equalsIgnoreCase("GET"))
+				searchValue = URLDecoder.decode(searchValue, "UTF-8");
+		}
+
+		//페이징처리
+		int dataCount = dao.gymGetDataCount(searchKey, searchValue);
+		int numPerPage = 10;
+		int totalPage = myUtil.getPageCount(numPerPage, dataCount);
+
+		if (currentPage > totalPage)
+			currentPage = totalPage;
+
+		int start = (currentPage - 1) * numPerPage + 1;
+		int end = currentPage * numPerPage;
+
+		//사진컬럼 ,구분 배열처리
+		List<GymDTO> lists =
+				dao.gymGetList(start, end, searchKey, searchValue);
+		
+		Iterator<GymDTO> itrT = lists.iterator();
+		GymDTO dto;
+		
+		while( itrT.hasNext() ) {
+			dto = itrT.next();
+			
+			dto.setGymTrainerAry(dto.getGymTrainer().split(",")); 
+			dto.setGymTrainerPicAry(dto.getGymTrainerPic().split(","));
+			dto.setGymPicAry(dto.getGymPic().split(","));
+			dto.setGymFacilityAry(dto.getGymFacility().split(","));
+			
+		}
+		
+		List<GymDTO> falselists =
+				dao.gymGetFalseList();
+		
+		Iterator<GymDTO> itr = falselists.iterator();
+		
+		//GymDTO dto;
+		
+		while( itr.hasNext() ) {
+			dto = itr.next();
+			
+			dto.setGymTrainerAry(dto.getGymTrainer().split(",")); 
+			dto.setGymTrainerPicAry(dto.getGymTrainerPic().split(","));
+			dto.setGymPicAry(dto.getGymPic().split(","));
+			dto.setGymFacilityAry(dto.getGymFacility().split(","));
+			
+		}
+		
+		//param 생성
+		String param = "";
+		if (!searchValue.equals("")) {
+
+			param = "searchKey=" + searchKey;
+			param += "&searchValue=" + URLEncoder.encode(searchValue, "UTF-8");
+
+		}
+
+		String listUrl = cp + "/adminGymList.action";
+
+		if (!param.equals("")) {
+			listUrl = listUrl + "?" + param;
+		}
+
+		String pageIndexList =
+
+				myUtil.pageIndexList(currentPage, totalPage, listUrl);
+
+		//이미지
+		cp = cp + "/resources/img/test";
+		String imgPath = cp;
+
+		//request set
+		request.setAttribute("lists", lists);
+		request.setAttribute("falselists", falselists);
+		request.setAttribute("pageIndexList", pageIndexList);
+		request.setAttribute("dataCount", dataCount);
+		request.setAttribute("pageNum", pageNum);
+		request.setAttribute("imgPath", imgPath);
+		return "admin/adminGymList";
+
+	}
+
+	//체육관 gymOk false -> true
+	@RequestMapping(value = "/adminGymUpdated_ok.action",
+			method = { RequestMethod.GET, RequestMethod.POST})
+	public String adminGymUpdated_ok(GymDTO dto ,HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		String pageNum = request.getParameter("pageNum");
+		String gymId = request.getParameter("gymId");
+		
+		dao.gymUpdateData(dto);
+
+		return "redirect:/adminGymList.action";
+
+	}
+
+	//매장 리스트 삭제 gymOk false 거절용
+	@RequestMapping(value = "/adminGymDeleted.action",
+			method = { RequestMethod.GET, RequestMethod.POST })
+	public String gymDeleted(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+
+		String pageNum = request.getParameter("pageNum");
+		String str = request.getParameter("gymId");
+
+		dao.gymDeleteData(str);
+
+		return "redirect:/adminGymList.action";
+
+	}
+
+	//회원 리스트
+	@RequestMapping(value = "/adminCustomerList.action", method = { RequestMethod.GET, RequestMethod.POST })
+	public String customerList(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		String cp = request.getContextPath();
+		String pageNum = request.getParameter("pageNum");
+		int currentPage = 1;
+
+		if (pageNum != null)
+			currentPage = Integer.parseInt(pageNum);
+
+		String searchKey = request.getParameter("searchKey");
+		String searchValue = request.getParameter("searchValue");
+
+		if (searchKey == null) {//아무것도 없이 검색만 눌럿을떄
+			searchKey = "cusId";
+			searchValue = "";
+
+		} else {
+			if (request.getMethod().equalsIgnoreCase("GET"))
+				searchValue = URLDecoder.decode(searchValue, "UTF-8");
+		}
+
+		//페이징 처리
+		int dataCount = dao.customerGetDataCount(searchKey, searchValue);
+		int numPerPage = 10;
+		int totalPage = myUtil.getPageCount(numPerPage, dataCount);
+
+		if (currentPage > totalPage)
+			currentPage = totalPage;
+
+		int start = (currentPage - 1) * numPerPage + 1;
+		int end = currentPage * numPerPage;
+
+		List<CustomerDTO> lists =
+
+				dao.customerGetList(start, end, searchKey, searchValue);
+
+		//파람 생성
+		String param = "";
+		if (!searchValue.equals("")) {
+
+			param = "searchKey=" + searchKey;
+			param += "&searchValue=" + URLEncoder.encode(searchValue, "UTF-8");
+
+		}
+
+		String listUrl = cp + "/adminCustomerList.action";
+
+		if (!param.equals("")) {
+			listUrl = listUrl + "?" + param;
+		}
+
+		String pageIndexList =
+
+				myUtil.pageIndexList(currentPage, totalPage, listUrl);
+
+		//request set
+		request.setAttribute("lists", lists);
+		request.setAttribute("pageIndexList", pageIndexList);
+		request.setAttribute("dataCount", dataCount);
+		request.setAttribute("pageNum", pageNum);
+
+		return "admin/adminCustomerList";
+
+	}
+
+	//상품 입력
+	@RequestMapping(value = "/adminProductCreated.action")
+	public ModelAndView productCreated() {
+
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("admin/adminProductCreated");
+
+		return mav;
+
+	}
+
+	@RequestMapping(value = "/adminProductCreated_ok.action", method = { RequestMethod.GET, RequestMethod.POST })
+	public String created_ok(ProductDTO dto, HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		dao.productInsertData(dto);
+
+		return "redirect:/adminProductList.action";
+
+	}
+
+	//상품 리스트
+	@RequestMapping(value = "/adminProductList.action", method = { RequestMethod.GET, RequestMethod.POST })
+	public String productList(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		String cp = request.getContextPath();
+		String pageNum = request.getParameter("pageNum");
+		int currentPage = 1;
+
+		if (pageNum != null)
+			currentPage = Integer.parseInt(pageNum);
+
+		String searchKey = request.getParameter("searchKey");
+		String searchValue = request.getParameter("searchValue");
+
+		if (searchValue == null) {//아무것도 없이 검색만 눌럿을떄
+			searchKey = "productId";
+			searchValue = "";
+
+		} else {
+
+			if (request.getMethod().equalsIgnoreCase("GET"))
+				searchValue = URLDecoder.decode(searchValue, "UTF-8");
+		}
+
+		//페이징 처리
+		int dataCount = dao.productGetDataCount(searchKey, searchValue);
+		int numPerPage = 10;
+		int totalPage = myUtil.getPageCount(numPerPage, dataCount);
+
+		if (currentPage > totalPage)
+			currentPage = totalPage;
+
+		int start = (currentPage - 1) * numPerPage + 1;
+		int end = currentPage * numPerPage;
+
+		List<ProductDTO> lists =
+
+				dao.productGetList(start, end, searchKey, searchValue);
+
+		//파람 생성
+		String param = "";
+		if (!searchValue.equals("")) {
+
+			param = "searchKey=" + searchKey;
+			param += "&searchValue=" + URLEncoder.encode(searchValue, "UTF-8");
+
+		}
+
+		String listUrl = cp + "/adminProductList.action";
+
+		if (!param.equals("")) {
+			listUrl = listUrl + "?" + param;
+		}
+
+		String pageIndexList =
+
+				myUtil.pageIndexList(currentPage, totalPage, listUrl);
+
+		//이미지
+		cp = cp + "/resources/img/test";
+		String imgPath = cp;
+
+		//request set
+		request.setAttribute("lists", lists);
+		request.setAttribute("pageIndexList", pageIndexList);
+		request.setAttribute("dataCount", dataCount);
+		request.setAttribute("pageNum", pageNum);
+		request.setAttribute("imgPath", imgPath);
+
+		return "admin/adminProductList";
+
+	}
+
+	//상품 내용 productArticle
+	@RequestMapping(value = "/adminProductArticle.action",
+			method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView productArticle(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+
+		String cp = request.getContextPath();
+
+		String str = request.getParameter("productId");
+
+		String pageNum = request.getParameter("pageNum");
+
+		ProductDTO dto = dao.productGetReadData(str);
+
+		if (dto == null) {
+			//return "redirect:/list.action";
+		}
+
+		String param = "pageNum=" + pageNum;
+
+		ModelAndView mav = new ModelAndView();
+
+		//View
+		mav.setViewName("admin/adminProductArticle");
+
+		//이미지
+		cp = cp + "/resources/img/test";
+		String imgPath = cp;
+
+		//Model
+		mav.addObject("dto", dto);
+		mav.addObject("params", param);
+		mav.addObject("pageNum", pageNum);
+		mav.addObject("imgPath", imgPath);
+
+		return mav;
+
+	}
+
+	//상품 수정 입력
+	@RequestMapping(value = "/adminProductUpdated.action",
+			method = { RequestMethod.GET, RequestMethod.POST })
+
+	public String productUpdated(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		String cp = request.getContextPath();
+		String productId = request.getParameter("productId");
+		String pageNum = request.getParameter("pageNum");
+
+		ProductDTO dto = dao.productGetReadData(productId);
+
+		if (dto == null) {
+
+			return "redirect:/adminProductList.action";
+
+		}
+
+		request.setAttribute("dto", dto);
+		request.setAttribute("pageNum", pageNum);
+
+		return "admin/adminProductUpdated";
+
+	}
+
+	//상품 수정 반영
+	@RequestMapping(value = "/adminProductUpdated_ok.action",		//productUpdated_ok.action
+			method = { RequestMethod.GET, RequestMethod.POST })
+
+	public String productUpdated_ok(ProductDTO dto, HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+			String pageNum = request.getParameter("pageNum");
+
+			dao.productUpdateData(dto);
+
+			return "redirect:/adminProductList.action";
+
+		}
 
 }
 

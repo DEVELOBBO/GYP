@@ -79,14 +79,6 @@
                                     </div>
                                 </div>
                                 
-                                <div class="single-slide">
-                                    <!-- Single Testimonial -->
-                                    <div class="single-testimonial">
-                                        <p>운동을 즐기고 싶은 분들은 어서 GYP에 가입하세요</p>
-                                        <span>최원식</span>
-                                    </div>
-                                </div>
-
                             </div>
                         </div>
                     </div>

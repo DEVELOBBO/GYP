@@ -494,6 +494,183 @@ private SqlSessionTemplate sessionTemplate;
 		CustomerDTO dto = sessionTemplate.selectOne("mapMapper.getCustomerGoo", params);
 		return dto;
 	}
+	
+	// *******************최원식*******************
+
+	// 체육관 리스트 갯수
+	public int gymGetDataCount(String searchKey, String searchValue) {
+
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("searchKey", searchKey);
+		params.put("searchValue", searchValue);
+		int result = sessionTemplate.selectOne("adminGymMapper.getDataCount", params);
+
+		return result;
+	}
+
+	// 체육관 리스트
+	public List<GymDTO> gymGetList(int start, int end, String searchKey, String searchValue) {
+
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("start", start);
+		params.put("end", end);
+		params.put("searchKey", searchKey);
+		params.put("searchValue", searchValue);
+
+		List<GymDTO> lists = sessionTemplate.selectList("adminGymMapper.getLists", params);
+
+		return lists;
+	}
+
+	// 체육관 미승인 리스트
+	public List<GymDTO> gymGetFalseList() {
+		List<GymDTO> falselists = sessionTemplate.selectList("adminGymMapper.getFalseLists");
+		return falselists;
+	}
+
+	//체육관 gymOk false -> true
+	public void gymUpdateData(GymDTO dto) {
+		sessionTemplate.update("adminGymMapper.updateData", dto);
+	}
+
+	// 체육관 삭제
+	public void gymDeleteData(String str) {
+		sessionTemplate.delete("adminGymMapper.deleteData", str);
+	}
+
+	// 회원 수
+	public int customerGetDataCount(String searchKey, String searchValue) {
+
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("searchKey", searchKey);
+		params.put("searchValue", searchValue);
+		int result = sessionTemplate.selectOne("adminCustomerMapper.getDataCount", params);
+
+		return result;
+	}
+
+	// 회원 리스트
+	public List<CustomerDTO> customerGetList(int start, int end, String searchKey, String searchValue) {
+
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("start", start);
+		params.put("end", end);
+		params.put("searchKey", searchKey);
+		params.put("searchValue", searchValue);
+
+		List<CustomerDTO> lists = sessionTemplate.selectList("adminCustomerMapper.getLists", params);
+
+		return lists;
+	}
+
+	// 고객 불러오기 (조회)
+	public CustomerDTO customerGetReadData(int num) {
+		CustomerDTO dto = sessionTemplate.selectOne("adminCustomerMapper.getReadData", num);
+		return dto;
+	}
+
+	// 고객 데이터 삭제
+	public void customerDeleteData(String str) {
+		sessionTemplate.delete("adminCustomerMapper.deleteData", str);
+	}
+
+	// 공지사항 maxNum
+	public int noticeMaxNum() {
+		int maxNum = 0;
+		maxNum = sessionTemplate.selectOne("adminNoticeMapper.maxNum");
+		return maxNum;
+	}
+
+	// 공지사항 생성
+	public void noticeInsertData(NoticeDTO dto) {
+
+		sessionTemplate.insert("adminNoticeMapper.insertData", dto);
+
+	}
+
+	// 공지사항 리스트
+	public List<NoticeDTO> noticeGetList(int start, int end) {
+
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("start", start);
+		params.put("end", end);
+
+		List<NoticeDTO> lists = sessionTemplate.selectList("adminNoticeMapper.getLists", params);
+		return lists;
+	}
+
+	// 공지사항 갯수
+	public int noticeGetDataCount() {
+		int result = sessionTemplate.selectOne("adminNoticeMapper.getDataCount");
+		return result;
+	}
+
+	// 공지사항 불러오기 (조회)
+	public NoticeDTO noticeGetReadData(int num) {
+		NoticeDTO dto = sessionTemplate.selectOne("adminNoticeMapper.getReadData", num);
+		return dto;
+	}
+
+	// 공지사항 수정
+	public void noticeUpdateData(NoticeDTO dto) {
+		sessionTemplate.update("adminNoticeMapper.updateData", dto);
+	}
+
+	// 공지사항 삭제
+	public void noticeDeleteData(int num) {
+		sessionTemplate.delete("adminNoticeMapper.deleteData", num);
+	}
+
+	// 상품관리 상품 갯수
+	public int productGetDataCount(String searchKey, String searchValue) {
+
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("searchKey", searchKey);
+		params.put("searchValue", searchValue);
+		int result = sessionTemplate.selectOne("adminProductMapper.getDataCount", params);
+		return result;
+	}
+
+	// 상품 생성, 입력
+	public void productInsertData(ProductDTO dto) {
+		sessionTemplate.insert("adminProductMapper.insertData", dto);
+	}
+
+	// 상품 리스트
+	public List<ProductDTO> productGetList(int start, int end, String searchKey, String searchValue) {
+
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("start", start);
+		params.put("end", end);
+		params.put("searchKey", searchKey);
+		params.put("searchValue", searchValue);
+
+		List<ProductDTO> lists = sessionTemplate.selectList("adminProductMapper.getLists", params);
+
+		return lists;
+
+	}
+
+	// 상품 불러오기 (조회)
+	public ProductDTO productGetReadData(String str) {
+		ProductDTO dto = sessionTemplate.selectOne("adminProductMapper.getReadData", str);
+		return dto;
+	}
+
+	// 상품 조회수
+	public void productUpdateHitCount(int num) {
+		sessionTemplate.update("adminProductMapper.updateHitCount", num);
+	}
+
+	// 상품 수정
+	public void productUpdateData(ProductDTO dto) {
+		sessionTemplate.update("adminProductMapper.updateData", dto);
+	}
+
+	// 상품 삭제
+	public void productDeleteData(String str) {
+			sessionTemplate.delete("adminProductMapper.deleteData", str);
+		}
 
 }
 

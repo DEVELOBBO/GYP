@@ -42,5 +42,13 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<!-- ********************경기민*********************** -->
 		<mapper resource="com/exe/mybatis/mapMapper.xml"/>
 		
+		
+		<!-- ********************최원식*********************** -->
+		<mapper resource="com/exe/mybatis/adminBoardMapper.xml"/>
+		<mapper resource="com/exe/mybatis/adminCustomerMapper.xml"/>
+		<mapper resource="com/exe/mybatis/adminGymMapper.xml"/>
+		<mapper resource="com/exe/mybatis/adminProductMapper.xml"/>
+		
+		
 	</mappers>
 </configuration>

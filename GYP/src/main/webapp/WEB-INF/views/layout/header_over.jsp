@@ -55,7 +55,7 @@
                                     <c:if test="${empty sessionScope.customInfo.sessionId }">
                                     	<li><a href="/gyp/create.action">회원가입</a></li></c:if>
                                     
-                                    <c:if test="${sessionScope.customInfo.loginType =='customer' }">
+                                    <c:if test="${sessionScope.customInfo.loginType =='customer' && sessionScope.customInfo.sessionId !='admin' }">
                                     	<li><a href="/gyp/customerMyPage.action">마이페이지</a>
                                     	 <ul class="dropdown" style="width: 100px;">
                                             <li><a href="/gyp/customerMyPage.action#">회원정보</a></li>
@@ -74,6 +74,10 @@
                                             <li><a href="/gyp/gymMyPage.action#2">예약 현황</a></li>
                                             <li><a href="/gyp/gymMyPage.action#3">리뷰 목록</a></li>
                                         </ul>
+                                    </li></c:if>
+                                    
+                                    <c:if test="${sessionScope.customInfo.sessionId =='admin' }">
+                                    	<li><a href="/gyp/adminHome.action">관리자페이지</a>
                                     </li></c:if>
                                     
                                     
