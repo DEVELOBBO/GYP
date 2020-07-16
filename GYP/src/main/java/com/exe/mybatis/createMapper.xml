@@ -17,14 +17,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	insert into GYM (gymId,gymType,gymName,gymPwd,gymEmail,gymTel,gymAddr,gymLongitude,gymLatitude
 	,gymTrainer,gymTrainerPic,gymPic,gymProgram,gymFacility,gymHour,gymCreated,gymPass,gymOk)
 	values (#{gymId},#{gymType},#{gymName},#{gymPwd},#{gymEmail},#{gymTel},#{gymAddr},1,1,
-	#{gymTrainer},#{gymTrainerPic},'aa','aa','aa','aa',sysdate,1,'false')
+	#{gymTrainer},#{gymTrainerPic},#{gymPic},#{gymProgram},#{gymFacility},#{gymHour},sysdate,1,'false')
 </insert>
 
 
 <!-- 개인회원 아이디 중복 체크 -->
-<select id="idCheck" resultType="com.exe.dto.CustomerDTO">
- select cusId from CUSTOMER
-     where cusId = #{cusId}
+<select parameterType="com.exe.dto.GymDTO" id="cusidCheck" resultType="int">
+	SELECT nvl(count(*),0) FROM customer WHERE cusId = #{cusId} 
 </select>
+
+<!-- 체육관회원 아이디 중복 체크 -->
+<select parameterType="com.exe.dto.GymDTO" id="gymidCheck" resultType="int">
+	SELECT nvl(count(*),0) FROM gym WHERE gymId = #{gymId} 
+</select>
+
+<!-- 개인회원 아이디 중복 체크 -->
+<!-- <select parameterType="String" id="Id_Check" resultType="com.app.app.Dto.UserDto">SELECT cusId FROM customer where cusId = #{cusId} </select> -->
 
 </mapper>

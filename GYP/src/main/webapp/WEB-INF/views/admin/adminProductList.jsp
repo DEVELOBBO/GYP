@@ -7,12 +7,18 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>상품 리스트</title>
-<link rel="stylesheet" href="/gyp/resources/css/adminProductStyle.css" type="text/css"/>
-<link rel="stylesheet" href="/gyp/resources/css/adminProductList.css" type="text/css"/>
-<script type="text/javascript">
-
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<!-- Favicon -->
+	<link rel="icon" href="/gyp/resources/img/core-img/favicon.ico">
+	<!-- Core Stylesheet -->
+	<link rel="stylesheet" href="/gyp/resources/css/style.css">
+	<!-- font -->
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400&display=swap" rel="stylesheet">
+	
+	
+	<script type="text/javascript">
 	function searchData(){
 
 		var f = document.searchForm;		
@@ -20,72 +26,96 @@
 		f.submit();
 
 	}
-	
-</script>
+	</script>
+<title>GYP</title>
 </head>
-<body>
-<div id="bbsList">
-	<div id="bbsList_title">
-	상품 리스트
-	</div>
+<body style="font-family: 'Noto Sans KR', sans-serif;">
 
-	<div id="bbsList_header">
-		<div id="leftHeader">
-			<form action="" name="searchForm" method="post">
-				<select name="searchKey" class="selectField">
-					<option value="productId">상품 ID</option>
-					<option value="productName">상품 이름</option>
-				</select>
-				<input type="text" name="searchValue" class="textField">
-				<input type="button" value=" 검색 " class="btn2" onclick="searchData();"/>			
-			</form>		
-		</div>
+	<jsp:include page="/WEB-INF/views/layout/header_over.jsp" />
+	<!-- 메인 : header_main.jsp / 그외 : header_below.jsp -->
+	<jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
 
-		<div id="rightHeader">
-			<input type="button" value=" 상품등록 " class="btn2"
-			onclick="javascript:location.href='<%=cp%>/adminProductCreated.action';"/>		
-		</div>
+	<div style="height: 50px;"></div>
 
-	</div>
-
-	<div id="bbsList_list">
-		<div id="title">
-			<dl>
-				<dt class="productId">상품 ID</dt>
-				<dt class="productName">상품 이름</dt>
-				<dt class="productPrice">가격</dt>
-				<dt class="productContent">설명</dt>
-				<dt class="productImg">사진</dt>
-				<dt class="productHit">조회수</dt>
-			</dl>
-		</div>
-
-		<div id="lists">
-		<c:forEach var="dto" items="${lists}">
-			<dl>
-				<dd class="productId">${dto.productId }</dd> 
-				<dd class="productName"><a href="${urlArticle }adminProductArticle.action?productId=${dto.productId }">${dto.productName}</a></dd>
-				<dd class="productPrice">${dto.productPrice }</dd>
-				<dd class="productContent">${dto.productContent }</dd>
-				<dd class="productImg"><a href="${urlArticle }adminProductArticle.action?productId=${dto.productId }"><img src="${imgPath}/${dto.productImg }" width="100" height="100"></a></dd>
-				<dd class="productHit">${dto.productHit }</dd>
+	<div id="myPage_wrapper" style="width: 1100px; margin: 0 auto;">
+		<div id="content">
+			<h5 style="color: green;">Customer Management</h5>
+			<h2 class="mb-30">상품 관리</h2>
+		
+			<div>
+				<!-- 검색 -->
+				<div id="leftHeader" style="height: 50px; padding-top: 10px; display: inline-block; width: 550px;">
+					<form action="" name="searchForm" method="post">
+						<select name="searchKey" class="selectField">
+							<option value="productId">상품 ID</option>
+							<option value="productName">상품 이름</option>
+						</select>
+						<input type="text" name="searchValue" class="textField">
+						<input type="button" value=" 검색 " class="btn2" onclick="searchData();"/>			
+					</form>		
+				</div>
 				
-			</dl>
-		</c:forEach>
+				<!-- 상품등록 -->
+				<div id="rightHeader" style=" height: 50px; padding-top: 10px; display: inline-block; width: 550px; float: right; text-align: right;">
+					<input type="button" value=" 상품등록 " class="btn2"
+					onclick="javascript:location.href='<%=cp%>/adminProductCreated.action';"/>&nbsp;	
+				</div>
+				
+				
+				<div>
+					<table width="1100px;" border="1" bordercolor="white">
+						<tr style="background-color: #666; color: white;" align="center">
+							<td width="100">상품 ID</td>
+							<td width="70">이름</td>
+							<td width="170">가격</td>
+							<td width="100">설명</td>
+							<td width="250">사진</td>
+							<td width="80">조회수</td>
+						</tr>
+						
+						<c:forEach var="dto" items="${lists}">
+							<tr align="center" height="45">
+								<td>${dto.productId }</td> 
+								<td><a href="${urlArticle }adminProductArticle.action?productId=${dto.productId }"><font style="color: green; font-weight: bold;">${dto.productName}</font></a></td>
+								<td>${dto.productPrice }</td>
+								<td>${dto.productContent }</td>
+								<td><a href="${urlArticle }adminProductArticle.action?productId=${dto.productId }"><img src="${imgPath}/${dto.productImg }" width="50" height="50"></a></td>
+								<td>${dto.productHit }</td>
+							</tr>
+						</c:forEach>
+					</table><br><br>
+					<div style="width: 1100px; margin: 0 auto; align-items: center; text-align: center;">
+						<p>
+							<c:if test="${dataCount!=0 }">
+								${pageIndexList }
+							</c:if>
+							<c:if test="${dataCount==0 }">
+								등록된 상품이 없습니다.
+							</c:if>
+						</p>
+					</div>	
+					
+				</div>
+			</div>
 		</div>
-
-		<div id="footer">
-
-			<p>
-				<c:if test="${dataCount!=0 }">
-					${pageIndexList }
-				</c:if>
-				<c:if test="${dataCount==0 }">
-					등록된 회원이 없습니다.
-				</c:if>
-			</p>
-		</div>	
 	</div>
-</div>
+	
+	<div style="height: 100px;"></div>
+
+	<jsp:include page="/WEB-INF/views/layout/footer.jsp" />
+
+	
+    <!-- ##### All Javascript Script ##### -->
+    <!-- jQuery-2.2.4 js -->
+    <script src="/gyp/resources/js/jquery/jquery-2.2.4.min.js"></script>
+    <!-- Popper js -->
+    <script src="/gyp/resources/js/bootstrap/popper.min.js"></script>
+    <!-- Bootstrap js -->
+    <script src="/gyp/resources/js/bootstrap/bootstrap.min.js"></script>
+    <!-- All Plugins js -->
+    <script src="/gyp/resources/js/plugins/plugins.js"></script>
+    <!-- Active js -->
+    <script src="/gyp/resources/js/active.js"></script>
+
 </body>
 </html>

@@ -34,9 +34,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 회원 세션id를 기반으로 최신 예약 타입 추출 -->
 	<select id="customerRecentBookType" resultType="String" parameterType="String">
-		SELECT B.GYMTYPE FROM BOOK A, GYM B 
-		WHERE A.GYMID = B.GYMID AND A.CUSID = #{sessionId}
-		order by A.BOOKCREATED DESC
+		SELECT GYMTYPE FROM (
+		SELECT ROWNUM RNUM, B.GYMTYPE FROM BOOK A, GYM B 
+		WHERE A.GYMID = B.GYMID AND A.CUSID = #{sessionId} 
+		order by A.BOOKCREATED DESC) WHERE RNUM=1
 	</select>
 	
 	<!-- 로그인 시 : 추천상품리스트(Type내 조회순) -->

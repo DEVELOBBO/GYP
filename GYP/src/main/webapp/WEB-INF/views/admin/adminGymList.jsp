@@ -3,164 +3,308 @@
 <%
 	request.setCharacterEncoding("UTF-8");
 	String cp = request.getContextPath();
+
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>체육관 리스트</title>
-<link rel="stylesheet" href="/gyp/resources/css/adminGymStyle.css" type="text/css"/>
-<link rel="stylesheet" href="/gyp/resources/css/adminGymList.css" type="text/css"/>
-<script type="text/javascript">
-
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<!-- Favicon -->
+	<link rel="icon" href="/gyp/resources/img/core-img/favicon.ico">
+	<!-- Core Stylesheet -->
+	<link rel="stylesheet" href="/gyp/resources/css/style.css">
+	<!-- font -->
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400&display=swap" rel="stylesheet">
+	
+	
+	<script type="text/javascript">
 	function sendIt(){
 
 		var f = document.searchForm;		
 		f.action = "<%=cp%>/adminGymList.action";
 		f.submit();
-
 	}
+	</script>
 	
-</script>
+	
+<title>GYP</title>
 </head>
-<body>
-<div id="bbsList">
-	<div id="bbsList_title">
-	체육관 리스트
-	</div>
+<body style="font-family: 'Noto Sans KR', sans-serif;">
+	
+	<jsp:include page="/WEB-INF/views/layout/header_over.jsp" />
+	<!-- 메인 : header_main.jsp / 그외 : header_below.jsp -->
+	<jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
 
-	<div id="bbsList_list">
-		<div id="title">
-			<dl>
-				<dt class="gymId">ID</dt>
-				<dt class="gymType">타입</dt>
-				<dt class="gymName">이름</dt>
-				<!-- <dt class="gymPwd">비밀번호</dt> -->
-				<dt class="gymEmail">이메일</dt>
-				<dt class="gymTel">전화번호</dt>
-				<dt class="gymAddr">주소</dt>
-				<!-- <dt class="gymLongitude">경도</dt> -->
-				<!-- <dt class="gymLatitude">위도</dt> -->
-				<dt class="gymTrainer">트레이너</dt>
-				<dt class="gymTrainerPic">트레이너 사진</dt>
-				<dt class="gymPic">체육관 사진</dt>
-				<dt class="gymProgram">프로그램</dt>
-				<dt class="gymFacility">시설</dt>
-				<dt class="gymHour">운영시간</dt>
-				<dt class="gymCreated">가입일</dt>
-				<dt class="gymPass">gymPass</dt>
-			</dl>
-		</div>
-		
-		
-		<div id="falselists">
-		<c:forEach var="dto" items="${falselists}" varStatus="status">
-			<dl>
-				<dt class="gymId">${dto.gymId }</dt>
-				<dt class="gymType">${dto.gymType }</dt>
-				<dt class="gymName">${dto.gymName }</dt>
-				<dt class="gymEmail">${dto.gymEmail }</dt>
-				<dt class="gymTel">${dto.gymTel }</dt>
-				<dt class="gymAddr">${dto.gymAddr }</dt>
-				<dt class="gymTrainer">
-				<c:forEach var="gymTrainer" items="${dto.gymTrainerAry}" varStatus="status">
-					${gymTrainer}
-				</c:forEach>
-				</dt>
-				<dt class="gymTrainerPic">
-				<c:forEach var="gymTrainerPic" items="${dto.gymTrainerPicAry}" varStatus="status">
-					<img src="${imgPath}/${gymTrainerPic}" width="50" height="50">${gymTrainerPic}
-				</c:forEach>
-				</dt>
-				<dt class="gymPic">
-				<c:forEach var="gymPic" items="${dto.gymPicAry}" varStatus="status">
-					<img src="${imgPath}/${gymPic}" width="50" height="50">${gymPic}
-				</c:forEach>
-				</dt>
-				<dt class="gymProgram">${dto.gymProgram }</dt>
-				<dt class="gymFacility">
-				<c:forEach var="gymFacility" items="${dto.gymFacilityAry}" varStatus="status">
-					${gymFacility }
-				</c:forEach>
-				</dt>
-				<dt class="gymHour">${dto.gymHour }</dt>
-				<dt class="gymCreated">${dto.gymCreated }</dt>
-				<dt class="gymPass">${dto.gymPass }</dt>
-				<dt>
-				<input type="button" value=" 승인 " class="btn2" onclick="javascript:location.href='<%=cp%>/adminGymUpdated_ok.action?gymId=${dto.gymId}';"/>
+	<div style="height: 50px;"></div>
+	
+	<div id="myPage_wrapper" style="width: 1100px; margin: 0 auto;">
+		<div id="content">
+			<h5 style="color: green;">GYM Management</h5>
+			<h2 class="mb-30">체육관 관리</h2>
+			
+			<div>
+			<h6 style="color: gray;">승인 대기 체육관 리스트</h6>
+			<table width="1100px;" border="1" bordercolor="white">
+				<tr style="background-color: #666; color: white;" align="center">
+					<td width="100">체육관 ID</td>
+					<td width="60">유형</td>
+					<td width="100">이름</td>
+					<td width="170">이메일</td>
+					<td width="100">전화번호</td>
+					<td width="100">주소</td>
+					<td width="60">상세 정보</td> <!-- 트레이너, 트레이너 사진, 체육관 사진, 프로그램 -->
+					<td width="80">가입일</td>
+					<td width="50">금액</td>
+					<td width="50">승인</td>
+					<td width="50">거절</td>
+				</tr>
 				
-				<input type="button" value=" 거절 " class="btn2" onclick="javascript:location.href='<%=cp%>/adminGymDeleted.action?gymId=${dto.gymId}';"/>
-				</dt>
-			</dl>
-		</c:forEach>
+				<c:forEach var="dto" items="${falselists}" varStatus="status">
+				<tr align="center" height="45">
+					<td>${dto.gymId }</td>
+					<td>${dto.gymType }</td>
+					<td>${dto.gymName }</td>
+					<td>${dto.gymEmail }</td>
+					<td>${dto.gymTel }</td>
+					<td>${dto.gymAddr }</td>
+					<td> 
+					<!-- 더보기 모달 버튼 -->
+						<div id="seeMore1" class="post-date1" data-toggle="modal" 
+						data-target="#seeMore1${status.index }" data-backdrop="true" data-keyboard="false">
+							<p style="margin-bottom: 0; color: green; font-weight: bold;">더보기</p>
+						</div>
+						
+						
+					<!-- 모달(승인대기용) -->
+						<div id="seeMore1${status.index }"  class="modal fade" role="dialog">
+							<div class="modal-dialog modal-lg">
+								<!-- Modal content-->
+								<div class="modal-content">
+									<form action="" method="post" name="bookForm">
+										<div class="modal-header">
+											<h4 class="modal-title" >
+												${dto.gymName } 상세 정보
+											</h4>
+											<button type="button" class="close" data-dismiss="modal">&times;</button>
+										</div>
+										<div class="modal-body" style="text-align: left;">
+											
+											<table width="766" border="1" bordercolor="black">
+												<tr height="120">
+													<td width="80">&nbsp;&nbsp;트레이너 및 사진</td>
+													<c:forEach var="i" begin="0" end="3">
+														<td width="90" align="center">
+														<c:if test="${!empty dto.gymTrainerAry[i]}">
+															${dto.gymTrainerAry[i]}<br>
+															<img src="${imgPath}/${dto.gymTrainerPicAry[i]}" width="" height="10"><br>
+															${dto.gymTrainerPicAry[i]}
+														</c:if>
+														</td>
+													</c:forEach>
+												</tr>
+												<tr height="120">		
+													<td width="80">&nbsp;&nbsp;체육관 사진</td> 
+													<c:forEach var="i" begin="0" end="3">
+														<td width="90" align="center">
+															<c:if test="${!empty dto.gymPicAry[i]}">
+															<img src="${imgPath}/${gymPic}" width="10" height="10"><br>
+															${gymPic}
+															</c:if>
+														</td>
+													</c:forEach>
+												</tr>
+												<tr height="30">	
+													<td>&nbsp;&nbsp;프로그램</td> 
+													<td colspan="4">&nbsp;&nbsp;${dto.gymProgram }</td>
+												</tr>
+												<tr height="30">
+													<td>&nbsp;&nbsp;체육관 시설</td> 
+													<c:forEach var="i" begin="0" end="3">
+														<td>
+															<c:if test="${!empty dto.gymFacilityAry[i]}">
+															&nbsp;&nbsp;${dto.gymFacilityAry[i]}
+															</c:if>
+														</td>
+													</c:forEach>
+												</tr>
+												<tr height="30">
+													<td>&nbsp;&nbsp;운영 시간</td>
+													<td colspan="4">&nbsp;&nbsp;${dto.gymHour }</td>
+												</tr>
+											</table>
+												
+										</div>
+									</form>
+								</div>
+					
+							</div>
+						</div>
+						
+					</td>
+					<td>${dto.gymCreated }</td>
+					<td>${dto.gymPass }</td>
+					<td><input type="button" value=" 승인 " class="btn2" onclick="javascript:location.href='<%=cp%>/adminGymUpdated_ok.action?gymId=${dto.gymId}';"/></td>
+					<td><input type="button" value=" 거절 " class="btn2" onclick="javascript:location.href='<%=cp%>/adminGymDeleted.action?gymId=${dto.gymId}';"/></td>
+				</tr>
+				</c:forEach>
+			</table>
 		</div>
 
+		<!-- //////////////////////////////////////////////////////////// -->
+		
+		<hr>
+		<br><br><br>
+		<h6 style="color: gray;">등록된 체육관 리스트</h6>
 
-<h5>************************************************************************</h5>
-
-		<div id="bbsList_header">
-			<div id="leftHeader">
-				<form action="" name="searchForm" method="post">
-					<select name="searchKey" class="selectField">
-						<option value="gymName">이름</option>
-						<option value="gymType">종목</option>
-						<option value="gymAddr">지역</option>				
-					</select>
-					<input type="text" name="searchValue" class="textField">
-					<input type="button" value=" 검색 " class="btn2" onclick="sendIt();"/>			
-				</form>		
-			</div>
+		<!-- 검색 -->
+		<div id="leftHeader" style="height: 50px; padding-top: 10px;">
+			<form action="" name="searchForm" method="post">
+				<select name="searchKey" class="selectField">
+					<option value="gymName">이름</option>
+					<option value="gymType">종목</option>
+					<option value="gymAddr">지역</option>				
+				</select>
+				<input type="text" name="searchValue" class="textField">
+				<input type="button" value=" 검색 " class="btn2" onclick="sendIt();">			
+			</form>		
 		</div>
+
 
 		<div id="lists">
-		<c:forEach var="dto" items="${lists}">
-			<dl>
-				<dt class="gymId">${dto.gymId }</dt>
-				<dt class="gymType">${dto.gymType }</dt>
-				<dt class="gymName">${dto.gymName }</dt>
-				<dt class="gymEmail">${dto.gymEmail }</dt>
-				<dt class="gymTel">${dto.gymTel }</dt>
-				<dt class="gymAddr">${dto.gymAddr }</dt>
-				<dt class="gymTrainer">
-				<c:forEach var="gymTrainer" items="${dto.gymTrainerAry}" varStatus="status">
-					${gymTrainer}
+			<table width="1100px;" border="1" bordercolor="white">
+				<tr style="background-color: #666; color: white;" align="center">
+					<td width="80">체육관 ID</td>
+					<td width="60">유형</td>
+					<td width="200">이름</td>
+					<td width="170">이메일</td>
+					<td width="100">전화번호</td>
+					<td width="">주소</td>
+					<td width="80">상세 정보</td> <!-- 트레이너, 트레이너 사진, 체육관 사진, 프로그램 -->
+					<td width="80">가입일</td>
+					<td width="50">금액</td>
+				</tr>
+				
+				<c:forEach var="dto" items="${lists}">
+				<tr align="center" height="45">
+					<td>${dto.gymId }</td>
+					<td>${dto.gymType }</td>
+					<td>${dto.gymName }</td>
+					<td>${dto.gymEmail }</td>
+					<td>${dto.gymTel }</td>
+					<td>${dto.gymAddr }</td>
+					<td> 
+					<!-- 더보기 모달 버튼 -->
+						<div id="seeMore1" class="post-date1" data-toggle="modal" 
+						data-target="#seeMore2${status.index }" data-backdrop="true" data-keyboard="false">
+							<p style="margin-bottom: 0; color: green; font-weight: bold;">더보기</p>
+						</div>
+						
+						
+					<!-- 모달(승인대기용) -->
+						<div id="seeMore2${status.index }"  class="modal fade" role="dialog">
+							<div class="modal-dialog modal-lg">
+								<!-- Modal content-->
+								<div class="modal-content">
+									<form action="" method="post" name="bookForm">
+										<div class="modal-header">
+											<h4 class="modal-title" >
+												${dto.gymName } 상세 정보
+											</h4>
+											<button type="button" class="close" data-dismiss="modal">&times;</button>
+										</div>
+										<div class="modal-body" style="text-align: left;">
+											
+											<table width="766" border="1" bordercolor="black">
+												<tr height="120">
+													<td width="80">&nbsp;&nbsp;트레이너 및 사진</td>
+													<c:forEach var="i" begin="0" end="3">
+														<td width="90" align="center">
+														<c:if test="${!empty dto.gymTrainerAry[i]}">
+															${dto.gymTrainerAry[i]}<br>
+															<img src="${imgPath}/${dto.gymTrainerPicAry[i]}" width="" height="10"><br>
+															${dto.gymTrainerPicAry[i]}
+														</c:if>
+														</td>
+													</c:forEach>
+												</tr>
+												<tr height="120">		
+													<td width="80">&nbsp;&nbsp;체육관 사진</td> 
+													<c:forEach var="i" begin="0" end="3">
+														<td width="90" align="center">
+															<c:if test="${!empty dto.gymPicAry[i]}">
+															<img src="${imgPath}/${gymPic}" width="10" height="10"><br>
+															${gymPic}
+															</c:if>
+														</td>
+													</c:forEach>
+												</tr>
+												<tr height="30">	
+													<td>&nbsp;&nbsp;프로그램</td> 
+													<td colspan="4">&nbsp;&nbsp;${dto.gymProgram }</td>
+												</tr>
+												<tr height="30">
+													<td>&nbsp;&nbsp;체육관 시설</td> 
+													<c:forEach var="i" begin="0" end="3">
+														<td>
+															<c:if test="${!empty dto.gymFacilityAry[i]}">
+															&nbsp;&nbsp;${dto.gymFacilityAry[i]}
+															</c:if>
+														</td>
+													</c:forEach>
+												</tr>
+												<tr height="30">
+													<td>&nbsp;&nbsp;운영 시간</td>
+													<td colspan="4">&nbsp;&nbsp;${dto.gymHour }</td>
+												</tr>
+											</table>
+												
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					
+					
+					</td>
+					<td>${dto.gymCreated }</td>
+					<td>${dto.gymPass }</td>
+				</tr>
 				</c:forEach>
-				</dt>
-				<dt class="gymTrainerPic">
-				<c:forEach var="gymTrainerPic" items="${dto.gymTrainerPicAry}" varStatus="status">
-					<img src="${imgPath}/${gymTrainerPic}" width="50" height="50">${gymTrainerPic}
-				</c:forEach>
-				</dt>
-				<dt class="gymPic">
-				<c:forEach var="gymPic" items="${dto.gymPicAry}" varStatus="status">
-					<img src="${imgPath}/${gymPic}" width="50" height="50">${gymPic}
-				</c:forEach>
-				</dt>
-				<dt class="gymProgram">${dto.gymProgram }</dt>
-				<dt class="gymFacility">
-				<c:forEach var="gymFacility" items="${dto.gymFacilityAry}" varStatus="status">
-					${gymFacility }
-				</c:forEach>
-				</dt>
-				<dt class="gymHour">${dto.gymHour }</dt>
-				<dt class="gymCreated">${dto.gymCreated }</dt>
-				<dt class="gymPass">${dto.gymPass }</dt>
-			</dl>
-		</c:forEach>
+			</table>
 		</div>
-
-		<div id="footer">
-
-			<p>
-				<c:if test="${dataCount!=0 }">
-					${pageIndexList }
-				</c:if>
-				<c:if test="${dataCount==0 }">
-					등록된 회원이 없습니다.
-				</c:if>
-			</p>
-		</div>	
+			
+			<div style="width: 1100px; margin: 0 auto; align-content: center; text-align: center;">
+				<p>
+					<c:if test="${dataCount!=0 }">
+						<br>${pageIndexList }
+					</c:if>
+					<c:if test="${dataCount==0 }">
+						<br>등록된 체육관이 없습니다.
+					</c:if>
+				</p>
+			</div>	
+		</div>
 	</div>
-</div>
+
+	
+	<div style="height: 100px;"></div>
+
+	<jsp:include page="/WEB-INF/views/layout/footer.jsp" />
+
+	
+    <!-- ##### All Javascript Script ##### -->
+    <!-- jQuery-2.2.4 js -->
+    <script src="/gyp/resources/js/jquery/jquery-2.2.4.min.js"></script>
+    <!-- Popper js -->
+    <script src="/gyp/resources/js/bootstrap/popper.min.js"></script>
+    <!-- Bootstrap js -->
+    <script src="/gyp/resources/js/bootstrap/bootstrap.min.js"></script>
+    <!-- All Plugins js -->
+    <script src="/gyp/resources/js/plugins/plugins.js"></script>
+    <!-- Active js -->
+    <script src="/gyp/resources/js/active.js"></script>
+
 </body>
 </html>

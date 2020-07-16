@@ -23,6 +23,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -161,6 +163,11 @@ public class gypController {
 		HttpSession session = request.getSession(); //세션 생성
 		CustomInfo info = new CustomInfo(); //세션값을 저장하기 위해 객체 생성
 		String history = request.getParameter("history"); //로그인 이전 페이지 기록
+		
+		if(history==null || history.equals("")) {
+			history = "/";
+		}
+		
 		history = history.substring(history.lastIndexOf("/"), history.length()); //주소의 마지막 슬래시 추출
 		
 		//회원가입 후, 로그인창으로 이동했을때, 로그인하고 이전페이지(회원가입 등)으로 돌아가기 방지
@@ -282,7 +289,7 @@ public class gypController {
 		CustomInfo info = (CustomInfo) session.getAttribute("customInfo");
 
 		// 유저정보
-		CustomerDTO cusdto = dao.getReadData(info);
+		CustomerDTO cusdto = dao.getCustromerDTOReadData(info);
 
 		// 리뷰 아이디값 검색하기 위해
 		String reviewId = info.getSessionId();
@@ -419,10 +426,19 @@ public class gypController {
 	public String customerUpdate(HttpServletRequest request,HttpSession session) {
 		
 		CustomInfo info = (CustomInfo)session.getAttribute("customInfo");
-		CustomerDTO dto = dao.getReadData(info);
+		String mode=null;
 		
+		//세션아이디로 고객정보 디비에서 dto가져옴
+		CustomerDTO dto = dao.getCustromerDTOReadData(info);
+		
+		//고객정보가 있으면 mode를 "updated"으로 넘겨준다
+		if(dto!=null) {
+			mode = "updated";
+		}
+		
+		request.setAttribute("mode", mode);
 		request.setAttribute("dto", dto);
-		return "myPage/customerUpdate";
+		return "create/createCustomer";
 	}
 	
 	// 유저 정보 수정 (비밀번호 변경)
@@ -1323,17 +1339,20 @@ public class gypController {
 		
 		//경로생성	
 		String path = multiReq.getSession().getServletContext().getRealPath("/resources/img/gymTrainerPic/");
+		
 		File dir = new File(path);
 		if(!dir.exists()) {
 			dir.mkdir();//경로 체크 후, 없으면 생성
 		}
 		
 		//---------트레이너 이름 합치기---------
+		
 		String gymTrainer1 = request.getParameter("gymTrainer1");
 		String gymTrainer2 = request.getParameter("gymTrainer2");
 		String gymTrainer3 = request.getParameter("gymTrainer3");
 		String gymTrainer4 = request.getParameter("gymTrainer4");
 		String gymTrainer = "";
+		
 		
 		if(gymTrainer1!=null) {
 			gymTrainer += gymTrainer1 + ",";
@@ -1348,7 +1367,7 @@ public class gypController {
 			gymTrainer += gymTrainer4;
 		}
 		
-		//마지막글자
+		//마지막글자에   ,  <- 이거 빼기
 		String lastWord = gymTrainer.substring(gymTrainer.length()-1, gymTrainer.length());
 		
 		//마지막 쉼표면, 쉼표 빼고 dto에 setting
@@ -1358,6 +1377,8 @@ public class gypController {
 		}
 		dto.setGymTrainer(gymTrainer);
 
+	
+		
 		//---------트레이너 파일 합치기---------
 
 		//파일 리스트 생성
@@ -1396,7 +1417,7 @@ public class gypController {
 			}
 		}
 		
-		//마지막글자
+		//마지막글자에   ,  <- 이거 빼기
 		lastWord = gymTrainerPic.substring(gymTrainerPic.length()-1, gymTrainerPic.length());
 				
 		//마지막 쉼표면, 쉼표 빼고 dto에 setting
@@ -1404,16 +1425,151 @@ public class gypController {
 			gymTrainerPic = gymTrainerPic.substring(0, gymTrainerPic.length()-1);
 			lastWord = gymTrainerPic.substring(gymTrainerPic.length()-1, gymTrainerPic.length());//마지막 글자 다시 세팅
 		}
-		dto.setGymTrainerPic(gymTrainerPic);
-
 		
+		
+		
+		//======체육관 사진 등록===========
+		
+		//체육관 사진 어따 저장해서 넣을건지 경로생성	
+		String path2 = multiReq.getSession().getServletContext().getRealPath("/resources/img/gymPic/");
+				
+		File gymdir = new File(path2);
+		if(!gymdir.exists()) {
+			gymdir.mkdir();//경로 체크 후, 없으면 생성
+		}
+		
+		//html의 upload2 가져와서 파일 리스트 생성
+				List<MultipartFile> fileList2 = multiReq.getFiles("upload2");
+				String gymPic = "";
+				String newFileGymName = ""; 
+				
+				//확장 for문으로 하나씩 처리
+				for (MultipartFile fileShowOne : fileList2) {
+					try {
+						if(!fileShowOne.getOriginalFilename().equals("")) { //파일 이름이 null이 아니면
+							
+							//로컬저장용 이름 생성
+							newFileGymName = dto.getGymId() + "-" + fileShowOne.getOriginalFilename();
+							
+							//DB저장용 파일이름 합침 (아이디로 사진명 중복되지 않게) (예) 곰돌이체육관-체육관1.jpg
+							gymPic += newFileGymName + ",";
+							
+							//fs 생성 및 저장
+							FileOutputStream fs = new FileOutputStream(path2 + newFileGymName); 
+							fs.write(fileShowOne.getBytes());
+							fs.close();
+						}
+					} catch (Exception e) {
+						e.toString();
+					}
+				}
+		
+		
+				//마지막글자
+				lastWord = gymPic.substring(gymPic.length()-1, gymPic.length());
+						
+				//마지막 쉼표면, 쉼표 빼고 dto에 setting
+				while(lastWord.equals(",")) {
+					gymPic = gymPic.substring(0, gymPic.length()-1);
+					lastWord = gymPic.substring(gymPic.length()-1, gymPic.length());//마지막 글자 다시 세팅
+				}
+		
+				//GymHour 매장오픈시간 닫는시간 선택하는거 다 합쳐서 한 컬럼에 집어넣기
+				String gymHour1_1 = request.getParameter("gymHour1_1");
+				String gymHour1_2 = request.getParameter("gymHour1_2");
+				
+				String gymHour2_1 = request.getParameter("gymHour2_1");
+				String gymHour2_2 = request.getParameter("gymHour2_2");
+				
+				String gymHour3_1 = request.getParameter("gymHour3_1");
+				String gymHour3_2 = request.getParameter("gymHour3_2");
+				
+				String gymHour = "";
+				
+				String gymHour1 = gymHour1_1 + gymHour1_2;
+				String gymHour2 = gymHour2_1 + gymHour2_2;
+				String gymHour3 = gymHour3_1 + gymHour3_2;
+				
+				if(gymHour!=null) {
+					gymHour += gymHour1 + ",";
+				}
+				if(gymHour1!=null) {
+					gymHour += gymHour2 + ",";
+				}
+				if(gymHour2!=null) {
+					gymHour += gymHour3 ;
+				}
+			
+				
+				
+				
+				
+		//dto에 setting
+	
+		dto.setGymHour(gymHour);			
+		dto.setGymTrainerPic(gymTrainerPic);
+		dto.setGymPic(gymPic);
+
 		//디비 삽입
 		dao.gymCreated(dto);
         
  		return "redirect:/login.action";
 			 	
 	}
+	
+	
+	/*
+	//개인회원 아이디 중복체크
+		@RequestMapping(value = "/cusidck", method = {RequestMethod.GET,RequestMethod.POST})
+		public @ResponseBody String AjaxView(  
+			        @RequestParam("cusId") String cusId){
+			String str = "";
+			//int idcheck = dbPro.idCheck(id);
+			
+			int idcheck = dao.cusidCheck(cusId);
+			
+			if(idcheck==1){ //이미 존재하는 계정
+				str = "NO";	
+			}else{	//사용 가능한 계정
+				str = "YES";	
+			}
+			return str;
+		}
+		
+		*/
+	
+	//개인 아이디 중복 체크
+	@RequestMapping(value = "/cusIdck", method = RequestMethod.POST)
+	public @ResponseBody String AjaxView(  
+			        @RequestParam("cusId") String cusId){
+			String str = "";
+			int idcheck = dao.cusidCheck(cusId);
+			if(idcheck==1){ //이미 존재하는 계정
+				str = "NO";	
+			}else{	//사용 가능한 계정
+				str = "YES";	
+			}
+			return str;
+		}
 
+	
+	//체육관회원 아이디 중복체크
+		@RequestMapping(value = "/gymIdck", method = RequestMethod.POST)
+	public @ResponseBody String AjaxView2(  
+			        @RequestParam("gymId") String gymId){
+			String str = "";
+			
+			//int idcheck = dbPro.idCheck(id);
+			
+			int idcheck = dao.gymidCheck(gymId);
+			
+			if(idcheck==1){ //이미 존재하는 계정
+				str = "NO";	
+			}else{	//사용 가능한 계정
+				str = "YES";	
+			}
+			return str;
+		}
 	
 	//*******************경기민*******************
 	

@@ -55,7 +55,7 @@ private SqlSessionTemplate sessionTemplate;
 	}
 	
 	//회원정보 불러오기 (유저)
-	public CustomerDTO getReadData(CustomInfo info) {
+	public CustomerDTO getCustromerDTOReadData(CustomInfo info) {
 		CustomerDTO dto = sessionTemplate.selectOne("customerMapper.getReadData", info);
 		return dto;
 	}
@@ -395,6 +395,18 @@ private SqlSessionTemplate sessionTemplate;
 		sessionTemplate.selectOne("createMapper.idCheck", dto);
 	}
 	
+	
+	//개인회원 아이디 중복체크
+	public int cusidCheck(String cusId) {
+		int result = sessionTemplate.selectOne("createMapper.cusidCheck", cusId);
+		return result;
+	}
+	
+	//체육관회원 아이디 중복체크
+	public int gymidCheck(String gymId) {
+		int result = sessionTemplate.selectOne("createMapper.gymidCheck", gymId);
+		return result;
+	}
 	
 	//*******************최보경*******************
 	
