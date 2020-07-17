@@ -327,22 +327,5 @@ $(document).ready(function(){
 	
 	//지도 위치
 	showGymMap();
-/*	
-	
-	//reviewList 총점 별점
-	$("input:radio.total-rating").each(function(){
-		console.log("inside!!!");
-		if($("input:radio.total-rating").val() == $("#StarAvgParam").val()) {
-			this.prop("checked", true);
-		}
-	});
-	*/
-	
-/*	var star;
-	$("input[name='rating']").each(function(){
-		console.log("check input radio box");
-		$("input:radio[name='rating']:radio[value='9']").attr("checked",true);
-	});*/
-	
 	
 });

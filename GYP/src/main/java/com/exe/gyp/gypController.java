@@ -14,6 +14,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -21,6 +23,8 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,6 +36,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.exe.dao.GypDAO;
 import com.exe.dto.BookDTO;
+import com.exe.dto.ChargeDTO;
 import com.exe.dto.CustomInfo;
 import com.exe.dto.CustomerDTO;
 import com.exe.dto.GymDTO;
@@ -55,6 +60,7 @@ public class gypController {
 	
 	@Autowired
 	MyUtil_Map myUtilMap;
+	
 	
 	//*******************최보경*******************
 	
@@ -749,8 +755,6 @@ public class gypController {
 		String gymId = dto.getGymId();
 		int reNum = dto.getReNum();
 		
-		//System.out.println("gymId:reviewNum =" + gymId + ":" + reNum);
-		
 		dao.deleteReviewData(reNum);
 		
 		return reviewList(request,gymId,session);
@@ -805,6 +809,7 @@ public class gypController {
 			out.println("history.back();");
 			out.println("</script>");
 			out.close();
+			return "gymDetail/gymDetail";
 		}
 		
 		//사용자 pass 수 차감하기
@@ -817,6 +822,7 @@ public class gypController {
 			out.println("history.back();");
 			out.println("</script>");
 			out.close();
+			return "gymDetail/gymDetail";
 		}
 		
 		//사용자 pass수 차감하여 update하기
@@ -849,16 +855,10 @@ public class gypController {
 			}
 			
 			String cusId = info.getSessionId();
-			
-			System.out.println("cusId" + cusId);
-			
 			String gymId = request.getParameter("gymId");
-			System.out.println("gymId" + gymId);
 			
 			int whetherJjim = Integer.parseInt(request.getParameter("whetherJjim"));
-			//int whetherJjim = Integer.parseInt(request.getAttribute("whetherJjim"));
 			
-			System.out.println("whetherJjim: " + whetherJjim);
 			// 찜 추가하기
 			if(whetherJjim==0) {
 				
@@ -875,6 +875,114 @@ public class gypController {
 			
 			return "redirect:/gymDetail.action?gymId="+gymId;
 		}
+	
+	// 패스 선택
+	@RequestMapping(value="/passCharge.action", method = {RequestMethod.GET, RequestMethod.POST})
+	public String passCharge(HttpServletRequest request, HttpSession session) throws Exception {
+		
+		/*
+		 * CustomInfo info = (CustomInfo)session.getAttribute("customInfo");
+		 * if(info==null) {//돌발적 로그아웃 대비 return "redirect:/login.action"; }
+		 */
+		
+        int pricePerPass = 5000;
+        List<Integer> passKind = new ArrayList<Integer>();
+        passKind.add(5);
+        passKind.add(30);
+        passKind.add(78);
+        passKind.add(100);
+        
+        List<String> passDescription = new ArrayList<String>();
+        passDescription.add("한번 체험해보세요");
+        passDescription.add("재미를 붙여볼까요?");
+        passDescription.add("건강한 생활의 시작");
+        passDescription.add("당신은 운동 매니아");
+        
+        request.setAttribute("pricePerPass", pricePerPass);
+        request.setAttribute("passKind", passKind);
+        request.setAttribute("passDescription", passDescription);
+        
+		return "payment/passCharge";
+	}
+	
+	// 결제하기(창)
+	@RequestMapping(value="/payment.action", method = {RequestMethod.GET, RequestMethod.POST})
+	public String Payment(HttpServletRequest request, HttpSession session) throws Exception {
+		CustomInfo info = (CustomInfo)session.getAttribute("customInfo");
+		if(info==null) {//돌발적 로그아웃 대비
+			return "redirect:/login.action";
+		}
+		// 결제정보 작성을 위해 사용자 정보 불러오기
+		CustomerDTO cusDto = dao.getCustromerDTOReadData(info);
+		request.setAttribute("cusId", info.getSessionId());
+		request.setAttribute("cusName", cusDto.getCusName());
+		request.setAttribute("cusTel", cusDto.getCusTel());
+		request.setAttribute("cusAddr", cusDto.getCusAddr());
+		
+		String passSelected = request.getParameter("pass");
+		request.setAttribute("passSelected", passSelected);
+		//패스 결제
+		if(passSelected!=null) {
+			int passNum = Integer.parseInt(passSelected.substring(5));
+			//int finalPayVal = passNum * 5000;
+			int finalPayVal = 100; //테스트용 결제 금액
+
+			request.setAttribute("finalPayVal", finalPayVal);
+		}
+		
+		//상품 결제
+		return "payment/payment";
+	}
+	
+	// 실제 결제
+	@RequestMapping(value="/actualPayment.action", method=RequestMethod.POST)
+	public void actualPayment(HttpServletRequest request, HttpSession session, ChargeDTO dto) throws Exception {
+		
+		CustomInfo info = (CustomInfo)session.getAttribute("customInfo");
+		String cusId = info.getSessionId();
+		
+		String params=request.getParameter("params");
+		String item = params.substring(params.indexOf("item=")+5,params.indexOf("&"));
+		int chargePass = Integer.parseInt(item.substring(5));
+		//int amount = Integer.parseInt(params.substring(params.indexOf("amount=")+7,params.indexOf("&",params.indexOf("amount=")))); //최종 결제 금액
+		String payMethod = params.substring(params.indexOf("payMethod=")+10);
+		
+		//chargeDTO num데이터 타입 string에서 int로 수정함
+		int chargeNumMax = dao.getChargeNumMax();
+		dto.setChargeNum(chargeNumMax+1);
+		dto.setCusId(cusId);
+		dto.setChargePass(chargePass);
+		dto.setChargeType(payMethod);
+		
+		//charge테이블에 추가하기
+		dao.insertChargeData(dto);
+		
+		//사용자 pass 수 수정
+		int cusPassLeft = dao.getCusPassLeft(cusId);
+
+		cusPassLeft += chargePass;
+		Map<String, Object> hMap = new HashMap<String, Object>();
+		hMap.put("cusId",cusId);
+		hMap.put("cusPass",cusPassLeft);
+		//charge 테이블 업데이트
+		dao.updateCusPass(hMap);
+		return;
+	}
+	
+	// 결제 완료 (창)
+	@RequestMapping(value="/payment_ok.action")
+	public String payment_ok(HttpServletRequest request, JjimDTO dto,HttpSession session) throws Exception{
+			
+		CustomInfo info = (CustomInfo)session.getAttribute("customInfo");
+		if(info==null) {//돌발적 로그아웃 대비
+			//return "redirect:/login.action";
+		}
+		
+		System.out.println("payment_ok.action 에 들어옴");
+		
+		return "payment/payment_ok";
+	}
+	
 	
 	//*******************서예지*******************
 	//-------------------notice-------------------
@@ -2064,13 +2172,25 @@ public class gypController {
 				+Integer.toString(min);
 
 		//경로생성	
+		//만약 성공하면
+		//종완이 부분도 고쳐야함
 		
-
 		
-		String path = multiReq.getSession().getServletContext().getResourcePaths("webapp/resources/img/product/");
-				
+		/*
+		 * Resource resource =
+		 * ResourceLoader.getResource("file:webapp/resources/images");
+		 * 
+		 * String cp = request.getContextPath();
+		 */
 		
-		File dir = new File(path);
+		/*String path = cp;
+		path += "/WEB-INF/views/admin/";
+		path += "src\\main\\webapp\\resources\\product\\"; 
+		System.out.println(path);*/
+		
+		
+		
+		/*File dir = new File(path);
 		if(!dir.exists()) {
 			dir.mkdir();//경로 체크 후, 없으면 생성
 		}
@@ -2080,7 +2200,13 @@ public class gypController {
 		
 		try {
 			if(!upload.getOriginalFilename().equals("")) { //파일 이름이 null이 아니면
-				String newProductImgName = upload.getOriginalFilename() +"_"+ nowTime  ;
+				
+				//확장자 위치 구하기
+				int dotStart = upload.getOriginalFilename().indexOf(".");
+				
+				//원래 파일이름_202007171530.jpg
+				String newProductImgName = upload.getOriginalFilename().substring(0, dotStart) 
+						+"_"+ nowTime + upload.getOriginalFilename().substring(dotStart);		
 				
 				//fs 생성 및 저장
 				FileOutputStream fs = new FileOutputStream(path + newProductImgName); 
@@ -2093,7 +2219,7 @@ public class gypController {
 			}
 		} catch (Exception e) {
 			e.toString();
-		}
+		}*/
 		
 		//넘어온 dto를 dao에 넘김 
 		//dao.productInsertData(dto);

@@ -4,7 +4,7 @@
 	request.setCharacterEncoding("UTF-8");
 	String cp = request.getContextPath();
 %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html">
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -16,8 +16,6 @@
 	<link rel="icon" href="/gyp/resources/img/core-img/favicon.ico">
 	<!-- Core Stylesheet -->
 	<link rel="stylesheet" href="/gyp/resources/css/style.css">
-	<!-- 플로팅 -->
-	<link rel="stylesheet" href="/gyp/resources/css/floating.css">
 	<!-- font -->
 	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400&display=swap" rel="stylesheet">
 	
@@ -75,7 +73,7 @@
                                     
                                     <!-- 체육관 트레이너 목록 -->
 					                <div class="row">
-						                <c:forEach var="i" begin="0" end="3">
+						                <c:forEach var="i" begin="0" end="${gymTrainerPic.size()-1 }">
 							                <div class="col-3">
 									           <div class="single-teachers-area mb-100">
 							                        <!-- Bg Gradients -->
@@ -157,7 +155,6 @@
 											<span>${gymDto.gymPass }&nbsp;pass</span>
 										</p>
 									</div>
-									<div id="result"></div>
 								</div>
 							</div>
 
@@ -293,7 +290,6 @@
 							        </div>
 							        
 							        <div class="modal-body-select">
-							        
 							        	<input type="radio" name="bookType" value="online">온라인
 										<input type="radio" name="bookType" value="offline">오프라인
 							        </div>

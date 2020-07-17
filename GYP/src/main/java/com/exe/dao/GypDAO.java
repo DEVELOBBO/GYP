@@ -7,6 +7,7 @@ import java.util.Map;
 import org.mybatis.spring.SqlSessionTemplate;
 
 import com.exe.dto.BookDTO;
+import com.exe.dto.ChargeDTO;
 import com.exe.dto.CustomInfo;
 import com.exe.dto.CustomerDTO;
 import com.exe.dto.GymDTO;
@@ -134,8 +135,6 @@ private SqlSessionTemplate sessionTemplate;
 	}
 	
 	
-	
-	
 	//*******************김세이*******************
 	// getGymList : 체육관 하나의 정보 받아오기
 	public GymDTO getGymData(String gymId){
@@ -238,7 +237,17 @@ private SqlSessionTemplate sessionTemplate;
 		List<ProductDTO> productListForGym  = sessionTemplate.selectList("gymDetailMapper.getProductListForGym",c);
 		return productListForGym;
 	}
+	
+	// getChargeNumMax : 충전 전체의 최댓값 : pass 결제 삽입용
+	public int getChargeNumMax() {
+		int result = sessionTemplate.selectOne("paymentMapper.getChargeNumMax");
+		return result;
+	}
 
+	// insertChargeData : 예약 삽입
+	public void insertChargeData(ChargeDTO dto) {
+		sessionTemplate.insert("paymentMapper.insertChargeData", dto);
+	}
 	
 	//*******************서예지*******************
 	

@@ -91,7 +91,7 @@
                                 </ul>
 
                                 <!-- Call Button -->
-                                <a href="#" class="fitness-btn menu-btn ml-30" style="min-width: 100px;">
+                                <a href="/gyp/passCharge.action" class="fitness-btn menu-btn ml-30" style="min-width: 100px;">
                                 	이용권 구입</a>
                                 
                                 <!-- 수업하기 Button -->

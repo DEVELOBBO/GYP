@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="paymentMapper">
+
+<!-- 충전 전체의 최댓값 : pass 결제 삽입용 -->
+	<select id="getChargeNumMax" resultType="int">
+		select nvl(max(chargeNum),0) from charge
+	</select>
+
+<!-- 충전 삽입 : pass 결제 후 삽입 -->
+	<insert id="insertChargeData" parameterType="com.exe.dto.ChargeDTO">
+		insert into charge (chargeNum,cusId,chargePass,chargeCreated,chargeType)
+		values (#{chargeNum},#{cusId},#{chargePass},sysdate,#{chargeType})
+	</insert>
+
+</mapper>
