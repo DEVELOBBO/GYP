@@ -71,16 +71,20 @@
 							<td width="100">설명</td>
 							<td width="250">사진</td>
 							<td width="80">조회수</td>
+							<td width="50">수정</td>
 						</tr>
 						
 						<c:forEach var="dto" items="${lists}">
 							<tr align="center" height="45">
 								<td>${dto.productId }</td> 
-								<td><a href="${urlArticle }adminProductArticle.action?productId=${dto.productId }"><font style="color: green; font-weight: bold;">${dto.productName}</font></a></td>
+								<td>${dto.productName}</td>
 								<td>${dto.productPrice }</td>
 								<td>${dto.productContent }</td>
-								<td><a href="${urlArticle }adminProductArticle.action?productId=${dto.productId }"><img src="${imgPath}/${dto.productImg }" width="50" height="50"></a></td>
+								<td><a href="/gyp/adminProductArticle.action?productId=${dto.productId }">
+									<img src="${imgPath}/${dto.productImg }" width="25" height="25"></a>${dto.productImg }</td>
 								<td>${dto.productHit }</td>
+								<td><input type="button" value=" 수정 "
+										onclick="javascript:location.href='<%=cp%>/adminProductUpdated.action?productId=${dto.productId}';"/></td>
 							</tr>
 						</c:forEach>
 					</table><br><br>

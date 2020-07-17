@@ -63,8 +63,6 @@ $(function (){
 		         }
 		    }) 
 	     })
-	      
-
 	});
 	
 
@@ -122,31 +120,18 @@ $(function (){
 			 */
 			
 			
-			
-			
 		 	if(!cc1.test(f.gymId.value)) {
-		
 				alert('아이디 영문소문자/숫자 4~16자 이내로 입력하세요.');
-		
 				f.gymId.focus();
-				
 				return false;
 		 	}
 		 	
 		 	if($('#gymId').val()!= $('#checkgymId').val()) {
-		 		
 		 		alert('아이디 중복체크 버튼을 눌러주세요');
-		 		
 		 		f.checkbutton2.focus();
-		 		
 		 		return false;
-		 		
-		 		
-		 		
 		 	}
 		 	
-		 	
-
 		 	if(!f.gymName.value){
 				alert("체육관 이름을 입력하세요.");
 				f.gymName.focus();
@@ -154,11 +139,8 @@ $(function (){
 			}
 		 	
 		 	if(!cc2.test(f.gymPwd.value)) {
-		
 				alert('패스워드 영문 대소문자/숫자 4~16자 이내로 입력하세요.');
-		
 				f.gymPwd.focus();
-				
 				return false;
 		 	}
 		 	
@@ -167,30 +149,22 @@ $(function (){
 		 		f.gymPwd2.value.focus();
 		 	}
 		 	
-
 		 	if(f.gymPwd.value != f.gymPwd2.value){
 		 		alert('비밀번호가 일치하지 않습니다.');
-		 		
 		 		f.gymPwd.value="";
 		 		f.gymPwd2.value="";
 		 		f.gymPwd.focus();
 		 	}
 		 	
 		 	if(!cc4.test(f.gymEmail.value)) {
-		 		
 				alert('이메일을 바르게 입력하세요');
-		
 				f.gymEmail.focus();
-				
 				return false;
 		 	}
 		 	
 		 	if(!cc3.test(f.gymTel.value)) {
-				
 				alert('전화번호를 바르게 입력하세요');
-		
 				f.gymTel.focus();
-				
 				return false;
 		 	}
 		 	

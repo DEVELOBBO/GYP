@@ -19,15 +19,13 @@
 	
 <title>GYP</title>
 
-<!-- ?????????????????????? -->
-<script type="text/javascript" src="/gyp/resources/js/util.js"></script>
-
 <script type="text/javascript">
 		
 	function sendIt(){
 		
 		f = document.myForm;
 		
+		//상품아이디 체크
 		str = f.productId.value;
 		str = str.trim();
 		if(!str){
@@ -37,6 +35,7 @@
 		}
 		f.productId.value = str;
 		
+		//상품이름 체크
 		str = f.productName.value;
 		str = str.trim();
 		if(!str){
@@ -45,7 +44,15 @@
 			return;
 		}
 		f.productName.value = str;
-
+		
+		//상품이미지 체크
+		if(!f.upload.value){
+			alert("\n상품 사진을 입력하세요.");
+			f.upload.focus();
+			return;
+		}
+	
+		//상품가격 체크
 		str = f.productPrice.value;
 		str = str.trim();
 		if(!str){
@@ -55,6 +62,7 @@
 		}
 		f.productPrice.value = str;
 		
+		//상품내용 체크
 		str = f.productContent.value;
 		str = str.trim();
 		if(!str){
@@ -71,6 +79,13 @@
 
 </script>
 
+<style type="text/css">
+	td{
+		font-weight: bold;
+	}
+
+</style>
+
 </head>
 <body style="font-family: 'Noto Sans KR', sans-serif;">
 
@@ -79,79 +94,48 @@
 	<jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
 	
 	<div style="height: 50px;"></div>
-
-<div id="bbs">
-	<div id="bbs_title">
-	상품 등록
-	</div>
 	
-	<form action="" name="myForm" method="post">
-	<div id="bbsCreated">
-		<div class="bbsCreated_bottomLine">
-			<dl>
-				<dt>상품 ID</dt>
-				<dd>
-					<input type="text" name=productId value="${dto.productId }" size="74" maxlength="100" class="boxTF"/>
-				</dd>							
-			</dl>		
+	<form action="" method="post" name="myForm" enctype="multipart/form-data">
+		<div id="myPage_wrapper" style="width: 1100px; margin: 0 auto;">
+			<div id="content">
+				<h5 style="color: green;">Customer Management</h5>
+				<h2 class="mb-30">상품 등록하기</h2>
+				<table>
+					<tr height="40">
+						<td width="100">상품 ID</td>
+						<td><input type="text" name=productId value="${dto.productId }" size="35" maxlength="20" class="boxTF"/></td>
+					</tr>
+					<tr height="40">
+						<td>상품 이름</td>
+						<td><input type="text" name="productName" value="${dto.productName }" size="35" maxlength="20" class="boxTF"/></td>
+					</tr>
+					<tr height="40">
+						<td>상품 이미지</td>
+						<td><input type="file" name="upload" value="${dto.productImg }" size="35" maxlength="20" class="boxTF"/></td>
+					</tr>
+					<tr height="40">
+						<td>상품 가격</td>
+						<td><input type="text" name="productPrice" value="${dto.productPrice }" size="35" maxlength="20" class="boxTF"/></td>
+					</tr>
+					<tr height="40">
+						<td>상품 설명</td>
+						<td><textarea rows="5" cols="40" name="productContent">${dto.productContent }</textarea></td>
+					</tr>
+					<tr height="60" valign="middle">
+						<td colspan="2" align="center">
+						<div style="width: 100px; display: inline-block;"></div>
+						<input type="button" value=" 등록하기 " class="btn2" 
+						onclick="sendIt();"/>
+						<input type="reset" value=" 다시입력 " class="btn2" 
+						onclick="document.myForm.productId.focus();"/>
+						<input type="button" value=" 작성취소 " class="btn2" 
+						onclick="javascript:location.href='<%=cp%>/adminProductList.action';"/>
+						</td>
+					</tr>
+				</table>
+			</div>
 		</div>
-		
-		<div class="bbsCreated_bottomLine">
-			<dl>
-				<dt>상품 이름</dt>
-				<dd>
-					<input type="text" name="productName" value="${dto.productName }" size="35" maxlength="20" class="boxTF"/>
-				</dd>							
-			</dl>		
-		</div>
-		
-		<div class="bbsCreated_bottomLine">
-			<dl>
-				<dt>상품 이미지</dt>
-				<dd>
-					<input type="file" name="productImg" value="${dto.productImg }" size="35" maxlength="20" class="boxTF"/>
-				</dd>							
-			</dl>		
-		</div>
-	
-		<div id="bbsCreated_content" >
-			<dl>
-				<dt>상품 가격</dt>
-				<dd>
-					<input type="text" name="productPrice" value="${dto.productPrice }" size="35" maxlength="20" class="boxTF"/>
-				</dd>							
-			</dl>		
-		</div>
-		
-		<div class="bbsCreated_bottomLine">
-			<dl>
-				<dt>상품 설명(내용)</dt>
-				<dd>
-					<input type="text" name="productContent" value="${dto.productContent }" size="35" maxlength="20" class="boxTF"/>
-				</dd>							
-			</dl>		
-		</div>
-	
-	</div>	
-	
-	
-	
-	<div id="bbsCreated_footer">
-			
-		<input type="button" value=" 등록하기 " class="btn2" 
-		onclick="sendIt();"/>
-		<input type="reset" value=" 다시입력 " class="btn2" 
-		onclick="document.myForm.productId.focus();"/>
-		<input type="button" value=" 작성취소 " class="btn2" 
-		onclick="javascript:location.href='<%=cp%>/adminProductList.action';"/>
-		
-		</div>
-	
 	</form>
-	
-</div>
-
-
 
 	<div style="height: 100px;"></div>
 

@@ -10,7 +10,7 @@
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="/gyp">Home</a></li>
-                                <li class="breadcrumb-item active" aria-current="page"><a href="/gyp/notice.action">Notice</a></li>
+                                <li class="breadcrumb-item active" aria-current="page"><a href="/gyp/noticeList.action">Notice</a></li>
                             </ol>
                         </nav>
                     </div>

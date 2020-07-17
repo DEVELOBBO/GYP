@@ -20,6 +20,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -1367,7 +1368,7 @@ public class gypController {
 			gymTrainer += gymTrainer4;
 		}
 		
-		//마지막글자에   ,  <- 이거 빼기
+		//마지막글자에,  <- 이거 빼기
 		String lastWord = gymTrainer.substring(gymTrainer.length()-1, gymTrainer.length());
 		
 		//마지막 쉼표면, 쉼표 빼고 dto에 setting
@@ -1505,7 +1506,6 @@ public class gypController {
 				
 				
 		//dto에 setting
-	
 		dto.setGymHour(gymHour);			
 		dto.setGymTrainerPic(gymTrainerPic);
 		dto.setGymPic(gymPic);
@@ -1770,7 +1770,6 @@ public class gypController {
 		
 		//세션에 올라온값 받기
 		CustomInfo info = (CustomInfo)session.getAttribute("customInfo");
-		System.out.println(info.getSessionId());
 		request.setAttribute("info", info);
 		return "admin/adminHome";
 	}
@@ -1973,26 +1972,6 @@ public class gypController {
 
 	}
 
-	//상품 입력
-	@RequestMapping(value = "/adminProductCreated.action")
-	public ModelAndView productCreated() {
-
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName("admin/adminProductCreated");
-
-		return mav;
-
-	}
-
-	@RequestMapping(value = "/adminProductCreated_ok.action", method = { RequestMethod.GET, RequestMethod.POST })
-	public String created_ok(ProductDTO dto, HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-		dao.productInsertData(dto);
-
-		return "redirect:/adminProductList.action";
-
-	}
-
 	//상품 리스트
 	@RequestMapping(value = "/adminProductList.action", method = { RequestMethod.GET, RequestMethod.POST })
 	public String productList(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -2011,8 +1990,7 @@ public class gypController {
 			searchKey = "productId";
 			searchValue = "";
 
-		} else {
-
+		} else {//검색을 했을 경우 디코딩
 			if (request.getMethod().equalsIgnoreCase("GET"))
 				searchValue = URLDecoder.decode(searchValue, "UTF-8");
 		}
@@ -2028,32 +2006,26 @@ public class gypController {
 		int start = (currentPage - 1) * numPerPage + 1;
 		int end = currentPage * numPerPage;
 
-		List<ProductDTO> lists =
-
-				dao.productGetList(start, end, searchKey, searchValue);
+		//한 페이지에 뿌릴 상품 리스트 가져오기
+		List<ProductDTO> lists = dao.productGetList(start, end, searchKey, searchValue);
 
 		//파람 생성
 		String param = "";
 		if (!searchValue.equals("")) {
-
 			param = "searchKey=" + searchKey;
 			param += "&searchValue=" + URLEncoder.encode(searchValue, "UTF-8");
-
 		}
-
+		
+		//pageIndexList생성
 		String listUrl = cp + "/adminProductList.action";
-
 		if (!param.equals("")) {
 			listUrl = listUrl + "?" + param;
 		}
 
-		String pageIndexList =
-
-				myUtil.pageIndexList(currentPage, totalPage, listUrl);
-
-		//이미지
-		cp = cp + "/resources/img/test";
-		String imgPath = cp;
+		String pageIndexList = myUtil.pageIndexList(currentPage, totalPage, listUrl);
+		
+		//이미지 path
+		String imgPath = cp + "/resources/img/test";;
 
 		//request set
 		request.setAttribute("lists", lists);
@@ -2063,49 +2035,73 @@ public class gypController {
 		request.setAttribute("imgPath", imgPath);
 
 		return "admin/adminProductList";
-
 	}
 
-	//상품 내용 productArticle
-	@RequestMapping(value = "/adminProductArticle.action",
-			method = { RequestMethod.GET, RequestMethod.POST })
-	public ModelAndView productArticle(HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-
-		String cp = request.getContextPath();
-
-		String str = request.getParameter("productId");
-
-		String pageNum = request.getParameter("pageNum");
-
-		ProductDTO dto = dao.productGetReadData(str);
-
-		if (dto == null) {
-			//return "redirect:/list.action";
-		}
-
-		String param = "pageNum=" + pageNum;
-
+	//상품 입력 페이지로 이동
+	@RequestMapping(value = "/adminProductCreated.action")
+	public ModelAndView productCreated() {
 		ModelAndView mav = new ModelAndView();
-
-		//View
-		mav.setViewName("admin/adminProductArticle");
-
-		//이미지
-		cp = cp + "/resources/img/test";
-		String imgPath = cp;
-
-		//Model
-		mav.addObject("dto", dto);
-		mav.addObject("params", param);
-		mav.addObject("pageNum", pageNum);
-		mav.addObject("imgPath", imgPath);
-
+		mav.setViewName("admin/adminProductCreated");
 		return mav;
-
 	}
 
-	//상품 수정 입력
+	//상품 입력 (등록)
+	@RequestMapping(value = "/adminProductCreated_ok.action", method = { RequestMethod.GET, RequestMethod.POST })
+	public String created_ok(ProductDTO dto, HttpServletRequest request, 
+			HttpServletResponse response, MultipartHttpServletRequest multiReq) throws Exception {
+		
+		//날짜생성용 객체
+		Calendar cal = Calendar.getInstance();
+		int year = cal.get(Calendar.YEAR);
+		int month = cal.get(Calendar.MONTH) + 1;
+		int day = cal.get(Calendar.DATE);
+		int hour = cal.get(Calendar.HOUR_OF_DAY);
+		int min = cal.get(Calendar.MINUTE);
+		String nowTime = Integer.toString(year)
+				+Integer.toString(month)
+				+Integer.toString(day)
+				+Integer.toString(hour)
+				+Integer.toString(min);
+
+		//경로생성	
+		
+
+		
+		String path = multiReq.getSession().getServletContext().getResourcePaths("webapp/resources/img/product/");
+				
+		
+		File dir = new File(path);
+		if(!dir.exists()) {
+			dir.mkdir();//경로 체크 후, 없으면 생성
+		}
+		
+		//html의 productImg 가져와서 객체 생성
+		MultipartFile upload = multiReq.getFile("upload");
+		
+		try {
+			if(!upload.getOriginalFilename().equals("")) { //파일 이름이 null이 아니면
+				String newProductImgName = upload.getOriginalFilename() +"_"+ nowTime  ;
+				
+				//fs 생성 및 저장
+				FileOutputStream fs = new FileOutputStream(path + newProductImgName); 
+				System.out.println(path + newProductImgName);
+				fs.write(upload.getBytes());
+				fs.close();
+				
+				//dto에 덮어씌우기
+				dto.setProductImg(newProductImgName);
+			}
+		} catch (Exception e) {
+			e.toString();
+		}
+		
+		//넘어온 dto를 dao에 넘김 
+		//dao.productInsertData(dto);
+		
+		return "redirect:/adminProductList.action";
+	}
+
+	//상품 수정 페이지로 이동
 	@RequestMapping(value = "/adminProductUpdated.action",
 			method = { RequestMethod.GET, RequestMethod.POST })
 
@@ -2116,7 +2112,7 @@ public class gypController {
 		String pageNum = request.getParameter("pageNum");
 
 		ProductDTO dto = dao.productGetReadData(productId);
-
+		
 		if (dto == null) {
 
 			return "redirect:/adminProductList.action";
