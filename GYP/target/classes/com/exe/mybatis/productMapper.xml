@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="productMapper">
+
+<!-- 예약 데이터 개수 -->
+<select id="getDataCount"  parameterType="hashMap" resultType="int">
+	select nvl(count(*),0) from product
+	where productId like '%' || #{serachValueCategory} ||'%'
+	and productName like '%' || #{searchValueWord} || '%'
+</select>
+
+<!-- 리스트 불러오기  -->
+<select id="getList" parameterType="hashMap" resultType="com.exe.dto.ProductDTO">
+		select * from (
+		select rownum rnum, data.* from (
+		select productId,productName,productImg,productPrice,productHit,productContent 
+		from PRODUCT where productId like '%' || #{serachValueCategory} ||'%'
+		and productName like '%' || #{searchValueWord} || '%'
+		order by productName desc) data)
+	<![CDATA[
+		where rnum>=#{start} and rnum<=#{end}
+	]]>
+</select>
+
+<!-- product 데이터 불러오기 -->
+<select id="getProductReadData" parameterType="String" resultType="com.exe.dto.ProductDTO"> 
+	select productId,productName,productImg,productPrice,productHit,productContent 
+	from product where productId=#{productId}
+</select>
+
+<!-- 상품 조회수 증가 -->
+<update id="updateHitCount" parameterType="String">
+	update PRODUCT set productHit=productHit+1 where productId=#{productId}
+</update>
+
+<!-- 리스트 불러오기(높은가격순)  -->
+<select id="getpayupList" parameterType="hashMap" resultType="com.exe.dto.ProductDTO">
+		select * from (
+		select rownum rnum, data.* from (
+		select productId,productName,productImg,productPrice,productHit,productContent 
+		from PRODUCT where productId like '%' || #{serachValueCategory} ||'%'
+		and productName like '%' || #{searchValueWord} || '%'
+		order by productPrice desc) data)
+	<![CDATA[
+		where rnum>=#{start} and rnum<=#{end}
+	]]>
+</select>
+
+<!-- 리스트 불러오기(낮은가격순) -->
+<select id="getpaydownList" parameterType="hashMap" resultType="com.exe.dto.ProductDTO">
+		select * from (
+		select rownum rnum, data.* from (
+		select productId,productName,productImg,productPrice,productHit,productContent 
+		from PRODUCT where productId like '%' || #{serachValueCategory} ||'%'
+		and productName like '%' || #{searchValueWord} || '%'
+		order by productPrice asc) data)
+	<![CDATA[
+		where rnum>=#{start} and rnum<=#{end}
+	]]>
+</select>
+
+<!-- 리스트 불러오기(조회수)  -->
+<select id="gethitList" parameterType="hashMap" resultType="com.exe.dto.ProductDTO">
+		select * from (
+		select rownum rnum, data.* from (
+		select productId,productName,productImg,productPrice,productHit,productContent 
+		from PRODUCT where productId like '%' || #{serachValueCategory} ||'%'
+		and productName like '%' || #{searchValueWord} || '%'
+		order by productHit desc) data)
+	<![CDATA[
+		where rnum>=#{start} and rnum<=#{end}
+	]]>
+</select>
+
+<!-- 장바구니 선택한 물품 출력 리스트 -->
+<select id="getProductList" parameterType="String" resultType="com.exe.dto.ProductDTO">
+		select productId,productName,productImg,productPrice,productHit,productContent 
+		from PRODUCT where productId in 
+		<foreach collection="array" item="proId" index="index"  open="(" close=")" separator=",">
+        #{proId}	
+   		</foreach>
+</select>
+
+
+</mapper>

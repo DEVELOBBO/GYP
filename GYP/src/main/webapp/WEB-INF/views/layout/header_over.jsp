@@ -81,11 +81,11 @@
                                     </li></c:if>
                                     
                                     
-                                    <li><a href="#">스포츠용품</a>
+                                    <li><a href="/gyp/productList.action">스포츠용품</a>
                                     	<ul class="dropdown" style="width: 100px;">
-                                            <li><a href="/">헬스</a></li>
-                                            <li><a href="/">요가</a></li>
-                                            <li><a href="/">필라테스</a></li>
+                                            <li><a href="/gyp/productList.action?searchValueCategory=H">헬스</a></li>
+                                            <li><a href="/gyp/productList.action?searchValueCategory=Y">요가</a></li>
+                                            <li><a href="/gyp/productList.action?searchValueCategory=P">필라테스</a></li>
                                         </ul>
                                     </li>
                                 </ul>

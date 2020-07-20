@@ -17,6 +17,11 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<mapper resource="com/exe/mybatis/customerMapper.xml"/>
 		<!-- 체육관 회원 Mapper 추가 -->
 		<mapper resource="com/exe/mybatis/gymMapper.xml"/>
+		<!-- 쇼핑몰 상품관련 -->
+		<mapper resource="com/exe/mybatis/productMapper.xml"/>
+		<!--  장바구니 -->
+		<mapper resource="com/exe/mybatis/cartMapper.xml"/>
+		
 		
 		
 		<!-- ********************김세이*********************** -->

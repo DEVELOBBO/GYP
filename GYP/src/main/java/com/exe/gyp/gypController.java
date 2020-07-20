@@ -36,6 +36,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.exe.dao.GypDAO;
 import com.exe.dto.BookDTO;
+import com.exe.dto.CartDTO;
 import com.exe.dto.ChargeDTO;
 import com.exe.dto.CustomInfo;
 import com.exe.dto.CustomerDTO;
@@ -180,6 +181,10 @@ public class gypController {
 		//회원가입 후, 로그인창으로 이동했을때, 로그인하고 이전페이지(회원가입 등)으로 돌아가기 방지
 		if(history.equals("/createCustomer.action") || history.equals("/login.action")) {
 			history = "/";
+		}
+		//제품 상세에서 로그인 안했을 경우, 로그인 창으로 이동했다가 productId를 못갖고 와서 에러 뜨는것 방지
+		if(history.contains("/productDetail.action")) {
+			history = "/productList.action";
 		}
 		
 		String sessionId = request.getParameter("sessionId");//input 입력한값 
@@ -537,6 +542,353 @@ public class gypController {
 		dao.bookdeleteData(bookNum);
 		return "redirect:/gymMyPage.action";
 	}
+	
+	
+	//////////////////
+	// 상품 리스트
+	@RequestMapping(value = "/productList.action", method = { RequestMethod.GET, RequestMethod.POST })
+	public String productList(HttpServletRequest request) throws Exception {
+
+		// 리스트 생성
+		List<ProductDTO> lists = null;
+
+		// 절대 경로 생성
+		String cp = request.getContextPath();
+
+		// 맵 객체 추가
+		Map<String, Object> hMap = new HashMap<String, Object>();
+
+		// 넘어오는값
+		String pageNum = request.getParameter("pageNum");
+		String searchValueCategory = request.getParameter("searchValueCategory"); //카테고리
+		String searchValueWord = request.getParameter("searchValueWord"); //키보드 타이핑한 글자
+		String type = request.getParameter("type");//정렬타입
+		
+		// 카테고리 검색 널 처리 + 인코딩 처리
+		if (searchValueCategory  == null) {
+			searchValueCategory = ""; // 키워드 헬스 요가 필라테스
+		}else if (request.getMethod().equalsIgnoreCase("GET")) {
+			searchValueCategory = URLDecoder.decode(searchValueCategory, "UTF-8");
+		}
+		
+		// 타이핑 검색 널 처리 + 인코딩 처리
+		if (searchValueWord  == null) {
+			searchValueWord = "";
+		} else if (request.getMethod().equalsIgnoreCase("GET")) {
+			searchValueWord = URLDecoder.decode(searchValueWord, "UTF-8");
+		}
+
+		// type 널처리
+		if (searchValueCategory.equals("all")){
+			searchValueCategory = "";
+			type = "0";
+		}else if(type==null) {
+			type="0";
+		}
+
+		//페이징
+		int currentPage = 1;
+
+		if (pageNum != null) {
+			currentPage = Integer.parseInt(pageNum);
+		} else {
+			pageNum = "1"; // 처음 페이지값
+		}
+
+		// 검색한 경우를 위한 페이징용 hMap
+		hMap.put("serachValueCategory", searchValueCategory);
+		hMap.put("searchValueWord", searchValueWord);
+
+		int dataCount = dao.getProductCount(hMap);
+		int numPerPage = 12;// 페이지에 보여주는 게시물수
+		int totalPage = myUtil.getPageCount(numPerPage, dataCount);
+
+		if (currentPage > totalPage) {
+			currentPage = totalPage;
+		}
+		
+		//한 페이지의 첫과 끝 게시물 번호
+		int start = (currentPage - 1) * numPerPage + 1;
+		int end = currentPage * numPerPage;
+		hMap.put("start", start);
+		hMap.put("end", end);
+		
+		//파람 생성
+		String param = "";
+		if (!searchValueCategory.equals("")) {
+			param = "serachValueCategory=" + searchValueCategory;
+			param += "&searchValueWord=" + URLEncoder.encode(searchValueWord, "UTF-8");
+		}
+		
+		//전달할 url과 path
+		String articleUrl = cp + "/productDetail.action?pageNum=" + currentPage;
+		if (!param.equals(""))
+			articleUrl = articleUrl + "&" + param;
+		
+		String searchUrl = "productList.action?" + param;
+		String pageIndexList = myUtil.pageIndexList(currentPage, totalPage, searchUrl);
+		String imagePath = cp + "/image/product"; // 이미지 경로
+
+		
+		// 정렬 타입에 따라 리스트가 달라진다
+		// 1.높은가격순 2.낮은가격순 3.조회수 0.그냥 검색
+		if (type.equals("1")) {
+			lists = dao.searchListpayup(hMap);
+		} else if (type.equals("2")) {
+			lists = dao.searchListpaydown(hMap);
+		} else if (type.equals("3")) {
+			lists = dao.searchListhit(hMap);
+		} else if (type.equals("0")) {
+			lists = dao.searchList(hMap);
+		}
+
+		request.setAttribute("lists", lists);
+		request.setAttribute("serachValueCategory", searchValueCategory);
+		request.setAttribute("searchValueWord", searchValueWord);
+		request.setAttribute("pageNum", pageNum);
+		request.setAttribute("dataCount", dataCount);
+		request.setAttribute("totalPage", totalPage);
+		request.setAttribute("currentPage", currentPage);
+		request.setAttribute("pageIndexList", pageIndexList);
+		request.setAttribute("imagePath", imagePath);
+		request.setAttribute("articleUrl", articleUrl);
+
+		return "product/productList";
+
+	}
+
+	// 제품상세 페이지
+	@RequestMapping(value = "/productDetail.action", method = { RequestMethod.GET, RequestMethod.POST })
+	public String productDetail(HttpServletRequest request) throws Exception {
+
+		String cp = request.getContextPath();
+
+		// 넘어오는값
+		String productId = request.getParameter("productId");
+		String pageNum = request.getParameter("pageNum");
+		String searchValueCategory = request.getParameter("searchValueCategory"); //카테고리
+		String searchValueWord = request.getParameter("searchValueWord"); //키보드 타이핑한 글자
+
+		// 카테고리 검색 널 처리 + 인코딩 처리
+		if (searchValueCategory  == null) {
+			searchValueCategory = ""; // 키워드 헬스 요가 필라테스
+		}else if (request.getMethod().equalsIgnoreCase("GET")) {
+			searchValueCategory = URLDecoder.decode(searchValueCategory, "UTF-8");
+		}
+		
+		// 타이핑 검색 널 처리 + 인코딩 처리
+		if (searchValueWord  == null) {
+			searchValueWord = "";
+		} else if (request.getMethod().equalsIgnoreCase("GET")) {
+			searchValueWord = URLDecoder.decode(searchValueWord, "UTF-8");
+		}
+		
+		// product 데이터 불러오기
+		ProductDTO dto = dao.getProductReadData(productId);
+		
+		//조회수 증가
+		dao.updateHitCount(productId);
+
+		String param = "pageNum=" + pageNum;
+		if (searchValueCategory != null) {
+			param += "&searchValueCategory=" + searchValueCategory;
+			param += "&searchValueWord=" + URLEncoder.encode(searchValueWord, "UTF-8");
+		}
+
+		String imagePath = cp + "/image/product";
+
+		request.setAttribute("dto", dto);
+		request.setAttribute("params", param);
+		request.setAttribute("searchValueCategory", searchValueCategory);
+		request.setAttribute("searchValueWord", searchValueWord);
+		request.setAttribute("pageNum", pageNum);
+		request.setAttribute("imagePath", imagePath);
+
+		return "product/productDetail";
+	}
+
+	// 장바구니 추가
+	// 미구현: 장바구니 추가시 로그인 기능 , 중복 추가(방지)
+	@RequestMapping(value = "/productDetail_ok.action", method = { RequestMethod.GET, RequestMethod.POST })
+	public String productDetail_ok(HttpServletRequest request, HttpSession session, CartDTO cartdto) throws Exception {
+
+		// 장바구니 클릭시 로그인하게 만듦 (jsp에서)
+		CustomInfo info = (CustomInfo) session.getAttribute("customInfo"); //세션에 로그인값 가져올려고 생성
+		
+		// 넘어오는값
+		String productId = request.getParameter("productId");
+		String pageNum = request.getParameter("pageNum");
+		String searchValueCategory = request.getParameter("searchValueCategory"); //카테고리
+		String searchValueWord = request.getParameter("searchValueWord"); //키보드 타이핑한 글자
+		int count = Integer.parseInt(request.getParameter("count")); //물건 갯수
+		
+		// 카테고리 검색 널 처리 + 인코딩 처리
+		if (searchValueCategory  == null) {
+			searchValueCategory = ""; // 키워드 헬스 요가 필라테스
+		}else if (request.getMethod().equalsIgnoreCase("GET")) {
+			searchValueCategory = URLDecoder.decode(searchValueCategory, "UTF-8");
+		}
+		
+		// 타이핑 검색 널 처리 + 인코딩 처리
+		if (searchValueWord  == null) {
+			searchValueWord = "";
+		} else if (request.getMethod().equalsIgnoreCase("GET")) {
+			searchValueWord = URLDecoder.decode(searchValueWord, "UTF-8");
+		}
+		
+		//cartMaxNum
+		int maxNum = dao.getCartNumMax();
+
+		cartdto.setCartNum(maxNum + 1);
+		cartdto.setCusId(info.getSessionId()); // 세션에 있는 id
+		cartdto.setProductId(productId);
+		cartdto.setCount(count);
+		
+		
+		//삽입전, 같은 아이디에 같은 물품을 이미 넣었는지 확인하기
+		int result = dao.cartCheckSame(cartdto);
+		
+		if(result==0) {//같은 사람이 같은 물품을 안담았다면! 
+			dao.cartInsertData(cartdto);//삽입
+		}else {
+			dao.cartCountChange(cartdto);//수량만 변경
+		}
+
+		return "redirect:/productDetail.action?productId=" + productId + "&pageNum=" + pageNum;
+	}
+
+	// 장바구니
+	// 미구현: 로그인 기능 추가해야함 , 가격 총합
+	//cartdto 에 productName,productPrice 추가
+	@RequestMapping(value = "/cart.action", method = { RequestMethod.GET, RequestMethod.POST })
+	public String cart(HttpServletRequest request, HttpSession session) throws Exception {
+
+		// CustomInfo info = (CustomInfo) session.getAttribute("customInfo");
+
+		// String cusId = info.getSessionId();
+
+		// 임시로 값 넣어줌
+		String cusId = "suzi"; // 세션에 있는 로그인값으로 변경
+
+		List<CartDTO> cartLists = dao.cartList(cusId);
+		
+		int totPrice = 0; //총합 변수
+		
+		for (CartDTO dto : cartLists) {
+			totPrice += dto.getProductPrice();
+		}
+
+		request.setAttribute("cartLists", cartLists);
+		request.setAttribute("totPrice", totPrice);
+
+		return "product/cart";
+
+	}
+
+	// 장바구니 체크박스 삭제
+	@RequestMapping(value = "/cart_delete.action", method = { RequestMethod.GET, RequestMethod.POST })
+	public String cart_delete(HttpServletRequest request, HttpSession session) throws Exception {
+
+		// 넘어오는값
+		String chkNum = request.getParameter("cartChk");
+		String[] chkNums = request.getParameterValues("cartChk");
+
+		int numI = Integer.parseInt(chkNum); //선택한 넘버값 정수로 바꿔줌
+
+		int[] numsI = new int[chkNums.length]; //배열 생성
+
+		int result = dao.getCartNumMax(); // 전체 데이터 개수
+
+		// System.out.println(chkNums.length); // 배열 크기
+		// System.out.println(cartNum); // 마지막 넘버값
+		// System.out.println(chkNum); // 선택 넘버
+
+		if (chkNums.length >= 2) { // 여러개 선택시 (2개이상)
+			if (chkNums.length == result) { // 전체선택
+				dao.AlldeleteCart(); //전체삭제
+			}
+			if (chkNums.length != result) // 여러개 선택
+			{
+				for (int i = 0; i < chkNums.length; i++) {
+					numsI[i] = Integer.parseInt(chkNums[i]);
+				}
+			}
+			dao.selectDeleteCart(numsI); //선택한 번호삭제
+
+		} else if (chkNums.length == 1) { // 하나 선택시
+			dao.deleteCart(numI);//하나삭제
+		}
+
+		return "redirect:/cart.action";
+	}
+
+	// 장바구니 버튼삭제
+	@RequestMapping(value = "/cart_Onedelete.action", method = { RequestMethod.GET, RequestMethod.POST })
+	public String cart_Onedelete(HttpServletRequest request, HttpSession session) throws Exception {
+
+		// 넘어오는 카트 리스트 번호값
+		int cartNum = Integer.parseInt(request.getParameter("cartNum"));
+
+		// 삭제
+		dao.OnedeleteCart(cartNum);
+
+		return "redirect:/cart.action";
+	}
+
+	//미구현: 결제 정보창  (값만 넘김) , 세션 로그인한 값으로 아이디값 받아와야함
+	@RequestMapping(value = "/order.action", method = { RequestMethod.GET, RequestMethod.POST })
+	public String order(HttpServletRequest request, HttpSession session) throws Exception {
+
+		
+		// 임시로 아이디는 suzi로 고정
+		String cusId = "suzi";
+
+		// String totPrice = req.getParameter("totPrice"); //나중에 결제 금액 넘김
+		String[] chkNums = request.getParameterValues("cartChk"); // 배열에 선택한 cartNum값이 들어온다
+		String chkNum = request.getParameter("cartChk");
+
+		// 인트형 배열생성
+		int[] numsI = new int[chkNums.length]; 
+
+		// 스트링형 배열생성
+		String[] proId = new String[chkNums.length];
+
+		if (chkNums.length >= 2) { // 여러개 선택시 (2개이상)
+
+			// 선택한 번호의 상품 id값 가져오기
+			for (int i = 0; i < chkNums.length; i++) {
+				numsI[i] = Integer.parseInt(chkNums[i]); // 선택한cartNum을 저장할 변수
+			}
+			List<CartDTO> lists = dao.getCartReadData2(numsI); //배열을 넘겨서 cartNum에 해당하는 productId값을 가져오기 위해
+
+			int i = 0;
+			
+			for (CartDTO dto : lists) {//선택한 개수많큼 리스트를 돌린다
+				proId[i] = dto.getProductId(); //스트링 배열에 선택한 productId값을 넘겨준다
+				i++;
+			}
+
+			//스트링 배열proId에 내가 선택한 항목의 productId값이 들어가있다
+			
+			//배열을 리스트에 넘겨준다 
+			List<ProductDTO> productlists = dao.getProductList(proId);
+			
+			//request.setAttribute("totPrice", totPrice);//나중에 물건 총합을 가져온다
+			request.setAttribute("productlists", productlists);
+
+		} else if (chkNums.length == 1) { // 하나 선택시
+
+			// 선택한 번호의 상품 id값 가져오기
+			CartDTO dto = dao.getCartReadData(chkNum);
+			request.setAttribute("dto", dto);
+		}
+
+		return "product/order";
+	}
+	
+	
+	
+	
 	
 	
 	//*******************김세이*******************

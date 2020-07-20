@@ -7,6 +7,7 @@ import java.util.Map;
 import org.mybatis.spring.SqlSessionTemplate;
 
 import com.exe.dto.BookDTO;
+import com.exe.dto.CartDTO;
 import com.exe.dto.ChargeDTO;
 import com.exe.dto.CustomInfo;
 import com.exe.dto.CustomerDTO;
@@ -26,114 +27,243 @@ private SqlSessionTemplate sessionTemplate;
 	}
 	
 	
-	//*******************원도현*******************
-	
-	//일반유저 로그인
-	public CustomerDTO getLoginReadData(String cusId) {//비밀번호 찾기
+	// *******************원도현*******************
+
+	// 일반유저 로그인
+	public CustomerDTO getLoginReadData(String cusId) {// 비밀번호 찾기
 		CustomerDTO dto = sessionTemplate.selectOne("loginMapper.getLoginReadData", cusId);
 		return dto;
 	}
-	//체육관 로그인
-	public GymDTO getGymLoginReadData(String cusId) {//비밀번호 찾기
+
+	// 체육관 로그인
+	public GymDTO getGymLoginReadData(String cusId) {// 비밀번호 찾기
 		GymDTO dto = sessionTemplate.selectOne("loginMapper.getGymLoginReadData", cusId);
 		return dto;
 	}
-	
-	//아이디 찾기
+
+	// 아이디 찾기
 	public CustomerDTO getLoginIdReadData(Map<String, Object> hMap) {
 		CustomerDTO dto = sessionTemplate.selectOne("loginMapper.getLoginIdReadData", hMap);
 		return dto;
 	}
-	
-	//회원정보 수정 (유저)
+
+	// 회원정보 수정(유저)
 	public void updateData(CustomerDTO dto) {
 		sessionTemplate.update("customerMapper.updateData", dto);
 	}
-	
+
 	// 회원정보 수정(체육관)
 	public void gymupdateData(GymDTO gymdto) {
 		sessionTemplate.update("gymMapper.gymupdateData", gymdto);
 	}
-	
-	//회원정보 불러오기 (유저)
+
+	// 회원정보 불러오기 (유저)
 	public CustomerDTO getCustromerDTOReadData(CustomInfo info) {
 		CustomerDTO dto = sessionTemplate.selectOne("customerMapper.getReadData", info);
 		return dto;
 	}
-	
-	//회원정보 불러오기 (체육관)
+
+	// 회원정보 불러오기 (체육관)
 	public GymDTO getgymReadData(CustomInfo info) {
 		GymDTO dto = sessionTemplate.selectOne("gymMapper.getgymReadData", info);
 		return dto;
 	}
-	
-	//회원정보 삭제(유저)
+
+	// 회원정보 삭제(유저)
 	public void deleteData(CustomerDTO dto) {
 		sessionTemplate.delete("customerMapper.deleteData", dto);
 	}
-	
+
 	// 회원정보 삭제(체육관)
 	public void gymdeleteData(GymDTO dto) {
 		sessionTemplate.delete("gymMapper.gymdeleteData", dto);
 	}
-	
-	//로그인시 값이 존재하는지 확인
+
+	// 로그인시 값이 존재하는지 확인
 	public int getDataCount(String cusId) {
 		int result = sessionTemplate.selectOne("loginMapper.getDataCount", cusId);
 		return result;
 	}
-	
+
 	// 리뷰 리스트(유저)
 	public List<ReviewDTO> reviewgetList(String reviewId) {
 		List<ReviewDTO> reviewlists = sessionTemplate.selectList("customerMapper.reviewgetLists", reviewId);
 		return reviewlists;
 	}
-	
+
 	// 리뷰 리스트(체육관)
 	public List<ReviewDTO> gymreviewgetList(String reviewId) {
 		List<ReviewDTO> gymreviewlists = sessionTemplate.selectList("gymMapper.gymreviewgetLists", reviewId);
 		return gymreviewlists;
 	}
-	
+
 	// 리뷰 삭제
 	public void reviewdeleteData(int reNum) {
 		sessionTemplate.delete("customerMapper.reviewdeleteData", reNum);
 	}
-	
+
 	// 찜 리스트
 	public List<JjimDTO> jjimgetList(String jjimId) {
 		List<JjimDTO> jjimlists = sessionTemplate.selectList("customerMapper.jjimgetLists", jjimId);
 		return jjimlists;
 	}
-	
+
 	// 찜 삭제
 	public void jjimdeleteData(String gymId) {
 		sessionTemplate.delete("customerMapper.jjimdeleteData", gymId);
 	}
-	
+
 	// 예약 리스트(유저)
 	public List<BookDTO> bookgetList(String bookId) {
 		List<BookDTO> booklists = sessionTemplate.selectList("customerMapper.bookgetLists", bookId);
 		return booklists;
 	}
-	
+
 	// 예약 리스트(체육관)
 	public List<BookDTO> gymbookgetList(String bookId) {
 		List<BookDTO> gymbooklists = sessionTemplate.selectList("gymMapper.gymbookgetLists", bookId);
 		return gymbooklists;
 	}
-	
+
 	// 예약 삭제
 	public void bookdeleteData(int bookNum) {
 		sessionTemplate.delete("customerMapper.bookdeleteData", bookNum);
 	}
-	
-	//예약 데이터 개수
+
+	// 예약 데이터 개수
 	public int bookgetDataCount(Map<String, Object> hMap) {
-		int result = sessionTemplate.selectOne("gymMapper.getDataCount",hMap);
+		int result = sessionTemplate.selectOne("gymMapper.getDataCount", hMap);
 		return result;
 	}
 	
+	// ******************************************** 원도현 쇼핑몰
+
+	// 데이터 갯수
+	public int getProductCount(Map<String, Object> hMap) {
+		int totalDataCount = sessionTemplate.selectOne("productMapper.getDataCount", hMap);
+		return totalDataCount;
+	}
+
+	// 상품 리스트
+	public List<ProductDTO> searchList(Map<String, Object> hMap) {
+		List<ProductDTO> lists = sessionTemplate.selectList("productMapper.getList", hMap);
+		return lists;
+	}
+
+	// 데이터 불러오기
+	public ProductDTO getProductReadData(String productId) {
+		ProductDTO dto = sessionTemplate.selectOne("productMapper.getProductReadData", productId);
+		return dto;
+	}
+
+	// 조회수 증가
+	public void updateHitCount(String productId) {
+		sessionTemplate.update("productMapper.updateHitCount", productId);
+	}
+
+	// 상품 리스트(높은가격순)
+	public List<ProductDTO> searchListpayup(Map<String, Object> hMap) {
+		List<ProductDTO> lists = sessionTemplate.selectList("productMapper.getpayupList", hMap);
+		return lists;
+	}
+
+	// 상품 리스트(낮은가격순)
+	public List<ProductDTO> searchListpaydown(Map<String, Object> hMap) {
+		List<ProductDTO> lists = sessionTemplate.selectList("productMapper.getpaydownList", hMap);
+		return lists;
+	}
+
+	// 상품 리스트(조회수)
+	public List<ProductDTO> searchListhit(Map<String, Object> hMap) {
+		List<ProductDTO> lists = sessionTemplate.selectList("productMapper.gethitList", hMap);
+		return lists;
+	}
+
+	// 장바구니 맥스넘
+	public int getCartNumMax() {
+		int result = sessionTemplate.selectOne("cartMapper.getCartNumMax");
+		return result;
+	}
+
+	// 장바구니에 같은 아이디, 같은 물건 있는지 확인
+	public int cartCheckSame(CartDTO cartdto) {
+		
+		int result = sessionTemplate.selectOne("cartMapper.cartCheckSame", cartdto);		
+		return result;
+	}
+	
+	// 장바구니 추가
+	public void cartInsertData(CartDTO cartdto) {
+		sessionTemplate.insert("cartMapper.cartInsertData", cartdto);
+	}
+	
+	// 장바구니 기존 물품의 갯수만 변경
+	public void cartCountChange(CartDTO cartdto) {
+		sessionTemplate.update("cartMapper.cartCountChange",cartdto);
+	}
+	
+
+	// 장바구니 데이터 불러오기(바로구매 선택시)
+	public CartDTO getCartReadData(String chkNum) {
+		CartDTO dto = sessionTemplate.selectOne("cartMapper.getCartReadData", chkNum);
+		return dto;
+	}
+
+	// 장바구니 데이터 불러오기(cartNum에 해당하는 productId값을 뽑기위해)
+	public List<CartDTO> getCartReadData2(int[] numsI) {
+		List<CartDTO> lists = sessionTemplate.selectList("cartMapper.getCartReadData2", numsI);
+		return lists;
+	}
+
+	// 장바구니 리스트
+	public List<CartDTO> cartList(String cusId) {
+		List<CartDTO> lists = sessionTemplate.selectList("cartMapper.getcartList", cusId);
+		return lists;
+	}
+
+	// 데이터 갯수 (헬스상품)
+	public int getProductCountH(Map<String, Object> hMap) {
+		int totalDataCount = sessionTemplate.selectOne("productMapper.getDataCountH", hMap);
+		return totalDataCount;
+	}
+
+	// 데이터 갯수 (요가상품)
+	public int getProductCountY(Map<String, Object> hMap) {
+		int totalDataCount = sessionTemplate.selectOne("productMapper.getDataCountY", hMap);
+		return totalDataCount;
+	}
+
+	// 데이터 갯수 (필라테스상품)
+	public int getProductCountP(Map<String, Object> hMap) {
+		int totalDataCount = sessionTemplate.selectOne("productMapper.getDataCountP", hMap);
+		return totalDataCount;
+	}
+
+	// 카트 삭제(여러개 선택)
+	public void selectDeleteCart(int[] numsI) {
+		sessionTemplate.delete("cartMapper.selectDeleteCart", numsI);
+	}
+
+	// 카트 삭제(한개 선택시)
+	public void deleteCart(int numI) {
+		sessionTemplate.delete("cartMapper.deleteCart", numI);
+	}
+
+	// 카트 전체 삭제
+	public void AlldeleteCart() {
+		sessionTemplate.delete("cartMapper.AlldeleteCart");
+	}
+
+	// 카트 삭제(바로 선택)
+	public void OnedeleteCart(int cartNum) {
+		sessionTemplate.delete("cartMapper.OnedeleteCart", cartNum);
+	}
+
+	// 상품 리스트(주문)
+	public List<ProductDTO> getProductList(String[] proId) {
+		List<ProductDTO> productlists = sessionTemplate.selectList("productMapper.getProductList", proId);
+		return productlists;
+	}
 	
 	//*******************김세이*******************
 	// getGymList : 체육관 하나의 정보 받아오기
