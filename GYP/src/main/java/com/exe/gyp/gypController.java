@@ -86,7 +86,7 @@ public class gypController {
 			//체육관 회원이면 마이페이지로
 			int result = dao.getDataCount(info.getSessionId());//유저로 로그인하면 result값은 1 gym으로 로그인 하면 0
 			if(result==0) {
-				return "myPage/gymMyPage";
+				return "redirect:/gymMyPage.action";
 			}
 			
 			//일반 회원이면 주소 추출
