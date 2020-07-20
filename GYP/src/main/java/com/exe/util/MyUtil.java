@@ -59,11 +59,11 @@ public class MyUtil {
 			
 			if(page == currentPage){				
 				
-				sb.append("<font color=\"Fuchsia\">" + page + "</font>&nbsp;");				
+				sb.append("<font color=\"#38b143\">" + page + "</font>&nbsp;");				
 			
 			}else{
 				
-				sb.append("<a href=\"" + listUrl + "pageNum=" + page + "\">"
+				sb.append("<a href=\"" + listUrl + "pageNum=" +  page + "\">"
 						+ page + "</a>&nbsp;");
 				
 			}
@@ -75,7 +75,7 @@ public class MyUtil {
 		//다음▶
 		if(totalPage - currentPageSetup > numPerBlock){
 						
-			sb.append("<a href=\"" + listUrl + "pageNum=" + page + "\">다음▶</a>&nbsp;");
+			sb.append("<a href=\"" + listUrl + "pageNum=" +  page + "\">다음▶</a>&nbsp;");
 			
 		}
 		

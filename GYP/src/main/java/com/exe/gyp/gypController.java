@@ -92,15 +92,23 @@ public class gypController {
 			//일반 회원이면 주소 추출
 			String customerAddr = dao.getCusAddr(info.getSessionId());
 			
-			//"구"를 자름
-			customerAddr = customerAddr.substring(customerAddr.indexOf("구")-2, customerAddr.indexOf("구")+1); 
-			//해당 "구"의 체육관 리스트
-			gymRecommendLists = dao.getGymRecommend(customerAddr);
-			//체육관 리스트가 널인 경우, 기본 리스트로 대체
+			//"구"가 존재하면 자름
+			if(customerAddr.indexOf("구")!=-1) {
+				customerAddr = customerAddr.substring(customerAddr.indexOf("구")-2, customerAddr.indexOf("구")+1);
+				gymRecommendLists = dao.getGymRecommend(customerAddr);//해당 "구"의 체육관 리스트
+			
+			//주소에 "구"가 없으면 "강남구"리스트 추천
+			}else {
+				gymRecommendLists = dao.getGymRecommendDefault();
+			}
+			
+			//체육관 리스트가 널인 경우, 기본 리스트로 대체 (에러방지)
 			if(gymRecommendLists == null) {
 				gymRecommendLists = dao.getGymRecommendDefault();
 			}
 		}
+		
+		
 		
 		//확장for문, 하나씩 꺼내서 글자길이 수정
 		for(GymDTO show : gymRecommendLists) {
@@ -169,9 +177,8 @@ public class gypController {
 	
 	//로그인시
 	@RequestMapping(value = "/login_ok.action" , method = {RequestMethod.GET,RequestMethod.POST})
-	public String login_ok(HttpServletRequest request, HttpServletResponse response) throws Exception{
+	public String login_ok(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception{
 		
-		HttpSession session = request.getSession(); //세션 생성
 		CustomInfo info = new CustomInfo(); //세션값을 저장하기 위해 객체 생성
 		String history = request.getParameter("history"); //로그인 이전 페이지 기록
 		
@@ -520,7 +527,6 @@ public class gypController {
 		// 임시 회원탈퇴시 로그인창으로 넘어가기
 		return "login/login";
 	}
-	
 	
 	// 리뷰 삭제
 	@RequestMapping(value = "/reviewDelete.action", method = { RequestMethod.GET, RequestMethod.POST })
@@ -1339,26 +1345,31 @@ public class gypController {
 	}
 	
 	
+	
 	//*******************서예지*******************
 	//-------------------notice-------------------
 	
 	@RequestMapping(value="/noticeList.action",method = {RequestMethod.GET,RequestMethod.POST})
 	public String noticeList(HttpServletRequest request,HttpSession session) throws Exception{
-		
+
+		CustomInfo info = (CustomInfo)session.getAttribute("customInfo");
+		int result = 1;
+
+		//0:관리자 / 로그인했을때만 qnaList.jsp 뜬다.(수정해야됨)
+		if(info!=null && info.getSessionId().equals("admin")) {
+			result = 0;
+			session.getId();
+		}
+	
 		String cp = request.getContextPath();
-		session = request.getSession();
 		String pageNum = request.getParameter("pageNum");
 		int currentPage = 1;
 		
-		//페이징처리
-		if(pageNum == null) {
-			pageNum = (String)session.getAttribute("pageNum");
-		}
-		if(pageNum != null) {
+		if(pageNum != null) {//처음 페이지는 1
 			currentPage = Integer.parseInt(pageNum);
 		}
 		
-		int dataCount = dao.getNoticeDataCount();
+		int dataCount = dao.getNoticeDataCount();//데이터전체출력
 		int numPerPage = 10; //한 페이지에 10개
 	
 		int totalPage = myUtil.getPageCount(numPerPage, dataCount);
@@ -1369,7 +1380,7 @@ public class gypController {
 		int end = currentPage*numPerPage;
 		
 		//한 페이지에 뿌릴 리스트 가져옴
-		List<NoticeDTO> lists = dao.getNoticeList(start, end); 
+		List<NoticeDTO> lists = dao.getNoticeList(start,end); 
 		
 		//listNum
 		int n = 0;
@@ -1382,11 +1393,13 @@ public class gypController {
 			n++;
 		}
 		
+		//주소
 		String listUrl = cp + "/noticeList.action";
 		String pageIndexList = myUtil.pageIndexList(currentPage, totalPage, listUrl);
 		String articleUrl = cp + "/noticeArticle.action?pageNum=" + currentPage;
 		
 		request.setAttribute("lists", lists);
+		request.setAttribute("result",result);
 		request.setAttribute("pageIndexList",pageIndexList);
 		request.setAttribute("pageNum",pageNum);
 		request.setAttribute("dataCount",dataCount);
@@ -1397,31 +1410,41 @@ public class gypController {
 	
 	//공지사항 등록 페이지로 가기
 	@RequestMapping(value="/noticeCreated.action",method = {RequestMethod.GET,RequestMethod.POST})
-	public ModelAndView noticeCreated(HttpServletRequest request,NoticeDTO dto,
-			ProductDTO dto1,HttpSession session) throws Exception{
+	public String noticeCreated(HttpServletRequest request,HttpServletResponse response,NoticeDTO dto) throws Exception{
+	
+		//maxnum 을 불러와서 +1해서 dto에 집어넣은 뒤 보내기
+		int maxNum = dao.getNoticeMaxNum();
+		dto.setNotiNum(maxNum+1);
 		
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName("notice/noticeCreated");
 		request.setAttribute("dto", dto);
 		request.setAttribute("mode", "insert");
-		return mav;
+		return "notice/noticeCreated";
 	}
 	
 	//공지사항 등록 삽입
 	@RequestMapping(value="/noticeCreated_ok.action",method = {RequestMethod.GET,RequestMethod.POST})
-	public String noticeCreated_ok(HttpServletRequest request,NoticeDTO dto, HttpSession session) throws Exception{
+	public String noticeCreated_ok(HttpServletRequest request,NoticeDTO dto) throws Exception{
 		
+		//notiNum 최대값 +1을 넘긴다. 
 		int noticeNumMax = dao.getNoticeMaxNum();
-		dto.setNotiNum(noticeNumMax + 1); 
+		dto.setNotiNum(noticeNumMax + 1);
+		
 		dao.insertNotice(dto);
 		return "redirect:/noticeList.action";
 	}	
 	
 	//공지사항 게시글
 	@RequestMapping(value="/noticeArticle.action",method = {RequestMethod.GET,RequestMethod.POST})
-	public String noticeArticle(HttpServletRequest request) throws Exception{
+	public String noticeArticle(HttpServletRequest request, HttpSession session) throws Exception{
 		
-		String cp = request.getContextPath();
+		CustomInfo info = (CustomInfo)session.getAttribute("customInfo");
+		int result = 1;//1:일반회원 
+				
+		//0:관리자 / 관리자일 경우에만 qnaList.jsp 뜬다.(수정해야됨)
+		if(info!=null && info.getSessionId().equals("admin")) {
+			result = 0;
+			session.getId();
+		}
 		
 		//넘어오는 값 받아옴
 		int notiNum = Integer.parseInt(request.getParameter("notiNum"));
@@ -1455,8 +1478,10 @@ public class gypController {
 			nextNotiTitle = nextReadData.getNotiTitle();
 		}
 		
+		//주소
 		String params = "pageNum="+pageNum;
 		
+		request.setAttribute("result", result);
 		request.setAttribute("dto", dto);
 		request.setAttribute("preNotiNum", preNotiNum);
 		request.setAttribute("preNotiTitle", preNotiTitle);
@@ -1472,6 +1497,7 @@ public class gypController {
 	@RequestMapping(value="/noticeUpdated.action",method = {RequestMethod.GET,RequestMethod.POST})
 	public String noticeUpdate(HttpServletRequest request) throws Exception{
 		
+	
 		//넘어오는 값 받음
 		int notiNum = Integer.parseInt(request.getParameter("notiNum"));
 		String pageNum = request.getParameter("pageNum");
@@ -1490,8 +1516,8 @@ public class gypController {
 	
 	//공지사항 수정 처리
 	@RequestMapping(value="/noticeUpdated_ok.action",method = {RequestMethod.GET,RequestMethod.POST})
-	public String noticeUpdated_ok(NoticeDTO dto,HttpServletRequest request,HttpSession session) throws Exception{
-		
+	public String noticeUpdated_ok(NoticeDTO dto,HttpServletRequest request) throws Exception{
+				
 		//넘어오는 값
 		String pageNum = request.getParameter("pageNum");
 		//수정
@@ -1503,7 +1529,7 @@ public class gypController {
 	//공지사항 삭제
 	@RequestMapping(value="/noticeDeleted.action",method = {RequestMethod.GET,RequestMethod.POST})
 	public String noticeDeleted(HttpServletRequest request) throws Exception{
-
+		
 		//넘어오는 값
 		String pageNum = request.getParameter("pageNum");
 		int notiNum = Integer.parseInt(request.getParameter("notiNum"));
@@ -1517,31 +1543,48 @@ public class gypController {
 	
 	//질문게시판 리스트
 	@RequestMapping(value="/qnaList.action",method = {RequestMethod.GET,RequestMethod.POST})
-	public String qnaList(HttpServletRequest request,HttpSession session) throws Exception{
+	public String qnaList(HttpServletRequest request,QnaDTO dto,HttpSession session) throws Exception{
+	
+		CustomInfo info = (CustomInfo)session.getAttribute("customInfo");
+		int result = 1;//1:일반회원
 		
+		//0:관리자 / 관리자일 경우에만 qnaList.jsp 뜬다.(수정해야됨)
+		if(info!=null && info.getSessionId().equals("admin")) {
+			result = 0;
+			session.getId();
+		}
+	
+		//dto의 get로 만들경우 readData할 때 dto가 초기화되므로 매개변수 값 받고 진행 
 		String cp = request.getContextPath();
-		//넘어오는값
 		String pageNum = request.getParameter("pageNum");
 		String searchValue = request.getParameter("searchValue");
+		String searchValue2 = request.getParameter("searchValue2");
 		String searchKey = "qnaType";
 		
-		//검색
+		//검색값 없을 경우
 		if(searchValue == null) {
+			searchKey = "qnaType";
 			searchValue = "";
-		}else if(request.getMethod().equalsIgnoreCase("GET")){
+			searchValue2 = "";
+		}
+		//검색값 있을 경우 한글디코딩
+		if(request.getMethod().equalsIgnoreCase("GET")){
 			searchValue = URLDecoder.decode(searchValue,"UTF-8");
+			
 		}
 		
 		//페이징
 		int currentPage = 1;
-		int numPerPage = 3;
+		int numPerPage = 10;
 		
+		// Q&A 데이터 갯수 가져오기
 		int dataCount = dao.getQnaDataCount(searchKey,searchValue);
 		
 		if(pageNum != null)
 			currentPage = Integer.parseInt(pageNum);
-	
+		
 		int totalPage = myUtil.getPageCount(numPerPage, dataCount);
+		
 		if(currentPage > totalPage)
 			currentPage = totalPage;
 		
@@ -1549,8 +1592,9 @@ public class gypController {
 		int end = currentPage*numPerPage;
 		
 		//검색 + 한페이지에 뿌릴 qna객체 리스트
-		List<QnaDTO> lists = dao.getQnaList(start, end,searchKey,searchValue);
+		List<QnaDTO> lists = dao.getQnaList(start, end,searchKey,searchValue, searchValue2);
 		
+		//listNum
 		int n=0;
 		int listNum=0;
 		Iterator<QnaDTO> it = lists.iterator();
@@ -1561,13 +1605,14 @@ public class gypController {
 			n++;
 		}
 		
+		//주소
 		String params = "";
 		String listUrl = "";
 		String articleUrl = "";
 		
 		if(!searchValue.equals("")) {
 			searchValue = URLEncoder.encode(searchValue,"UTF-8");
-			params = "searchKey=" + searchKey + "&searchValue=" + searchValue;
+			params = "searchKey=" + searchKey + "&searchValue=" + searchValue + "&searchValue2=" + searchValue2 ;
 		}
 		
 		if(params.equals("")) {
@@ -1579,41 +1624,62 @@ public class gypController {
 		}
 		
 		String pageIndexList = myUtil.pageIndexList(currentPage, totalPage, listUrl);
+	
 		
+		request.setAttribute("result",result);
 		request.setAttribute("lists", lists);
 		request.setAttribute("pageIndexList",pageIndexList);
 		request.setAttribute("pageNum",pageNum);
 		request.setAttribute("dataCount",dataCount);
 		request.setAttribute("articleUrl",articleUrl);
+		session.setAttribute("customInfo", info);
 		
 		return "qna/qnaList";
 	}
 	
 	//질문게시판 작성 페이지로 이동
 	@RequestMapping(value="/qnaCreated.action",method = {RequestMethod.GET,RequestMethod.POST})
-	public String qnaCreated(HttpServletRequest request,QnaDTO dto,
-			HttpSession session) throws Exception{
-
-		String cusId = session.getId();//세션에서 cusId를 불러온다.
-		request.setAttribute("mode", "insert");
-		request.setAttribute("dto", dto);
-		session.setAttribute("cusId", cusId);//cusId를 보낸다.
-		return "qna/qnaCreated";
+	public String qnaCreated(HttpServletRequest request,QnaDTO dto, HttpSession session) throws Exception{
 		
-		/*ModelAndView mav = new ModelAndView();
-		mav.setViewName("/qna/qnaCreated");
+		//로그인안했을때의 처리 js로 함 (qnaList.jsp)
+		//여기로 왔다는건 로그인 되어있다는 뜻
+		CustomInfo info = (CustomInfo)session.getAttribute("customInfo");
+		
+		//qnaDTO 세팅
+		int qnaNumMax = dao.getQnaMaxNum();
+		dto.setQnaNum(qnaNumMax+1);
+		dto.setCusId(info.getSessionId());
+		
 		request.setAttribute("dto", dto);
 		request.setAttribute("mode", "insert");
-		return mav;*/
+		
+		return "qna/qnaCreated";
 		
 	}
 	
 	//질문게시판 작성 삽입 처리
 	@RequestMapping(value="/qnaCreated_ok.action",method = {RequestMethod.GET,RequestMethod.POST})
-	public String qnaCreated_ok(HttpServletRequest request,QnaDTO dto) throws Exception{
+	public String qnaCreated_ok(HttpServletRequest request,QnaDTO dto, HttpSession session) throws Exception{
 		
+		CustomInfo info = (CustomInfo)session.getAttribute("customInfo");
+		
+		//qnaType에 쉼표가 있으면
+		if(dto.getQnaType().indexOf(",") != -1) {
+			dto.setQnaType(dto.getQnaType().substring(0, dto.getQnaType().length()-1));
+		}
+		
+		//maxNum 을 불러와서 +1해서 dto에 집어넣은 뒤 보내기
 		int qnaNumMax = dao.getQnaMaxNum();
 		dto.setQnaNum(qnaNumMax + 1);
+		dto.setCusId(info.getSessionId());
+		dto.setQnaDepth(0);//처음 생성할 때는 다 0으로 설정
+		dto.setQnaOrderNo(0);
+		dto.setQnaParent(0);
+		
+		//처음 생성할 때는 qnaNum을 그대로 넣는다.
+		dto.setQnaGroupNum(dto.getQnaNum());
+		
+		//insert
 		dao.insertQna(dto);
 		return "redirect:/qnaList.action";
 		
@@ -1621,12 +1687,19 @@ public class gypController {
 	
 	//질문게시글 페이지로 이동
 	@RequestMapping(value="/qnaArticle.action",method = {RequestMethod.GET,RequestMethod.POST})
-	public String qnaArticle(HttpServletRequest request,QnaDTO dto) throws Exception{
-		
+	public String qnaArticle(HttpServletRequest request,QnaDTO dto, HttpSession session) throws Exception{
+
+		//사용값 불러오기
 		int qnaNum = Integer.parseInt(request.getParameter("qnaNum"));
 		String pageNum = request.getParameter("pageNum");
-		String searchKey = request.getParameter("searchKey");
+		
+		//searchKey는 qnaType으로 고정
+		String searchKey = "qnaType";
 		String searchValue = request.getParameter("searchValue");
+		
+		//에러방지
+		int groupNum = 0;
+		String orderNo = request.getParameter("orderNo");
 		
 		if(searchValue==null) {
 			searchKey = "qnaType";
@@ -1648,7 +1721,7 @@ public class gypController {
 		dto.setQnaContent(dto.getQnaContent().replaceAll("\r\n", "<br/>"));
 		
 		//이전글
-		QnaDTO preReadData = (QnaDTO)dao.getQnaPreReadData(qnaNum,searchKey,searchValue);
+		QnaDTO preReadData = (QnaDTO)dao.getQnaPreReadData(qnaNum,searchKey,searchValue,groupNum,orderNo);
 		int preQnaNum = 0;
 		String preQnaTitle = "";
 		if(preReadData!=null) {
@@ -1657,7 +1730,7 @@ public class gypController {
 		}
 		
 		//다음글
-		QnaDTO nextReadData = (QnaDTO)dao.getQnaNextReadData(qnaNum,searchKey,searchValue);
+		QnaDTO nextReadData = (QnaDTO)dao.getQnaNextReadData(qnaNum,searchKey,searchValue,groupNum,orderNo);
 		int nextQnaNum = 0;
 		String nextQnaTitle = "";
 		if(nextReadData!=null) {
@@ -1686,7 +1759,8 @@ public class gypController {
 	//질문게시판 수정페이지로 이동
 	@RequestMapping(value="/qnaUpdated.action",method = {RequestMethod.GET,RequestMethod.POST})
 	public String qnaUpdate(HttpServletRequest request,QnaDTO dto) throws Exception{
-
+		
+		
 		//넘어오는 값
 		int qnaNum = Integer.parseInt(request.getParameter("qnaNum"));
 		String pageNum = request.getParameter("pageNum");
@@ -1705,8 +1779,9 @@ public class gypController {
 	
 	//질문게시판 수정 처리
 	@RequestMapping(value="/qnaUpdated_ok.action",method = {RequestMethod.GET,RequestMethod.POST})
-	public String qnaUpdated_ok(QnaDTO dto,HttpServletRequest request,HttpSession session) throws Exception{
+	public String qnaUpdated_ok(QnaDTO dto,HttpServletRequest request) throws Exception{
 
+		//수정 후 리스트로 돌아가기
 		String pageNum = request.getParameter("pageNum");
 		dao.updateQnaData(dto);
 		return "redirect:/qnaList.action?pageNum="+pageNum;
@@ -1715,52 +1790,79 @@ public class gypController {
 	//질문게시판 삭제
 	@RequestMapping(value="/qnaDeleted.action",method = {RequestMethod.GET,RequestMethod.POST})
 	public String qnaDeleted(HttpServletRequest request) throws Exception{
-
+		
+		//사용할 값 가져오기
 		String pageNum = request.getParameter("pageNum");
 		int qnaNum = Integer.parseInt(request.getParameter("qnaNum"));
+		
+		//삭제 후 리스트로 돌아가기
 		dao.deleteQnaData(qnaNum);
 		return "redirect:/qnaList.action?pageNum="+pageNum;
 	}	
 	
 	//질문게시판 답글쓰기
 	@RequestMapping(value="/qnaReply.action",method = {RequestMethod.GET,RequestMethod.POST})
-	public String qnaReply(HttpServletRequest request,QnaDTO dto) throws Exception{
+	public String qnaReply(HttpServletRequest request, HttpSession session) throws Exception{
 		
-		//넘어오는값
+		//2개 값 가져오기
 		String pageNum = request.getParameter("pageNum");
 		int qnaNum = Integer.parseInt(request.getParameter("qnaNum"));
 		
-		//따로 넘어오지 않으면, qnaNum으로 디비에서 가져온다
-		if(dto==null || dto.getMode()==null || dto.getMode().equals("")) {
-			
-			dto = (QnaDTO)dao.getQnaReadData(qnaNum);
-			
-			String temp = "\r\n\r\n----------------------------------------\r\n\r\n";
-			temp += "[답변]\r\n";
-			
-			//답변 데이터 읽어옴 " 부모 데이터 밑줄 후 답변
-			dto.setQnaTitle("[답변]" + dto.getQnaTitle());
-			dto.setQnaContent(dto.getQnaContent() + temp);
-				
-			return "redirect:/qnaCreated.action?pageNum="+pageNum; //created.jsp창으로 넘어감
-		}	
+		//qnaNum에 일치하는 "부모" 데이터 가져오기
+		QnaDTO dto = (QnaDTO)dao.getQnaReadData(qnaNum);
 		
-		//--------------답변처리---------------
-		//orderNo 변경
-		String qnaGroupNum = request.getParameter("qnaGroupNum");
-		String qnaOrderNo = request.getParameter("qnaOrderNo");
-		dao.orderNoUpdate(qnaGroupNum,qnaOrderNo);
-				
-		//답변 입력
-		int maxNum = dao.getQnaMaxNum();
-		dto.setQnaNum(maxNum + 1);
+		//답변 구분
+		String temp = "\r\n\r\n----------------------------------------\r\n\r\n";
+		temp += "Re: \r\n";
+		
+		//수정되기전에 먼저 set
+		dto.setQnaParent(dto.getQnaNum());
+		String qnaType = dao.getQnaType(qnaNum);
+		
+		//qnaType에 쉼표가 있으면
+		if(dto.getQnaType().indexOf(",") != -1) {
+			dto.setQnaType(dto.getQnaType().substring(0, dto.getQnaType().length()-1));
+		}
+		
+		//부모의 데이터를 수정해서 자식에 담는다
+		dto.setQnaTitle("Re: " + dto.getQnaTitle());
+		dto.setQnaContent(dto.getQnaContent() + temp);
+		dto.setQnaNum(dao.getQnaMaxNum() + 1);
+		dto.setQnaGroupNum(dto.getQnaGroupNum());
 		dto.setQnaDepth(dto.getQnaDepth()+1);
-		dto.setQnaOrderNo(dto.getQnaOrderNo() + 1); //자신의 orderNo 업데이트
+		dto.setQnaOrderNo(dto.getQnaOrderNo() + 1);
+		dto.setQnaType(qnaType);
+		
+		request.setAttribute("mode", "reply");	
+		request.setAttribute("dto", dto);
+		request.setAttribute("pageNum", pageNum);
+		return "qna/qnaCreated";
+		
+	}
+
+	//질문게시판 답변처리
+	@RequestMapping(value="/qnaReply_ok.action",method = {RequestMethod.GET,RequestMethod.POST})
+	public String qnaReply_ok(HttpServletRequest request,QnaDTO dto, HttpSession session) throws Exception{
+		
+		CustomInfo info = (CustomInfo)session.getAttribute("customInfo");
+		dto.setCusId(info.getSessionId());
+		
+		//값 가져오기
+		String pageNum = request.getParameter("pageNum");
+		
+		//orderNo 변경 
+		//(자기자신보다 orderNo가 큰 게시물은, 즉 내 뒤로 있는"다음"게시물은 전부 +1 시킨다)
+		//중간에 끼어들거니까!
+		dao.orderNoUpdate(dto.getQnaGroupNum(), dto.getQnaOrderNo());
+		
+		//삽입
 		dao.insertQna(dto);
 				
 		return "redirect:/qnaList.action?pageNum="+pageNum;
 	}
 
+
+	
 	//*******************채종완*******************
 	
 	//회원가입 유형 2가지 중 선택하는 페이지로 이동

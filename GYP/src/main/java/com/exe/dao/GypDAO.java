@@ -452,12 +452,13 @@ private SqlSessionTemplate sessionTemplate;
 	}
 	
 	// Q&A 데이터 갯수
-	public List<QnaDTO> getQnaList(int start, int end,String searchKey,String searchValue){
+	public List<QnaDTO> getQnaList(int start, int end,String searchKey,String searchValue, String searchValue2){
 		HashMap<String,Object> params = new HashMap<String,Object>();
 		params.put("start", start);
 		params.put("end", end);
 		params.put("searchKey", searchKey);
 		params.put("searchValue", searchValue);
+		params.put("searchValue2", searchValue2);
 		List<QnaDTO> lists = sessionTemplate.selectList("qna.getLists",params);
 		return lists;
 	}
@@ -469,10 +470,12 @@ private SqlSessionTemplate sessionTemplate;
 	}
 	
 	//Q&A 이전글
-	public QnaDTO getQnaPreReadData(int qnaNum,String searchKey,String searchValue){
+	public QnaDTO getQnaPreReadData(int qnaNum,String searchKey,String searchValue,int groupNum,String orderNo){
 		HashMap<String,Object> params = new HashMap<String,Object>();
 		params.put("searchKey", searchKey);
 		params.put("searchValue", searchValue);
+		params.put("groupNum", groupNum);
+		params.put("orderNo",orderNo);
 		params.put("qnaNum", qnaNum);
 		
 		QnaDTO dto = sessionTemplate.selectOne("qna.preReadData",params);
@@ -480,10 +483,12 @@ private SqlSessionTemplate sessionTemplate;
 	}
 
 	//Q&A 다음글
-	public QnaDTO getQnaNextReadData(int qnaNum,String searchKey,String searchValue){
+	public QnaDTO getQnaNextReadData(int qnaNum,String searchKey,String searchValue,int groupNum,String orderNo){
 		HashMap<String,Object> params = new HashMap<String,Object>();
 		params.put("searchKey", searchKey);
 		params.put("searchValue", searchValue);
+		params.put("groupNum", groupNum);
+		params.put("orderNo",orderNo);
 		params.put("qnaNum", qnaNum);
 		
 		QnaDTO dto = sessionTemplate.selectOne("qna.nextReadData",params);
@@ -492,15 +497,15 @@ private SqlSessionTemplate sessionTemplate;
 	
 	// Q&A 데이터 갯수 가져오기
 	public int getQnaDataCount(String searchKey,String searchValue){
-			HashMap<String,Object> params = new HashMap<String,Object>();
-			params.put("searchKey", searchKey);
-			params.put("searchValue", searchValue);
-			int result = sessionTemplate.selectOne("qna.getDataCount",params);
-			return result;
-		}
+		HashMap<String,Object> params = new HashMap<String,Object>();
+		params.put("searchKey", searchKey);
+		params.put("searchValue", searchValue);
+		int result = sessionTemplate.selectOne("qna.getDataCount",params);
+		return result;
+	}
 
 	//orderNo 정렬
-	public void orderNoUpdate(String qnaGroupNum,String qnaOrderNo) {
+	public void orderNoUpdate(int qnaGroupNum,int qnaOrderNo) {
 		HashMap<String,Object> params = new HashMap<String,Object>();
 		params.put("qnaGroupNum", qnaGroupNum);
 		params.put("qnaOrderNo", qnaOrderNo);
@@ -516,6 +521,13 @@ private SqlSessionTemplate sessionTemplate;
 	public void updateQnaData(QnaDTO dto){
 		sessionTemplate.update("qna.updateData",dto);
 	}
+	
+	//QnA타입 받아오기
+	public String getQnaType(int qnaNum) {
+		String qnaType = sessionTemplate.selectOne("qna.getQnaType",qnaNum);
+		return qnaType;
+	}
+
 	
 	//*******************채종완*******************
 	 
@@ -823,6 +835,8 @@ private SqlSessionTemplate sessionTemplate;
 			sessionTemplate.delete("adminProductMapper.deleteData", str);
 		}
 
+
+	
 }
 
 

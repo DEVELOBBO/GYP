@@ -1,38 +1,49 @@
 package com.exe.dto;
+
+
 // Q&A 테이블
 public class QnaDTO {
 	
-	private int listNum; 		//리스트넘
+	private int listNum; 			//리스트넘
 	
-	private int qnaNum;			// QNA 번호
-	private String qnaType;		// QNA 타입 (체육관/상품)
-	private String cusId;		// 회원번호
-	private String qnaTitle;	// QNA 제목
-	private String qnaContent;	// QNA 내용
-	private String qnaCreated;	// QNA 생성일
-	private String qnaGroupNum;	// QNA 그룹 Num
-	private int qnaDepth;		//  깊이 : 답변시 사용
-	private int qnaOrderNo;		// 그룹 내의 순서
-	private int qnaParent;		// QNA 게시글 부모
+	private int qnaNum;				// QNA 번호
+	private String qnaType;			// QNA 타입 (체육관/상품)
+	private String cusId;			// 회원번호
+	private String qnaTitle;		// QNA 제목
+	private String qnaContent;		// QNA 내용
+	private String qnaCreated;		// QNA 생성일
+	private int qnaGroupNum;		// QNA 그룹 Num
+	private int qnaDepth;			//  깊이 : 답변시 사용
+	private int qnaOrderNo;			// 같은그룹 내의 출력되는 순서
+	private int qnaParent;			// QNA 게시글 부모
 	
-	private String searchKey;
-	private String searchValue;
-	private String pageNum;
+	private String searchKey;		//qnaType
+	private String searchValue;	 	//체육관, 이용권, 쇼핑몰
+	private String searchValue2;	//사용자가 입력한 검색어
+	private String pageNum; 		//페이지 
 	
-	private String mode;
+	private String mode;			//insert,update,reply
 	
 	public int getQnaNum() {
 		return qnaNum;
 	}
+	public String getSearchValue2() {
+		return searchValue2;
+	}
+	public void setSearchValue2(String searchValue2) {
+		this.searchValue2 = searchValue2;
+	}
 	public void setQnaNum(int qnaNum) {
 		this.qnaNum = qnaNum;
 	}
+	
 	public String getQnaType() {
 		return qnaType;
 	}
 	public void setQnaType(String qnaType) {
 		this.qnaType = qnaType;
 	}
+	
 	public String getCusId() {
 		return cusId;
 	}
@@ -57,10 +68,11 @@ public class QnaDTO {
 	public void setQnaCreated(String qnaCreated) {
 		this.qnaCreated = qnaCreated;
 	}
-	public String getQnaGroupNum() {
+	
+	public int getQnaGroupNum() {
 		return qnaGroupNum;
 	}
-	public void setQnaGroupNum(String qnaGroupNum) {
+	public void setQnaGroupNum(int qnaGroupNum) {
 		this.qnaGroupNum = qnaGroupNum;
 	}
 	public int getQnaDepth() {

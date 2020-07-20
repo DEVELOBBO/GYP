@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
 	request.setCharacterEncoding("UTF-8");
-	String cp = request.getContextPath();
+String cp = request.getContextPath();
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -16,35 +16,34 @@
 <!-- Core Stylesheet -->
 <link rel="stylesheet" href="/gyp/resources/css/style.css">
 <!-- font -->
-<link
-	href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400&display=swap"
-	rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400&display=swap" rel="stylesheet">
+<!-- notice.css -->
+<link rel="stylesheet" href="/gyp/resources/css/notice.css">
 <title>GYP</title>
-
 <script type="text/javascript">
-
-	function deleteData(){
-		
-		var notiNum = "${dto.notiNum}";
-		var pageNum = "${pageNum}";
-		var params = "?notiNum=" + notiNum + "&pageNum=" + pageNum;
-		var url = "/gyp/noticeDeleted.action" + params;
-		
-		location.replace(url);
-		
-	}
+function deleteData(){
 	
-	function updateData(){
-		
-		var notiNum = "${dto.notiNum}";
-		var pageNum = "${pageNum}";
-		var params = "?notiNum=" + notiNum + "&pageNum=" + pageNum;
-		var url = "/gyp/noticeUpdated.action" + params;
+	var notiNum = "${dto.notiNum}";
+	var pageNum = "${pageNum}";
+	var params = "?notiNum=" + notiNum + "&pageNum=" + pageNum;
+	var url = "<%=cp%>/noticeDeleted.action" + params;
+	
+	location.replace(url);
+	
+}
 
-		location.replace(url);
+function updateData(){
+	
+	var notiNum = "${dto.notiNum}";
+	var pageNum = "${pageNum}";
+	var params = "?notiNum=" + notiNum + "&pageNum=" + pageNum;
+	var url = "<%=cp%>/noticeUpdated.action" + params;
+	
+	location.replace(url);
+	
+}
 
-	}
+
 </script>
 </head>
 <body style="font-family: 'Noto Sans KR', sans-serif;">
@@ -53,70 +52,60 @@
 	<!-- 메인 : header_main.jsp / 그외 : header_below.jsp -->
 	<jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
 
-	<div id="bbsList">
+	<div id="noticeList">
 		<br>
 		<br>
 		<br>
 		<h5>FITNESS GYM</h5>
-		<h1>WORKING HOUR &nbsp;&nbsp; 공지사항</h1>
+		<div id="noticeList_title">WORKING HOUR &nbsp;&nbsp; 공지사항</div>
 		<br>
 
 		<div>
-			<div>게시판</div>
-			<div id="lists">
+			<div id="noticeList_list">
 				<dl>
-					<dt>글 번호</dt>
-					<dd class="num">${dto.listNum }</dd>
-					<%-- <dd class="name">${dto1.prdductName }</dd> --%>
-					<dt>제목</dt>
-					<dd class="subject">${dto.notiTitle }</dd>
-					<dt>등록일</dt>
-					<dd class="created">${dto.notiCreated }</dd>
+					<dt>제목: ${dto.notiTitle }</dt>
+					<dt>이름 : 대표관리자</dt>
+					<dt>작성일: ${dto.notiCreated }</dt>
 				</dl>
 			</div>
 			<div id="lists">
 				<table width="600" border="0">
 					<tr>
-						<td class="content" style="padding: 20px 80px 20px 62px;"
-							valign="top" height="200">${dto.notiContent }</td>
+						<td style="padding: 20px 80px 20px 62px;" valign="top" height="200">${dto.notiContent }</td>
 					</tr>
 				</table>
 			</div>
-
 		</div>
-		<div class="">
+		<div>
 			이전글:
 			<c:if test="${!empty preNotiTitle  }">
-				<a
-					href="/gyp/noticeArticle.action?pageNum=${pageNum }&notiNum=${preNotiNum}">
-					${preNotiTitle } </a>
+				<a href="<%=cp%>/noticeArticle.action?pageNum=${pageNum }&notiNum=${preNotiNum}">${preNotiTitle }</a>
 			</c:if>
 		</div>
 
-		<div class="">
+		<div>
 			다음글:
 			<c:if test="${!empty nextNotiTitle  }">
-				<a
-					href="/gyp/noticeArticle.action?pageNum=${pageNum }&notiNum=${nextNotiNum}">
-					${nextNotiTitle } </a>
+				<a href="<%=cp%>/noticeArticle.action?pageNum=${pageNum }&notiNum=${nextNotiNum}">${nextNotiTitle }</a>
 			</c:if>
 		</div>
 		<br>
 
 
-		<div id="bbsArticle_footer">
+		<div id="noticeArticle_footer">
 			<div id="leftFooter">
-				<input type="button" value="수정" class="btn2" onclick="updateData();">
-				<input type="button" value="삭제" class="btn2" onclick="deleteData();">
-			</div>
-			<div id="rightFooter">
-				<input type="button" value="돌아가기"
-					onclick="javascript:location.href='/gyp/noticeList.action?pageNum=${pageNum }';" />
+			<!-- 마이페이지에서 다 수정/삭제버튼 설정해놓을거 같아서, 지워도 된다.   -->
+			
+			<c:if test="${sessionScope.customInfo.sessionId =='admin' }">
+			<input type="button" value="수정" class="btn2" onclick="updateData();">
+			<input type="button" value="삭제" class="btn2" onclick="deleteData();">
+			</c:if>
+			</div>  
+				<input type="button" value="목록" onclick="javascript:location.href='<%=cp%>/noticeList.action?pageNum=${pageNum }';" />
 			</div>
 		</div>
 
-	</div>
-
+	
 
 
 	<jsp:include page="/WEB-INF/views/layout/footer.jsp" />
@@ -132,6 +121,7 @@
 	<script src="/gyp/resources/js/plugins/plugins.js"></script>
 	<!-- Active js -->
 	<script src="/gyp/resources/js/active.js"></script>
-
+	<!-- notice.js -->
+	<script src="/gyp/resources/js/notice.js"></script>
 </body>
 </html>

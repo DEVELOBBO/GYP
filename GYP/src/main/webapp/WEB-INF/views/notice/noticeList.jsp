@@ -16,46 +16,8 @@
 	<link rel="stylesheet" href="/gyp/resources/css/style.css">
 	<!-- font -->
 	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400&display=swap" rel="stylesheet">
-	
-	
-	<style type="text/css">
-	#noticeList{
-		width:500px;
-		height:800px;
-		margin:30px auto;
-		text-align:center;
-	}
-	h5{
-		color:green;
-		text-align:left;
-	}
-	#noticeList_title{
-		width:664px;   /* 690px - (padding-left+border:3px+border:3px) */
-		padding-left:20px;
-		height:40px;
-		text-align:left;
-		font-weight: bold;
-		line-height:40px;
-		font-size:30pt;
-		margin-bottom:30px;
-	}
-	
-	#noticeList_list #right{
-		float:right;
-		width:345px;
-		text-align:right;
-	}
-	hr{}
-
-	td{
-		width: 500px;
-		margin: auto;
-	}
-	
-	</style>
-		
-	
-	
+	<!-- notice.css -->
+	<link rel="stylesheet" href="/gyp/resources/css/notice.css">	
 <title>GYP</title>
 </head>
 <body style="font-family: 'Noto Sans KR', sans-serif;">
@@ -70,15 +32,21 @@
 		<h5>FITNESS GYM</h5>
 		<div id="noticeList_title">WORKING HOURS &nbsp;&nbsp; 공지사항</div>
 		<br>
-		<a href=/gyp/noticeCreated.action>테스트용 글올리기</a>		
+		<c:if test="${sessionScope.customInfo.sessionId =='admin' }"> 
+		<button onclick="javascript:location.href='/gyp/noticeCreated.action'"> 글올리기 </button>
+		</c:if>
+		<c:if test="${result==1}">
 		
-		<div>
+		</c:if>
+		
+		<div id="noticeList_list">
 			<c:forEach var="dto" items="${lists }">
-			<div id="lists">
+			<hr>
+			<div>
 				<table>
 					<tr>
 					<td>${dto.listNum }</td>
-					<td>
+					<td>+
 						<a href="${articleUrl}&notiNum=${dto.notiNum}">
 							${dto.notiTitle }
 						</a>
@@ -88,17 +56,18 @@
 				</table>
 			</div>	
 			</c:forEach>
-		
+			<hr>
+		</div>
 				
-			<div>
-				<c:if test="${dataCount!=0 }">
-					${pageIndexList }
-				</c:if>
-				<c:if test="${dataCount==0 }">
-					등록된 게시물이 없습니다.
-				</c:if>
-			</div>
-		</div>	
+		<div id="noticeList_footer">
+			<c:if test="${dataCount!=0 }">
+				${pageIndexList }
+			</c:if>
+			<c:if test="${dataCount==0 }">
+				등록된 게시물이 없습니다.
+			</c:if>
+		</div>
+			
 	</div>
 
 
@@ -115,6 +84,7 @@
     <script src="/gyp/resources/js/plugins/plugins.js"></script>
     <!-- Active js -->
     <script src="/gyp/resources/js/active.js"></script>
-
+	<!-- notice.js -->
+	<script src="/gyp/resources/js/notice.js"></script>
 </body>
 </html>

@@ -16,68 +16,93 @@
 	<link rel="stylesheet" href="/gyp/resources/css/style.css">
 	<!-- font -->
 	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400&display=swap" rel="stylesheet">
+	<!-- qna.css -->
+	<link rel="stylesheet" href="/gyp/resources/css/qna.css">
 <title>GYP</title>
-
 <script type="text/javascript">
+function search(){
+	
+	f = document.searchForm;
+	f.action="/gyp/qnaList.action";
+	f.submit();
+}
 
-	function sendIt(){
-		
-		f = document.searchForm;
-		
-		f.action="/gyp/qnaList.action";
+function create(){
+	
+	f = document.searchForm;
+	
+	<c:if test="${empty sessionScope.customInfo.sessionId }">
+		alert("로그인 해주세요");
+		f.action = "/gyp/login.action";
 		f.submit();
-	}
-</script>
+	</c:if>
+	
+	<c:if test="${!empty sessionScope.customInfo.sessionId }">
+		f.action="/gyp/qnaCreated.action";
+		f.submit();
+	</c:if>
+}
 
+</script>
 </head>
 <body style="font-family: 'Noto Sans KR', sans-serif;">
 	<jsp:include page="/WEB-INF/views/layout/header_over.jsp" />
 	<!-- 메인 : header_main.jsp / 그외 : header_below.jsp -->
 	<jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
 	
-	<div id="">
-		<br><br><br>
-		<h5>FITNESS GYM</h5><br>
-		<h1>WORKING HOURS &nbsp;&nbsp; Q&A</h1>
+	<div id="qnaList">
+		<br><br>
+		<h5>FITNESS GYM</h5>
+		<div id="qnaList_title">WORKING HOURS &nbsp;&nbsp; Q&A</div>
 		<br>
 		
-		<div id="bbsList_header">
-			<div id="leftHeader">
-				<form action="/gyp/qnaList.action" name="searchForm" method="post">
-					<select name="searchValue" class="selectField">
-						<option value="gym">체육관</option>
-						<option value="pass">이용권</option>
-						<option value="shopping">쇼핑몰</option>				
+		<div>
+			<div>
+				<form name="searchForm" method="post">
+					<select name="searchValue">
+						<option value="">전체</option>
+						<option value="체육관">체육관</option>
+						<option value="이용권">이용권</option>
+						<option value="쇼핑몰">쇼핑몰</option>				
 					</select>
-					<input type="text" name="searchValue" class="textField">
-					<input type="button" value=" 검색 " class="btn2" onclick="sendIt();"/>			
+					<input type="text" name="searchValue2">
+					<input type="button" value="검색" onclick="search();"/>			
 				</form>		
 			</div>
 			
 			<div id="rightHeader">
-				<input type="button" value=" 질문올리기 " class="btn2" 
-				onclick="javascript:location.href='/gyp/qnaCreated.action'"/>		
-			</div>	
+				<input type="button" value="질문올리기" class="btn2" onclick="create();"/>		
+			</div>
+			
+		<c:if test="${result==1}">
+		
+		</c:if>		
 		</div>
 				
-		<div class="lists">
+		<div class="qnaList_list">
 			<c:forEach var="dto" items="${lists }">
-			<div id="lists">
-				<dl>
-					<dd class="num">${dto.qnaNum }</dd>
-					<dd class="subject">
-						<a href="${articleUrl}&qnaNum=${dto.qnaNum}">
-							${dto.qnaTitle }
-						</a>
-					</dd>
-					<dd class="created">${dto.qnaCreated }</dd>
-				</dl>
-			</div>	
+			<hr>
+			<div>
+				<table>
+					<tr>
+					<td>${dto.listNum }</td>
+					<td>
+						<c:if test="${dto.qnaDepth!=0}">
+							<c:forEach var="i" begin="1" end="${dto.qnaDepth }" step="1">
+								&nbsp;
+							</c:forEach>
+						</c:if>
+						<a href="${articleUrl}&qnaNum=${dto.qnaNum}">${dto.qnaTitle }</a>
+					</td>
+					<td id="right">${dto.qnaCreated }</td>
+					</tr>
+				</table>
+			</div>
 			</c:forEach>
+			<hr>
 		</div>
 				
-		<div id="footer">
-		<br>
+		<div id="qnaList_footer">
 			<c:if test="${dataCount!=0 }">
 				${pageIndexList }
 			</c:if>
@@ -88,7 +113,6 @@
 			
 	</div>
 
-	<div style="height: 70px;">&nbsp;</div>
 	<jsp:include page="/WEB-INF/views/layout/footer.jsp" />
 
     <!-- ##### All Javascript Script ##### -->
@@ -102,7 +126,8 @@
     <script src="/gyp/resources/js/plugins/plugins.js"></script>
     <!-- Active js -->
     <script src="/gyp/resources/js/active.js"></script>
-
+	<!-- qna.js -->
+	<script src="/gyp/resources/js/qna.js"></script>
 
 </body>
 </html>
