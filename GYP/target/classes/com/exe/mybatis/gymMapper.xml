@@ -37,7 +37,7 @@ PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
 <select id="getDataCount"  parameterType="hashMap" resultType="int">
 	select nvl(count(*),0) from BOOK
 	<![CDATA[
-	where bookOk=#{type} and gymId=#{gymId} and bookCreated <= sysdate and to_char(bookCreated,'YYYY-MM')<= '#{aftermonthdate}' and to_char(bookCreated,'YYYY-MM')> '#{beforemonthdate}'
+	where bookOk=#{type} and gymId=#{gymId} and bookCreated <= sysdate and to_char(bookCreated,'YYYY-MM')<= #{aftermonthdate} and to_char(bookCreated,'YYYY-MM')> #{beforemonthdate}
 	]]>
 </select>
 

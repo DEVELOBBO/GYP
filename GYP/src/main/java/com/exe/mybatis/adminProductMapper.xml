@@ -27,10 +27,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	select rownum rnum, data.* from(
 	select productId, productName, productImg, productPrice, productHit, productContent
 	from product where ${searchKey} like '%' || #{searchValue} || '%'
-	order by productId desc) data)
-<![CDATA[
-where rnum>=#{start} and rnum<=#{end}
-]]>
+	order by productId) data)
+	<![CDATA[
+	where rnum>=#{start} and rnum<=#{end}
+	]]>
 </select>
 
 <select id="getReadData" parameterType="String" resultType="com.exe.dto.ProductDTO">

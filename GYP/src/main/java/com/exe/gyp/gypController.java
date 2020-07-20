@@ -72,15 +72,25 @@ public class gypController {
 		//세션에 올라온값 받기
 		CustomInfo info = (CustomInfo)session.getAttribute("customInfo");
 		
+		
 		//체육관 추천 리스트 선언 ------------------------------------------
 		List<GymDTO> gymRecommendLists = null;
 		
 		//로그인되어 있지 않으면 "강남구" 리스트 추천
-		if(info==null) {
-			gymRecommendLists = dao.getGymRecommendDefault();
+		gymRecommendLists = dao.getGymRecommendDefault();
 		
-		}else if(info!=null) {//로그인 되어 있으면 "회원주소 주변" 리스트
-			String customerAddr = dao.getCusAddr(info.getSessionId()); //회원주소 추출
+		
+		//로그인 되어 있고
+		if(info!=null) {
+			
+			//체육관 회원이면 마이페이지로
+			int result = dao.getDataCount(info.getSessionId());//유저로 로그인하면 result값은 1 gym으로 로그인 하면 0
+			if(result==0) {
+				return "myPage/gymMyPage";
+			}
+			
+			//일반 회원이면 주소 추출
+			String customerAddr = dao.getCusAddr(info.getSessionId());
 			
 			//"구"를 자름
 			customerAddr = customerAddr.substring(customerAddr.indexOf("구")-2, customerAddr.indexOf("구")+1); 
@@ -110,22 +120,15 @@ public class gypController {
 		String productType = null;
 		String gymType = null;
 		
-		if(info==null) {//로그인 되어있지 않으면 "조회순" 리스트 추천
-			productRecommendLists = dao.getProductRecommendDefault();
+		productRecommendLists = dao.getProductRecommendDefault();
 			
-		}else if(info!=null) {//로그인 되어 있으면
+		if(info!=null) {//로그인 되어 있으면
 			
 			//최신 예약한 체육관 타입 추출
 			gymType = dao.getCusRecentBookType(info.getSessionId());
 			
-			System.out.println(gymType + "짐타입");
-			
 			//최신 예약한 체육관 타입이 존재하면
 			if(gymType != null) {
-				
-				
-				
-				System.out.println(gymType + "짐타입");
 				
 				if(gymType.equals("헬스")) {
 					productType = "H";
@@ -202,6 +205,7 @@ public class gypController {
 			}
 			
 		}else if (result == 0){//체육관 로그인 ( 체육관 로그인시 바로 마이페이지 이동)
+			
 			GymDTO dto = dao.getGymLoginReadData(sessionId);
 			loginType = "gym";
 			if (dto == null || !dto.getGymPwd().equals(sessionpwd)) { 
@@ -361,14 +365,13 @@ public class gypController {
 		year = Integer.parseInt(strYear);
 		month = Integer.parseInt(strMonth);
 			
-
 		//book타입
 		String type = "true";
-
+		
 		//범위 검색하기위한 변수 생성
 		String beforemonthdate = "";
 		String aftermonthdate = "";
-
+		
 		//달이 7이렇게 넘어오면 안되므로 07 이렇게 넘어와야 하므로 해준 조건식
 		if (strMonth.length() == 2) {
 			beforemonthdate = year + "-" + (month-1);
@@ -380,7 +383,7 @@ public class gypController {
 		} else if (strMonth.length() == 1) {
 			aftermonthdate = year + "-0" + month;
 		}
-
+		
 		// 체육관 정보
 		GymDTO gymdto = dao.getgymReadData(info);
 
@@ -390,7 +393,7 @@ public class gypController {
 		hMap.put("beforemonthdate", beforemonthdate);
 		hMap.put("aftermonthdate", aftermonthdate);
 		hMap.put("type", type);// 타입 값 검색하기위해
-
+		
 		// 예약 데이터 개수
 		int bookdataCount = dao.bookgetDataCount(hMap);
 
@@ -1330,7 +1333,7 @@ public class gypController {
 			//return "redirect:/login.action";
 		}
 		
-		System.out.println("payment_ok.action 에 들어옴");
+		//System.out.println("payment_ok.action 에 들어옴");
 		
 		return "payment/payment_ok";
 	}
