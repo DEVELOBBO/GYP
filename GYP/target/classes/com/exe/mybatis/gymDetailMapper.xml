@@ -66,9 +66,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 <!-- 예약 중복확인 -->
 	<select id="checkDuplicateBook" parameterType="com.exe.dto.BookDTO" resultType="int">
-		select count(*) from book where
-		gymId=#{gymId} and gymTrainerPick=#{gymTrainerPick}
-		and bookHour=#{bookHour} and bookOK='true'
+		select count(*) from book where 
+		(gymId=#{gymId} and gymTrainerPick=#{gymTrainerPick} and bookHour=#{bookHour} and bookOK='true') 
+		or (bookHour=#{bookHour} and bookOK='true')
 	</select>
 	
 <!-- 예약 삽입 -->

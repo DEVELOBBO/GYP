@@ -14,8 +14,9 @@ html{
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap");"
 
 /*------------------------ 체육관 제목/트레이너 ------------------------*/
-.gymDetailHeadLine{
-    border-top: 3px solid #99d753;
+div#gymDetailTitle {
+    margin-right: 0px;
+    margin-left: 0px;
 }
 
 a.gymName-title span {

@@ -36,21 +36,23 @@
 	<input type="hidden" id="gymName" value="${gymDto.gymName }"/>
 	<input type="hidden" id="gymAddr" value="${gymDto.gymAddr }"/>
 	
-    <!-- ##### Blog Area Start ##### -->
-    <div class="blog-area mt-50 section-padding-100">
+    <!-- ##### Content Area Start ##### -->
+    <div class="blog-area mt-20 section-padding-100">
         <div class="container">
         
         	<!-- 제목 및 개요 -->
         	<div id="gymDetailSubject">
 	            <!-- 체육관 이름 + 타입 -->
-	            <div class="row">
-		            <a href="#" class="gymName-title"><span>${gymDto.gymName }</span></a>
+	            <div class="row" id="gymDetailTitle">
+		            <a href="<%=cp %>/gymDetail.action?gymId=${gymDto.gymId }" class="gymName-title">
+		            <span>${gymDto.gymName }</span></a>
 		            &nbsp;<span class="gymName-type">&gt;&gt; ${gymDto.gymType }</span>
 	            </div>
 	            <br/>
+	            <hr style="width: 100%; margin-left: 0px; text-align: left,border-bottom:0px;">
 	            <!-- 체육관 프로그램 내용 -->
 	            <div class="col-12">
-		            <div class="single-blog-post gymDetailHeadLine">
+		            <div class="single-blog-post">
 		              	<div id="gymDetailGymProgram">
 			            	${gymDto.gymProgram } 
 		                </div>
@@ -59,6 +61,9 @@
 	            <div class="col-12 col-md-4">&nbsp;</div>
             </div>
             
+            <hr style="width: 100%; margin-left: 0px; text-align: left,border-bottom:0px;">
+            
+            <!-- 체육관 상세 content -->
             <div class="row">
             	<!-- ------------좌측 컬럼 시작------------- -->
                 <div class="col-12 col-md-8" id="gymDetailLeftCol">
@@ -93,7 +98,8 @@
 					                </div>
                                 </div>
                             </div>
-
+							<hr style="width: 100%; margin-left: 0px; text-align: left,border-bottom:0px;">
+							
                             <!-- 체육관 리뷰 -->
                             <div class="col-12">
                                 <div class="single-blog-post mb-100 gymDetailHeadLine">
@@ -106,7 +112,8 @@
 									
                                 </div>
                             </div>
-                            
+                        
+                        <hr style="width: 100%; margin-left: 0px; text-align: left,border-bottom:0px;">	    
                         <!-- 관련 상품 뿌리기 -->
 	                    <div class="col-12">
 		                    <h4>${gymDto.gymType }관련 인기 상품<span>&nbsp;
@@ -320,54 +327,56 @@
 						    </div>
 						</div>
 
+						<hr style="width: 100%; margin-left: 0px; text-align: left,border-bottom:0px;">
                         <!-- 제휴시설 미리보기 -->
                         <div class="blog-post-categories mb-100">
                             <h5>제휴시설 미리보기</h5>
                             <!-- 사진 영역 -->
                             <div class=right-col-box>
                             
-		                     <c:forEach var="i" begin="1" end="${gymPic.size() }">
-		                        <div class="column1">
-		                        <img src="/gyp/sfiles/gymPic/${gymPic[i-1] }" style="width:100%" onclick="openModal();currentSlide(${i})" class="hover-shadow cursor">
-		                        </div>
-		                        <c:if test="i%2==0">
-		                           </div><div class="row">
-		                        </c:if>
-		                     </c:forEach>
-		                     
-                     <!-- 체육관 사진 모달 -->
-		                     <div id="myModal" class="modal" style="z-index: 100000000001">
-		                       <span class="close cursor" onclick="closeModal()">&times;</span>
-		                       <div class="modal-content">
-		                        <c:forEach var="i" begin="0" end="${gymPic.size()-1 }">
-		                            <div class="mySlides">
-		                              <div class="numbertext">${i+1 } / ${gymPic.size() }"</div>
-		                              <img src="/gyp/sfiles/gymPic/${gymPic[i] }" style="width:100%">
-		                            </div>
-		                         </c:forEach> 
-		                         <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-		                         <a class="next" onclick="plusSlides(1)">&#10095;</a>
-		                     
-		                         <div class="caption-container">
-		                           <p id="caption"></p>
-		                         </div>
-		                         
-		                        <div class="row">
-		                           <c:forEach var="i" begin="0" end="3">
-		                               <div class="column2">
-		                                 <img class="demo cursor" src="/gyp/sfiles/gymPic/${gymPic[i] }"  
-		                                    style="width:90%;" onclick="currentSlide( ${i+1 })"/>
-		                               </div>
-		                            </c:forEach> 
-		                         </div> 
-		                         
-		                       </div>
-		                     </div>
+							<c:forEach var="i" begin="1" end="${gymPic.size() }">
+								<div class="column1">
+								<img src="/gyp/sfiles/gymPic/${gymPic[i-1] }" style="width:100%" onclick="openModal();currentSlide(${i})" class="hover-shadow cursor">
+								</div>
+								<c:if test="i%2==0">
+									</div><div class="row">
+								</c:if>
+							</c:forEach>
+							
+							<!-- 체육관 사진 모달 -->
+							<div id="myModal" class="modal" style="z-index: 100000000001">
+							  <span class="close cursor" onclick="closeModal()">&times;</span>
+							  <div class="modal-content">
+								<c:forEach var="i" begin="0" end="${gymPic.size()-1 }">
+								    <div class="mySlides">
+								      <div class="numbertext">${i+1 } / ${gymPic.size() }</div>
+								      <img src="/gyp/sfiles/gymPic/${gymPic[i] }" style="width:100%">
+								    </div>
+							    </c:forEach> 
+							    <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+							    <a class="next" onclick="plusSlides(1)">&#10095;</a>
+							
+							    <div class="caption-container">
+							      <p id="caption"></p>
+							    </div>
+							    
+								<div class="row">
+									<c:forEach var="i" begin="0" end="3">
+									    <div class="column2">
+									      <img class="demo cursor" src="/gyp/sfiles/gymPic/${gymPic[i] }"  
+									      	style="width:90%;" onclick="currentSlide( ${i+1 })"/>
+									    </div>
+								 	</c:forEach> 
+							 	</div> 
+							 	
+							  </div>
+							</div>
                             
-                          </div>
+                            </div>
                         </div>
                         
                         
+                        <hr style="width: 100%; margin-left: 0px; text-align: left,border-bottom:0px;">
                         <!-- 이용가능 시설 -->
                         <div class="blog-post-categories mb-100">
                             <h5>이용가능 시설</h5>
@@ -377,7 +386,8 @@
 							                <div class="col-3">
 						                        <div class="teachers-info">
 						                        	<div class="facility-rect">
-							                        	<c:if test="${gymFacility[i] == '주차'}">
+						                        	<!-- 문구 수정 필요 -->
+							                        	<c:if test="${gymFacility[i] == '주차'}"><!-- 혹은 '주차시설 완비; -->
 							                        		<img alt="주차" src="/gyp/sfiles/gymFacility/parking.png">
 							                        	</c:if>
 							                        	<c:if test="${gymFacility[i] == '샤워장'}">
@@ -399,6 +409,7 @@
                         </div>
                         
                         
+                        <hr style="width: 100%; margin-left: 0px; text-align: left,border-bottom:0px;">
                         <!-- 이용 시간 -->
                         <div class="blog-post-categories mb-100">
                             <h5>이용 시간</h5>
@@ -412,7 +423,7 @@
                             </div>
                         </div>
                         
-                        
+                        <hr style="width: 100%; margin-left: 0px; text-align: left,border-bottom:0px;">
                         <!-- 연락처 및 주소 -->
                         <div class="blog-post-categories mb-100">
                  	       <h5>연락처 및 주소</h5>
@@ -425,7 +436,7 @@
 						                ${gymDto.gymAddr }
 				                </div>
 				                
-				                <div id="map" style="width:400px;height:300px;"></div>
+				                <div id="map" style="width:350px;height:300px;"></div>
                             </div>
                         </div>
                         
@@ -437,11 +448,10 @@
             </div>
         </div>
     </div>
-    <!-- ##### Blog Area End ##### -->
+    <!-- ##### Content Area End ##### -->
 
 	<jsp:include page="/WEB-INF/views/layout/footer.jsp" />
 	
-
     <!-- ##### All Javascript Script ##### -->
     <!-- jQuery-2.2.4 js -->
     <script src="/gyp/resources/js/jquery/jquery-2.2.4.min.js"></script>	

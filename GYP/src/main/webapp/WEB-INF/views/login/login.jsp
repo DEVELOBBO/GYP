@@ -1,3 +1,6 @@
+<%@page import="java.math.BigInteger"%>
+<%@page import="java.security.SecureRandom"%>
+<%@page import="java.net.URLEncoder"%>
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
@@ -41,6 +44,7 @@ String cp = request.getContextPath();
 		f.action = "/gyp/login_ok.action?history=" + referrer;
 		f.submit();
 	}
+	
 </script>
 
 
@@ -64,17 +68,34 @@ String cp = request.getContextPath();
 	
 				<form action="" method="post" name="myForm">
 					<div class="form-group">
-						<input type="text" class="form-control" name="sessionId" id="name"
+						<input type="text" class="form-control" name="sessionId" id="loginId"
 							placeholder="아이디" style="width: 400px;">
 					</div>
 					<div class="form-group mb-0">
-						<input type="password" class="form-control" name="sessionpwd" id="name"
+						<input type="password" class="form-control" name="sessionpwd" id="loginPwd"
 							placeholder="패스워드" style="width: 400px;">
 						<font color="red"><b>${message }</b></font>
 						
 					</div>
-					<button type="button" class="btn fitness-btn btn-white mt-50"
-						onclick="">체크박스(임시)</button>
+					<%-- <div id="naver_id_login" class="btn mt-50" style="padding: 0;"><img alt="네이버 로그인" src="<%=cp %>/resources/img/core-img/네이버 아이디로 로그인_완성형_Green.PNG" style="width: 200px;"/></div> --%>
+					
+					
+					 <%
+					    String clientId = "P84rJHPRvVU6zfXj1ZXD";//애플리케이션 클라이언트 아이디값";
+					    String redirectURI = URLEncoder.encode("http://192.168.16.25:8000/gyp/naverLogin_ok.action", "UTF-8");
+					    SecureRandom random = new SecureRandom();
+					    String state = new BigInteger(130, random).toString();
+					    String apiURL = "https://nid.naver.com/oauth2.0/authorize?response_type=code";
+					    apiURL += "&client_id=" + clientId;
+					    apiURL += "&redirect_uri=" + redirectURI;
+					    apiURL += "&state=" + state;
+					    session.setAttribute("state", state);
+					 %>
+					  <div id="naver_id_login" class="btn mt-50" style="padding: 0;">
+					  	<a href="<%=apiURL%>"><img height="50" src="/gyp/resources/img/core-img/네이버 아이디로 로그인_완성형_Green.PNG" style="width: 200px;"/></a>
+					  </div>
+					
+					
 					<button type="button" class="btn fitness-btn btn-white mt-50"
 						onclick="sendIt();">로그인</button>
 				</form>
@@ -109,6 +130,7 @@ String cp = request.getContextPath();
     <script src="/gyp/resources/js/plugins/plugins.js"></script>
     <!-- Active js -->
     <script src="/gyp/resources/js/active.js"></script>
-
+    <!-- 네이버 로그인 api -->
+    <script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charset="utf-8"></script>
 </body>
 </html>
