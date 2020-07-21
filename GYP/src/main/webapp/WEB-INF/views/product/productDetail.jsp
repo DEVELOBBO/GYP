@@ -12,6 +12,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.css" rel="stylesheet" type="text/css" />
 	<!-- Favicon -->
 	<link rel="icon" href="/gyp/resources/img/core-img/favicon.ico">
 	<!-- Core Stylesheet -->
@@ -54,11 +55,7 @@
 	return;
 	</c:if>
 	
-	<%-- if (${sessionScope.customInfo }==null) {
-		f.action = "<%=cp%>/fatale/login.do";
-		f.submit();
-		return;
-	} --%>
+	
 	
 	//수량 빈칸 체크
 	str = f.count.value;
@@ -77,6 +74,71 @@
 	f.submit();
 
 	}
+	
+	
+	//////////////////////////////
+	//리뷰
+	function listPage(page){	//리뷰 리스트 출력
+	
+	var url = "/gyp/productreviewList.action?productId=" + $("#productId").val()
+	$.post(url,{pageNum:page},function(args){
+		$("#listData").html(args);
+	});
+	
+	$("#listData").show();
+	
+	
+}
+
+function writeReview() {	//리뷰 작성
+	var star;
+	$("input[name='rating']:checked").each(function(){
+		star = $(this).val();
+	});
+	
+	var params = "cusId=" + $("#rname").val().replace(" ","")
+			+ "&productId=" + $("#productId").val()
+			+ "&star=" + star
+			+ "&reContent=" + $("#rcontent").val();
+	
+	$.ajax({
+		
+		type:"POST",
+		url:"/gyp/productreviewCreated.action",
+		data:params,
+		success:function(args){
+
+			//args로 데이터 받음.
+			$("#listData").html(args);	//넘어온 데이터를 넣어준다.
+			
+			//초기화 작업
+			$("#rname").val("");
+			$("#rcontent").val("");
+			//라디오버튼 초기화
+			$("input[name='rating']:checked").each(function(){
+				$(this).prop('checked', false);
+			});
+			
+		},
+		beforeSend:showRequest,
+		error:function(e){
+			alert(e.responseText);
+		}
+		
+	});
+}
+
+
+function deleteData(productId,reNum){	//리뷰삭제
+	
+	var url = "/gyp/productreviewDeleted.action";
+	
+	$.post(url,{productId:productId,reNum:reNum},function(args){
+		$("#listData").html(args);
+	});
+	
+}
+	
 	</script>
 
 <title>GYP</title>
@@ -85,8 +147,22 @@
 	
 	<jsp:include page="/WEB-INF/views/layout/header_over.jsp" />
 	<jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
+	
+	
+	<div class="col-12">
+    	<div class="single-blog-post mb-100 gymDetailHeadLine">
+        <!-- Post Title -->
+    		<a href="#" class="post-title">체육관 리뷰</a>
+     			<br>
+                                    
+      	<!-- ajax를 이용한 리뷰 리스트 및 리뷰 작성 : reviewList.jsp 참조 -->
+        <span id="listData" style="display:show"></span>
+									
+        </div>
+     </div>
 
-
+	
+	
 	<div class="wrapper" style="font-family: 'Noto Sans KR', sans-serif;">
 		<div class="wrapper_inner">
 			<!-- Gallery -->
@@ -129,8 +205,7 @@
 						<!-- 갯수 선택 -->
 						<!-- 수량 -->
 						<font style="font-size:16pt; color: #666; vertical-align: middle;">
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						
 						갯수&nbsp;&nbsp;</font>
 						<input type="text" name="count" 
 						style="width: 50px; height: 45px; padding-top: 2px; text-align: center;
@@ -158,7 +233,7 @@
 						<input type="button" onclick="" value="리뷰 보기"
 							class="bokyung_review"><br> <br>
 						<br> <input type="button" class="bokyung_back" value="◀목록으로"
-							onclick="javascript:location.href='<%=cp%>/productList.action?searchKey=${searchKey }&searchValue=${searchValue }&pageNum=${pageNum }';" />
+							onclick="javascript:location.href='<%=cp%>/productList.action?searchValueCategory=${searchValueCategory }&searchValueWord=${searchValueWord }&pageNum=${pageNum }';" />
 
 					</form>
 				</div>
@@ -166,7 +241,8 @@
 			</section>
 		</div>
 	</div>
-
+	
+	
 
 	
 	
@@ -189,7 +265,11 @@
     <script src="/gyp/resources/js/plugins/plugins.js"></script>
     <!-- Active js -->
     <script src="/gyp/resources/js/active.js"></script>
-    
+    <!-- Bootstrap DatePicker -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
+    <!-- Moment js -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+	
 
 
 </body>

@@ -30,10 +30,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <![CDATA[
 	where rnum>=#{start} and rnum<=#{end}
 ]]>	
-
-
-
-
 </select>
 <!-- 한개의 게시물 가져오기 -->
 <select id="getReadData" parameterType="int" resultType="com.exe.dto.QnaDTO">

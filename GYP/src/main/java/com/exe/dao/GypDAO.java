@@ -135,7 +135,7 @@ private SqlSessionTemplate sessionTemplate;
 		int result = sessionTemplate.selectOne("gymMapper.getDataCount", hMap);
 		return result;
 	}
-	
+
 	// ******************************************** 원도현 쇼핑몰
 
 	// 데이터 갯수
@@ -187,21 +187,25 @@ private SqlSessionTemplate sessionTemplate;
 
 	// 장바구니에 같은 아이디, 같은 물건 있는지 확인
 	public int cartCheckSame(CartDTO cartdto) {
-		
-		int result = sessionTemplate.selectOne("cartMapper.cartCheckSame", cartdto);		
+
+		int result = sessionTemplate.selectOne("cartMapper.cartCheckSame", cartdto);
 		return result;
 	}
-	
+
 	// 장바구니 추가
 	public void cartInsertData(CartDTO cartdto) {
 		sessionTemplate.insert("cartMapper.cartInsertData", cartdto);
 	}
-	
+
 	// 장바구니 기존 물품의 갯수만 변경
 	public void cartCountChange(CartDTO cartdto) {
-		sessionTemplate.update("cartMapper.cartCountChange",cartdto);
+		sessionTemplate.update("cartMapper.cartCountChange", cartdto);
 	}
-	
+
+	// 장바구니 상품 갯수변경
+	public void updateCartCount(Map<String, Object> hMap) {
+		sessionTemplate.update("cartMapper.cartCountUpdate", hMap);
+	}
 
 	// 장바구니 데이터 불러오기(바로구매 선택시)
 	public CartDTO getCartReadData(String chkNum) {
@@ -264,7 +268,47 @@ private SqlSessionTemplate sessionTemplate;
 		List<ProductDTO> productlists = sessionTemplate.selectList("productMapper.getProductList", proId);
 		return productlists;
 	}
-	
+
+	// insertReviewData : 리뷰 삽입
+	public void insertProductReviewData(ReviewDTO dto) {
+		sessionTemplate.insert("productMapper.insertReviewData", dto);
+	}
+
+	// deleteReviewData : 리뷰 삭제
+	public void deleteProductReviewData(int reNum) {
+		sessionTemplate.delete("productMapper.deleteReviewData", reNum);
+	}
+
+	// getReviewNum : 체육관 하나에 달린 리뷰 갯수
+	public int getProductReviewNum(String productId) {
+		int result = sessionTemplate.selectOne("productMapper.getReviewNum", productId);
+		return result;
+	}
+
+	// getReviewData : 체육관 하나의 전체 리뷰 리스트 받아오기
+	public List<ReviewDTO> getProductReviewList(Map<String, Object> hMap) {
+		List<ReviewDTO> productreviewLists = sessionTemplate.selectList("productMapper.getReviewList", hMap);
+		return productreviewLists;
+	}
+
+	// getAvgReview : 체육관 평점 평균
+	public int getProductAvgReview(String productId) {
+		int result = sessionTemplate.selectOne("productMapper.getAvgReview", productId);
+		return result;
+	}
+
+	// getTimesCusBookedGym : 체육관 예약 횟수 확인 : 세션의 사용자의 해당 체육관 이용 횟수
+	public int getProductTimesCusBookedGym(Map<String, Object> hMap) {
+		int result = sessionTemplate.selectOne("productMapper.getTimesCusBookedGym", hMap);
+		return result;
+	}
+
+	// getTimesCusReviewedGym : 체육관 리뷰 횟수 확인 : 세션의 사용자의 해당 체육관 리뷰 횟수
+	public int getProductTimesCusReviewedGym(Map<String, Object> hMap) {
+		int result = sessionTemplate.selectOne("productMapper.getTimesCusReviewedGym", hMap);
+		return result;
+	}
+
 	//*******************김세이*******************
 	// getGymList : 체육관 하나의 정보 받아오기
 	public GymDTO getGymData(String gymId){

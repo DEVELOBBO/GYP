@@ -80,7 +80,7 @@
 							                        <div class="teachers-bg-gradients"></div>
 							                        <!-- Thumbnail -->
 							                        <div class="teachers-thumbnail">
-							                            <img src="/gyp/resources/img/team-img/${gymTrainerPic[i]}" alt="${gymTrainer[i]}">
+							                            <img src="/gyp/sfiles/gymTrainerPic/${gymTrainerPic[i]}" alt="${gymTrainer[i]}">
 							                        </div>
 							                        <!-- Meta Info -->
 							                        <div class="teachers-info">
@@ -117,7 +117,7 @@
 		                    
 		                    <c:forEach var="productDto" items="${productLists }">
 				                <div class="single-price-table mb-100">
-			                        <img src="/gyp/resources/img/product/${productDto.productImg}" alt="${productDto.productName }">
+			                        <img src="/gyp/sfiles/product/${productDto.productImg}" alt="${productDto.productName }">
 			                        <div class="price-table-content">
 			                            <!-- price -->
 			                            <h4 class="price"><span>${productDto.productId }</span></h4>
@@ -326,45 +326,45 @@
                             <!-- 사진 영역 -->
                             <div class=right-col-box>
                             
-							<c:forEach var="i" begin="1" end="4">
-								<div class="column1">
-								<img src="/gyp/resources/img/blog-img/${gymPic[i-1] }" style="width:100%" onclick="openModal();currentSlide(${i})" class="hover-shadow cursor">
-								</div>
-								<c:if test="i%2==0">
-									</div><div class="row">
-								</c:if>
-							</c:forEach>
-							
-							<!-- 체육관 사진 모달 -->
-							<div id="myModal" class="modal" style="z-index: 100000000001">
-							  <span class="close cursor" onclick="closeModal()">&times;</span>
-							  <div class="modal-content">
-								<c:forEach var="i" begin="0" end="3">
-								    <div class="mySlides">
-								      <div class="numbertext">${i+1 } / 4</div>
-								      <img src="/gyp/resources/img/blog-img/${gymPic[i] }" style="width:100%">
-								    </div>
-							    </c:forEach> 
-							    <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-							    <a class="next" onclick="plusSlides(1)">&#10095;</a>
-							
-							    <div class="caption-container">
-							      <p id="caption"></p>
-							    </div>
-							    
-								<div class="row">
-									<c:forEach var="i" begin="0" end="3">
-									    <div class="column2">
-									      <img class="demo cursor" src="/gyp/resources/img/blog-img/${gymPic[i] }"  
-									      	style="width:90%;" onclick="currentSlide( ${i+1 })"/>
-									    </div>
-								 	</c:forEach> 
-							 	</div> 
-							 	
-							  </div>
-							</div>
+		                     <c:forEach var="i" begin="1" end="${gymPic.size() }">
+		                        <div class="column1">
+		                        <img src="/gyp/sfiles/gymPic/${gymPic[i-1] }" style="width:100%" onclick="openModal();currentSlide(${i})" class="hover-shadow cursor">
+		                        </div>
+		                        <c:if test="i%2==0">
+		                           </div><div class="row">
+		                        </c:if>
+		                     </c:forEach>
+		                     
+                     <!-- 체육관 사진 모달 -->
+		                     <div id="myModal" class="modal" style="z-index: 100000000001">
+		                       <span class="close cursor" onclick="closeModal()">&times;</span>
+		                       <div class="modal-content">
+		                        <c:forEach var="i" begin="0" end="${gymPic.size()-1 }">
+		                            <div class="mySlides">
+		                              <div class="numbertext">${i+1 } / ${gymPic.size() }"</div>
+		                              <img src="/gyp/sfiles/gymPic/${gymPic[i] }" style="width:100%">
+		                            </div>
+		                         </c:forEach> 
+		                         <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+		                         <a class="next" onclick="plusSlides(1)">&#10095;</a>
+		                     
+		                         <div class="caption-container">
+		                           <p id="caption"></p>
+		                         </div>
+		                         
+		                        <div class="row">
+		                           <c:forEach var="i" begin="0" end="3">
+		                               <div class="column2">
+		                                 <img class="demo cursor" src="/gyp/sfiles/gymPic/${gymPic[i] }"  
+		                                    style="width:90%;" onclick="currentSlide( ${i+1 })"/>
+		                               </div>
+		                            </c:forEach> 
+		                         </div> 
+		                         
+		                       </div>
+		                     </div>
                             
-                            </div>
+                          </div>
                         </div>
                         
                         
@@ -378,16 +378,16 @@
 						                        <div class="teachers-info">
 						                        	<div class="facility-rect">
 							                        	<c:if test="${gymFacility[i] == '주차'}">
-							                        		<img alt="주차" src="/gyp/resources/img/gymFacility/parking.png">
+							                        		<img alt="주차" src="/gyp/sfiles/gymFacility/parking.png">
 							                        	</c:if>
 							                        	<c:if test="${gymFacility[i] == '샤워장'}">
-							                        		<img alt="주차" src="/gyp/resources/img/gymFacility/shower.png">
+							                        		<img alt="주차" src="/gyp/sfiles/gymFacility/shower.png">
 							                        	</c:if>
 							                        	<c:if test="${gymFacility[i] == '타올'}">
-							                        		<img alt="주차" src="/gyp/resources/img/gymFacility/towel.png">
+							                        		<img alt="주차" src="/gyp/sfiles/gymFacility/towel.png">
 							                        	</c:if>
 							                        	<c:if test="${gymFacility[i] == '운동복'}">
-							                        		<img alt="주차" src="/gyp/resources/img/gymFacility/tshirt.png">
+							                        		<img alt="주차" src="/gyp/sfiles/gymFacility/tshirt.png">
 							                        	</c:if>
 						                        	</div>
 						                            <h6>${gymFacility[i]}</h6>

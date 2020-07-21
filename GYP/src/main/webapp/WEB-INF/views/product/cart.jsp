@@ -120,6 +120,23 @@ function OneOrder(checkboxName,cartChk) {
 		}
 	}
 	
+	//수량변경
+	function countUpdate(countBox,cartNum) {
+		var obj = document.getElementsByName(countBox);
+		
+		for(var i=0; i< obj.length; i++){
+		       if(obj[i].value==null||obj[i].value==""){
+		    	   alert("\n갯수를 입력하세요.");
+		    	   obj[i].focus();
+		    	   return;
+		       }
+		}
+		var f = document.myForm;
+		f.action = "<%=cp%>/cart_count_update.action?cartNum="+cartNum;
+		f.submit();
+
+	}
+	
 
 </script>
 
@@ -165,28 +182,33 @@ function OneOrder(checkboxName,cartChk) {
 							<td colspan="10" bgcolor="#cccccc"></td>
 
 							<c:forEach var="cart" items="${cartLists}">
-								<tr height="100px">
-									<td width="50px">
+								<tr height="120px">
+									<td width="70px">
 										<input type="hidden" name="cartNum" value="${cart.cartNum}"> &nbsp;&nbsp; 
 										<input type="checkbox" id="cartChk${cart.cartNum}" name="cartChk"
 												value="${cart.cartNum}"
 												onchange="price('cartChk${cart.cartNum}','won${cart.cartNum}')" /> <!-- pid -->
-									<td><label for="cartChk${cart.cartNum}">${cart.productId}</label></td>
+									<td align="left"><label for="cartChk${cart.cartNum}">${cart.productId}</label></td>
 									<!-- 이미지 -->
-									<td align="center"><img alt="그림" src="<%=cp%>/image/product/${해당 사진불러와서 리스트 넘겨줘야할듯 ★}" width="100px" height="100px"></td>
+									<td>&nbsp;&nbsp;&nbsp;</td>
+									<td width="100px" align="right">
+									<img alt="그림" src="${imagePath }/${cart.productImg}">
+									</td>
+									
+									<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 									<!-- 수량> -->
-									<td width="60"><input type="text" name="count${cart.num}" value="${cart.count}" 
+									<td align="center" width="50px"><input type="text" name="count${cart.cartNum}" value="${cart.count}" 
 											style="font-size:16pt; color: #666; vertical-align: middle;
 													width: 50px; height: 45px; padding-top: 2px; text-align: center;
 													color:#F23D4C; font-size: 20pt; font-family: 'Do Hyeon', sans-serif;
 													vertical-align: middle;"/></td>
 									<!-- 변경버튼 -->							
-									<td width="70"><input type="button" value="변경" onclick="countUpdate('count${cart.num}','${cart.num}');"
+									<td width="50px"><input type="button" value="변경" onclick="countUpdate('count${cart.cartNum}','${cart.cartNum}');"
 													class="bokyung_button_cart_change"/></td>
-									<td width="600px" style="text-align: center;">${cart.productName }</td>
+									<td width="500px" style="text-align: center;"><a href="javascript:location.href='<%=cp%>/productDetail.action?productId=${cart.productId}&pageNum=1'"><h4>${cart.productName }</h4></a></td>
 
-									<td width="500px" style="text-align: center;">${cart.productPrice}원
-									<input type="hidden" id="won${cart.cartNum}" value="${cart.productPrice}"/></td>
+									<td width="400px" style="text-align: center;">${cart.productPrice}원
+									<input type="hidden" id="won${cart.cartNum}" value="${cart.productPrice * cart.count}"/></td>
 									
 
 									<td><input type="button" value="구매하기"

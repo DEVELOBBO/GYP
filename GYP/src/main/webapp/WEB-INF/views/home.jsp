@@ -72,7 +72,7 @@
 		        <div class="single-price-table mb-100" style="width: 282px; display: inline-block;">
 		             <div class="price-table-content">
 		             	 <!-- image -->
-		             	 <img src="/gyp/resources/img/product/${productDTO.productImg}" alt="${productDTO.productName }"
+		             	 <img src="/gyp/sfiles/product/${productDTO.productImg}" alt="${productDTO.productName }"
 		             	 	style="width: 282px;">
 		                 <!-- price -->
 		                 <h4 class="price"><span>${productDTO.productId }(조회수: ${productDTO.productHit })</span></h4>

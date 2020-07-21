@@ -63,6 +63,17 @@ public class gypController {
 	MyUtil_Map myUtilMap;
 	
 	
+	//☆☆☆ 이미지 파일 저장 경로 ☆☆☆ 
+	// - 배포시 war파일로 만들때, 내부 서버의 파일들이 삭제되기에 외부 경로 파일 저장 폴더를 만든다. 
+	// - 이 부분과 더불어 tomcat서버의 server.xml에 다음 문장을 추가해준다. 
+	// 		<Context docBase="D:/gyp_external_files/" path="/gyp/sfiles" reloadable="true"/>
+	// - 실제 파일 저장 경로는 D:/gyp_external_files/이고 프로그램 내에서 접근하는 가상 경로는 /gyp/sfiles/ 이다.
+	// - (추후에 개인적으로 경로 변경가능 : 바꿀곳 2군데 : 1.컨트롤러의 PATH  2. Servers > server.xml의 docBase경로)
+	// - 각 메소드에서 상세 링크를 추가하여 파일을 저장하도록 하자.
+	// - 자세한 설명 참고 사이트:( https://byson.tistory.com/20)
+	String PATH = "D:\\gyp_external_files\\";
+	
+	
 	//*******************최보경*******************
 	
 	//home
@@ -91,6 +102,7 @@ public class gypController {
 			
 			//일반 회원이면 주소 추출
 			String customerAddr = dao.getCusAddr(info.getSessionId());
+			
 			
 			//"구"가 존재하면 자름
 			if(customerAddr.indexOf("구")!=-1) {
@@ -167,104 +179,104 @@ public class gypController {
 		return "howToUse/howToUse";
 	}
 	
-	//*******************원도현*******************
-	
-	//로그인 화면 
-	@RequestMapping(value = "/login.action" , method = {RequestMethod.GET,RequestMethod.POST})
+	// *******************원도현*******************
+
+	// 로그인 화면
+	@RequestMapping(value = "/login.action", method = { RequestMethod.GET, RequestMethod.POST })
 	public String login() {
 		return "login/login";
 	}
-	
-	//로그인시
-	@RequestMapping(value = "/login_ok.action" , method = {RequestMethod.GET,RequestMethod.POST})
-	public String login_ok(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception{
-		
-		CustomInfo info = new CustomInfo(); //세션값을 저장하기 위해 객체 생성
-		String history = request.getParameter("history"); //로그인 이전 페이지 기록
-		
-		if(history==null || history.equals("")) {
+
+	// 로그인시
+	@RequestMapping(value = "/login_ok.action", method = { RequestMethod.GET, RequestMethod.POST })
+	public String login_ok(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		HttpSession session = request.getSession(); // 세션 생성
+		CustomInfo info = new CustomInfo(); // 세션값을 저장하기 위해 객체 생성
+		String history = request.getParameter("history"); // 로그인 이전 페이지 기록
+
+		if (history == null || history.equals("")) {
 			history = "/";
 		}
-		
-		history = history.substring(history.lastIndexOf("/"), history.length()); //주소의 마지막 슬래시 추출
-		
-		//회원가입 후, 로그인창으로 이동했을때, 로그인하고 이전페이지(회원가입 등)으로 돌아가기 방지
-		if(history.equals("/createCustomer.action") || history.equals("/login.action")) {
+
+		history = history.substring(history.lastIndexOf("/"), history.length()); // 주소의 마지막 슬래시 추출
+
+		// 회원가입 후, 로그인창으로 이동했을때, 로그인하고 이전페이지(회원가입 등)으로 돌아가기 방지
+		if (history.equals("/createCustomer.action") || history.equals("/login.action")) {
 			history = "/";
 		}
-		//제품 상세에서 로그인 안했을 경우, 로그인 창으로 이동했다가 productId를 못갖고 와서 에러 뜨는것 방지
-		if(history.contains("/productDetail.action")) {
+		// 제품 상세에서 로그인 안했을 경우, 로그인 창으로 이동했다가 productId를 못갖고 와서 에러 뜨는것 방지
+		if (history.contains("/productDetail.action")) {
 			history = "/productList.action";
 		}
-		
-		String sessionId = request.getParameter("sessionId");//input 입력한값 
+
+		String sessionId = request.getParameter("sessionId");// input 입력한값
 		String sessionpwd = request.getParameter("sessionpwd");
-		
-		int result = dao.getDataCount(sessionId);//유저로 로그인하면 result값은 1 gym으로 로그인 하면 0 
-		String loginType = null; //customer 인지, gym인지 저장
-		
-		if(result == 1 ) {// 유저가 로그인
+
+		int result = dao.getDataCount(sessionId);// 유저로 로그인하면 result값은 1 gym으로 로그인 하면 0
+		String loginType = null; // customer 인지, gym인지 저장
+
+		if (result == 1) {// 유저가 로그인
 			CustomerDTO dto = dao.getLoginReadData(sessionId);
 			loginType = "customer";
-			if (dto == null || !dto.getCusPwd().equals(sessionpwd)) { 
+			if (dto == null || !dto.getCusPwd().equals(sessionpwd)) {
 				request.setAttribute("message", "아이디 또는 패스워드를 정확히 입력하세요! ");
 				return "login/login";
 			}
-			
-		}else if (result == 0){//체육관 로그인 ( 체육관 로그인시 바로 마이페이지 이동)
-			
+
+		} else if (result == 0) {// 체육관 로그인 ( 체육관 로그인시 바로 마이페이지 이동)
 			GymDTO dto = dao.getGymLoginReadData(sessionId);
 			loginType = "gym";
-			if (dto == null || !dto.getGymPwd().equals(sessionpwd)) { 
+			if (dto == null || !dto.getGymPwd().equals(sessionpwd)) {
 				request.setAttribute("message", "아이디 또는 패스워드를 정확히 입력하세요! ");
 				return "login/login";
 			}
 		}
-		
-		info.setSessionId(sessionId); //세션에 값 입력
-		info.setLoginType(loginType);//로그인 타입(customer, gym )
+
+		info.setSessionId(sessionId); // 세션에 값 입력
+		info.setLoginType(loginType);// 로그인 타입(customer, gym )
 		session.setAttribute("customInfo", info); // 세션에 info에 들어가있는정보(userid,username)이 올라간다.
-		
-		if(loginType=="customer") {
-	        
-			//관리자 로그인
-			if(sessionId.equals("admin") || info.getSessionId().equals("admin")) {
+
+		if (loginType == "customer") {
+
+			// 관리자 로그인
+			if (sessionId.equals("admin") || info.getSessionId().equals("admin")) {
 				return "redirect:/adminHome.action";
 			}
-			return "redirect:" + history; //로그인 성공
+			return "redirect:" + history; // 로그인 성공
 
-		}else{
+		} else {
 			return "redirect:/gymMyPage.action";
 		}
 	}
-	
-	//유저 로그아웃
-	@RequestMapping(value = "/logout.action" , method = {RequestMethod.GET,RequestMethod.POST})
-	public String logout_ok(HttpServletRequest request,HttpSession session,CustomerDTO dto) throws Exception{
-		
-		//로그아웃시 세션 제거 
+
+	// 유저 로그아웃
+	@RequestMapping(value = "/logout.action", method = { RequestMethod.GET, RequestMethod.POST })
+	public String logout_ok(HttpServletRequest request, HttpSession session, CustomerDTO dto) throws Exception {
+
+		// 로그아웃시 세션 제거
 		session.removeAttribute("customInfo"); // customInfo 안에 있는 데이터를 지운다
 		session.invalidate(); // customInfo 라는 변수도 지운다.
 		return "redirect:/";
 	}
-	
-	//유저 패스워드 보여주기창
-	@RequestMapping(value = "/searchpw.action" , method = {RequestMethod.GET,RequestMethod.POST})
+
+	// 유저 패스워드 보여주기창
+	@RequestMapping(value = "/searchpw.action", method = { RequestMethod.GET, RequestMethod.POST })
 	public String searchpw() {
-		
+
 		return "login/searchpw";
 	}
-	
-	//유저 패스워드 찾기
-	@RequestMapping(value = "/searchpw_ok.action" , method = {RequestMethod.GET,RequestMethod.POST})
-	public String searchpw_ok(HttpServletRequest request) throws Exception{
-		
+
+	// 유저 패스워드 찾기
+	@RequestMapping(value = "/searchpw_ok.action", method = { RequestMethod.GET, RequestMethod.POST })
+	public String searchpw_ok(HttpServletRequest request) throws Exception {
+
 		String cusId = request.getParameter("cusId");
 		String custel = request.getParameter("custel");
 		CustomerDTO dto = dao.getLoginReadData(cusId);
-		
+
 		if (dto == null || !dto.getCusTel().equals(custel)) { // 아이디가 틀리거나 전화번호가 틀린경우
-			request.setAttribute("message", "아이디 또는 전화번호가 일치하지 않습니다"); 
+			request.setAttribute("message", "아이디 또는 전화번호가 일치하지 않습니다");
 			return "login/searchpw";
 
 		} else if (dto.getCusId().equals(cusId) || dto.getCusTel().equals(custel)) {
@@ -273,38 +285,38 @@ public class gypController {
 		}
 		return "login/login";
 	}
-	
-	//유저 아이디 찾는 보여주는창 
-	@RequestMapping(value = "/searchid.action" , method = {RequestMethod.GET,RequestMethod.POST})
+
+	// 유저 아이디 찾는 보여주는창
+	@RequestMapping(value = "/searchid.action", method = { RequestMethod.GET, RequestMethod.POST })
 	public String searchid() {
-		
+
 		return "login/searchid";
 	}
-	
-	//유저 아이디 찾기
-	@RequestMapping(value = "/searchid_ok.action" , method = {RequestMethod.GET,RequestMethod.POST})
-	public String searchid_ok(HttpServletRequest request) throws Exception{
-		
+
+	// 유저 아이디 찾기
+	@RequestMapping(value = "/searchid_ok.action", method = { RequestMethod.GET, RequestMethod.POST })
+	public String searchid_ok(HttpServletRequest request) throws Exception {
+
 		String cusName = request.getParameter("cusName");
 		String cusTel = request.getParameter("cusTel");
-		
-		Map<String, Object> hMap = new HashMap<String,Object>();
+
+		Map<String, Object> hMap = new HashMap<String, Object>();
 		hMap.put("cusName", cusName);
 		hMap.put("cusTel", cusTel);
-		
-		//아이디 찾기는 이름으로 검색하기 때문에 이름으로 검색하는 dao를 하나더 만들어준다
+
+		// 아이디 찾기는 이름으로 검색하기 때문에 이름으로 검색하는 dao를 하나더 만들어준다
 		CustomerDTO dto = dao.getLoginIdReadData(hMap);
-		
+
 		if (dto == null || !dto.getCusTel().equals(cusTel)) { // 이름가 틀리거나 전화번호가 틀린경우
 			request.setAttribute("message", "이름 또는 전화번호가 일치하지 않습니다"); ////
 			return "login/searchid";
-			
+
 		} else if (dto.getCusName().equals(cusName) || dto.getCusTel().equals(cusTel)) {
 			request.setAttribute("message", "이름는 [" + dto.getCusId() + "] 입니다");
 		}
 		return "login/login";
 	}
-	
+
 	// User 마이페이지
 	@RequestMapping(value = "/customerMyPage.action", method = { RequestMethod.GET, RequestMethod.POST })
 	public String customerMyPage(HttpServletRequest request, HttpSession session) {
@@ -335,72 +347,70 @@ public class gypController {
 
 		return "myPage/customerMyPage";
 	}
-	
+
 	// GYM 마이페이지
 	@RequestMapping(value = "/gymMyPage.action", method = { RequestMethod.GET, RequestMethod.POST })
 	public String gymMyPage(HttpServletRequest request, HttpSession session) throws ParseException {
 
 		CustomInfo info = (CustomInfo) session.getAttribute("customInfo");
-		
+
 		// 리뷰 아이디값 검색하기 위해
 		String reviewId = info.getSessionId();
 		// 예약 아이디값 검색하기 위해
 		String bookId = info.getSessionId();
 		// 체육관 아이디
 		String gymId = info.getSessionId();
-		//넘어오는값
+		// 넘어오는값
 		String strYear = request.getParameter("year");
-		//넘어오는값
+		// 넘어오는값
 		String strMonth = request.getParameter("month");
 
-		
-		//캘린더 사용
+		// 캘린더 사용
 		Calendar cal = Calendar.getInstance();
-		//현재 년도
+		// 현재 년도
 		int year = cal.get(Calendar.YEAR);
-		//현재 월
+		// 현재 월
 		int month = cal.get(Calendar.MONTH) + 1;
 
-		
-		//넘어오는 값이 없을 경우에, 현재 날짜 넣어줌
+		// 넘어오는 값이 없을 경우에, 현재 날짜 넣어줌
 		if (strYear == null || strYear.equals(""))
 			strYear = Integer.toString(year);
 		if (strMonth == null || strMonth.equals(""))
 			strMonth = Integer.toString(month);
-		
-		//숫자로 변환
+
+		// 숫자로 변환
 		year = Integer.parseInt(strYear);
 		month = Integer.parseInt(strMonth);
-			
-		//book타입
+
+		// book타입
 		String type = "true";
-		
-		//범위 검색하기위한 변수 생성
+
+		// 범위 검색하기위한 변수 생성
 		String beforemonthdate = "";
 		String aftermonthdate = "";
-		
-		//달이 7이렇게 넘어오면 안되므로 07 이렇게 넘어와야 하므로 해준 조건식
+
+		// 달이 7이렇게 넘어오면 안되므로 07 이렇게 넘어와야 하므로 해준 조건식
 		if (strMonth.length() == 2) {
-			beforemonthdate = year + "-" + (month-1);
+			beforemonthdate = year + "-" + (month - 1);
 		} else if (strMonth.length() == 1) {
-			beforemonthdate = year + "-0" + (month-1);
+			beforemonthdate = year + "-0" + (month - 1);
 		}
 		if (strMonth.length() == 2) {
 			aftermonthdate = year + "-" + month;
 		} else if (strMonth.length() == 1) {
 			aftermonthdate = year + "-0" + month;
 		}
-		
+
 		// 체육관 정보
 		GymDTO gymdto = dao.getgymReadData(info);
 
-		//데이터 넘겨주기
+		// 데이터 넘겨주기
 		Map<String, Object> hMap = new HashMap<String, Object>();
 		hMap.put("gymId", gymId);
 		hMap.put("beforemonthdate", beforemonthdate);
 		hMap.put("aftermonthdate", aftermonthdate);
 		hMap.put("type", type);// 타입 값 검색하기위해
-		
+
 		// 예약 데이터 개수
 		int bookdataCount = dao.bookgetDataCount(hMap);
 
@@ -442,59 +452,59 @@ public class gypController {
 
 		return "myPage/gymMyPage";
 	}
-	
+
 	// 유저 수정창
-	@RequestMapping(value = "/customerUpdate.action" , method = {RequestMethod.GET,RequestMethod.POST})
-	public String customerUpdate(HttpServletRequest request,HttpSession session) {
-		
-		CustomInfo info = (CustomInfo)session.getAttribute("customInfo");
-		String mode=null;
-		
-		//세션아이디로 고객정보 디비에서 dto가져옴
+	@RequestMapping(value = "/customerUpdate.action", method = { RequestMethod.GET, RequestMethod.POST })
+	public String customerUpdate(HttpServletRequest request, HttpSession session) {
+
+		CustomInfo info = (CustomInfo) session.getAttribute("customInfo");
+		String mode = null;
+
+		// 세션아이디로 고객정보 디비에서 dto가져옴
 		CustomerDTO dto = dao.getCustromerDTOReadData(info);
-		
-		//고객정보가 있으면 mode를 "updated"으로 넘겨준다
-		if(dto!=null) {
+
+		// 고객정보가 있으면 mode를 "updated"으로 넘겨준다
+		if (dto != null) {
 			mode = "updated";
 		}
-		
+
 		request.setAttribute("mode", mode);
 		request.setAttribute("dto", dto);
 		return "create/createCustomer";
 	}
-	
+
 	// 유저 정보 수정 (비밀번호 변경)
-	@RequestMapping(value = "/customerUpdate_ok.action" , method = {RequestMethod.GET,RequestMethod.POST})
-	public String customerUpdate_ok(HttpServletRequest request,HttpSession session,
-			CustomerDTO dto, HttpServletResponse response) throws IOException {
-		
+	@RequestMapping(value = "/customerUpdate_ok.action", method = { RequestMethod.GET, RequestMethod.POST })
+	public String customerUpdate_ok(HttpServletRequest request, HttpSession session, CustomerDTO dto,
+			HttpServletResponse response) throws IOException {
+
 		dao.updateData(dto);
 		request.setAttribute("dto", dto);
-		
+
 		return "login/test";
 	}
-	
+
 	// 유저 정보 수정 (삭제)
-	@RequestMapping(value = "/customerDeleted_ok.action" , method = {RequestMethod.GET,RequestMethod.POST})
-	public String customerDeleted_ok(HttpServletRequest request,CustomerDTO dto,
-			HttpSession session, HttpServletResponse response) throws IOException {
-		
+	@RequestMapping(value = "/customerDeleted_ok.action", method = { RequestMethod.GET, RequestMethod.POST })
+	public String customerDeleted_ok(HttpServletRequest request, CustomerDTO dto, HttpSession session,
+			HttpServletResponse response) throws IOException {
+
 		dao.deleteData(dto);
-		
-		//삭제시 세션제거
+
+		// 삭제시 세션제거
 		session.removeAttribute("customInfo"); // customInfo 안에 있는 데이터를 지운다
 		session.invalidate(); // customInfo 라는 변수도 지운다.
-		
-		// 임시 회원탈퇴시 로그인창으로 넘어가기 
+
+		// 임시 회원탈퇴시 로그인창으로 넘어가기
 		return "login/login";
 	}
-	
+
 	// 체육관 수정창
 	@RequestMapping(value = "/gymUpdate.action", method = { RequestMethod.GET, RequestMethod.POST })
 	public String gymUpdate(HttpServletRequest request, HttpSession session) {
 		// 세션에 올라온값
 		CustomInfo info = (CustomInfo) session.getAttribute("customInfo");
-		
+
 		GymDTO gymdto = dao.getgymReadData(info);
 		request.setAttribute("gymdto", gymdto);
 		return "myPage/gymUpdate";
@@ -504,19 +514,19 @@ public class gypController {
 	@RequestMapping(value = "/gymUpdate_ok.action", method = { RequestMethod.GET, RequestMethod.POST })
 	public String gymUpdate_ok(HttpServletRequest request, HttpSession session, GymDTO gymdto) {
 		dao.gymupdateData(gymdto);
-		
-		//캘린더 사용
+
+		// 캘린더 사용
 		Calendar cal = Calendar.getInstance();
 
-		//현재 년도
+		// 현재 년도
 		int nowYear = cal.get(Calendar.YEAR);
-		//현재 월
+		// 현재 월
 		int nowMonth = cal.get(Calendar.MONTH) + 1;
-		
+
 		request.setAttribute("gymdto", gymdto);
-		return "redirect:/gymMyPage.action?year="+nowYear+"&month="+nowMonth;
+		return "redirect:/gymMyPage.action?year=" + nowYear + "&month=" + nowMonth;
 	}
-	
+
 	// 체육관 정보 수정 (삭제)
 	@RequestMapping(value = "/gymDeleted_ok.action", method = { RequestMethod.GET, RequestMethod.POST })
 	public String gymDeleted_ok(HttpServletRequest request, GymDTO dto, HttpSession session) {
@@ -527,7 +537,7 @@ public class gypController {
 		// 임시 회원탈퇴시 로그인창으로 넘어가기
 		return "login/login";
 	}
-	
+
 	// 리뷰 삭제
 	@RequestMapping(value = "/reviewDelete.action", method = { RequestMethod.GET, RequestMethod.POST })
 	public String reviewDelete(HttpServletRequest request, HttpSession session) {
@@ -551,12 +561,13 @@ public class gypController {
 		dao.bookdeleteData(bookNum);
 		return "redirect:/gymMyPage.action";
 	}
-	
-	
+
 	//////////////////
 	// 상품 리스트
 	@RequestMapping(value = "/productList.action", method = { RequestMethod.GET, RequestMethod.POST })
 	public String productList(HttpServletRequest request) throws Exception {
+
+		String productType = "";
 
 		// 리스트 생성
 		List<ProductDTO> lists = null;
@@ -569,33 +580,42 @@ public class gypController {
 
 		// 넘어오는값
 		String pageNum = request.getParameter("pageNum");
-		String searchValueCategory = request.getParameter("searchValueCategory"); //카테고리
-		String searchValueWord = request.getParameter("searchValueWord"); //키보드 타이핑한 글자
-		String type = request.getParameter("type");//정렬타입
-		
+		String searchValueCategory = request.getParameter("searchValueCategory"); // 카테고리
+		String searchValueWord = request.getParameter("searchValueWord"); // 키보드 타이핑한 글자
+		String type = request.getParameter("type");// 정렬타입
+
+		System.out.println("****************");
+		System.out.println("****************");
+		System.out.println("****************");
+		System.out.println(searchValueCategory);
+
+		if (searchValueCategory.equals("H") || searchValueCategory.equals("Y") || searchValueCategory.equals("P")) {
+			productType = searchValueCategory;
+		}
+
 		// 카테고리 검색 널 처리 + 인코딩 처리
-		if (searchValueCategory  == null) {
+		if (searchValueCategory == null) {
 			searchValueCategory = ""; // 키워드 헬스 요가 필라테스
-		}else if (request.getMethod().equalsIgnoreCase("GET")) {
+		} else if (request.getMethod().equalsIgnoreCase("GET")) {
 			searchValueCategory = URLDecoder.decode(searchValueCategory, "UTF-8");
 		}
-		
+
 		// 타이핑 검색 널 처리 + 인코딩 처리
-		if (searchValueWord  == null) {
+		if (searchValueWord == null) {
 			searchValueWord = "";
 		} else if (request.getMethod().equalsIgnoreCase("GET")) {
 			searchValueWord = URLDecoder.decode(searchValueWord, "UTF-8");
 		}
 
 		// type 널처리
-		if (searchValueCategory.equals("all")){
+		if (searchValueCategory.equals("all")) {
 			searchValueCategory = "";
 			type = "0";
-		}else if(type==null) {
-			type="0";
+		} else if (type == null) {
+			type = "0";
 		}
 
-		//페이징
+		// 페이징
 		int currentPage = 1;
 
 		if (pageNum != null) {
@@ -615,30 +635,29 @@ public class gypController {
 		if (currentPage > totalPage) {
 			currentPage = totalPage;
 		}
-		
-		//한 페이지의 첫과 끝 게시물 번호
+
+		// 한 페이지의 첫과 끝 게시물 번호
 		int start = (currentPage - 1) * numPerPage + 1;
 		int end = currentPage * numPerPage;
 		hMap.put("start", start);
 		hMap.put("end", end);
-		
-		//파람 생성
+
+		// 파람 생성
 		String param = "";
 		if (!searchValueCategory.equals("")) {
 			param = "serachValueCategory=" + searchValueCategory;
 			param += "&searchValueWord=" + URLEncoder.encode(searchValueWord, "UTF-8");
 		}
-		
-		//전달할 url과 path
+
+		// 전달할 url과 path
 		String articleUrl = cp + "/productDetail.action?pageNum=" + currentPage;
 		if (!param.equals(""))
 			articleUrl = articleUrl + "&" + param;
-		
+
 		String searchUrl = "productList.action?" + param;
 		String pageIndexList = myUtil.pageIndexList(currentPage, totalPage, searchUrl);
-		String imagePath = cp + "/image/product"; // 이미지 경로
+		String imagePath = "/gyp/sfiles/product"; // 이미지 경로
 
-		
 		// 정렬 타입에 따라 리스트가 달라진다
 		// 1.높은가격순 2.낮은가격순 3.조회수 0.그냥 검색
 		if (type.equals("1")) {
@@ -651,6 +670,7 @@ public class gypController {
 			lists = dao.searchList(hMap);
 		}
 
+		request.setAttribute("productType", productType);
 		request.setAttribute("lists", lists);
 		request.setAttribute("serachValueCategory", searchValueCategory);
 		request.setAttribute("searchValueWord", searchValueWord);
@@ -675,27 +695,27 @@ public class gypController {
 		// 넘어오는값
 		String productId = request.getParameter("productId");
 		String pageNum = request.getParameter("pageNum");
-		String searchValueCategory = request.getParameter("searchValueCategory"); //카테고리
-		String searchValueWord = request.getParameter("searchValueWord"); //키보드 타이핑한 글자
+		String searchValueCategory = request.getParameter("searchValueCategory"); // 카테고리
+		String searchValueWord = request.getParameter("searchValueWord"); // 키보드 타이핑한 글자
 
 		// 카테고리 검색 널 처리 + 인코딩 처리
-		if (searchValueCategory  == null) {
+		if (searchValueCategory == null) {
 			searchValueCategory = ""; // 키워드 헬스 요가 필라테스
-		}else if (request.getMethod().equalsIgnoreCase("GET")) {
+		} else if (request.getMethod().equalsIgnoreCase("GET")) {
 			searchValueCategory = URLDecoder.decode(searchValueCategory, "UTF-8");
 		}
-		
+
 		// 타이핑 검색 널 처리 + 인코딩 처리
-		if (searchValueWord  == null) {
+		if (searchValueWord == null) {
 			searchValueWord = "";
 		} else if (request.getMethod().equalsIgnoreCase("GET")) {
 			searchValueWord = URLDecoder.decode(searchValueWord, "UTF-8");
 		}
-		
+
 		// product 데이터 불러오기
 		ProductDTO dto = dao.getProductReadData(productId);
-		
-		//조회수 증가
+
+		// 조회수 증가
 		dao.updateHitCount(productId);
 
 		String param = "pageNum=" + pageNum;
@@ -704,7 +724,7 @@ public class gypController {
 			param += "&searchValueWord=" + URLEncoder.encode(searchValueWord, "UTF-8");
 		}
 
-		String imagePath = cp + "/image/product";
+		String imagePath = "/gyp/sfiles/product"; // 이미지 경로
 
 		request.setAttribute("dto", dto);
 		request.setAttribute("params", param);
@@ -722,45 +742,44 @@ public class gypController {
 	public String productDetail_ok(HttpServletRequest request, HttpSession session, CartDTO cartdto) throws Exception {
 
 		// 장바구니 클릭시 로그인하게 만듦 (jsp에서)
-		CustomInfo info = (CustomInfo) session.getAttribute("customInfo"); //세션에 로그인값 가져올려고 생성
-		
+		CustomInfo info = (CustomInfo) session.getAttribute("customInfo"); // 세션에 로그인값 가져올려고 생성
+
 		// 넘어오는값
 		String productId = request.getParameter("productId");
 		String pageNum = request.getParameter("pageNum");
-		String searchValueCategory = request.getParameter("searchValueCategory"); //카테고리
-		String searchValueWord = request.getParameter("searchValueWord"); //키보드 타이핑한 글자
-		int count = Integer.parseInt(request.getParameter("count")); //물건 갯수
-		
+		String searchValueCategory = request.getParameter("searchValueCategory"); // 카테고리
+		String searchValueWord = request.getParameter("searchValueWord"); // 키보드 타이핑한 글자
+		int count = Integer.parseInt(request.getParameter("count")); // 물건 갯수
+
 		// 카테고리 검색 널 처리 + 인코딩 처리
-		if (searchValueCategory  == null) {
+		if (searchValueCategory == null) {
 			searchValueCategory = ""; // 키워드 헬스 요가 필라테스
-		}else if (request.getMethod().equalsIgnoreCase("GET")) {
+		} else if (request.getMethod().equalsIgnoreCase("GET")) {
 			searchValueCategory = URLDecoder.decode(searchValueCategory, "UTF-8");
 		}
-		
+
 		// 타이핑 검색 널 처리 + 인코딩 처리
-		if (searchValueWord  == null) {
+		if (searchValueWord == null) {
 			searchValueWord = "";
 		} else if (request.getMethod().equalsIgnoreCase("GET")) {
 			searchValueWord = URLDecoder.decode(searchValueWord, "UTF-8");
 		}
-		
-		//cartMaxNum
+
+		// cartMaxNum
 		int maxNum = dao.getCartNumMax();
 
 		cartdto.setCartNum(maxNum + 1);
 		cartdto.setCusId(info.getSessionId()); // 세션에 있는 id
 		cartdto.setProductId(productId);
 		cartdto.setCount(count);
-		
-		
-		//삽입전, 같은 아이디에 같은 물품을 이미 넣었는지 확인하기
+
+		// 삽입전, 같은 아이디에 같은 물품을 이미 넣었는지 확인하기
 		int result = dao.cartCheckSame(cartdto);
-		
-		if(result==0) {//같은 사람이 같은 물품을 안담았다면! 
-			dao.cartInsertData(cartdto);//삽입
-		}else {
-			dao.cartCountChange(cartdto);//수량만 변경
+
+		if (result == 0) {// 같은 사람이 같은 물품을 안담았다면!
+			dao.cartInsertData(cartdto);// 삽입
+		} else {
+			dao.cartCountChange(cartdto);// 수량만 변경
 		}
 
 		return "redirect:/productDetail.action?productId=" + productId + "&pageNum=" + pageNum;
@@ -768,25 +787,31 @@ public class gypController {
 
 	// 장바구니
 	// 미구현: 로그인 기능 추가해야함 , 가격 총합
-	//cartdto 에 productName,productPrice 추가
+	// cartdto 에 productName,productPrice 추가
+	// 스프링
 	@RequestMapping(value = "/cart.action", method = { RequestMethod.GET, RequestMethod.POST })
 	public String cart(HttpServletRequest request, HttpSession session) throws Exception {
 
-		// CustomInfo info = (CustomInfo) session.getAttribute("customInfo");
+		String cp = request.getContextPath();
 
-		// String cusId = info.getSessionId();
+		CustomInfo info = (CustomInfo) session.getAttribute("customInfo");
+
+		String cusId = info.getSessionId();
 
 		// 임시로 값 넣어줌
-		String cusId = "suzi"; // 세션에 있는 로그인값으로 변경
+		// String cusId = "suzi"; // 세션에 있는 로그인값으로 변경
 
 		List<CartDTO> cartLists = dao.cartList(cusId);
-		
-		int totPrice = 0; //총합 변수
-		
+
+		int totPrice = 0; // 총합 변수
+
 		for (CartDTO dto : cartLists) {
 			totPrice += dto.getProductPrice();
 		}
 
+		String imagePath = "/gyp/sfiles/product"; // 이미지 경로
+
+		request.setAttribute("imagePath", imagePath);
 		request.setAttribute("cartLists", cartLists);
 		request.setAttribute("totPrice", totPrice);
 
@@ -802,9 +827,9 @@ public class gypController {
 		String chkNum = request.getParameter("cartChk");
 		String[] chkNums = request.getParameterValues("cartChk");
 
-		int numI = Integer.parseInt(chkNum); //선택한 넘버값 정수로 바꿔줌
+		int numI = Integer.parseInt(chkNum); // 선택한 넘버값 정수로 바꿔줌
 
-		int[] numsI = new int[chkNums.length]; //배열 생성
+		int[] numsI = new int[chkNums.length]; // 배열 생성
 
 		int result = dao.getCartNumMax(); // 전체 데이터 개수
 
@@ -814,7 +839,7 @@ public class gypController {
 
 		if (chkNums.length >= 2) { // 여러개 선택시 (2개이상)
 			if (chkNums.length == result) { // 전체선택
-				dao.AlldeleteCart(); //전체삭제
+				dao.AlldeleteCart(); // 전체삭제
 			}
 			if (chkNums.length != result) // 여러개 선택
 			{
@@ -822,10 +847,10 @@ public class gypController {
 					numsI[i] = Integer.parseInt(chkNums[i]);
 				}
 			}
-			dao.selectDeleteCart(numsI); //선택한 번호삭제
+			dao.selectDeleteCart(numsI); // 선택한 번호삭제
 
 		} else if (chkNums.length == 1) { // 하나 선택시
-			dao.deleteCart(numI);//하나삭제
+			dao.deleteCart(numI);// 하나삭제
 		}
 
 		return "redirect:/cart.action";
@@ -844,20 +869,40 @@ public class gypController {
 		return "redirect:/cart.action";
 	}
 
-	//미구현: 결제 정보창  (값만 넘김) , 세션 로그인한 값으로 아이디값 받아와야함
+	// 장바구니 수량 번경
+	@RequestMapping(value = "/cart_count_update.action", method = { RequestMethod.GET, RequestMethod.POST })
+	public String cart_count_update(HttpServletRequest request, HttpSession session) throws Exception {
+
+		String Snum = request.getParameter("cartNum");
+		int cartNum = Integer.parseInt(request.getParameter("cartNum"));
+		int count = Integer.parseInt(request.getParameter("count" + Snum));
+
+		Map<String, Object> hMap = new HashMap<String, Object>();
+		hMap.put("cartNum", cartNum);
+		hMap.put("count", count);
+
+		dao.updateCartCount(hMap);
+
+		return "redirect:/cart.action";
+	}
+
+	// 미구현: 결제 정보창 (값만 넘김) , 세션 로그인한 값으로 아이디값 받아와야함
 	@RequestMapping(value = "/order.action", method = { RequestMethod.GET, RequestMethod.POST })
 	public String order(HttpServletRequest request, HttpSession session) throws Exception {
 
-		
+		CustomInfo info = (CustomInfo) session.getAttribute("customInfo");
+
+		String cusId = info.getSessionId();
+
 		// 임시로 아이디는 suzi로 고정
-		String cusId = "suzi";
+		// String cusId = "suzi";
 
 		// String totPrice = req.getParameter("totPrice"); //나중에 결제 금액 넘김
 		String[] chkNums = request.getParameterValues("cartChk"); // 배열에 선택한 cartNum값이 들어온다
 		String chkNum = request.getParameter("cartChk");
 
 		// 인트형 배열생성
-		int[] numsI = new int[chkNums.length]; 
+		int[] numsI = new int[chkNums.length];
 
 		// 스트링형 배열생성
 		String[] proId = new String[chkNums.length];
@@ -868,21 +913,21 @@ public class gypController {
 			for (int i = 0; i < chkNums.length; i++) {
 				numsI[i] = Integer.parseInt(chkNums[i]); // 선택한cartNum을 저장할 변수
 			}
-			List<CartDTO> lists = dao.getCartReadData2(numsI); //배열을 넘겨서 cartNum에 해당하는 productId값을 가져오기 위해
+			List<CartDTO> lists = dao.getCartReadData2(numsI); // 배열을 넘겨서 cartNum에 해당하는 productId값을 가져오기 위해
 
 			int i = 0;
-			
-			for (CartDTO dto : lists) {//선택한 개수많큼 리스트를 돌린다
-				proId[i] = dto.getProductId(); //스트링 배열에 선택한 productId값을 넘겨준다
+
+			for (CartDTO dto : lists) {// 선택한 개수많큼 리스트를 돌린다
+				proId[i] = dto.getProductId(); // 스트링 배열에 선택한 productId값을 넘겨준다
 				i++;
 			}
 
-			//스트링 배열proId에 내가 선택한 항목의 productId값이 들어가있다
-			
-			//배열을 리스트에 넘겨준다 
+			// 스트링 배열proId에 내가 선택한 항목의 productId값이 들어가있다
+
+			// 배열을 리스트에 넘겨준다
 			List<ProductDTO> productlists = dao.getProductList(proId);
-			
-			//request.setAttribute("totPrice", totPrice);//나중에 물건 총합을 가져온다
+
+			// request.setAttribute("totPrice", totPrice);//나중에 물건 총합을 가져온다
 			request.setAttribute("productlists", productlists);
 
 		} else if (chkNums.length == 1) { // 하나 선택시
@@ -894,11 +939,127 @@ public class gypController {
 
 		return "product/order";
 	}
-	
-	
-	
-	
-	
+
+	// 리뷰 추가 : 체육관 상세페이지 리뷰 추가 (ajax)
+	@RequestMapping(value = "/productreviewCreated.action")
+	public String productreviewCreated(HttpServletRequest request, ReviewDTO dto, HttpSession session) throws Exception {
+		CustomInfo info = (CustomInfo) session.getAttribute("customInfo");
+		if (info != null) {
+			request.setAttribute("info", info);
+		}
+		int numMax = dao.getReviewNumMax(); // 삽입용 전체 리뷰 최댓값
+
+		dto.setReNum(numMax + 1);
+		dto.setReType("product");
+		dao.insertReviewData(dto);
+
+		String productId = dto.getProductId();
+
+		// return reviewList(request,gymId); //리다이렉팅 안하고 메소드로 가야 한다. 왜? ajax이므로 새로고침하면
+		// 안된다.
+		// 이전에는 리다이렉팅을 통해 페이지 이동이므로 새로고침이 들어갔다.
+		return productreviewList(request, productId, session);
+	}
+
+	// 리뷰 리스트 : 체육관 상세페이지 리뷰 리스트 (ajax)
+	@RequestMapping(value = "/productreviewList.action", method = { RequestMethod.GET, RequestMethod.POST })
+	public String productreviewList(HttpServletRequest request, String productId, HttpSession session) throws Exception {
+		CustomInfo info = (CustomInfo) session.getAttribute("customInfo");
+		if (info != null) {
+			request.setAttribute("info", info);
+		}
+
+		if (productId == null || productId.equals("")) {
+			productId = request.getParameter("productId");
+		}
+
+		int numPerPage = 3;
+		int totalPage = 0;
+		int totalDataCount = 0;
+
+		String pageNum = request.getParameter("pageNum");
+
+		int currentPage = 1;
+
+		if (pageNum != null && pageNum != "") {
+			currentPage = Integer.parseInt(pageNum);
+		} else {
+			pageNum = "1";
+		}
+
+		// 전체 데이터 갯수
+		totalDataCount = dao.getProductReviewNum(productId);
+
+		if (totalDataCount != 0) {
+			totalPage = myUtil.getPageCount(numPerPage, totalDataCount);
+		}
+
+		if (currentPage > totalPage) {
+			currentPage = totalPage;
+		}
+
+		Map<String, Object> hMap = new HashMap<String, Object>();
+
+		int start = (currentPage - 1) * numPerPage + 1;
+		int end = currentPage * numPerPage;
+
+		hMap.put("start", start);
+		hMap.put("end", end);
+		hMap.put("productId", productId);
+
+		List<ReviewDTO> productreviewLists = dao.getProductReviewList(hMap);
+
+		Iterator<ReviewDTO> it = productreviewLists.iterator();
+		// 전체 평점 평균
+		int starAvg = dao.getProductAvgReview(productId);
+
+		while (it.hasNext()) {
+			ReviewDTO vo = (ReviewDTO) it.next();
+			vo.setReContent(vo.getReContent().replaceAll("\n", "<br/>"));
+		}
+
+		String pageIndexList = myUtil.pageIndexList(currentPage, totalPage);
+		
+		if (info != null) {
+			request.setAttribute("info", info);
+			String cusInfo = info.getSessionId();
+
+			// Map<String, Object> hMap = new HashMap<String, Object>();
+			hMap.put("cusId", cusInfo);
+			hMap.put("productId", productId);
+			
+			int timesCusBookedGym = dao.getProductTimesCusBookedGym(hMap);
+			request.setAttribute("timesCusBookedGym", timesCusBookedGym);
+
+			int timesCusReviewedGym = dao.getProductTimesCusReviewedGym(hMap);
+			request.setAttribute("timesCusReviewedGym", timesCusReviewedGym);
+		}
+
+		request.setAttribute("starAvg", starAvg);
+		request.setAttribute("productreviewLists", productreviewLists);
+		request.setAttribute("pageIndexList", pageIndexList);
+		request.setAttribute("totalDataCount", totalDataCount);
+		request.setAttribute("pageNum", pageNum);
+
+		return "product/productreviewList";
+	}
+
+	// 리뷰 삭제 : 체육관 상세페이지 리뷰 삭제 (ajax)
+	@RequestMapping(value = "/productreviewDeleted.action")
+	public String productreviewDeleted(HttpServletRequest request, ReviewDTO dto, HttpSession session) throws Exception {
+		CustomInfo info = (CustomInfo) session.getAttribute("customInfo");
+		if (info != null) {
+			request.setAttribute("info", info);
+		}
+
+		String productId = dto.getProductId();
+		int reNum = dto.getReNum();
+
+		dao.deleteProductReviewData(reNum);
+
+		return productreviewList(request, productId, session);
+	}
+
 	
 	//*******************김세이*******************
 	
@@ -1625,7 +1786,6 @@ public class gypController {
 		
 		String pageIndexList = myUtil.pageIndexList(currentPage, totalPage, listUrl);
 	
-		
 		request.setAttribute("result",result);
 		request.setAttribute("lists", lists);
 		request.setAttribute("pageIndexList",pageIndexList);
@@ -2138,7 +2298,7 @@ public class gypController {
 	
 	//*******************경기민*******************
 	
-	//제휴시설 찾기로 이동
+	//제휴시설 찾기로 이동 (맨 첫화면만)
 	@RequestMapping(value = "/map.action", method = { RequestMethod.GET, RequestMethod.POST })
 	public String map(HttpServletRequest req) throws Exception {
 		String sessionId = "";
@@ -2157,7 +2317,15 @@ public class gypController {
 		if(req.getParameter("searchValue")!=null) {
 			searchValue = req.getParameter("searchValue");
 		}
+		//체육관 리스트
 		List<GymDTO> lists = dao.getMapList(1, 10000, searchKey, searchValue);
+		
+		//체육관 이미지
+		for(GymDTO eachGym : lists) {
+			List<String> subPic = new ArrayList<String>(Arrays.asList(eachGym.getGymPic().split(",")));
+			eachGym.setGymPicAryList(subPic);
+		}
+		
 		req.setAttribute("lists", lists);
 		req.setAttribute("tempSearchKey", searchKey);
 		req.setAttribute("tempSearchValue", searchValue);
@@ -2228,6 +2396,7 @@ public class gypController {
 		String searchGymAddrUrl = cp + "/map.action?searchGymAddr=";
 		
 		
+		
 		req.setAttribute("searchGymAddr", searchGymAddr);
 		req.setAttribute("lists", lists);
 		req.setAttribute("ajaxPageIndexList", ajaxPageIndexList);
@@ -2240,7 +2409,7 @@ public class gypController {
 
 	}
 	
-	//지도만 불러오기 (리다이렉트) (첫화면)
+	//지도만 불러오기 (리다이렉트) (새로고침)
 	@RequestMapping(value = "/mapReload.action", method = {RequestMethod.GET})
 	public String mapReload() throws Exception {
 		return "redirect:map.action";
@@ -2260,6 +2429,13 @@ public class gypController {
 			searchKey = "gymName";
 		}
 		List<GymDTO> lists = dao.getMapList(1, 10000, searchKey, searchValue);
+		
+		//체육관 이미지
+		for(GymDTO eachGym : lists) {
+			List<String> subPic = new ArrayList<String>(Arrays.asList(eachGym.getGymPic().split(",")));
+			eachGym.setGymPicAryList(subPic);
+			System.out.println(subPic.get(0));
+		}
 		
 		req.setAttribute("searchKey", searchKey);
 		req.setAttribute("searchValue", searchValue);

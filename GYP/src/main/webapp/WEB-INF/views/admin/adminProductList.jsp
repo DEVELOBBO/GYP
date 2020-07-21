@@ -80,8 +80,8 @@
 								<td>${dto.productName}</td>
 								<td>${dto.productPrice }</td>
 								<td>${dto.productContent }</td>
-								<td><a href="/gyp/adminProductArticle.action?productId=${dto.productId }">
-									<img src="${imgPath}/${dto.productImg }" width="25" height="25"></a>${dto.productImg }</td>
+								<td><a href="${imgPath }${dto.productImg }">
+									<img src="${imgPath }${dto.productImg }" width="25" height="25"></a>${dto.productImg }</td>
 								<td>${dto.productHit }</td>
 								<td><input type="button" value=" 수정 "
 										onclick="javascript:location.href='<%=cp%>/adminProductUpdated.action?productId=${dto.productId}';"/></td>

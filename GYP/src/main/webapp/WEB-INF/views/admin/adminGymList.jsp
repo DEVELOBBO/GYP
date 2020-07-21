@@ -98,8 +98,8 @@
 														<td width="90" align="center">
 														<c:if test="${!empty dto.gymTrainerAry[i]}">
 															${dto.gymTrainerAry[i]}<br>
-															<img src="${imgPath}/${dto.gymTrainerPicAry[i]}" width="" height="10"><br>
-															${dto.gymTrainerPicAry[i]}
+															<a href="${imgPath}/gymTrainerPic/${dto.gymTrainerPicAry[i]}"><img src="${imgPath}/gymTrainerPic/${dto.gymTrainerPicAry[i]}" style="width:100px; height:150px;"/></a><br>
+															<a href="${imgPath}/gymTrainerPic/${dto.gymTrainerPicAry[i]}"><span style="font-size: 8px;">${dto.gymTrainerPicAry[i]}</span></a>
 														</c:if>
 														</td>
 													</c:forEach>
@@ -109,8 +109,8 @@
 													<c:forEach var="i" begin="0" end="3">
 														<td width="90" align="center">
 															<c:if test="${!empty dto.gymPicAry[i]}">
-															<img src="${imgPath}/${gymPic}" width="10" height="10"><br>
-															${gymPic}
+															<a href="${imgPath}/gymPic/${dto.gymPicAry[i]}"><img src="${imgPath}/gymPic/${dto.gymPicAry[i]}" style="width:100px; height:100px;"/></a><br>
+															<a href="${imgPath}/gymPic/${dto.gymPicAry[i]}"><span style="font-size: 8px;">${dto.gymPicAry[i]}</span></a>
 															</c:if>
 														</td>
 													</c:forEach>
@@ -221,11 +221,11 @@
 													<td width="80">&nbsp;&nbsp;트레이너 및 사진</td>
 													<c:forEach var="i" begin="0" end="3">
 														<td width="90" align="center">
-														<c:if test="${!empty dto.gymTrainerAry[i]}">
-															${dto.gymTrainerAry[i]}<br>
-															<img src="${imgPath}/${dto.gymTrainerPicAry[i]}" width="" height="10"><br>
-															${dto.gymTrainerPicAry[i]}
-														</c:if>
+															<c:if test="${!empty dto.gymTrainerAry[i]}">
+																${dto.gymTrainerAry[i]}<br>
+																<a href="${imgPath}/gymTrainerPic/${dto.gymTrainerPicAry[i]}"><img src="${imgPath}/gymTrainerPic/${dto.gymTrainerPicAry[i]}" style="width:100px; height:150px;"/></a><br>
+																<a href="${imgPath}/gymTrainerPic/${dto.gymTrainerPicAry[i]}"><span style="font-size: 8px;">${dto.gymTrainerPicAry[i]}</span></a>
+															</c:if>
 														</td>
 													</c:forEach>
 												</tr>
@@ -234,8 +234,8 @@
 													<c:forEach var="i" begin="0" end="3">
 														<td width="90" align="center">
 															<c:if test="${!empty dto.gymPicAry[i]}">
-															<img src="${imgPath}/${gymPic}" width="10" height="10"><br>
-															${gymPic}
+																<a href="${imgPath}/gymPic/${dto.gymPicAry[i]}"><img src="${imgPath}/gymPic/${dto.gymPicAry[i]}" style="width:100px; height:100px;"/></a><br>
+																<a href="${imgPath}/gymPic/${dto.gymPicAry[i]}"><span style="font-size: 8px;">${dto.gymPicAry[i]}</span></a>
 															</c:if>
 														</td>
 													</c:forEach>
@@ -289,7 +289,7 @@
 	</div>
 
 	
-	<div style="height: 100px;"></div>
+	<div style="height:100px;"></div>
 
 	<jsp:include page="/WEB-INF/views/layout/footer.jsp" />
 

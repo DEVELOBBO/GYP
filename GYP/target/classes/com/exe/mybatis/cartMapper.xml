@@ -47,7 +47,7 @@ PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
 
 <!-- 카트 리스트 -->
 <select id="getcartList" parameterType="String" resultType="com.exe.dto.CartDTO">
-		select CART.productId,CART.cartNum,CART.cusId,CART.count,PRODUCT.productName,PRODUCT.productPrice
+		select CART.productId,CART.cartNum,CART.cusId,CART.count,PRODUCT.productName,PRODUCT.productImg,PRODUCT.productPrice
 		from CART,PRODUCT where CART.cusId = #{cusId} and CART.productId = PRODUCT.productId order by CART.cartNum desc
 </select>
 
@@ -74,6 +74,12 @@ PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
 <delete id="AlldeleteCart" parameterType="int">
 	delete from CART 
 </delete>
+
+<!-- 장바구니 상품 갯수변경 -->
+<update id="cartCountUpdate" parameterType="hashMap">
+	update cart set count = #{count} 
+	where cartNum = #{cartNum}
+</update>
 
 
 </mapper>

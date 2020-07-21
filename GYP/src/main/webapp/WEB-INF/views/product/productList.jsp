@@ -78,37 +78,38 @@
 					<option value="P">필라테스</option>
 					<!-- <option value="prod_price">가격</option> -->
 				</select> <input type="text" name="searchValueWord" class="textField" />
-				<%-- <input type="hidden" value="${prod_category_code2 }" name="prod_category_code2">  --%>
 				<input type="button" value="검 색" class="btn2" onclick="search();" />
 			</form>
 
 			<form action="" method="get" name="orderby" class="form-signin">
-				<c:if test="${empty search}">
+				<c:if test="${empty productType}">
 					<input type="button" value=" 높은가격순"
 						style="float: right; background-color: white; border: 0em; color: #7a7ebf"
-						onclick="javascript:location.href='<%=cp%>/productList.action?type=1&searchValueCategory=${searchValueCategory }&searchValueWord=${searchValueWord }&pageNum=${pageNum }&search=${search }';">
+						onclick="javascript:location.href='<%=cp%>/productList.action?type=1&searchValueCategory=${searchValueCategory }&searchValueWord=${searchValueWord }&pageNum=${pageNum }';">
 					<input type="button" value=" 낮은가격순 |"
 						style="float: right; background-color: white; border: 0em; color: #7a7ebf"
-						onclick="javascript:location.href='<%=cp%>/productList.action?type=2&searchValueCategory=${searchValueCategory }&searchValueWord=${searchValueWord }&pageNum=${pageNum }&search=${search }';">
+						onclick="javascript:location.href='<%=cp%>/productList.action?type=2&searchValueCategory=${searchValueCategory }&searchValueWord=${searchValueWord }&pageNum=${pageNum }';">
 					<input type="button" value="조회수 |"
 						style="float: right; background-color: white; border: 0em; color: #7a7ebf"
-						onclick="javascript:location.href='<%=cp%>/productList.action?type=3&searchValueCategory=${searchValueCategory }&searchValueWord=${searchValueWord }&pageNum=${pageNum }&search=${search }';">
+						onclick="javascript:location.href='<%=cp%>/productList.action?type=3&searchValueCategory=${searchValueCategory }&searchValueWord=${searchValueWord }&pageNum=${pageNum }';">
 				</c:if>
-
-				<c:if test="${!empty search}">
-					<input type="button" value=" 높은가격순"
+				
+				<c:if test="${!empty productType}">
+				<!-- 헬스,필라테스,요가 검색시 -->
+				<input type="button" value=" 높은가격순"
 						style="float: right; background-color: white; border: 0em; color: #7a7ebf"
-						onclick="javascript:location.href='<%=cp%>/productList.action?type=1&searchValueCategory=${searchValueCategory }&searchValueWord=${searchValueWord }&pageNum=${pageNum }&search=${search }';">
+						onclick="javascript:location.href='<%=cp%>/productList.action?type=1&searchValueCategory=${productType }&searchValueWord=${searchValueWord }&pageNum=${pageNum }';">
 					<input type="button" value=" 낮은가격순 |"
 						style="float: right; background-color: white; border: 0em; color: #7a7ebf"
-						onclick="javascript:location.href='<%=cp%>/productList.action?type=2&searchValueCategory=${searchValueCategory }&searchValueWord=${searchValueWord }&pageNum=${pageNum }&search=${search }';">
+						onclick="javascript:location.href='<%=cp%>/productList.action?type=2&searchValueCategory=${productType }&searchValueWord=${searchValueWord }&pageNum=${pageNum }';">
 					<input type="button" value="조회수 |"
 						style="float: right; background-color: white; border: 0em; color: #7a7ebf"
-						onclick="javascript:location.href='<%=cp%>/productList.action?type=3&searchValueCategory=${searchValueCategory }&searchValueWord=${searchValueWord }&pageNum=${pageNum }&search=${search }';">
+						onclick="javascript:location.href='<%=cp%>/productList.action?type=3&searchValueCategory=${productType }&searchValueWord=${searchValueWord }&pageNum=${pageNum }';">
+				
 				</c:if>
+				
 			</form>
 
-			<h1>${search }</h1>
 			<br>
 			<section class="gallery"> 
 			<!-- for문 한칸 --> 

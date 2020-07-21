@@ -1,4 +1,7 @@
 package com.exe.dto;
+
+import java.util.List;
+
 // 체육관 정보 테이블 GYM
 public class GymDTO {
 	private String gymId;		// 체육관 ID
@@ -24,8 +27,16 @@ public class GymDTO {
 	private String[] gymTrainerPicAry;
 	private String[] gymPicAry;
 	private String[] gymFacilityAry;
+	
+	private List<String> gymPicAryList; //map에서 사진 뿌리는 용도
 
 	
+	public List<String> getGymPicAryList() {
+		return gymPicAryList;
+	}
+	public void setGymPicAryList(List<String> gymPicAryList) {
+		this.gymPicAryList = gymPicAryList;
+	}
 	public String getGymId() {
 		return gymId;
 	}
