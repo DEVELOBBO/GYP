@@ -116,7 +116,7 @@
 				<table>
 					<tr height="40">
 						<td width="100">상품 ID</td>
-						<td><input type="text" name=productId value="${dto.productId }" size="35" maxlength="20" class="boxTF"/></td>
+						<td><input type="text" name=productId value="${dto.productId }" size="35" maxlength="20" class="boxTF" disabled="disabled"/></td>
 					</tr>
 					<tr height="40">
 						<td>상품 이름</td>

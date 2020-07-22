@@ -3173,7 +3173,15 @@ public class gypController {
 		
 		return "redirect:/adminProductList.action";
 	}
-
+	
+	@RequestMapping(value = "/adminProductDeleted.action",method = { RequestMethod.GET, RequestMethod.POST })
+	public String productDeleted(HttpServletRequest request) throws Exception {
+		
+		String productId = request.getParameter("productId");
+		dao.productDeleteData(productId);
+		
+		return "redirect:/adminProductList.action";
+	}
 }
 
 

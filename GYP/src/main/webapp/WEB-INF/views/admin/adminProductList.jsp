@@ -71,6 +71,7 @@
 							<td width="250">사진</td>
 							<td width="80">조회수</td>
 							<td width="50">수정</td>
+							<td width="50">삭제</td>
 						</tr>
 						
 						<c:forEach var="dto" items="${lists}">
@@ -84,6 +85,8 @@
 								<td>${dto.productHit }</td>
 								<td><input type="button" value=" 수정 "
 										onclick="javascript:location.href='<%=cp%>/adminProductUpdated.action?pageNum=${pageNum}${params }&productId=${dto.productId}';"/></td>
+								<td><input type="button" value=" 삭제 "
+										onclick="javascript:location.href='<%=cp%>/adminProductDeleted.action?productId=${dto.productId}'"></td>
 							</tr>
 						</c:forEach>
 					</table><br><br>

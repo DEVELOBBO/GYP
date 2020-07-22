@@ -909,8 +909,8 @@ private SqlSessionTemplate sessionTemplate;
 	}
 
 	// 상품 삭제
-	public void productDeleteData(String str) {
-			sessionTemplate.delete("adminProductMapper.deleteData", str);
+	public void productDeleteData(String productId) {
+			sessionTemplate.delete("adminProductMapper.deleteData", productId);
 		}
 
 
