@@ -75,8 +75,8 @@
 
 			<form action="" method="post" name="myForm">
 				<div class="form-group">
-					<input type="" class="form-control" name="cusId" 
-						placeholder="아이디" style="width: 400px;" value="${dto.cusId }" readonly="readonly">
+					<input type="text" class="form-control" name="cusId" 
+						placeholder="아이디" style="width: 400px;" value="${dto.cusId }" >
 				</div>
 				<div class="form-group mb-0">
 					<input type="password" class="form-control" name="cusPwd" 

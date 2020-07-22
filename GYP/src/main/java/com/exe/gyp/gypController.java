@@ -505,7 +505,7 @@ public class gypController {
 		dao.updateData(dto);
 		request.setAttribute("dto", dto);
 
-		return "login/test";
+		return "redirect:/customerMyPage.action";
 	}
 
 	// 유저 정보 수정 (삭제)
@@ -529,15 +529,24 @@ public class gypController {
 		// 세션에 올라온값
 		CustomInfo info = (CustomInfo) session.getAttribute("customInfo");
 
-		GymDTO gymdto = dao.getgymReadData(info);
-		request.setAttribute("gymdto", gymdto);
-		return "myPage/gymUpdate";
+		String mode=null;
+		
+		//세션아이디로 고객정보 디비에서 dto가져옴
+		GymDTO dto = dao.getgymReadData(info);
+		
+		//고객정보가 있으면 mode를 "updated"으로 넘겨준다
+		if(dto!=null) {
+			mode = "updated";
+		}
+		
+		request.setAttribute("mode", mode);
+		request.setAttribute("dto", dto);
+		return "create/createGym";
 	}
 
 	// 체육관 정보 수정 (비밀번호 변경)
 	@RequestMapping(value = "/gymUpdate_ok.action", method = { RequestMethod.GET, RequestMethod.POST })
 	public String gymUpdate_ok(HttpServletRequest request, HttpSession session, GymDTO gymdto) {
-		dao.gymupdateData(gymdto);
 
 		// 캘린더 사용
 		Calendar cal = Calendar.getInstance();
@@ -546,7 +555,8 @@ public class gypController {
 		int nowYear = cal.get(Calendar.YEAR);
 		// 현재 월
 		int nowMonth = cal.get(Calendar.MONTH) + 1;
-
+		
+		dao.gymupdateData(gymdto);
 		request.setAttribute("gymdto", gymdto);
 		return "redirect:/gymMyPage.action?year=" + nowYear + "&month=" + nowMonth;
 	}

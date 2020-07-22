@@ -26,9 +26,12 @@
 
 <script src="http://code.jquery.com/jquery.js"></script>
 
+<!-- 다음 카카오 주소API -->
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+
 <script type="text/javascript">
 
-if(f.mode.value=="updated"){
 		$(function (){
 			//아이디 중복체크
 			    $('#checkbutton1').click(function(){
@@ -59,7 +62,33 @@ if(f.mode.value=="updated"){
 			      
 		
 			});
-}
+
+		//주소 찾기 버튼(Daum카카오 주소API 기반)
+	     function sample6_execDaumPostcode() {
+	         new daum.Postcode({
+	             oncomplete: function(data) {
+	                 // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+	                 // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+	                 // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+	                 var addr = ''; // 주소 변수
+
+	                 //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+	                 if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+	                     addr = data.roadAddress;
+	                 } else { // 사용자가 지번 주소를 선택했을 경우(J)
+	                    addr = data.roadAddress;
+	                     addr = data.jibunAddress;
+	                 }
+
+	                 // 우편번호와 주소 정보를 해당 필드에 넣는다.
+	                 document.getElementById("sample6_address").value = addr;
+	                 // 커서를 상세주소 필드로 이동한다.
+	               //  document.getElementById("sample6_detailAddress").focus();
+	             }
+	         }).open();
+	     }
+	
 
 	function sendIt() {
 		
@@ -188,14 +217,30 @@ if(f.mode.value=="updated"){
 
 	
 	<form action="" name="myForm" method="post">
-	<div id="bbsCreated">
-		<div class="bbsCreated_bottomLine">
-			<label for="cusId">아이디</label>
+	<table align="center" style="font-size: 13pt; color: #888"
+		width="800" cellpadding="0" cellspacing="0" border="0">
+	
+		<tr valign="center">
+			<td colspan="3">
+				<font style="font-size: 20pt; color: black; ">&nbsp;회원가입</font>
+				<hr></td>
+		
+	
+				<dt>아이디</dt>
+				
+				<c:if test="${mode=='updated' }">	
+					<input type="text"  size="74" maxlength="100" class="boxTF"  value="${sessionScope.customInfo.sessionId }"
+					 disabled/>
+					<input type="hidden"  name="cusId" id="cusId" value="${sessionScope.customInfo.sessionId }"/>
+				</c:if>
+					
+				<c:if test="${mode!='updated' }">
 					<input type="text" name="cusId" id="cusId" size="74" maxlength="100" class="boxTF" 
 					value="${sessionScope.customInfo.sessionId }"/>
 					<input type="button" id = "checkbutton1" name = "checkbutton1" value ="체크"/>
 					<input type="hidden" id = "checkcusId" name = "checkcusId" value =""/>
-					
+				</c:if>
+			</dl>		
 					
 		</div>
 		
@@ -247,9 +292,12 @@ if(f.mode.value=="updated"){
 		
 		<div class="bbsCreated_bottomLine">
 			<dl>
-				<dt>주소</dt>
+				<dt>주소(상세주소 추가로 적어주세요^_^)</dt>
 				<dd>
-					<input type="text" name="cusAddr" size="35" maxlength="50" class="boxTF" value="${dto.cusAddr }"/>
+					<input type="text" name="cusAddr" size="35" maxlength="50" 
+					class="boxTF" value="${dto.cusAddr }" id="sample6_address"/>
+					<input type="button" size="35" maxlength="50"
+					class="boxTF" onclick = "sample6_execDaumPostcode();" value="주소 찾기"/>
 				</dd>							
 			</dl>		
 		</div>
@@ -278,13 +326,13 @@ if(f.mode.value=="updated"){
 	     그리고 보루토왜욕하냐 귀여운데 나루토를보는것같다 성격도 닮았어 그리고버루토에 나루토사스케 둘이싸워도 이기는 
 	     신같은존재 나온다는게 사실임?? 그리고인터닛에 쳐봣는디 이거 ㄹㅇㄹㅇ 진짜팩트냐?? 
 	     저적이 보루토에 나오는 신급괴물임?ㅡ 나루토사스케 합체한거봐라 진짜 ㅆㅂ 이거보고 개충격먹어가지고
-	     와 소리 저절로 나오더라 ;;
-	     진짜 저건 개오지는데.. 저게 ㄹㅇ이면 진짜 꼭봐야돼 진짜 세계도 파괴시키는거아니야 .. 와 진짜 
-	     나루토사스케가 저렇게 되다니 
-	     진짜 눈물나려고했다.. 버루토그라서 계속보는중인데 저거 ㄹㅇ이냐..? 하.. ㅆㅂ 사스케 보고싶다..  
-	     진짜언제 이렇게 신급 최강들이 되었을까 옛날생각나고 나 중딩때생각나고 뭔가 슬프기도하고 좋기도하고
-	     감격도하고 
-	     여러가지감정이 복잡하네.. 아무튼 나루토는 진짜 애니중최거명작임..
+	      와 소리 저절로 나오더라 ;;
+	      진짜 저건 개오지는데.. 저게 ㄹㅇ이면 진짜 꼭봐야돼 진짜 세계도 파괴시키는거아니야 .. 와 진짜 
+	      나루토사스케가 저렇게 되다니 
+	      진짜 눈물나려고했다.. 버루토그라서 계속보는중인데 저거 ㄹㅇ이냐..? 하.. ㅆㅂ 사스케 보고싶다..  
+	      진짜언제 이렇게 신급 최강들이 되었을까 옛날생각나고 나 중딩때생각나고 뭔가 슬프기도하고 좋기도하고
+	       감격도하고 
+	      여러가지감정이 복잡하네.. 아무튼 나루토는 진짜 애니중최거명작임..
 		</textarea><br>
 		<input type="checkbox" name="check"> 약관에 동의합니다.
 		</c:if>
@@ -317,7 +365,7 @@ if(f.mode.value=="updated"){
 	<input type="button" value=" 수정하기 " class="btn2" 
 	onclick="sendIt();"/>
 	<input type="button" value=" 작성취소 " class="btn2" 
-	onclick="javascript:location.href='<%=cp%>/list.action';"/>	
+	onclick="javascript:location.href='<%=cp%>/customerMyPage.action';"/>	
 	</div>
 	</c:if>
 	
