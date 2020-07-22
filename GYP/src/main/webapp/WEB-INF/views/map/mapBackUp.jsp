@@ -121,7 +121,7 @@
 
 	$(function() {
 		listPage(1);
-		mapMake("아이티윌","서울 강남구 테헤란로 124");
+		mapMake("아이티윌","서울 강남구 테헤란로 114 5층 201호");
 	});
 	
 	function listPage(page) {

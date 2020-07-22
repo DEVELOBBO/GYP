@@ -63,6 +63,8 @@
                                             <li><a href="/gyp/customerMyPage.action#2">예약 내역</a></li>
                                             <li><a href="/gyp/customerMyPage.action#3">리뷰 목록</a></li>
                                             <li><a href="/gyp/customerMyPage.action#4">찜 목록</a></li>
+                                            <li><a href="/gyp/cart.action">장바구니</a>
+                                            
                                         </ul>
                                     </li></c:if>
                                     
@@ -96,7 +98,7 @@
                                 
                                 <!-- 수업하기 Button -->
                                 <c:if test="${!empty sessionScope.customInfo.sessionId }">
-                                <a href="#" class="fitness-btn menu-btn ml-30" style="min-width: 100px; 
+                                <a href="/gyp/faceLink.action" class="fitness-btn menu-btn ml-30" style="min-width: 100px; 
                                 			margin-left: 20px!important; background: linear-gradient(to right, #38b143, #00B38F); ">
                                 	수업하기</a>
                                 </c:if>

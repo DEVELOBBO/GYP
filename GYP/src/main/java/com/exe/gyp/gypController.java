@@ -1,9 +1,16 @@
 package com.exe.gyp;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.ParseException;
@@ -15,15 +22,17 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,7 +60,15 @@ import com.exe.dto.QnaDTO;
 
 @Controller
 public class gypController {
-
+	
+	/** 샘플 스레드 */
+	@Resource(name = "asyncTaskSample")
+    private AsyncTaskSample asyncTaskSample;
+    
+    /** AsyncConfig (스레드 설정) */
+    @Resource(name = "asyncConfig")
+    private AsyncConfig asyncConfig;
+	
 	@Autowired
 	@Qualifier("gypDAO")
 	GypDAO dao;
@@ -62,6 +79,7 @@ public class gypController {
 	@Autowired
 	MyUtil_Map myUtilMap;
 	
+	int n=0;//스레드에서 쓰임
 	
 	//☆☆☆ 이미지 파일 저장 경로 ☆☆☆ 
 	// - 배포시 war파일로 만들때, 내부 서버의 파일들이 삭제되기에 외부 경로 파일 저장 폴더를 만든다. 
@@ -73,12 +91,18 @@ public class gypController {
 	// - 자세한 설명 참고 사이트:( https://byson.tistory.com/20)
 	String PATH = "D:\\gyp_external_files\\";
 	
-	
 	//*******************최보경*******************
 	
 	//home
 	@RequestMapping(value="/",method = {RequestMethod.GET, RequestMethod.POST})
-	public String home(HttpServletRequest request,HttpSession session) {
+	public String home(HttpServletRequest request,HttpSession session) throws InterruptedException {
+		
+		//처음 메인 시작 시 예약을 체크하는 쓰레드 실행
+		if(this.n==0) {
+			this.n++;
+			startBookCheck();
+		}
+		
 		
 		//세션에 올라온값 받기
 		CustomInfo info = (CustomInfo)session.getAttribute("customInfo");
@@ -180,8 +204,6 @@ public class gypController {
 	}
 	
 	//*******************원도현*******************
-	
-	// *******************원도현*******************
 
 	// 로그인 화면
 	@RequestMapping(value = "/login.action", method = { RequestMethod.GET, RequestMethod.POST })
@@ -586,13 +608,13 @@ public class gypController {
 		String searchValueWord = request.getParameter("searchValueWord"); // 키보드 타이핑한 글자
 		String type = request.getParameter("type");// 정렬타입
 
-		System.out.println("****************");
-		System.out.println("****************");
-		System.out.println("****************");
 		System.out.println(searchValueCategory);
-
-		if (searchValueCategory.equals("H") || searchValueCategory.equals("Y") || searchValueCategory.equals("P")) {
+		
+		//productType 세팅
+		if (searchValueCategory!=null) {
 			productType = searchValueCategory;
+		}else if(searchValueCategory==null) {
+			productType="";
 		}
 
 		// 카테고리 검색 널 처리 + 인코딩 처리
@@ -739,7 +761,6 @@ public class gypController {
 	}
 
 	// 장바구니 추가
-	// 미구현: 장바구니 추가시 로그인 기능 , 중복 추가(방지)
 	@RequestMapping(value = "/productDetail_ok.action", method = { RequestMethod.GET, RequestMethod.POST })
 	public String productDetail_ok(HttpServletRequest request, HttpSession session, CartDTO cartdto) throws Exception {
 
@@ -788,9 +809,7 @@ public class gypController {
 	}
 
 	// 장바구니
-	// 미구현: 로그인 기능 추가해야함 , 가격 총합
 	// cartdto 에 productName,productPrice 추가
-	// 스프링
 	@RequestMapping(value = "/cart.action", method = { RequestMethod.GET, RequestMethod.POST })
 	public String cart(HttpServletRequest request, HttpSession session) throws Exception {
 
@@ -1080,13 +1099,6 @@ public class gypController {
 		}
 		
 		String gymId = request.getParameter("gymId");
-		/*
-		 * String searchKey = request.getParameter("searchKey"); 
-		 * String searchValue = request.getParameter("searchValue");
-		 * 
-		 * if(searchKey != null)
-			searchValue = URLDecoder.decode(searchValue, "UTF-8");
-		 */
 		
 		// 체육관 정보
 		GymDTO gymDto = dao.getGymData(gymId);
@@ -1127,9 +1139,17 @@ public class gypController {
 			
 			int startTime = Integer.parseInt(gymHour.get(i).substring(0,2));
 			int endTime = Integer.parseInt(gymHour.get(i).substring(8,10));
-			
 			for (int j = startTime; j < endTime; j++) {
-				String time = j+":00~"+(j+1)+":00";
+				String time;
+
+				if (j<9) {
+					time = "0" + j+":00~"+ "0" + (j+1)+":00";	// 08:00~09:00
+				} else if(j==9) {
+					time = "0" + j+":00~"+ (j+1)+":00";	// 09:00~10:00
+				} else {
+					time = j+":00~"+(j+1)+":00";	// 10:00~11:00
+				}
+				
 				optionTimes.add(time);
 			}
 			request.setAttribute("optionTimes"+i, optionTimes);
@@ -1148,10 +1168,8 @@ public class gypController {
 		 
 		// 체육관 사진
 		List<String> gymPic = Arrays.asList(gymDto.getGymPic().split(","));
-		
 		// 이용 가능 시설
 		List<String> gymFacility = Arrays.asList(gymDto.getGymFacility().split(","));
-		
 		// request set
 		request.setAttribute("productLists", productLists);
 		request.setAttribute("gymDto", gymDto);
@@ -1192,58 +1210,64 @@ public class gypController {
 		if(info!=null) {
 			request.setAttribute("info", info);
 		}
-		
+      
 		if(gymId==null||gymId.equals("")) {
 			gymId = request.getParameter("gymId");
 		}
-		
+      
 		int numPerPage = 3;
 		int totalPage = 0;
 		int totalDataCount = 0;
-		
+      
 		String pageNum = request.getParameter("pageNum");
-		
+      
 		int currentPage = 1;
-		
+      
 		if(pageNum!=null && pageNum!=""){
 			currentPage = Integer.parseInt(pageNum);
 		} else {
 			pageNum = "1";
 		}
-		
+      
 		//전체 데이터 갯수
 		totalDataCount = dao.getReviewNum(gymId);
-		
-		if(totalDataCount!=0) {
-			totalPage = myUtil.getPageCount(numPerPage, totalDataCount);
+      
+		if(totalDataCount==0) {
+			request.setAttribute("totalDataCount",totalDataCount);
+			return "gymDetail/reviewList";
 		}
-		
+      
+		totalPage = myUtil.getPageCount(numPerPage, totalDataCount);
+      
 		if(currentPage>totalPage) {
 			currentPage = totalPage;
 		}
-		
+      
 		Map<String, Object> hMap = new HashMap<String, Object>();
-		
+      
 		int start = (currentPage-1)*numPerPage+1;
 		int end = currentPage*numPerPage;
-		
+      
 		hMap.put("start", start);
 		hMap.put("end", end);
 		hMap.put("gymId",gymId);
-		
+      
 		List<ReviewDTO> lists = dao.getReviewList(hMap);
-		
+      
 		Iterator<ReviewDTO> it = lists.iterator();
 		//전체 평점 평균
-		int starAvg = dao.getAvgReview(gymId);
-		
+		if(lists!=null) {
+			int starAvg = dao.getAvgReview(gymId);
+			request.setAttribute("starAvg", starAvg);
+		}
+      
 		while(it.hasNext()) {
 			ReviewDTO vo = (ReviewDTO)it.next();
 			vo.setReContent(vo.getReContent().replaceAll("\n", "<br/>"));
 		}
-		
+      
 		String pageIndexList = myUtil.pageIndexList(currentPage, totalPage);
-		
+      
 		if(info!=null) {
 			request.setAttribute("info", info);
 			String cusInfo = info.getSessionId();
@@ -1251,20 +1275,19 @@ public class gypController {
 			//Map<String, Object> hMap = new HashMap<String, Object>();
 			hMap.put("cusId", cusInfo);
 			hMap.put("gymId", gymId);
-			
+         
 			int timesCusBookedGym = dao.getTimesCusBookedGym(hMap);
 			request.setAttribute("timesCusBookedGym", timesCusBookedGym);
 			
 			int timesCusReviewedGym = dao.getTimesCusReviewedGym(hMap);
 			request.setAttribute("timesCusReviewedGym", timesCusReviewedGym);
 		}
-		
-		request.setAttribute("starAvg", starAvg);
+      
 		request.setAttribute("reviewLists", lists);
 		request.setAttribute("pageIndexList",pageIndexList);
-		request.setAttribute("totalDataCount",totalDataCount);
 		request.setAttribute("pageNum",pageNum);
-		
+		request.setAttribute("totalDataCount",totalDataCount);
+      
 		return "gymDetail/reviewList";
 	}
 
@@ -1329,7 +1352,8 @@ public class gypController {
 			response.setContentType("text/html; charset=utf-8");
 			PrintWriter out = response.getWriter();
 			out.println("<script>");
-			out.println("alert('이미 예약된 시간입니다. 다른 시간을 선택해주세요');");
+			out.println("alert('이미 예약된 시간이거나, 동일한 시간대에 예약한 기록이 있습니다.      "
+					+ "다른 시간을 선택해주세요');");
 			out.println("history.back();");
 			out.println("</script>");
 			out.close();
@@ -1502,11 +1526,191 @@ public class gypController {
 			//return "redirect:/login.action";
 		}
 		
-		//System.out.println("payment_ok.action 에 들어옴");
+		System.out.println("payment_ok.action 에 들어옴");
 		
 		return "payment/payment_ok";
 	}
 	
+	//네이버 로그인 (사용자만 가능. 체육관 X)
+		@SuppressWarnings("null")
+		@RequestMapping(value = "/naverLogin_ok.action" , method = {RequestMethod.GET,RequestMethod.POST})
+	public String naverLogin_ok(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception{
+			
+			String clientId = "P84rJHPRvVU6zfXj1ZXD";//애플리케이션 클라이언트 아이디값";
+		    String clientSecret = "Q_VuYrdAQN";//애플리케이션 클라이언트 시크릿값";
+		    String code = request.getParameter("code");
+		    String state = request.getParameter("state");
+		    String redirectURI = URLEncoder.encode("http://192.168.16.25:8000/gyp/naverLogin_ok.action", "UTF-8");
+		    String apiURL;
+		    apiURL = "https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&";
+		    apiURL += "client_id=" + clientId;
+		    apiURL += "&client_secret=" + clientSecret;
+		    apiURL += "&redirect_uri=" + redirectURI;
+		    apiURL += "&code=" + code;
+		    apiURL += "&state=" + state;
+		    String access_token = "";
+		    String refresh_token = "";
+		    //System.out.println("apiURL="+apiURL);
+		    try {
+		      URL url = new URL(apiURL);
+		      HttpURLConnection con = (HttpURLConnection)url.openConnection();
+		      con.setRequestMethod("GET");
+		      int responseCode = con.getResponseCode();
+		      BufferedReader br;
+		      //System.out.println("responseCode="+responseCode);
+		      if(responseCode==200) { // 정상 호출
+		        br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+		      } else {  // 에러 발생
+		        br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+		      }
+		      String inputLine;
+		      StringBuffer res = new StringBuffer();
+		      while ((inputLine = br.readLine()) != null) {
+		        res.append(inputLine);
+		      }
+		      br.close();
+		      if(responseCode==200) {	//정상 로그인 시
+		        //System.out.println("res: " + res.toString());
+		         
+		        JSONParser parsing = new JSONParser();
+		        Object obj = parsing.parse(res.toString());
+		        JSONObject jsonObj = (JSONObject)obj;
+		        
+		    	access_token = (String)jsonObj.get("access_token");
+		    	refresh_token = (String)jsonObj.get("refresh_token");
+		    	
+		    	// 사용자 회원정보 api response parsing
+		        String header = "Bearer " + access_token; // Bearer 다음에 공백 추가
+		        String apiURL2 = "https://openapi.naver.com/v1/nid/me";
+
+		        Map<String, String> requestHeaders = new HashMap<String, String>();
+		        requestHeaders.put("Authorization", header);
+		        String responseBody = get(apiURL2,requestHeaders);
+		        String responsebodyparse = responseBody.substring(responseBody.indexOf("response")+11,responseBody.length()-2);
+		        
+				Map<String, String> naverMap = new HashMap<String, String>();
+				String[] pairs = responsebodyparse.split(","); 
+				
+				for (int i=0;i<pairs.length;i++) { 
+					String pair = pairs[i]; 
+					String[] keyValue = pair.split(":"); 
+					naverMap.put(keyValue[0], String.valueOf(keyValue[1])); 
+				}
+				//System.out.println("naverMap: " + naverMap);
+				 
+		    	String naverId = naverMap.get("\"id\"");
+		    	String naverName = naverMap.get("\"name\"");
+		    		naverName = convertString(naverName);
+		    	String naverEmail = naverMap.get("\"email\"");
+		    	
+		    	// 일반 로그인 처리
+				CustomInfo info = new CustomInfo(); 
+				String sessionId = naverId.replaceAll("\"", "");	// 네이버 식별정보 ID 잘라서 삽입
+				String loginType = "customer"; //customer 인지, gym인지 저장
+				
+				int result = dao.getDataCount(sessionId);//첫 로그인이라면 결과는 0, 이전에 로그인한적 있다면 결과는 1
+				
+				if (result == 0){//유저가 네이버 로그인이 처음이라면 회원 추가하기
+					System.out.println("네이버 회원을 추가합니다. ");
+					// 데이터베이스에 회원 추가하고 
+					CustomerDTO naverCusDto = new CustomerDTO();
+					naverCusDto.setCusId(naverId.replaceAll("\"", ""));
+					naverCusDto.setCusName(naverName.replaceAll("\"", ""));
+					naverCusDto.setCusPwd("naver");
+					naverCusDto.setCusEmail(naverEmail.replaceAll("\"", ""));
+					naverCusDto.setCusTel("naver");
+					naverCusDto.setCusAddr("naver");
+					dao.cusCreated(naverCusDto);
+					System.out.println("데이터베이스에 네이버 회원 추가 완료");
+				}
+				// 로그인이 처음이 아니라면 추가하지 않고 세션에만 올린다. 
+				
+				//세션에 올리기
+				info.setSessionId(sessionId); //세션에 값 입력
+				info.setLoginType(loginType);//로그인 타입(customer, gym )
+				session.setAttribute("customInfo", info); // 세션에 info에 들어가있는정보(userid,username)이 올라간다.
+				System.out.println("로그인 완료");
+				return "home";
+				
+		      }else {  // 에러 발생
+		    	  br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+		    	  System.out.println("로그인 실패 : " + br);
+		    	  return "login/login";
+		      }
+		    } catch (Exception e) {
+		      System.out.println(e);
+		    }
+			return "login/naverLogin_ok";
+			
+		}
+		
+	//네이버 로그인시 필요한 메소드(1)
+	private static String get(String apiUrl, Map<String, String> requestHeaders){
+        HttpURLConnection con = connect(apiUrl);
+        try {
+            con.setRequestMethod("GET");
+            for(Map.Entry<String, String> header :requestHeaders.entrySet()) {
+                con.setRequestProperty(header.getKey(), header.getValue());
+            }
+
+            int responseCode = con.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) { // 정상 호출
+                return readBody(con.getInputStream());
+            } else { // 에러 발생
+                return readBody(con.getErrorStream());
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("API 요청과 응답 실패", e);
+        } finally {
+            con.disconnect();
+        }
+    }
+	
+	//네이버 로그인시 필요한 메소드(2)
+    private static HttpURLConnection connect(String apiUrl){
+        try {
+            URL url = new URL(apiUrl);
+            return (HttpURLConnection)url.openConnection();
+        } catch (MalformedURLException e) {
+            throw new RuntimeException("API URL이 잘못되었습니다. : " + apiUrl, e);
+        } catch (IOException e) {
+            throw new RuntimeException("연결이 실패했습니다. : " + apiUrl, e);
+        }
+    }
+    
+    //네이버 로그인시 필요한 메소드(3)
+    private static String readBody(InputStream body){
+        InputStreamReader streamReader = new InputStreamReader(body);
+        
+        try{
+        	BufferedReader lineReader = new BufferedReader(streamReader);
+            StringBuilder responseBody = new StringBuilder();
+
+            String line;
+            while ((line = lineReader.readLine()) != null) {
+                responseBody.append(line);
+            }
+
+            return responseBody.toString();
+        } catch (IOException e) {
+            throw new RuntimeException("API 응답을 읽는데 실패했습니다.", e);
+        }
+    }
+	
+    // 유니코드에서 String으로 변환
+	public static String convertString(String val) {
+	    	StringBuffer sb = new StringBuffer();
+	    	for (int i = 0; i < val.length(); i++) {
+	    	if ('\\' == val.charAt(i) && 'u' == val.charAt(i + 1)) {
+	    	Character r = (char) Integer.parseInt(val.substring(i + 2, i + 6), 16);
+	    	sb.append(r);
+	    	i += 5;
+	    	} else {
+	    	sb.append(val.charAt(i));
+	    	}
+	    	}
+	    	return sb.toString();
+		}
 	
 	
 	//*******************서예지*******************
@@ -2279,7 +2483,6 @@ public class gypController {
 			return str;
 		}
 
-	
 	//체육관회원 아이디 중복체크
 		@RequestMapping(value = "/gymIdck", method = RequestMethod.POST)
 	public @ResponseBody String AjaxView2(  
@@ -2298,9 +2501,10 @@ public class gypController {
 			return str;
 		}
 	
+	
 	//*******************경기민*******************
 	
-	//제휴시설 찾기로 이동 (맨 첫화면만)
+	//제휴시설 찾기로 이동 (첫화면만)
 	@RequestMapping(value = "/map.action", method = { RequestMethod.GET, RequestMethod.POST })
 	public String map(HttpServletRequest req) throws Exception {
 		String sessionId = "";
@@ -2319,6 +2523,7 @@ public class gypController {
 		if(req.getParameter("searchValue")!=null) {
 			searchValue = req.getParameter("searchValue");
 		}
+		
 		//체육관 리스트
 		List<GymDTO> lists = dao.getMapList(1, 10000, searchKey, searchValue);
 		
@@ -2326,6 +2531,7 @@ public class gypController {
 		for(GymDTO eachGym : lists) {
 			List<String> subPic = new ArrayList<String>(Arrays.asList(eachGym.getGymPic().split(",")));
 			eachGym.setGymPicAryList(subPic);
+			System.out.println(subPic.get(0));
 		}
 		
 		req.setAttribute("lists", lists);
@@ -2335,7 +2541,7 @@ public class gypController {
 		req.setAttribute("sessionId", sessionId);
 		req.setAttribute("cusAddrGoo", cusAddrGoo);
 		
-		return "map/map";
+		return "map/mapBackUp";
 	}
 
 	//페이징 처리 + 제휴시설 리스트 가져오기
@@ -2398,7 +2604,6 @@ public class gypController {
 		String searchGymAddrUrl = cp + "/map.action?searchGymAddr=";
 		
 		
-		
 		req.setAttribute("searchGymAddr", searchGymAddr);
 		req.setAttribute("lists", lists);
 		req.setAttribute("ajaxPageIndexList", ajaxPageIndexList);
@@ -2430,6 +2635,8 @@ public class gypController {
 		if(searchValue.equals("")) {
 			searchKey = "gymName";
 		}
+		
+		//체육관리스트
 		List<GymDTO> lists = dao.getMapList(1, 10000, searchKey, searchValue);
 		
 		//체육관 이미지
@@ -2503,7 +2710,31 @@ public class gypController {
 
 		return "map/map_ok";
 	}
+	
+	//수업링크 나올 화면
+	@RequestMapping(value = "/faceLink.action", method = { RequestMethod.GET, RequestMethod.POST })
+	public String faceLink(HttpServletRequest req) throws Exception {
 
+		CustomInfo info=null;
+		BookDTO dto=null;
+		HttpSession httpSession = req.getSession(true);		
+		if(httpSession.getAttribute("customInfo")==null) {
+			return "login/login";
+		}else {
+			info = (CustomInfo)httpSession.getAttribute("customInfo");
+		}
+		dto = dao.getOnlineBookSearch(info);
+			
+		req.setAttribute("dto", dto);
+			
+		return "faceLink/faceLink";
+	}
+	
+	//예약확인 스레드
+	public void startBookCheck() throws InterruptedException {
+		asyncTaskSample.logger(this.dao);
+	}
+	
 	
 	//*******************최원식*******************
 	
@@ -2721,13 +2952,12 @@ public class gypController {
 
 		String cp = request.getContextPath();
 		String pageNum = request.getParameter("pageNum");
-		int currentPage = 1;
-
-		if (pageNum != null)
-			currentPage = Integer.parseInt(pageNum);
-
 		String searchKey = request.getParameter("searchKey");
 		String searchValue = request.getParameter("searchValue");
+		int currentPage = 1;
+
+		if (pageNum != null && !pageNum.equals(""))
+			currentPage = Integer.parseInt(pageNum);
 
 		if (searchValue == null) {//아무것도 없이 검색만 눌럿을떄
 			searchKey = "productId";
@@ -2753,25 +2983,27 @@ public class gypController {
 		List<ProductDTO> lists = dao.productGetList(start, end, searchKey, searchValue);
 
 		//파람 생성
-		String param = "";
+		String params = "";
 		if (!searchValue.equals("")) {
-			param = "searchKey=" + searchKey;
-			param += "&searchValue=" + URLEncoder.encode(searchValue, "UTF-8");
+			params = "&searchKey=" + searchKey;
+			params += "&searchValue=" + URLEncoder.encode(searchValue, "UTF-8");
 		}
 		
 		//pageIndexList생성
 		String listUrl = cp + "/adminProductList.action";
-		if (!param.equals("")) {
-			listUrl = listUrl + "?" + param;
+		if (!params.equals("")) {
+			listUrl = listUrl + "?" + params;
 		}
 
 		String pageIndexList = myUtil.pageIndexList(currentPage, totalPage, listUrl);
 		
 		//이미지 path
-		String imgPath = cp + "/resources/img/test";;
+		String imgPath = "/gyp/sfiles/product/";
 
 		//request set
+		request.setAttribute("pageNum", currentPage);
 		request.setAttribute("lists", lists);
+		request.setAttribute("params", params);
 		request.setAttribute("pageIndexList", pageIndexList);
 		request.setAttribute("dataCount", dataCount);
 		request.setAttribute("pageNum", pageNum);
@@ -2781,11 +3013,10 @@ public class gypController {
 	}
 
 	//상품 입력 페이지로 이동
-	@RequestMapping(value = "/adminProductCreated.action")
-	public ModelAndView productCreated() {
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName("admin/adminProductCreated");
-		return mav;
+	@RequestMapping(value = "/adminProductCreated.action", method = { RequestMethod.GET, RequestMethod.POST })
+	public String productCreated(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		return "admin/adminProductCreated";
 	}
 
 	//상품 입력 (등록)
@@ -2806,29 +3037,8 @@ public class gypController {
 				+Integer.toString(hour)
 				+Integer.toString(min);
 
-		//경로생성	
-		//만약 성공하면
-		//종완이 부분도 고쳐야함
-		
-		
-		/*
-		 * Resource resource =
-		 * ResourceLoader.getResource("file:webapp/resources/images");
-		 * 
-		 * String cp = request.getContextPath();
-		 */
-		
-		/*String path = cp;
-		path += "/WEB-INF/views/admin/";
-		path += "src\\main\\webapp\\resources\\product\\"; 
-		System.out.println(path);*/
-		
-		
-		
-		/*File dir = new File(path);
-		if(!dir.exists()) {
-			dir.mkdir();//경로 체크 후, 없으면 생성
-		}
+		//이미지 path (Controller최상단 PATH)
+		String imgPath = PATH + "product\\";
 		
 		//html의 productImg 가져와서 객체 생성
 		MultipartFile upload = multiReq.getFile("upload");
@@ -2844,8 +3054,7 @@ public class gypController {
 						+"_"+ nowTime + upload.getOriginalFilename().substring(dotStart);		
 				
 				//fs 생성 및 저장
-				FileOutputStream fs = new FileOutputStream(path + newProductImgName); 
-				System.out.println(path + newProductImgName);
+				FileOutputStream fs = new FileOutputStream(imgPath + newProductImgName); 
 				fs.write(upload.getBytes());
 				fs.close();
 				
@@ -2854,10 +3063,10 @@ public class gypController {
 			}
 		} catch (Exception e) {
 			e.toString();
-		}*/
+		}
 		
-		//넘어온 dto를 dao에 넘김 
-		//dao.productInsertData(dto);
+		//디비삽입
+		dao.productInsertData(dto);
 		
 		return "redirect:/adminProductList.action";
 	}
@@ -2865,41 +3074,105 @@ public class gypController {
 	//상품 수정 페이지로 이동
 	@RequestMapping(value = "/adminProductUpdated.action",
 			method = { RequestMethod.GET, RequestMethod.POST })
-
 	public String productUpdated(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-		String cp = request.getContextPath();
 		String productId = request.getParameter("productId");
 		String pageNum = request.getParameter("pageNum");
-
+		String searchKey = request.getParameter("searchKey");
+		String searchValue = request.getParameter("searchValue");
+		String mode = "update";
+		
+		
+		System.out.println(pageNum);
+		System.out.println(searchKey);
+		System.out.println(searchValue);
+		
+		
+		//상품 DTO 가져오기
 		ProductDTO dto = dao.productGetReadData(productId);
 		
 		if (dto == null) {
-
 			return "redirect:/adminProductList.action";
-
 		}
-
+		
+		//기존 상품 이미지 이름
+		String oldImageName = dto.getProductImg();
+		
+		//파람 생성
+		String params = "";
+		if (searchValue!=null) {
+			params = "&searchKey=" + searchKey;
+			params += "&searchValue=" + URLEncoder.encode(searchValue, "UTF-8");
+		}
+		
+		request.setAttribute("pageNum", pageNum);
+		request.setAttribute("params", params);
+		request.setAttribute("oldImageName", oldImageName);
+		request.setAttribute("mode", mode);
 		request.setAttribute("dto", dto);
 		request.setAttribute("pageNum", pageNum);
 
-		return "admin/adminProductUpdated";
-
+		return "admin/adminProductCreated";
 	}
 
 	//상품 수정 반영
-	@RequestMapping(value = "/adminProductUpdated_ok.action",		//productUpdated_ok.action
-			method = { RequestMethod.GET, RequestMethod.POST })
-
-	public String productUpdated_ok(ProductDTO dto, HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-			String pageNum = request.getParameter("pageNum");
-
-			dao.productUpdateData(dto);
-
-			return "redirect:/adminProductList.action";
-
+	@RequestMapping(value = "/adminProductUpdated_ok.action",method = { RequestMethod.GET, RequestMethod.POST })
+	public String productUpdated_ok(ProductDTO dto, HttpServletRequest request, 
+			HttpServletResponse response, MultipartHttpServletRequest multiReq) throws Exception {
+		
+		String oldImageName = request.getParameter("oldImageName");
+		
+		//날짜생성용 객체
+		Calendar cal = Calendar.getInstance();
+		int year = cal.get(Calendar.YEAR);
+		int month = cal.get(Calendar.MONTH) + 1;
+		int day = cal.get(Calendar.DATE);
+		int hour = cal.get(Calendar.HOUR_OF_DAY);
+		int min = cal.get(Calendar.MINUTE);
+		String nowTime = Integer.toString(year)
+				+Integer.toString(month)
+				+Integer.toString(day)
+				+Integer.toString(hour)
+				+Integer.toString(min);
+		
+		//이미지 path (Controller최상단 PATH)
+		String imgPath = PATH + "product\\";
+		
+		//html의 productImg 가져와서 객체 생성
+		MultipartFile upload = multiReq.getFile("upload");
+		
+		try {//파일 이름이 null이 아니면 (즉, 파일업로드가 존재하면)
+			if(!upload.getOriginalFilename().equals("")) { 
+				
+				//확장자 위치 구하기
+				int dotStart = upload.getOriginalFilename().indexOf(".");
+				
+				//원래 파일이름_202007171530.jpg
+				String newProductImgName = upload.getOriginalFilename().substring(0, dotStart) 
+						+"_"+ nowTime + upload.getOriginalFilename().substring(dotStart);		
+				
+				//fs 생성 및 저장
+				FileOutputStream fs = new FileOutputStream(imgPath + newProductImgName); 
+				fs.write(upload.getBytes());
+				fs.close();
+				
+				//기존 파일 지우기
+				File deleteImage = new File(imgPath + oldImageName);
+				deleteImage.delete();
+				
+				
+				//dto에 덮어씌우기
+				dto.setProductImg(newProductImgName);
+			}
+		} catch (Exception e) {
+			e.toString();
 		}
+		
+		//수정
+		dao.productUpdateData(dto);
+		
+		return "redirect:/adminProductList.action";
+	}
 
 }
 

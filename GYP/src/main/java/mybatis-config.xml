@@ -23,7 +23,6 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<mapper resource="com/exe/mybatis/cartMapper.xml"/>
 		
 		
-		
 		<!-- ********************김세이*********************** -->
 		<!-- 체육관 상세 Mapper 추가 -->
 		<mapper resource="com/exe/mybatis/gymDetailMapper.xml"/>
@@ -48,6 +47,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		
 		<!-- ********************경기민*********************** -->
 		<mapper resource="com/exe/mybatis/mapMapper.xml"/>
+		<mapper resource="com/exe/mybatis/bookCheckMapper.xml"/>
 		
 		
 		<!-- ********************최원식*********************** -->

@@ -702,6 +702,40 @@ private SqlSessionTemplate sessionTemplate;
 		return dto;
 	}
 	
+	// 온라인 예약 5분 전인 계정들 조회
+	public List<BookDTO> getFiveBookIdList(){
+		List<BookDTO> lists = sessionTemplate.selectList("bookCheckMapper.getFiveBookIdList");
+		return lists;
+	}
+	
+	// 온라인 예약 1시간 후인 계정들 조회
+	public List<BookDTO> getOneHourIdList(){
+		List<BookDTO> lists = sessionTemplate.selectList("bookCheckMapper.getOneHourIdList");
+		return lists;
+	}
+	
+	// FACE LINK 삭제
+	public void delFaceLink(int bookNum){
+		sessionTemplate.delete("bookCheckMapper.delFaceLink", bookNum);
+		System.out.println(Integer.toString(bookNum) + "번의 FaceLink가 삭제됐습니다.");
+	}
+	
+	// FACE LINK 생성
+	public void setFaceLink(String faceLink,int bookNum){
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("faceLink", faceLink);
+		params.put("bookNum", bookNum);
+		sessionTemplate.update("bookCheckMapper.setFaceLink", params);
+		System.out.println(Integer.toString(bookNum) + "번의 FaceLink : " + faceLink + "가 생성됐습니다.");
+	}
+	
+	// SessionID로 온라인 예약 검색 
+	public BookDTO getOnlineBookSearch(CustomInfo info){
+		BookDTO dto = sessionTemplate.selectOne("bookCheckMapper.getOnlineBookSearch",info);
+		return dto;
+	}
+
+	
 	// *******************최원식*******************
 
 	// 체육관 리스트 갯수

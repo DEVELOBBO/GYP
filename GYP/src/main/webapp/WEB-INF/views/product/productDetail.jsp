@@ -148,6 +148,7 @@ function deleteData(productId,reNum){	//리뷰삭제
 	<jsp:include page="/WEB-INF/views/layout/header_over.jsp" />
 	<jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
 	
+	<a href="/gyp/cart.action">장바구니 바로가기</a>
 	
 	<div class="col-12">
     	<div class="single-blog-post mb-100 gymDetailHeadLine">
