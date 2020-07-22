@@ -64,8 +64,8 @@ private SqlSessionTemplate sessionTemplate;
 	}
 
 	// 회원정보 불러오기 (체육관)
-	public GymDTO getgymReadData(CustomInfo info) {
-		GymDTO dto = sessionTemplate.selectOne("gymMapper.getgymReadData", info);
+	public GymDTO getgymReadData(String sessionId) {
+		GymDTO dto = sessionTemplate.selectOne("gymMapper.getgymReadData", sessionId);
 		return dto;
 	}
 

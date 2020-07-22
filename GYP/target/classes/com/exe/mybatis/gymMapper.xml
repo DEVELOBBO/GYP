@@ -7,8 +7,8 @@ PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
 <mapper namespace="gymMapper">
 
 <!-- 체육관 회원 데이터 불러오기 -->
-<select id="getgymReadData" parameterType="hashMap" resultType="com.exe.dto.GymDTO"> 
-	select gymId,gymType,gymName,gymPwd,gymEmail,gymTel,gymAddr,gymCreated,gymPass,gymProgram,gymFacility from GYM where gymId=#{sessionId}
+<select id="getgymReadData" parameterType="String" resultType="com.exe.dto.GymDTO"> 
+	select gymId,gymType,gymName,gymPwd,gymEmail,gymTel,gymAddr,gymCreated,gymPass,gymProgram,gymFacility,gymPic,gymTrainerPic,gymTrainer from GYM where gymId=#{sessionId}
 </select>
 
 <!-- 회원정보 수정(비밀번호) -->

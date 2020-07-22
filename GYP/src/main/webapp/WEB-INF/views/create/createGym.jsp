@@ -383,24 +383,20 @@ GymDTO dto = (GymDTO)request.getAttribute("dto");
 	<jsp:include page="/WEB-INF/views/layout/header_over.jsp" />
 	<jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
 	
-<c:if test="${mode!='updated' }">
-	
-		
+	<c:if test="${mode!='updated' }">
 		<div class="section-heading">
 		<h6>Fitness Gym</h6>
 		<h4>체육관 회원가입창★</h4>
 		</div>
-</c:if>
+	</c:if>
 
-
-
-
-<c:if test="${mode=='updated' }">
+	<c:if test="${mode=='updated' }">
 		<div class="section-heading">
 		<h6>Fitness Gym</h6>
 		<h4>체육관 정보 수정창★</h4>
 		</div>
-</c:if>
+	</c:if>
+	
 		<form action="" name="myForm" method="post" enctype="multipart/form-data">
 			
 			<div class="form-group">	
@@ -517,14 +513,10 @@ GymDTO dto = (GymDTO)request.getAttribute("dto");
 							 <input type="radio" value="필라테스"  name="gymType" >필라테스</input>
 							 </c:if>
 							 
-							 
-							 
 							 <%-- <% if(dto.gymType.equals("필라테스")){%>checked<%}%>>필라테스</input> --%>
 						 	 
 							<%-- <input type="radio" value="필라테스" name="gymType"  <c:if test="${'dto.gymType ' eq '필라테스'}">checked</c:if>>
 							필라테스</input> --%>
-						  
-				
 						</dd>
 					</dl>
 				</div>
@@ -537,8 +529,8 @@ GymDTO dto = (GymDTO)request.getAttribute("dto");
 						<dt>체육관 유형</dt>
 						<dd>
 							<input type="radio" value="헬스" name="gymType" />헬스
-							 <input type="radio" value="요가" name="gymType" />요가 
-							 <input type="radio" value="필라테스" name="gymType" />필라테스
+							<input type="radio" value="요가" name="gymType" />요가 
+							<input type="radio" value="필라테스" name="gymType" />필라테스
 						</dd>
 					</dl>
 				</div>
@@ -546,47 +538,116 @@ GymDTO dto = (GymDTO)request.getAttribute("dto");
 				<div class="bbsCreated_bottomLine">
 					<dl>
 						<dt>
-							트레이너 등록<font size='1'>(최소1명 이상)</font>
+							<c:if test="${mode!='updated' }">
+								트레이너 등록&nbsp;<font size='1'>(최소1명 이상)</font>
+							</c:if>	
+							
+							<c:if test="${mode=='updated' }">
+								트레이너 수정&nbsp;<font size='1'>(최소1명 이상)</font>	
+							</c:if>
 						</dt>
+	
+						
+						<!-- 회원가입일때 -->
+						<c:if test="${mode!='updated' }">
 						<dd>
-							<input type="text" name="gymTrainer1" class="boxTF"
-								placeholder='트레이너명을 입력하세요.' /> <input type="file" name="upload"
-								class="boxTF" />
+							*트레이너 이름 : <input type="text" name="gymTrainer1" class="boxTF" size="10"> &nbsp;&nbsp;&nbsp;
+							*트레이너 사진 : <input type="file" name="upload"/>
 						</dd>
 						<dd>
-							<input type="text" name="gymTrainer2" class="boxTF"
-								placeholder='트레이너명을 입력하세요.' /> <input type="file" name="upload"
-								class="boxTF" />
+							*트레이너 이름 : <input type="text" name="gymTrainer2" class="boxTF" size="10"> &nbsp;&nbsp;&nbsp;
+							*트레이너 사진 : <input type="file" name="upload"/>
 						</dd>
 						<dd>
-							<input type="text" name="gymTrainer3" class="boxTF"
-								placeholder='트레이너명을 입력하세요.' /> <input type="file" name="upload"
-								class="boxTF" />
+							*트레이너 이름 : <input type="text" name="gymTrainer3" class="boxTF" size="10"> &nbsp;&nbsp;&nbsp;
+							*트레이너 사진 : <input type="file" name="upload"/>
 						</dd>
 						<dd>
-							<input type="text" name="gymTrainer4" class="boxTF"
-								placeholder='트레이너명을 입력하세요.' /> <input type="file" name="upload"
-								class="boxTF" />
+							*트레이너 이름 : <input type="text" name="gymTrainer4" class="boxTF" size="10"> &nbsp;&nbsp;&nbsp;
+							*트레이너 사진 : <input type="file" name="upload"/>
 						</dd>
+						</c:if>
+							
+						<!-- 수정일때, 기존 이미지들의 이름 출력 -->
+						<c:if test="${mode=='updated' }">
+						<dd>
+							*트레이너 이름 : <input type="text" name="trainerName1" value="${trainerName1 }"size="25" maxlength="7" />
+							*기존 사진 : <input type="text" name="oldTrainerImage1" value="${oldTrainerImage1}" size="25" maxlength="20" 
+								class="boxTF" disabled="disabled"/>&nbsp;&nbsp;&nbsp;
+							*수정 또는 추가할 사진 : <input type="file" name="upload" class="boxTF" />
+						</dd>	
+						<dd>
+							*트레이너 이름 : <input type="text" name="trainerName2" value="${trainerName2 }"size="25" maxlength="7" />
+							*기존 사진 : <input type="text" name="oldTrainerImage2"  value="${oldTrainerImage2}" size="25" maxlength="20" 
+								class="boxTF" disabled="disabled"/>&nbsp;&nbsp;&nbsp;
+							*수정 또는 추가할 사진 : <input type="file" name="upload" class="boxTF" />
+						</dd>	
+						<dd>
+							*트레이너 이름 : <input type="text" name="trainerName3" value="${trainerName3 }"size="25" maxlength="7" />
+							*기존 사진 : <input type="text" name="oldTrainerImage3" value="${oldTrainerImage3}" size="25" maxlength="20" 
+								class="boxTF" disabled="disabled"/>&nbsp;&nbsp;&nbsp;
+							*수정 또는 추가할 사진 : <input type="file" name="upload" class="boxTF" />
+						</dd>	
+						<dd>
+							*트레이너 이름 : <input type="text" name="trainerName4" value="${trainerName4 }"size="25" maxlength="7" />
+							*기존 사진 : <input type="text" name="oldTrainerImage4"  value="${oldTrainerImage4}" size="25" maxlength="20" 
+								class="boxTF" disabled="disabled"/>&nbsp;&nbsp;&nbsp;
+							*수정 또는 추가할 사진 : <input type="file" name="upload" class="boxTF" />
+						</dd>						
+						</c:if>
 					</dl>
 				</div>
 
 				<div class="bbsCreated_bottomLine">
-					<dl>
-						<dt>체육관 사진 등록</dt>
-						<dd>
-							<input type="file" name="upload2" class="boxTF" />
-						</dd>
-						<dd>
-							<input type="file" name="upload2" class="boxTF" />
-						</dd>
-						<dd>
-							<input type="file" name="upload2" class="boxTF" />
-						</dd>
-						<dd>
-							<input type="file" name="upload2" class="boxTF" />
-						</dd>
-					</dl>
+					
+					<!-- 회원가입일때 -->
+					<c:if test="${mode!='updated' }">
+						<dl>
+							<dt>체육관 사진 등록</dt>
+							<dd>
+								<input type="file" name="upload2" class="boxTF" />
+							</dd>
+							<dd>
+								<input type="file" name="upload2" class="boxTF" />
+							</dd>
+							<dd>
+								<input type="file" name="upload2" class="boxTF" />
+							</dd>
+							<dd>
+								<input type="file" name="upload2" class="boxTF" />
+							</dd>
+						</dl>
+					</c:if>
+					
+					<!-- 수정일때 -->
+					<c:if test="${mode=='updated' }">
+						<dl>
+							<dt>체육관 사진 수정</dt>
+							<dd>
+								기존 사진 : <input type="text" name="oldGymImage1" value="${oldGymImage1}" size="25" maxlength="20" 
+									class="boxTF" disabled="disabled"/>&nbsp;&nbsp;&nbsp;     
+								수정할 사진 : <input type="file" name="upload2" class="boxTF" />
+							</dd>
+							<dd>
+								기존 사진 : <input type="text" name="oldGymImage2" value="${oldGymImage1}" size="25" maxlength="20" 
+									class="boxTF" disabled="disabled"/>&nbsp;&nbsp;&nbsp;     
+								수정할 사진 : <input type="file" name="upload2" class="boxTF" />
+							</dd>
+							<dd>
+								기존 사진 : <input type="text" name="oldGymImage3" value="${oldGymImage1}" size="25" maxlength="20" 
+									class="boxTF" disabled="disabled"/>&nbsp;&nbsp;&nbsp;     
+								수정할 사진 : <input type="file" name="upload2" class="boxTF" />
+							</dd>
+							<dd>
+								기존 사진 : <input type="text" name="oldGymImage4" value="${oldGymImage1}" size="25" maxlength="20" 
+									class="boxTF" disabled="disabled"/>&nbsp;&nbsp;&nbsp;     
+								수정할 사진 : <input type="file" name="upload2" class="boxTF" />
+							</dd>
+						</dl>
+					</c:if>
+					
+					
+					
 				</div>
 
 				<div class="bbsCreated_bottomLine">

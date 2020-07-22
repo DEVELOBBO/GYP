@@ -426,7 +426,7 @@ public class gypController {
 		}
 
 		// 체육관 정보
-		GymDTO gymdto = dao.getgymReadData(info);
+		GymDTO gymdto = dao.getgymReadData(info.getSessionId());
 
 		// 데이터 넘겨주기
 		Map<String, Object> hMap = new HashMap<String, Object>();
@@ -523,7 +523,7 @@ public class gypController {
 		return "login/login";
 	}
 
-	// 체육관 수정창
+	// 체육관 수정창 (채종완)
 	@RequestMapping(value = "/gymUpdate.action", method = { RequestMethod.GET, RequestMethod.POST })
 	public String gymUpdate(HttpServletRequest request, HttpSession session) {
 		// 세션에 올라온값
@@ -532,19 +532,53 @@ public class gypController {
 		String mode=null;
 		
 		//세션아이디로 고객정보 디비에서 dto가져옴
-		GymDTO dto = dao.getgymReadData(info);
+		GymDTO dto = dao.getgymReadData(info.getSessionId());
+		
+		//기존 트레이너명 뿌릴 준비
+		List<String> gymTrainerLists = Arrays.asList(dto.getGymTrainer().split(","));
+		String trainerName1 = gymTrainerLists.get(0);
+		String trainerName2 = gymTrainerLists.get(1);
+		String trainerName3 = gymTrainerLists.get(2);
+		String trainerName4 = gymTrainerLists.get(3);
+		
+		//기존 트레이너 사진명 뿌릴 준비
+		List<String> gymTrainerPicLists = Arrays.asList(dto.getGymTrainerPic().split(","));
+		String oldTrainerImage1 = gymTrainerPicLists.get(0);
+		String oldTrainerImage2 = gymTrainerPicLists.get(1);
+		String oldTrainerImage3 = gymTrainerPicLists.get(2);
+		String oldTrainerImage4 = gymTrainerPicLists.get(3);
+		
+		//기존 체육관 사진명 뿌릴 준비
+		List<String> gymPicLists = Arrays.asList(dto.getGymPic().split(","));
+		String oldGymImage1 = gymPicLists.get(0);
+		String oldGymImage2 = gymPicLists.get(1);
+		String oldGymImage3 = gymPicLists.get(2);
+		String oldGymImage4 = gymPicLists.get(3);
+		
 		
 		//고객정보가 있으면 mode를 "updated"으로 넘겨준다
 		if(dto!=null) {
 			mode = "updated";
 		}
 		
+		request.setAttribute("trainerName1", trainerName1);
+		request.setAttribute("trainerName2", trainerName2);
+		request.setAttribute("trainerName3", trainerName3);
+		request.setAttribute("trainerName4", trainerName4);
+		request.setAttribute("oldTrainerImage1", oldTrainerImage1);
+		request.setAttribute("oldTrainerImage2", oldTrainerImage2);
+		request.setAttribute("oldTrainerImage3", oldTrainerImage3);
+		request.setAttribute("oldTrainerImage4", oldTrainerImage4);
+		request.setAttribute("oldGymImage1", oldGymImage1);
+		request.setAttribute("oldGymImage2", oldGymImage2);
+		request.setAttribute("oldGymImage3", oldGymImage3);
+		request.setAttribute("oldGymImage4", oldGymImage4);
 		request.setAttribute("mode", mode);
 		request.setAttribute("dto", dto);
 		return "create/createGym";
 	}
 
-	// 체육관 정보 수정 (비밀번호 변경)
+	// 체육관 정보 수정 (비밀번호 변경) (채종완)
 	@RequestMapping(value = "/gymUpdate_ok.action", method = { RequestMethod.GET, RequestMethod.POST })
 	public String gymUpdate_ok(HttpServletRequest request, HttpSession session, GymDTO gymdto) {
 
@@ -561,7 +595,7 @@ public class gypController {
 		return "redirect:/gymMyPage.action?year=" + nowYear + "&month=" + nowMonth;
 	}
 
-	// 체육관 정보 수정 (삭제)
+	// 체육관 정보 수정 (삭제) (채종완)
 	@RequestMapping(value = "/gymDeleted_ok.action", method = { RequestMethod.GET, RequestMethod.POST })
 	public String gymDeleted_ok(HttpServletRequest request, GymDTO dto, HttpSession session) {
 		dao.gymdeleteData(dto);
@@ -2457,7 +2491,6 @@ public class gypController {
  		return "redirect:/login.action";
 			 	
 	}
-	
 	
 	/*
 	//개인회원 아이디 중복체크
