@@ -26,7 +26,6 @@ private SqlSessionTemplate sessionTemplate;
 		this.sessionTemplate = sessionTemplate; 
 	}
 	
-	
 	// *******************원도현*******************
 
 	// 일반유저 로그인
@@ -54,7 +53,7 @@ private SqlSessionTemplate sessionTemplate;
 
 	// 회원정보 수정(체육관)
 	public void gymupdateData(GymDTO gymdto) {
-		sessionTemplate.update("gymMapper.gymupdateData", gymdto);
+		sessionTemplate.update("gymMapper.gymUpdateData", gymdto);
 	}
 
 	// 회원정보 불러오기 (유저)

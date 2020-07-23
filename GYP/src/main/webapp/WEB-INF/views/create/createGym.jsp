@@ -201,14 +201,17 @@ GymDTO dto = (GymDTO)request.getAttribute("dto");
 		
 		
 		 */
-
-		if (!cc1.test(f.gymId.value)) {
-
-			alert('아이디 영문소문자/숫자 4~16자 이내로 입력하세요.');
-
-			f.gymId.focus();
-
-			return false;
+		//수정일때는 아이디 검사 안하는 것으로
+		
+		if (f.mode.value != 'updated') {
+			if (!cc1.test(f.gymId.value)) {
+	
+				alert('아이디 영문소문자/숫자 4~16자 이내로 입력하세요.');
+	
+				f.gymId.focus();
+	
+				return false;
+			}
 		}
 
 		if (f.mode.value != 'updated') {
@@ -281,62 +284,67 @@ GymDTO dto = (GymDTO)request.getAttribute("dto");
 			f.gymType.focus();
 			return;
 		}
-
-		//트레이너명,트레이너사진 업로드 유효성 검사! , 최소 1명이상 등록하라고 alert띄움
-		if (f.gymTrainer1.value != "" && uploads[0].value == "") {
-			alert("1번째 트레이너 사진을 입력해주세요!");
-			f.gymTrainer1.focus();
-			return;
+		
+		//처음 회원가입할때
+		if (f.mode.value != 'updated') {
+			//트레이너명,트레이너사진 업로드 유효성 검사! , 최소 1명이상 등록하라고 alert띄움
+			if (f.gymTrainer1.value != "" && uploads[0].value == "") {
+				alert("1번째 트레이너 사진을 입력해주세요!");
+				f.gymTrainer1.focus();
+				return;
+			}
+			if (f.gymTrainer1.value == "" && uploads[0].value != "") {
+				alert("1번째 트레이너명을 입력하세요 (최소1명 이상).");
+				f.gymTrainer1.focus();
+				return;
+			}
+			if (f.gymTrainer2.value != "" && uploads[1].value == "") {
+				alert("2번째 트레이너 사진을 입력해주세요!");
+				f.gymTrainer2.focus();
+				return;
+			}
+			if (f.gymTrainer2.value == "" && uploads[1].value != "") {
+				alert("2번째 트레이너명을 입력하세요 (최소1명 이상).");
+				f.gymTrainer2.focus();
+				return;
+			}
+			if (f.gymTrainer3.value != "" && uploads[2].value == "") {
+				alert("3번째 트레이너 사진을 입력해주세요!");
+				f.gymTrainer3.focus();
+				return;
+			}
+			if (f.gymTrainer3.value == "" && uploads[2].value != "") {
+				alert("3번째트레이너명을 입력하세요 (최소1명 이상).");
+				f.gymTrainer3.focus();
+				return;
+			}
+			if (f.gymTrainer4.value != "" && uploads[3].value == "") {
+				alert("4번째 트레이너 사진을 입력해주세요!");
+				f.gymTrainer4.focus();
+				return;
+			}
+			if (f.gymTrainer4.value == "" && uploads[3].value != "") {
+				alert("4번째 트레이너명을 입력하세요 (최소1명 이상).");
+				f.gymTrainer4.focus();
+				return;
+			}
+	
+			if (!f.gymTrainer1.value) {
+				alert("1번째 트레이너명을 입력하세요 (최소1명 이상).");
+				f.gymTrainer1.focus();
+				return;
+			}
+	
+			//체육관 사진등록 제약조건 (최소1장이상)
+			if (uploads2[0].value == "") {
+				alert("첫번째 체육관 사진등록을 해주세요 (최소 1장이상)");
+				f.uploads2[0].focus();
+				return;
+			}
 		}
-		if (f.gymTrainer1.value == "" && uploads[0].value != "") {
-			alert("1번째 트레이너명을 입력하세요 (최소1명 이상).");
-			f.gymTrainer1.focus();
-			return;
-		}
-		if (f.gymTrainer2.value != "" && uploads[1].value == "") {
-			alert("2번째 트레이너 사진을 입력해주세요!");
-			f.gymTrainer2.focus();
-			return;
-		}
-		if (f.gymTrainer2.value == "" && uploads[1].value != "") {
-			alert("2번째 트레이너명을 입력하세요 (최소1명 이상).");
-			f.gymTrainer2.focus();
-			return;
-		}
-		if (f.gymTrainer3.value != "" && uploads[2].value == "") {
-			alert("3번째 트레이너 사진을 입력해주세요!");
-			f.gymTrainer3.focus();
-			return;
-		}
-		if (f.gymTrainer3.value == "" && uploads[2].value != "") {
-			alert("3번째트레이너명을 입력하세요 (최소1명 이상).");
-			f.gymTrainer3.focus();
-			return;
-		}
-		if (f.gymTrainer4.value != "" && uploads[3].value == "") {
-			alert("4번째 트레이너 사진을 입력해주세요!");
-			f.gymTrainer4.focus();
-			return;
-		}
-		if (f.gymTrainer4.value == "" && uploads[3].value != "") {
-			alert("4번째 트레이너명을 입력하세요 (최소1명 이상).");
-			f.gymTrainer4.focus();
-			return;
-		}
-
-		if (!f.gymTrainer1.value) {
-			alert("1번째 트레이너명을 입력하세요 (최소1명 이상).");
-			f.gymTrainer1.focus();
-			return;
-		}
-
-		//체육관 사진등록 제약조건 (최소1장이상)
-		if (uploads2[0].value == "") {
-			alert("첫번째 체육관 사진등록을 해주세요 (최소 1장이상)");
-			f.uploads2[0].focus();
-			return;
-		}
-
+		
+		
+		
 		if (!f.gymProgram.value) {
 			alert("프로그램 내용을 입력하세요 .");
 			f.gymProgram.focus();
@@ -546,7 +554,6 @@ GymDTO dto = (GymDTO)request.getAttribute("dto");
 								트레이너 수정&nbsp;<font size='1'>(최소1명 이상)</font>	
 							</c:if>
 						</dt>
-	
 						
 						<!-- 회원가입일때 -->
 						<c:if test="${mode!='updated' }">
@@ -569,31 +576,32 @@ GymDTO dto = (GymDTO)request.getAttribute("dto");
 						</c:if>
 							
 						<!-- 수정일때, 기존 이미지들의 이름 출력 -->
+						
 						<c:if test="${mode=='updated' }">
-						<dd>
-							*트레이너 이름 : <input type="text" name="trainerName1" value="${trainerName1 }"size="25" maxlength="7" />
-							*기존 사진 : <input type="text" name="oldTrainerImage1" value="${oldTrainerImage1}" size="25" maxlength="20" 
-								class="boxTF" disabled="disabled"/>&nbsp;&nbsp;&nbsp;
-							*수정 또는 추가할 사진 : <input type="file" name="upload" class="boxTF" />
-						</dd>	
-						<dd>
-							*트레이너 이름 : <input type="text" name="trainerName2" value="${trainerName2 }"size="25" maxlength="7" />
-							*기존 사진 : <input type="text" name="oldTrainerImage2"  value="${oldTrainerImage2}" size="25" maxlength="20" 
-								class="boxTF" disabled="disabled"/>&nbsp;&nbsp;&nbsp;
-							*수정 또는 추가할 사진 : <input type="file" name="upload" class="boxTF" />
-						</dd>	
-						<dd>
-							*트레이너 이름 : <input type="text" name="trainerName3" value="${trainerName3 }"size="25" maxlength="7" />
-							*기존 사진 : <input type="text" name="oldTrainerImage3" value="${oldTrainerImage3}" size="25" maxlength="20" 
-								class="boxTF" disabled="disabled"/>&nbsp;&nbsp;&nbsp;
-							*수정 또는 추가할 사진 : <input type="file" name="upload" class="boxTF" />
-						</dd>	
-						<dd>
-							*트레이너 이름 : <input type="text" name="trainerName4" value="${trainerName4 }"size="25" maxlength="7" />
-							*기존 사진 : <input type="text" name="oldTrainerImage4"  value="${oldTrainerImage4}" size="25" maxlength="20" 
-								class="boxTF" disabled="disabled"/>&nbsp;&nbsp;&nbsp;
-							*수정 또는 추가할 사진 : <input type="file" name="upload" class="boxTF" />
-						</dd>						
+							<c:forEach var="trainerName" items="${gymTrainerLists }" varStatus="status" >
+								<dd>
+									*트레이너 이름 수정 : <input type="text" name="trainerName${status.count }" value="${trainerName }"size="25" maxlength="7" />
+								</dd>
+							</c:forEach>
+							<c:forEach var="i" begin="${startNumberForTrainer }" end="4" step="1" varStatus="status" >
+								<dd>
+									*추가할 트레이너 이름(${i }) : <input type="text" name="trainerName${i }" class="boxTF" />
+								</dd>
+							</c:forEach>
+							<dd style="height: 10px;"></dd>
+							<c:forEach var="oldTrainerImage" items="${gymTrainerPicLists }" varStatus="status" >
+								<dd>
+									*기존 트레이너 사진 : <input type="text" name="oldTrainerImage${status.count }" value="${oldTrainerImage }"
+											size="25" maxlength="7"/>
+									수정할 사진 : <input type="file" name="newTrainerImage${status.count }" class="boxTF" />
+								</dd>
+							</c:forEach>
+							<!-- 4개보다 적으면 -->
+							<c:forEach var="i" begin="${startNumberForTrainer }" end="4" step="1" varStatus="status" >
+								<dd>
+									*추가할 사진(${i }) : <input type="file" name="newTrainerImage${i }" class="boxTF" />
+								</dd>
+							</c:forEach>
 						</c:if>
 					</dl>
 				</div>
@@ -601,6 +609,7 @@ GymDTO dto = (GymDTO)request.getAttribute("dto");
 				<div class="bbsCreated_bottomLine">
 					
 					<!-- 회원가입일때 -->
+					<div style="height: 10px;"></div>
 					<c:if test="${mode!='updated' }">
 						<dl>
 							<dt>체육관 사진 등록</dt>
@@ -620,41 +629,32 @@ GymDTO dto = (GymDTO)request.getAttribute("dto");
 					</c:if>
 					
 					<!-- 수정일때 -->
+					<div style="height: 10px;"></div>
 					<c:if test="${mode=='updated' }">
-						<dl>
-							<dt>체육관 사진 수정</dt>
-							<dd>
-								기존 사진 : <input type="text" name="oldGymImage1" value="${oldGymImage1}" size="25" maxlength="20" 
-									class="boxTF" disabled="disabled"/>&nbsp;&nbsp;&nbsp;     
-								수정할 사진 : <input type="file" name="upload2" class="boxTF" />
+						<c:forEach var="oldGymImage" items="${gymPicLists }" varStatus="status" >
+								<dd>
+								기존 사진 : <input type="text" name="oldGymImage${status.count }" value="${oldGymImage}" size="25" maxlength="20" 
+									class="boxTF"/>&nbsp;&nbsp;&nbsp;     
+								수정할 사진 : <input type="file" name="newGymImage${status.count }" class="boxTF" />
 							</dd>
+						</c:forEach>
+						<!-- 4개보다 적으면 -->
+						<c:forEach var="i" begin="${startNumberForGymPic }" end="4" step="1" varStatus="status" >
 							<dd>
-								기존 사진 : <input type="text" name="oldGymImage2" value="${oldGymImage1}" size="25" maxlength="20" 
-									class="boxTF" disabled="disabled"/>&nbsp;&nbsp;&nbsp;     
-								수정할 사진 : <input type="file" name="upload2" class="boxTF" />
+								*추가할 사진(${i }) : <input type="file" name="newGymImage${i }" class="boxTF" />
 							</dd>
-							<dd>
-								기존 사진 : <input type="text" name="oldGymImage3" value="${oldGymImage1}" size="25" maxlength="20" 
-									class="boxTF" disabled="disabled"/>&nbsp;&nbsp;&nbsp;     
-								수정할 사진 : <input type="file" name="upload2" class="boxTF" />
-							</dd>
-							<dd>
-								기존 사진 : <input type="text" name="oldGymImage4" value="${oldGymImage1}" size="25" maxlength="20" 
-									class="boxTF" disabled="disabled"/>&nbsp;&nbsp;&nbsp;     
-								수정할 사진 : <input type="file" name="upload2" class="boxTF" />
-							</dd>
-						</dl>
+						</c:forEach>
 					</c:if>
 					
 					
 					
 				</div>
-
+				<div style="height: 15px;"></div>
 				<div class="bbsCreated_bottomLine">
 					<dl>
 						<dt>프로그램 설명</dt>
 						<dd>
-							<textarea name="gymProgram" rows="20" cols="60" class="boxTF" >${dto.gymProgram }</textarea>
+							<textarea name="gymProgram" rows="10" cols="30" class="boxTF" >${dto.gymProgram }</textarea>
 						</dd>
 					</dl>
 				</div>
@@ -738,329 +738,338 @@ GymDTO dto = (GymDTO)request.getAttribute("dto");
 				</div>
 				</c:if>
 				
+				<c:if test="${mode=='updated' }">
+				<div>
+					<dl>
+						<dt>이용가능 시간</dt>
+						<dd>평일
+							<select name="gymHour1_1">
+							<!-- 선택이전 시간 -->
+							<c:if test="${beforeAfter[0]!=0 }">
+								<c:forEach var="a" begin="1" end="${beforeAfter[0] }" step="1">
+									<c:if test="${a<10 }">
+									<option value="0${a }:00">0${a }:00</option></c:if>
+									<c:if test="${a>=10 }">
+									<option value="${a }:00">${a }:00</option></c:if>
+								</c:forEach>
+							</c:if>
+							<!-- 선택 시간 -->
+								<c:if test="${gymHourListsInt[0]<10 }">
+								<option value="0${gymHourListsInt[0] }:00" selected="selected">0${gymHourListsInt[0] }:00</option></c:if>
+								<c:if test="${gymHourListsInt[0]>=10 }">
+								<option value="${gymHourListsInt[0] }:00" selected="selected">${gymHourListsInt[0] }:00</option></c:if>
+							<!-- 선택 이후 시간 -->
+							<c:forEach var="b" begin="${beforeAfter[1] }" end="24" step="1">
+								<c:if test="${b<10 }">
+								<option value="0${b }:00">0${b }:00</option></c:if>
+								<c:if test="${b>=10 }">
+								<option value="${b }:00">${b }:00</option></c:if>
+							</c:forEach>
+							</select>
+							
+							
+							<select name="gymHour1_2">
+							<!-- 선택이전 시간 -->
+							<c:if test="${beforeAfter[2]!=0 }">
+								<c:forEach var="c" begin="1" end="${beforeAfter[2] }" step="1">
+									<c:if test="${c<10 }">
+									<option value="0${c }:00">0${c }:00</option></c:if>
+									<c:if test="${c>=10 }">
+									<option value="0${c }:00">${c }:00</option></c:if>
+								</c:forEach>
+							</c:if>
+							<!-- 선택 시간 -->
+								<c:if test="${gymHourListsInt[1]<10 }">
+								<option value="0${gymHourListsInt[1] }:00" selected="selected">0${gymHourListsInt[1] }:00</option></c:if>
+								<c:if test="${gymHourListsInt[1]>=10 }">
+								<option value="${gymHourListsInt[1] }:00" selected="selected">${gymHourListsInt[1] }:00</option></c:if>
+							<!-- 선택 이후 시간 -->
+							<c:forEach var="d" begin="${beforeAfter[3] }" end="24" step="1">
+								<c:if test="${d<10 }">
+								<option value="0${d }:00">0${d }:00</option></c:if>
+								<c:if test="${d>=10 }">
+								<option value="${d }:00">${d }:00</option></c:if>
+							</c:forEach>
+							</select>
+							
+							
+						</dd>
+						<dd>토요일
+							<select name="gymHour2_1">
+							<!-- 선택이전 시간 -->
+							<c:if test="${beforeAfter[4]!=0 }">
+								<c:forEach var="e" begin="1" end="${beforeAfter[4] }">
+									<c:if test="${e<10 }">
+									<option value="0${e }:00">0${e }:00</option></c:if>
+									<c:if test="${e>=10 }">
+									<option value="${e }:00">${e }:00</option></c:if>
+								</c:forEach>
+							</c:if>
+							<!-- 선택 시간 -->
+								<c:if test="${gymHourListsInt[2]<10 }">
+								<option value="0${gymHourListsInt[2] }:00" selected="selected">0${gymHourListsInt[2] }:00</option></c:if>
+								<c:if test="${gymHourListsInt[2]>=10 }">
+								<option value="${gymHourListsInt[2] }:00" selected="selected">${gymHourListsInt[2] }:00</option></c:if>
+							<!-- 선택 이후 시간 -->
+							<c:forEach var="f" begin="${beforeAfter[5] }" end="24">
+								<c:if test="${f<10 }">
+								<option value="0${f }:00">0${f }:00</option></c:if>
+								<c:if test="${f>=10 }">
+								<option value="${f }:00">${f }:00</option></c:if>
+							</c:forEach>
+							</select>
+							
+							
+							<select name="gymHour2_2">
+							<!-- 선택이전 시간 -->
+							<c:if test="${beforeAfter[6]!=0 }">
+								<c:forEach var="g" begin="1" end="${beforeAfter[6] }">
+									<c:if test="${g<10 }">
+									<option value="0${g }:00">0${g }:00</option></c:if>
+									<c:if test="${g>=10 }">
+									<option value="${g }:00">${g }:00</option></c:if>
+								</c:forEach>
+							</c:if>
+							<!-- 선택 시간 -->
+								<c:if test="${gymHourListsInt[3]<10 }">
+								<option value="0${gymHourListsInt[3] }:00" selected="selected">0${gymHourListsInt[3] }:00</option></c:if>
+								<c:if test="${gymHourListsInt[3]>=10 }">
+								<option value="${gymHourListsInt[3] }:00" selected="selected">${gymHourListsInt[3] }:00</option></c:if>
+							<!-- 선택 이후 시간 -->
+							<c:forEach var="h" begin="${beforeAfter[7] }" end="24">
+								<c:if test="${h<10 }">
+								<option value="0${h }:00">0${h }:00</option></c:if>
+								<c:if test="${h>=10 }">
+								<option value="${h }:00">${h }:00</option></c:if>
+							</c:forEach>
+							</select>
+							
+						</dd>
+						<dd>일요일
+							<select name="gymHour3_1">
+							<!-- 선택이전 시간 -->
+							<c:if test="${beforeAfter[8]!=0 }">
+								<c:forEach var="i" begin="1" end="${beforeAfter[8] }">
+									<c:if test="${i<10 }">
+									<option value="0${i }:00">0${i }:00</option></c:if>
+									<c:if test="${i>=10 }">
+									<option value="${i }:00">${i }:00</option></c:if>
+								</c:forEach>
+							</c:if>
+							<!-- 선택 시간 -->
+								<c:if test="${gymHourListsInt[4]<10 }">
+								<option value="0${gymHourListsInt[4] }:00" selected="selected">0${gymHourListsInt[4] }:00</option></c:if>
+								<c:if test="${gymHourListsInt[4]>=10 }">
+								<option value="${gymHourListsInt[4] }:00" selected="selected">${gymHourListsInt[4] }:00</option></c:if>
+							<!-- 선택 이후 시간 -->
+							<c:forEach var="j" begin="${beforeAfter[9] }" end="24">
+								<c:if test="${j<10 }">
+								<option value="0${j }:00">0${j }:00</option></c:if>
+								<c:if test="${j>=10 }">
+								<option value="${j }:00">${j }:00</option></c:if>
+							</c:forEach>
+							</select>
+							
+							
+							<select name="gymHour3_2">
+							<!-- 선택이전 시간 -->
+							<c:if test="${beforeAfter[10]!=0 }">
+								<c:forEach var="k" begin="1" end="${beforeAfter[10] }">
+									<c:if test="${k<10 }">
+									<option value="0${k }:00">0${k }:00</option></c:if>
+									<c:if test="${k>=10 }">
+									<option value="${k }:00">${k }:00</option></c:if>
+								</c:forEach>
+							</c:if>
+							<!-- 선택 시간 -->
+								<c:if test="${gymHourListsInt[5]<10 }">
+								<option value="0${gymHourListsInt[5] }:00" selected="selected">0${gymHourListsInt[5] }:00</option></c:if>
+								<c:if test="${gymHourListsInt[5]>=10 }">
+								<option value="${gymHourListsInt[5] }:00" selected="selected">${gymHourListsInt[5] }:00</option></c:if>
+							<!-- 선택 이후 시간 -->
+							<c:forEach var="l" begin="${beforeAfter[11] }" end="24">
+								<c:if test="${l<10 }">
+								<option value="0${l }:00">0${l }:00</option></c:if>
+								<c:if test="${l>=10 }">
+								<option value="${l }:00">${l }:00</option></c:if>
+							</c:forEach>
+							</select>
+						</dd>
+					</dl>
+				</div>
+				</c:if>	
 				
-				
-				
-
+				<!--<c:if test="${mode!='updated' }">-->	
 				<div class="bbsCreated_bottomLine">
 					<dl>
 						<dt>이용가능 시간</dt>
 						<dd>
 							평일<select name="gymHour1_1">
-
-								<option value="휴무 " selected>휴무</option>
 								<option value="01:00 ">01:00</option>
-								<option value="01:30 ">01:30</option>
 								<option value="02:00 ">02:00</option>
-								<option value="02:30 ">02:30</option>
 								<option value="03:00 ">03:00</option>
-								<option value="03:30 ">03:30</option>
 								<option value="04:00 ">04:00</option>
-								<option value="04:30 ">04:30</option>
 								<option value="05:00 ">05:00</option>
-								<option value="05:30 ">05:30</option>
 								<option value="06:00 ">06:00</option>
-								<option value="06:30 ">06:30</option>
 								<option value="07:00 ">07:00</option>
-								<option value="07:30 ">07:30</option>
 								<option value="08:00 ">08:00</option>
-								<option value="08:30 ">08:30</option>
 								<option value="09:00 ">09:00</option>
-								<option value="09:30 ">09:30</option>
 								<option value="10:00 ">10:00</option>
-								<option value="10:30 ">10:30</option>
 								<option value="11:00 ">11:00</option>
-								<option value="11:30 ">11:30</option>
 								<option value="12:00 ">12:00</option>
-								<option value="12:30 ">12:30</option>
 								<option value="13:00 ">13:00</option>
-								<option value="13:30 ">13:30</option>
 								<option value="14:00 ">14:00</option>
-								<option value="14:30 ">14:30</option>
 								<option value="15:00 ">15:00</option>
-								<option value="15:30 ">15:30</option>
 								<option value="16:00 ">16:00</option>
-								<option value="16:30 ">16:30</option>
 								<option value="17:00 ">17:00</option>
-								<option value="17:30 ">17:30</option>
 								<option value="18:00 ">18:00</option>
-								<option value="18:30 ">18:30</option>
 								<option value="19:00 ">19:00</option>
-								<option value="19:30 ">19:30</option>
 								<option value="20:00 ">20:00</option>
-								<option value="20:30 ">20:30</option>
 								<option value="21:00 ">21:00</option>
-								<option value="21:30 ">21:30</option>
 								<option value="22:00 ">22:00</option>
-								<option value="22:30 ">22:30</option>
 								<option value="23:00 ">23:00</option>
-								<option value="23:30 ">23:30</option>
-								<option value="00:00 ">00:00</option>
+								<option value="24:00 ">24:00</option>
 							</select> ~ <select name="gymHour1_2">
 
-								<option value="~ 휴무" selected>휴무</option>
 								<option value="~ 01:00">01:00</option>
-								<option value="~ 01:30">01:30</option>
 								<option value="~ 02:00">02:00</option>
-								<option value="~ 02:30">02:30</option>
 								<option value="~ 03:00">03:00</option>
-								<option value="~ 03:30">03:30</option>
 								<option value="~ 04:00">04:00</option>
-								<option value="~ 04:30">04:30</option>
 								<option value="~ 05:00">05:00</option>
-								<option value="~ 05:30">05:30</option>
 								<option value="~ 06:00">06:00</option>
-								<option value="~ 06:30">06:30</option>
 								<option value="~ 07:00">07:00</option>
-								<option value="~ 07:30">07:30</option>
 								<option value="~ 08:00">08:00</option>
-								<option value="~ 08:30">08:30</option>
 								<option value="~ 09:00">09:00</option>
-								<option value="~ 09:30">09:30</option>
 								<option value="~ 10:00">10:00</option>
-								<option value="~ 10:30">10:30</option>
 								<option value="~ 11:00">11:00</option>
-								<option value="~ 11:30">11:30</option>
 								<option value="~ 12:00">12:00</option>
-								<option value="~ 12:30">12:30</option>
 								<option value="~ 13:00">13:00</option>
-								<option value="~ 13:30">13:30</option>
 								<option value="~ 14:00">14:00</option>
-								<option value="~ 14:30">14:30</option>
-								<option value="~ 15:00">15:00</option>
-								<option value="~ 15:30">15:30</option>
 								<option value="~ 16:00">16:00</option>
-								<option value="~ 16:30">16:30</option>
 								<option value="~ 17:00">17:00</option>
-								<option value="~ 17:30">17:30</option>
 								<option value="~ 18:00">18:00</option>
-								<option value="~ 18:30">18:30</option>
 								<option value="~ 19:00">19:00</option>
-								<option value="~ 19:30">19:30</option>
 								<option value="~ 20:00">20:00</option>
-								<option value="~ 20:30">20:30</option>
 								<option value="~ 21:00">21:00</option>
-								<option value="~ 21:30">21:30</option>
 								<option value="~ 22:00">22:00</option>
-								<option value="~ 22:30">22:30</option>
 								<option value="~ 23:00">23:00</option>
-								<option value="~ 23:30">23:30</option>
-								<option value="~ 00:00">00:00</option>
+								<option value="~ 24:00">24:00</option>
 							</select>
 						</dd>
 						<dd>
 							토요일<select name="gymHour2_1">
 
-								<option value="휴무 " selected>휴무</option>
 								<option value="01:00 ">01:00</option>
-								<option value="01:30 ">01:30</option>
 								<option value="02:00 ">02:00</option>
-								<option value="02:30 ">02:30</option>
 								<option value="03:00 ">03:00</option>
-								<option value="03:30 ">03:30</option>
 								<option value="04:00 ">04:00</option>
-								<option value="04:30 ">04:30</option>
 								<option value="05:00 ">05:00</option>
-								<option value="05:30 ">05:30</option>
 								<option value="06:00 ">06:00</option>
-								<option value="06:30 ">06:30</option>
 								<option value="07:00 ">07:00</option>
-								<option value="07:30 ">07:30</option>
 								<option value="08:00 ">08:00</option>
-								<option value="08:30 ">08:30</option>
 								<option value="09:00 ">09:00</option>
-								<option value="09:30 ">09:30</option>
 								<option value="10:00 ">10:00</option>
-								<option value="10:30 ">10:30</option>
 								<option value="11:00 ">11:00</option>
-								<option value="11:30 ">11:30</option>
 								<option value="12:00 ">12:00</option>
-								<option value="12:30 ">12:30</option>
 								<option value="13:00 ">13:00</option>
-								<option value="13:30 ">13:30</option>
 								<option value="14:00 ">14:00</option>
-								<option value="14:30 ">14:30</option>
 								<option value="15:00 ">15:00</option>
-								<option value="15:30 ">15:30</option>
 								<option value="16:00 ">16:00</option>
-								<option value="16:30 ">16:30</option>
 								<option value="17:00 ">17:00</option>
-								<option value="17:30 ">17:30</option>
 								<option value="18:00 ">18:00</option>
-								<option value="18:30 ">18:30</option>
 								<option value="19:00 ">19:00</option>
-								<option value="19:30 ">19:30</option>
 								<option value="20:00 ">20:00</option>
-								<option value="20:30 ">20:30</option>
 								<option value="21:00 ">21:00</option>
-								<option value="21:30 ">21:30</option>
 								<option value="22:00 ">22:00</option>
-								<option value="22:30 ">22:30</option>
 								<option value="23:00 ">23:00</option>
-								<option value="23:30 ">23:30</option>
-								<option value="00:00 ">00:00</option>
+								<option value="24:00 ">24:00</option>
 							</select> ~ <select name="gymHour2_2">
 
-								<option value="~ 휴무" selected>휴무</option>
 								<option value="~ 01:00">01:00</option>
-								<option value="~ 01:30">01:30</option>
 								<option value="~ 02:00">02:00</option>
-								<option value="~ 02:30">02:30</option>
 								<option value="~ 03:00">03:00</option>
-								<option value="~ 03:30">03:30</option>
 								<option value="~ 04:00">04:00</option>
-								<option value="~ 04:30">04:30</option>
 								<option value="~ 05:00">05:00</option>
-								<option value="~ 05:30">05:30</option>
 								<option value="~ 06:00">06:00</option>
-								<option value="~ 06:30">06:30</option>
 								<option value="~ 07:00">07:00</option>
-								<option value="~ 07:30">07:30</option>
 								<option value="~ 08:00">08:00</option>
-								<option value="~ 08:30">08:30</option>
 								<option value="~ 09:00">09:00</option>
-								<option value="~ 09:30">09:30</option>
 								<option value="~ 10:00">10:00</option>
-								<option value="~ 10:30">10:30</option>
 								<option value="~ 11:00">11:00</option>
-								<option value="~ 11:30">11:30</option>
 								<option value="~ 12:00">12:00</option>
-								<option value="~ 12:30">12:30</option>
 								<option value="~ 13:00">13:00</option>
-								<option value="~ 13:30">13:30</option>
 								<option value="~ 14:00">14:00</option>
-								<option value="~ 14:30">14:30</option>
-								<option value="~ 15:00">15:00</option>
-								<option value="~ 15:30">15:30</option>
 								<option value="~ 16:00">16:00</option>
-								<option value="~ 16:30">16:30</option>
 								<option value="~ 17:00">17:00</option>
-								<option value="~ 17:30">17:30</option>
 								<option value="~ 18:00">18:00</option>
-								<option value="~ 18:30">18:30</option>
 								<option value="~ 19:00">19:00</option>
-								<option value="~ 19:30">19:30</option>
 								<option value="~ 20:00">20:00</option>
-								<option value="~ 20:30">20:30</option>
 								<option value="~ 21:00">21:00</option>
-								<option value="~ 21:30">21:30</option>
 								<option value="~ 22:00">22:00</option>
-								<option value="~ 22:30">22:30</option>
 								<option value="~ 23:00">23:00</option>
-								<option value="~ 23:30">23:30</option>
-								<option value="~ 00:00">00:00</option>
+								<option value="~ 24:00">24:00</option>
 							</select>
 
 						</dd>
 						<dd>
 							일요일<select name="gymHour3_1">
 
-								<option value="휴무 " selected>휴무</option>
 								<option value="01:00 ">01:00</option>
-								<option value="01:00 ">01:00</option>
-								<option value="01:30 ">01:30</option>
 								<option value="02:00 ">02:00</option>
-								<option value="02:30 ">02:30</option>
 								<option value="03:00 ">03:00</option>
-								<option value="03:30 ">03:30</option>
 								<option value="04:00 ">04:00</option>
-								<option value="04:30 ">04:30</option>
 								<option value="05:00 ">05:00</option>
-								<option value="05:30 ">05:30</option>
 								<option value="06:00 ">06:00</option>
-								<option value="06:30 ">06:30</option>
 								<option value="07:00 ">07:00</option>
-								<option value="07:30 ">07:30</option>
 								<option value="08:00 ">08:00</option>
-								<option value="08:30 ">08:30</option>
 								<option value="09:00 ">09:00</option>
-								<option value="09:30 ">09:30</option>
 								<option value="10:00 ">10:00</option>
-								<option value="10:30 ">10:30</option>
 								<option value="11:00 ">11:00</option>
-								<option value="11:30 ">11:30</option>
 								<option value="12:00 ">12:00</option>
-								<option value="12:30 ">12:30</option>
 								<option value="13:00 ">13:00</option>
-								<option value="13:30 ">13:30</option>
 								<option value="14:00 ">14:00</option>
-								<option value="14:30 ">14:30</option>
 								<option value="15:00 ">15:00</option>
-								<option value="15:30 ">15:30</option>
 								<option value="16:00 ">16:00</option>
-								<option value="16:30 ">16:30</option>
 								<option value="17:00 ">17:00</option>
-								<option value="17:30 ">17:30</option>
 								<option value="18:00 ">18:00</option>
-								<option value="18:30 ">18:30</option>
 								<option value="19:00 ">19:00</option>
-								<option value="19:30 ">19:30</option>
 								<option value="20:00 ">20:00</option>
-								<option value="20:30 ">20:30</option>
 								<option value="21:00 ">21:00</option>
-								<option value="21:30 ">21:30</option>
 								<option value="22:00 ">22:00</option>
-								<option value="22:30 ">22:30</option>
 								<option value="23:00 ">23:00</option>
-								<option value="23:30 ">23:30</option>
-								<option value="00:00 ">00:00</option>
+								<option value="24:00 ">24:00</option>
 							</select> ~ <select name="gymHour3_2">
 
-								<option value="~ 휴무" selected>휴무</option>
 								<option value="~ 01:00">01:00</option>
-								<option value="~ 01:30">01:30</option>
 								<option value="~ 02:00">02:00</option>
-								<option value="~ 02:30">02:30</option>
 								<option value="~ 03:00">03:00</option>
-								<option value="~ 03:30">03:30</option>
 								<option value="~ 04:00">04:00</option>
-								<option value="~ 04:30">04:30</option>
 								<option value="~ 05:00">05:00</option>
-								<option value="~ 05:30">05:30</option>
 								<option value="~ 06:00">06:00</option>
-								<option value="~ 06:30">06:30</option>
 								<option value="~ 07:00">07:00</option>
-								<option value="~ 07:30">07:30</option>
 								<option value="~ 08:00">08:00</option>
-								<option value="~ 08:30">08:30</option>
 								<option value="~ 09:00">09:00</option>
-								<option value="~ 09:30">09:30</option>
 								<option value="~ 10:00">10:00</option>
-								<option value="~ 10:30">10:30</option>
 								<option value="~ 11:00">11:00</option>
-								<option value="~ 11:30">11:30</option>
 								<option value="~ 12:00">12:00</option>
-								<option value="~ 12:30">12:30</option>
 								<option value="~ 13:00">13:00</option>
-								<option value="~ 13:30">13:30</option>
 								<option value="~ 14:00">14:00</option>
-								<option value="~ 14:30">14:30</option>
-								<option value="~ 15:00">15:00</option>
-								<option value="~ 15:30">15:30</option>
 								<option value="~ 16:00">16:00</option>
-								<option value="~ 16:30">16:30</option>
 								<option value="~ 17:00">17:00</option>
-								<option value="~ 17:30">17:30</option>
 								<option value="~ 18:00">18:00</option>
-								<option value="~ 18:30">18:30</option>
 								<option value="~ 19:00">19:00</option>
-								<option value="~ 19:30">19:30</option>
 								<option value="~ 20:00">20:00</option>
-								<option value="~ 20:30">20:30</option>
 								<option value="~ 21:00">21:00</option>
-								<option value="~ 21:30">21:30</option>
 								<option value="~ 22:00">22:00</option>
-								<option value="~ 22:30">22:30</option>
 								<option value="~ 23:00">23:00</option>
-								<option value="~ 23:30">23:30</option>
-								<option value="~ 00:00">00:00</option>
+								<option value="~ 24:00">24:00</option>
 							</select>
 
 						</dd>
 					</dl>
 				</div>
-			</div>
-
+			<!--</c:if>-->
+			
 			<c:if test="${mode!='updated' }">
 				<tr>
 					<td width="100%" height="50%" align="center" />

@@ -113,7 +113,7 @@ function qnaTypeCheck(){
 			</tr>
 			<tr>
 				<td>작성자</td>
-				<td><input type="text" name="cusId" value="${dto.cusId }" disabled="disabled" /></td>
+				<td><input type="text" name="cusId" value="${sessionScope.customInfo.sessionId }" disabled="disabled" /></td>
 			</tr>
 			<tr>
 				<td>제목</td>

@@ -84,12 +84,18 @@ public class gypController {
 	//☆☆☆ 이미지 파일 저장 경로 ☆☆☆ 
 	// - 배포시 war파일로 만들때, 내부 서버의 파일들이 삭제되기에 외부 경로 파일 저장 폴더를 만든다. 
 	// - 이 부분과 더불어 tomcat서버의 server.xml에 다음 문장을 추가해준다. 
-	// 		<Context docBase="D:/gyp_external_files/" path="/gyp/sfiles" reloadable="true"/>
+	//	 		<Context docBase="D:/gyp_external_files/" path="/gyp/sfiles" reloadable="true"/>
+	// 			</Host>태그 이전에 추가해야함
 	// - 실제 파일 저장 경로는 D:/gyp_external_files/이고 프로그램 내에서 접근하는 가상 경로는 /gyp/sfiles/ 이다.
-	// - (추후에 개인적으로 경로 변경가능 : 바꿀곳 2군데 : 1.컨트롤러의 PATH  2. Servers > server.xml의 docBase경로)
-	// - 각 메소드에서 상세 링크를 추가하여 파일을 저장하도록 하자.
+	
+	// - <추후에 개인적으로 경로 변경가능>
+	// - 바꿀곳 2군데 : 1.컨트롤러의 PATH  2. Servers폴더의 server.xml의 docBase경로
+	
+	// - 각 메소드에서 상세 링크변수를 따로 생성하여 파일을 저장해야 PATH 경로가 보존된다
+	// - (예)imgPath = PATH + product\\를 따로 생성해서 사용한다
 	// - 자세한 설명 참고 사이트:( https://byson.tistory.com/20)
 	String PATH = "D:\\gyp_external_files\\";
+	
 	
 	//*******************최보경*******************
 	
@@ -102,7 +108,6 @@ public class gypController {
 			this.n++;
 			startBookCheck();
 		}
-		
 		
 		//세션에 올라온값 받기
 		CustomInfo info = (CustomInfo)session.getAttribute("customInfo");
@@ -120,7 +125,7 @@ public class gypController {
 			
 			//체육관 회원이면 마이페이지로
 			int result = dao.getDataCount(info.getSessionId());//유저로 로그인하면 result값은 1 gym으로 로그인 하면 0
-			if(result==0) {
+			if(result==0 || info.getLoginType()=="gym") {
 				return "redirect:/gymMyPage.action";
 			}
 			
@@ -473,11 +478,11 @@ public class gypController {
 		request.setAttribute("nextMonth", nextMonth);
 		request.setAttribute("preYear", preYear);
 		request.setAttribute("nextYear", nextYear);
-
+		
 		return "myPage/gymMyPage";
 	}
 
-	// 유저 수정창
+	// 유저 수정창으로 이동
 	@RequestMapping(value = "/customerUpdate.action", method = { RequestMethod.GET, RequestMethod.POST })
 	public String customerUpdate(HttpServletRequest request, HttpSession session) {
 
@@ -497,7 +502,7 @@ public class gypController {
 		return "create/createCustomer";
 	}
 
-	// 유저 정보 수정 (비밀번호 변경)
+	// 유저 정보 수정 후 업데이트
 	@RequestMapping(value = "/customerUpdate_ok.action", method = { RequestMethod.GET, RequestMethod.POST })
 	public String customerUpdate_ok(HttpServletRequest request, HttpSession session, CustomerDTO dto,
 			HttpServletResponse response) throws IOException {
@@ -508,7 +513,7 @@ public class gypController {
 		return "redirect:/customerMyPage.action";
 	}
 
-	// 유저 정보 수정 (삭제)
+	// 유저 탈퇴
 	@RequestMapping(value = "/customerDeleted_ok.action", method = { RequestMethod.GET, RequestMethod.POST })
 	public String customerDeleted_ok(HttpServletRequest request, CustomerDTO dto, HttpSession session,
 			HttpServletResponse response) throws IOException {
@@ -523,79 +528,507 @@ public class gypController {
 		return "login/login";
 	}
 
-	// 체육관 수정창 (채종완)
+	// 체육관 수정창으로 이동 (채종완)
 	@RequestMapping(value = "/gymUpdate.action", method = { RequestMethod.GET, RequestMethod.POST })
 	public String gymUpdate(HttpServletRequest request, HttpSession session) {
+		
 		// 세션에 올라온값
 		CustomInfo info = (CustomInfo) session.getAttribute("customInfo");
-
-		String mode=null;
+		String mode=null; //초기화
 		
 		//세션아이디로 고객정보 디비에서 dto가져옴
 		GymDTO dto = dao.getgymReadData(info.getSessionId());
-		
-		//기존 트레이너명 뿌릴 준비
-		List<String> gymTrainerLists = Arrays.asList(dto.getGymTrainer().split(","));
-		String trainerName1 = gymTrainerLists.get(0);
-		String trainerName2 = gymTrainerLists.get(1);
-		String trainerName3 = gymTrainerLists.get(2);
-		String trainerName4 = gymTrainerLists.get(3);
-		
-		//기존 트레이너 사진명 뿌릴 준비
-		List<String> gymTrainerPicLists = Arrays.asList(dto.getGymTrainerPic().split(","));
-		String oldTrainerImage1 = gymTrainerPicLists.get(0);
-		String oldTrainerImage2 = gymTrainerPicLists.get(1);
-		String oldTrainerImage3 = gymTrainerPicLists.get(2);
-		String oldTrainerImage4 = gymTrainerPicLists.get(3);
-		
-		//기존 체육관 사진명 뿌릴 준비
-		List<String> gymPicLists = Arrays.asList(dto.getGymPic().split(","));
-		String oldGymImage1 = gymPicLists.get(0);
-		String oldGymImage2 = gymPicLists.get(1);
-		String oldGymImage3 = gymPicLists.get(2);
-		String oldGymImage4 = gymPicLists.get(3);
-		
 		
 		//고객정보가 있으면 mode를 "updated"으로 넘겨준다
 		if(dto!=null) {
 			mode = "updated";
 		}
 		
-		request.setAttribute("trainerName1", trainerName1);
-		request.setAttribute("trainerName2", trainerName2);
-		request.setAttribute("trainerName3", trainerName3);
-		request.setAttribute("trainerName4", trainerName4);
-		request.setAttribute("oldTrainerImage1", oldTrainerImage1);
-		request.setAttribute("oldTrainerImage2", oldTrainerImage2);
-		request.setAttribute("oldTrainerImage3", oldTrainerImage3);
-		request.setAttribute("oldTrainerImage4", oldTrainerImage4);
-		request.setAttribute("oldGymImage1", oldGymImage1);
-		request.setAttribute("oldGymImage2", oldGymImage2);
-		request.setAttribute("oldGymImage3", oldGymImage3);
-		request.setAttribute("oldGymImage4", oldGymImage4);
+		//기존 트레이너 이름 뿌릴 준비
+		List<String> gymTrainerLists = Arrays.asList(dto.getGymTrainer().split(","));
+		
+		//기존 트레이너 사진명 뿌릴 준비
+		List<String> gymTrainerPicLists = Arrays.asList(dto.getGymTrainerPic().split(","));
+		
+		//기존 체육관 사진명 뿌릴 준비
+		List<String> gymPicLists = Arrays.asList(dto.getGymPic().split(","));
+		
+		//기존 체육관 시간 뿌릴 준비
+		List<String> gymHourListsString = Arrays.asList(dto.getGymHour().split(","));
+		List<Integer> gymHourListsInt = new ArrayList<Integer>();
+		List<Integer> beforeAfter = new ArrayList<Integer>();
+		
+		//시간을 숫자로 바꾸기
+		for(String one : gymHourListsString) {
+
+			//시간 부분만 추출
+			//예 : (01:00 ~ 02:00)에서 1과 2를 추출
+			int startHour = Integer.parseInt(one.substring(0, 2));
+			int endHour = Integer.parseInt(one.substring(8, 10));
+			
+			gymHourListsInt.add(startHour);
+			gymHourListsInt.add(endHour);
+		}
+		
+		//시간 앞뒤 숫자 생성
+		for(int i=0; i<6; i++) {
+			int temp = gymHourListsInt.get(i);
+			int before = temp-1;
+			int after = temp+1;
+			
+			//마지막 숫자들 처리
+			if(before<0)
+				before = 0;
+			if(after>24)
+				after = 24;
+			
+			//리스트에 추가
+			beforeAfter.add(before);
+			beforeAfter.add(after);
+		}
+
+		//배열관련 숫자
+		int startNumberForTrainer = gymTrainerLists.size()+1;
+		int startNumberForGymPic = gymPicLists.size()+1;
+		request.setAttribute("startNumberForTrainer", startNumberForTrainer);
+		request.setAttribute("startNumberForGymPic", startNumberForGymPic);
+		//리스트
+		request.setAttribute("gymTrainerLists", gymTrainerLists);
+		request.setAttribute("gymTrainerPicLists", gymTrainerPicLists);
+		request.setAttribute("gymPicLists", gymPicLists);
+		request.setAttribute("gymHourListsInt", gymHourListsInt);
+		request.setAttribute("beforeAfter", beforeAfter);
+		//기타
 		request.setAttribute("mode", mode);
 		request.setAttribute("dto", dto);
 		return "create/createGym";
 	}
 
-	// 체육관 정보 수정 (비밀번호 변경) (채종완)
+	// 체육관 정보 수정 후 업데이트(채종완)
+	//※이름만 입력하고 사진을 입력하지 않은 경우는 등록되지 않는다※
 	@RequestMapping(value = "/gymUpdate_ok.action", method = { RequestMethod.GET, RequestMethod.POST })
-	public String gymUpdate_ok(HttpServletRequest request, HttpSession session, GymDTO gymdto) {
-
-		// 캘린더 사용
-		Calendar cal = Calendar.getInstance();
-
-		// 현재 년도
-		int nowYear = cal.get(Calendar.YEAR);
-		// 현재 월
-		int nowMonth = cal.get(Calendar.MONTH) + 1;
+	public String gymUpdate_ok(HttpServletRequest request, HttpSession session, GymDTO gymdto,  MultipartHttpServletRequest multiReq) {
 		
-		dao.gymupdateData(gymdto);
+		//세션아이디로 체육관 정보 디비에서 dto가져옴
+		CustomInfo info = (CustomInfo) session.getAttribute("customInfo");
+		GymDTO dto = dao.getgymReadData(info.getSessionId());
+		
+		//trainerName : 수정한 트레이너 이름 
+		//oldTrainerName : 기존 트레이너 이름
+		//olyGymImage : 기존 체육관 사진의 """이름만!!!"""
+		String trainerName1 = request.getParameter("trainerName1");
+		String trainerName2 = request.getParameter("trainerName2");
+		String trainerName3 = request.getParameter("trainerName3");
+		String trainerName4 = request.getParameter("trainerName4");
+		String oldTrainerImage1 = request.getParameter("oldTrainerImage1");
+		String oldTrainerImage2 = request.getParameter("oldTrainerImage2");
+		String oldTrainerImage3 = request.getParameter("oldTrainerImage3");
+		String oldTrainerImage4 = request.getParameter("oldTrainerImage4");
+		String oldGymImage1 = request.getParameter("oldGymImage1");
+		String oldGymImage2 = request.getParameter("oldGymImage2");
+		String oldGymImage3 = request.getParameter("oldGymImage3");
+		String oldGymImage4 = request.getParameter("oldGymImage4");
+		
+		//html의 이미지 가져와서 객체 생성
+		//newTrainerImage : 수정한 트레이너 사진
+		//newGymImage: 수정한 체육관 사진
+		MultipartFile newTrainerImage1 = multiReq.getFile("newTrainerImage1");
+		MultipartFile newTrainerImage2 = multiReq.getFile("newTrainerImage2");
+		MultipartFile newTrainerImage3 = multiReq.getFile("newTrainerImage3");
+		MultipartFile newTrainerImage4 = multiReq.getFile("newTrainerImage4");
+		MultipartFile newGymImage1 = multiReq.getFile("newGymImage1");
+		MultipartFile newGymImage2 = multiReq.getFile("newGymImage2");
+		MultipartFile newGymImage3 = multiReq.getFile("newGymImage3");
+		MultipartFile newGymImage4 = multiReq.getFile("newGymImage4");
+		
+		//이미지 path (Controller최상단 PATH)
+		String gymTrainerPicImgPath = PATH + "gymTrainerPic\\";
+		String gymPicImgPath = PATH + "gymPic\\";
+		
+		//합쳐질 이름들
+		String gymTrainerNameCombine = "";
+		String gymTrainerPicCombine = "";
+		String gymPicCombine ="";
+		
+		//이미지가 로컬에 저장될 이름들
+		String newTrainerImage1LocalName = "";
+		String newTrainerImage2LocalName = "";
+		String newTrainerImage3LocalName = "";
+		String newTrainerImage4LocalName = "";
+		String newGymImage1LoclaName = "";
+		String newGymImage2LoclaName = "";
+		String newGymImage3LoclaName = "";
+		String newGymImage4LoclaName = "";
+		
+		try {
+			//트레이너 이미지 및 이름 함께처리함 (순서가 같아야 하므로 함께 처리한다)
+			
+			//----------트레이너1------------
+			//트레이너 이미지 수정을 안하고, 이름만 수정한경우
+			if((newTrainerImage1==null||newTrainerImage1.getOriginalFilename().equals("")) 
+					&& oldTrainerImage1!=null) {
+				gymTrainerNameCombine += trainerName1 + ",";
+				gymTrainerPicCombine += oldTrainerImage1 + ",";
+			}
+			
+			//트레이너 이미지 수정을 한 경우
+			if(newTrainerImage1!=null && newTrainerImage1.getSize()>0) {
+				
+				//로컬저장용 이름 생성
+				newTrainerImage1LocalName = gymdto.getGymId() + "-" + newTrainerImage1.getOriginalFilename();
+					
+				//디비에 들어가기 위해 이름을 하나로 합침
+				gymTrainerNameCombine += trainerName1 + ",";
+				gymTrainerPicCombine += newTrainerImage1LocalName+ ",";
+				
+				//fs 생성 및 저장
+				FileOutputStream fs = new FileOutputStream(gymTrainerPicImgPath + newTrainerImage1LocalName); 
+				fs.write(newTrainerImage1.getBytes());
+				fs.close();
+				
+				//기존 파일이 있다면 지우기
+				if(oldTrainerImage1!=null) {
+					File deleteImage = new File(gymTrainerPicImgPath + oldTrainerImage1);
+					deleteImage.delete();
+				}
+			}
+			
+			//----------트레이너2------------
+			//트레이너 이미지 수정을 안하고, 이름만 수정한경우
+			if((newTrainerImage2==null||newTrainerImage2.getOriginalFilename().equals("")) 
+					&& oldTrainerImage2!=null ) {
+				gymTrainerNameCombine += trainerName2 + ",";
+				gymTrainerPicCombine += oldTrainerImage2 + ",";
+			}
+			
+			//트레이너 이미지 수정을 한 경우
+			if(newTrainerImage2!=null && newTrainerImage2.getSize()>0) {
+				
+				//로컬저장용 이름 생성
+				newTrainerImage2LocalName = gymdto.getGymId() + "-" + newTrainerImage2.getOriginalFilename();
+					
+				//디비에 들어가기 위해 이름을 하나로 합침
+				gymTrainerNameCombine += trainerName2 + ",";
+				gymTrainerPicCombine += newTrainerImage2LocalName+ ",";
+				
+				//fs 생성 및 저장
+				FileOutputStream fs = new FileOutputStream(gymTrainerPicImgPath + newTrainerImage2LocalName); 
+				fs.write(newTrainerImage2.getBytes());
+				fs.close();
+				
+				//기존 파일이 있다면 지우기
+				if(oldTrainerImage2!=null) {
+					File deleteImage = new File(gymTrainerPicImgPath + oldTrainerImage2);
+					deleteImage.delete();
+				}
+			}
+			
+			//----------트레이너3------------
+			//트레이너 이미지 수정을 안하고, 이름만 수정한경우
+			if((newTrainerImage3==null||newTrainerImage3.getOriginalFilename().equals("")) 
+					&& oldTrainerImage3!=null) {
+				gymTrainerNameCombine += trainerName3 + ",";
+				gymTrainerPicCombine += oldTrainerImage3 + ",";
+			}
+			
+			//트레이너 이미지 수정을 한 경우
+			if(newTrainerImage3!=null && newTrainerImage3.getSize()>0) {
+				
+				//로컬저장용 이름 생성
+				newTrainerImage3LocalName = gymdto.getGymId() + "-" + newTrainerImage3.getOriginalFilename();
+					
+				//디비에 들어가기 위해 이름을 하나로 합침
+				gymTrainerNameCombine += trainerName3 + ",";
+				gymTrainerPicCombine += newTrainerImage3LocalName+ ",";
+				
+				//fs 생성 및 저장
+				FileOutputStream fs = new FileOutputStream(gymTrainerPicImgPath + newTrainerImage3LocalName); 
+				fs.write(newTrainerImage3.getBytes());
+				fs.close();
+				
+				//기존 파일이 있다면 지우기
+				if(oldTrainerImage3!=null) {
+					File deleteImage = new File(gymTrainerPicImgPath + oldTrainerImage3);
+					deleteImage.delete();
+				}
+			}
+			
+			//----------트레이너4------------
+			//트레이너 이미지 수정을 안하고, 이름만 수정한경우
+			if((newTrainerImage4==null||newTrainerImage4.getOriginalFilename().equals("")) 
+					&& oldTrainerImage4!=null) {
+				gymTrainerNameCombine += trainerName4 + ",";
+				gymTrainerPicCombine += oldTrainerImage4 + ",";
+			}
+			
+			//트레이너 이미지 수정을 한 경우
+			if(newTrainerImage4!=null && newTrainerImage4.getSize()>0) {
+				
+				//로컬저장용 이름 생성
+				newTrainerImage4LocalName = gymdto.getGymId() + "-" + newTrainerImage4.getOriginalFilename();
+					
+				//디비에 들어가기 위해 이름을 하나로 합침
+				gymTrainerNameCombine += trainerName4 + ",";
+				gymTrainerPicCombine += newTrainerImage4LocalName+ ",";
+				
+				//fs 생성 및 저장
+				FileOutputStream fs = new FileOutputStream(gymTrainerPicImgPath + newTrainerImage4LocalName); 
+				fs.write(newTrainerImage4.getBytes());
+				fs.close();
+				
+				//기존 파일이 있다면 지우기
+				if(oldTrainerImage4!=null) {
+					File deleteImage = new File(gymTrainerPicImgPath + oldTrainerImage4);
+					deleteImage.delete();
+				}
+			}
+			
+			//----------체육관 사진1------------
+			//새로 체육관 사진을 올리지 않은 경우, 기존의 사진이름 그대로 디비에 삽입해야함
+			if(newGymImage1.getSize()==0 && oldGymImage1!=null) {
+				gymPicCombine += oldGymImage1 + ",";
+			}
+			
+			//체육관 사진을 수정을 한 경우
+			if(newGymImage1!=null && newGymImage1.getSize()>0) {
+				
+				//로컬저장용 이름 생성
+				newGymImage1LoclaName = gymdto.getGymId() + "-" + newGymImage1.getOriginalFilename();
+					
+				//디비에 들어가기 위해 이름을 하나로 합침
+				gymPicCombine += newGymImage1LoclaName+ ",";
+				
+				//fs 생성 및 저장
+				FileOutputStream fs = new FileOutputStream(gymPicImgPath + newGymImage1LoclaName); 
+				fs.write(newGymImage1.getBytes());
+				fs.close();
+				
+				//기존 파일이 있다면 지우기
+				if(oldGymImage1!=null) {
+					File deleteImage = new File(gymPicImgPath + oldGymImage1);
+					deleteImage.delete();
+				}
+			}
+			
+			//----------체육관 사진2------------
+			//새로 체육관 사진을 올리지 않은 경우, 기존의 사진이름 그대로 디비에 삽입해야함
+			if(newGymImage2.getSize()==0  && oldGymImage2!=null) {
+				gymPicCombine += oldGymImage2 + ",";
+			}
+			
+			//체육관 사진을 수정을 한 경우
+			if(newGymImage2!=null && newGymImage2.getSize()>0) {
+				
+				//로컬저장용 이름 생성
+				newGymImage2LoclaName = gymdto.getGymId() + "-" + newGymImage2.getOriginalFilename();
+					
+				//디비에 들어가기 위해 이름을 하나로 합침
+				gymPicCombine += newGymImage2LoclaName+ ",";
+				
+				//fs 생성 및 저장
+				FileOutputStream fs = new FileOutputStream(gymPicImgPath + newGymImage2LoclaName); 
+				fs.write(newGymImage2.getBytes());
+				fs.close();
+				
+				//기존 파일이 있다면 지우기
+				if(oldGymImage2!=null) {
+					File deleteImage = new File(gymPicImgPath + oldGymImage2);
+					deleteImage.delete();
+				}
+			}
+			
+			//----------체육관 사진3------------
+			//새로 체육관 사진을 올리지 않은 경우, 기존의 사진이름 그대로 디비에 삽입해야함
+			if(newGymImage3.getSize()==0  && oldGymImage3!=null) {
+				gymPicCombine += oldGymImage3 + ",";
+			}
+			
+			//체육관 사진을 수정을 한 경우
+			if(newGymImage3!=null && newGymImage3.getSize()>0) {
+				
+				//로컬저장용 이름 생성
+				newGymImage3LoclaName = gymdto.getGymId() + "-" + newGymImage3.getOriginalFilename();
+					
+				//디비에 들어가기 위해 이름을 하나로 합침
+				gymPicCombine += newGymImage3LoclaName+ ",";
+				
+				//fs 생성 및 저장
+				FileOutputStream fs = new FileOutputStream(gymPicImgPath + newGymImage3LoclaName); 
+				fs.write(newGymImage3.getBytes());
+				fs.close();
+				
+				//기존 파일이 있다면 지우기
+				if(oldGymImage3!=null) {
+					File deleteImage = new File(gymPicImgPath + oldGymImage3);
+					deleteImage.delete();
+				}
+			}
+			
+			
+			//----------체육관 사진4------------
+			//새로 체육관 사진을 올리지 않은 경우, 기존의 사진이름 그대로 디비에 삽입해야함
+			if(newGymImage4.getSize()==0  && oldGymImage4!=null) {
+				gymPicCombine += oldGymImage4 + ",";
+			}
+			
+			//체육관 사진을 수정을 한 경우
+			if(newGymImage4!=null && newGymImage4.getSize()>0) {
+				
+				//로컬저장용 이름 생성
+				newGymImage4LoclaName = gymdto.getGymId() + "-" + newGymImage4.getOriginalFilename();
+					
+				//디비에 들어가기 위해 이름을 하나로 합침
+				gymPicCombine += newGymImage4LoclaName+ ",";
+				
+				//fs 생성 및 저장
+				FileOutputStream fs = new FileOutputStream(gymPicImgPath + newGymImage4LoclaName); 
+				fs.write(newGymImage4.getBytes());
+				fs.close();
+				
+				//기존 파일이 있다면 지우기
+				if(oldGymImage4!=null) {
+					File deleteImage = new File(gymPicImgPath + oldGymImage4);
+					deleteImage.delete();
+				}
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+		//----------쉼표처리 (트레이너 이름)-----------
+		if(gymTrainerNameCombine!=null && !gymTrainerNameCombine.equals("")) {
+			
+			//마지막글자에 쉼표 빼기
+			String lastWord = gymTrainerNameCombine.substring(gymTrainerNameCombine.length()-1, gymTrainerNameCombine.length());
+			
+			//마지막 쉼표면, 쉼표 빼고 dto에 setting
+			while(lastWord.equals(",")) { 
+				//마지막 쉼표 빼기
+				gymTrainerNameCombine = gymTrainerNameCombine.substring(0,gymTrainerNameCombine.length()-1); 
+				//마지막 글자 다시 세팅(반복문)
+				lastWord = gymTrainerNameCombine.substring(gymTrainerNameCombine.length()-1, gymTrainerNameCombine.length());
+			}
+		}
+		 
+		//----------쉼표처리 (트레이너 사진 이름)-----------
+		if(gymTrainerPicCombine!=null && !gymTrainerPicCombine.equals("")) {
+			//마지막글자에 쉼표 빼기
+			String lastWord = gymTrainerPicCombine.substring(gymTrainerPicCombine.length()-1, gymTrainerPicCombine.length());
+			
+			//마지막 쉼표면, 쉼표 빼고 dto에 setting
+			while(lastWord.equals(",")) { 
+				//마지막 쉼표 빼기
+				gymTrainerPicCombine = gymTrainerPicCombine.substring(0,gymTrainerPicCombine.length()-1); 
+				//마지막 글자 다시 세팅(반복문)
+				lastWord = gymTrainerPicCombine.substring(gymTrainerPicCombine.length()-1, gymTrainerPicCombine.length());
+			}
+		}
+		//----------쉼표처리 (체육관 사진 이름)-----------
+		if(gymPicCombine!=null && !gymPicCombine.equals("")) {
+			//마지막글자에 쉼표 빼기
+			String lastWord = gymPicCombine.substring(gymPicCombine.length()-1, gymPicCombine.length());
+			
+			//마지막 쉼표면, 쉼표 빼고 dto에 setting
+			while(lastWord.equals(",")) { 
+				//마지막 쉼표 빼기
+				gymPicCombine = gymPicCombine.substring(0,gymPicCombine.length()-1); 
+				//마지막 글자 다시 세팅(반복문)
+				lastWord = gymPicCombine.substring(gymPicCombine.length()-1, gymPicCombine.length());
+			}
+		}
+
+		
+		/*디버깅 시작*/
+		/*if(trainerName1!=null && newTrainerImage1.getSize()>0) {
+			System.out.println("trainerName1 " + trainerName1);
+			System.out.println("oldTrainerImage1 " + oldTrainerImage1);
+			System.out.println(newTrainerImage1.getOriginalFilename());
+			System.out.println("----");
+		}
+		if(trainerName2!=null && newTrainerImage2.getSize()>0) {
+			System.out.println("trainerName2 " +trainerName2);
+			System.out.println("oldTrainerImage2 " +oldTrainerImage2);
+			System.out.println(newTrainerImage2.getOriginalFilename());
+			System.out.println("----");
+		}
+		if(trainerName3!=null && newTrainerImage3.getSize()>0) {
+			System.out.println("trainerName3 " +trainerName3);
+			System.out.println("oldTrainerImage3 " +oldTrainerImage3);
+			System.out.println(newTrainerImage3.getOriginalFilename());
+			System.out.println("----");
+		}
+		if(trainerName4!=null && newTrainerImage4.getSize()>0) {
+			System.out.println("trainerName4 " +trainerName4);
+			System.out.println("oldTrainerImage4 " +oldTrainerImage4);
+			System.out.println(newTrainerImage4.getOriginalFilename());
+			System.out.println("----");
+		}
+		if(newGymImage1!=null  && newGymImage1.getSize()>0) {
+			System.out.println("oldGymImage1 " + oldGymImage1);
+			System.out.println(newGymImage1.getOriginalFilename());
+			System.out.println("----");
+		}
+		if(newGymImage2!=null  && newGymImage2.getSize()>0) {
+			System.out.println("oldGymImage2 " + oldGymImage2);
+			System.out.println(newGymImage2.getOriginalFilename());
+			System.out.println("----");
+		}
+		if(newGymImage3!=null  && newGymImage3.getSize()>0) {
+			System.out.println("oldGymImage3 " + oldGymImage3);
+			System.out.println(newGymImage3.getOriginalFilename());
+			System.out.println("----");
+		}
+		if(newGymImage4!=null  && newGymImage4.getSize()>0) {
+			System.out.println("oldGymImage4 " + oldGymImage4);
+			System.out.println(newGymImage4.getOriginalFilename());
+			System.out.println("----");
+		}
+		System.out.println("경로1 :" + gymTrainerPicImgPath);
+		System.out.println("경로2 :" + gymPicImgPath);
+		System.out.println("gymTrainerNameCombine " + gymTrainerNameCombine);
+		System.out.println("gymTrainerPicCombine " + gymTrainerPicCombine);
+		System.out.println("gymPicCombine " + gymPicCombine);*/
+		/*디버깅 끝*/
+		
+		
+		
+		//======체육관 시간 등록===========
+		
+		//GymHour 매장오픈시간 닫는시간 선택하는거 다 합쳐서 한 컬럼에 집어넣기
+		String gymHour1_1 = request.getParameter("gymHour1_1");
+		String gymHour1_2 = request.getParameter("gymHour1_2");
+		
+		String gymHour2_1 = request.getParameter("gymHour2_1");
+		String gymHour2_2 = request.getParameter("gymHour2_2");
+		
+		String gymHour3_1 = request.getParameter("gymHour3_1");
+		String gymHour3_2 = request.getParameter("gymHour3_2");
+		
+		String gymHour1 = gymHour1_1 + " ~ " + gymHour1_2;
+		String gymHour2 = gymHour2_1 + " ~ " + gymHour2_2;
+		String gymHour3 = gymHour3_1 + " ~ " + gymHour3_2;
+		
+		String gymHour = "";
+		gymHour += gymHour1 + ",";
+		gymHour += gymHour2 + ",";
+		gymHour += gymHour3 ;
+		
+		
+		//디비에 들어갈 데이터 dto에 세팅
+		gymdto.setGymTrainer(gymTrainerNameCombine);
+		gymdto.setGymTrainerPic(gymTrainerPicCombine);
+		gymdto.setGymPic(gymPicCombine);
+		gymdto.setGymHour(gymHour);
+		
+		
+		dao.gymupdateData(gymdto);//수정 완료
 		request.setAttribute("gymdto", gymdto);
-		return "redirect:/gymMyPage.action?year=" + nowYear + "&month=" + nowMonth;
+		return "redirect:/gymMyPage.action";
 	}
 
-	// 체육관 정보 수정 (삭제) (채종완)
+	// 체육관 회원 탈퇴
 	@RequestMapping(value = "/gymDeleted_ok.action", method = { RequestMethod.GET, RequestMethod.POST })
 	public String gymDeleted_ok(HttpServletRequest request, GymDTO dto, HttpSession session) {
 		dao.gymdeleteData(dto);
@@ -652,8 +1085,6 @@ public class gypController {
 		String searchValueWord = request.getParameter("searchValueWord"); // 키보드 타이핑한 글자
 		String type = request.getParameter("type");// 정렬타입
 
-		System.out.println(searchValueCategory);
-		
 		//productType 세팅
 		if (searchValueCategory!=null) {
 			productType = searchValueCategory;
@@ -2282,11 +2713,12 @@ public class gypController {
 	}
 	
 	//개인 회원가입 페이지로 이동
-	@RequestMapping(value = "/createCustomer.action")
-	public ModelAndView createCustomer() {
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName("create/createCustomer");
-		return mav;
+	@RequestMapping(value = "/createCustomer.action", method = { RequestMethod.GET, RequestMethod.POST })
+	public String createCustomer(HttpServletRequest request, HttpSession session) {
+		//세션에 올라온값 받기
+		CustomInfo info = (CustomInfo)session.getAttribute("customInfo");
+		request.setAttribute("info", info);
+		return "create/createCustomer";
 	}
 	
 	//개인 회원가입 완료 (삽입)
@@ -2300,11 +2732,12 @@ public class gypController {
 	}
 	
 	//체육관 회원가입 페이지로 이동
-	@RequestMapping(value = "/createGym.action")
-	public ModelAndView createGym() {
-		ModelAndView mav = new ModelAndView();
- 		mav.setViewName("create/createGym");
- 		return mav;
+	@RequestMapping(value = "/createGym.action",method = { RequestMethod.GET, RequestMethod.POST })
+	public String createGym(HttpServletRequest request, HttpSession session) {
+		//세션에 올라온값 받기
+		CustomInfo info = (CustomInfo)session.getAttribute("customInfo");
+		request.setAttribute("info", info);
+ 		return "create/createGym";
 	}
 	
 	//체육관 회원가입 완료 (삽입 + 파일업로드)
@@ -2314,12 +2747,14 @@ public class gypController {
 			String hidden1, MultipartHttpServletRequest multiReq, String str)throws Exception{
 		
 		//경로생성	
-		String path = multiReq.getSession().getServletContext().getRealPath("/resources/img/gymTrainerPic/");
+		/*
+		 * String path = multiReq.getSession().getServletContext().getRealPath(
+		 * "/resources/img/gymTrainerPic/");
+		 */
 		
-		File dir = new File(path);
-		if(!dir.exists()) {
-			dir.mkdir();//경로 체크 후, 없으면 생성
-		}
+		//이미지 path (Controller최상단 PATH)
+		String gymTrainerPicImgPath = PATH + "gymTrainerPic\\";
+		String gymPicImgPath = PATH + "gymPic\\";
 		
 		//---------트레이너 이름 합치기---------
 		
@@ -2352,7 +2787,6 @@ public class gypController {
 			lastWord = gymTrainer.substring(gymTrainer.length()-1, gymTrainer.length());//마지막 글자 다시 세팅
 		}
 		dto.setGymTrainer(gymTrainer);
-
 	
 		
 		//---------트레이너 파일 합치기---------
@@ -2367,7 +2801,7 @@ public class gypController {
 			return "redirect:/";
 		}
 		
-		//html의 upload 가져와서 파일 리스트 생성
+		//html의 upload 가져와서 파일 리스트 생성 (트레이너사진)
 		List<MultipartFile> fileList = multiReq.getFiles("upload");
 		String gymTrainerPic = "";
 		String newFileName = ""; 
@@ -2384,7 +2818,7 @@ public class gypController {
 					gymTrainerPic += newFileName + ",";
 					
 					//fs 생성 및 저장
-					FileOutputStream fs = new FileOutputStream(path + newFileName); 
+					FileOutputStream fs = new FileOutputStream(gymTrainerPicImgPath + newFileName); 
 					fs.write(fileShowOne.getBytes());
 					fs.close();
 				}
@@ -2403,17 +2837,8 @@ public class gypController {
 		}
 		
 		
-		
 		//======체육관 사진 등록===========
-		
-		//체육관 사진 어따 저장해서 넣을건지 경로생성	
-		String path2 = multiReq.getSession().getServletContext().getRealPath("/resources/img/gymPic/");
 				
-		File gymdir = new File(path2);
-		if(!gymdir.exists()) {
-			gymdir.mkdir();//경로 체크 후, 없으면 생성
-		}
-		
 		//html의 upload2 가져와서 파일 리스트 생성
 				List<MultipartFile> fileList2 = multiReq.getFiles("upload2");
 				String gymPic = "";
@@ -2431,7 +2856,7 @@ public class gypController {
 							gymPic += newFileGymName + ",";
 							
 							//fs 생성 및 저장
-							FileOutputStream fs = new FileOutputStream(path2 + newFileGymName); 
+							FileOutputStream fs = new FileOutputStream(gymPicImgPath + newFileGymName); 
 							fs.write(fileShowOne.getBytes());
 							fs.close();
 						}
@@ -2450,36 +2875,29 @@ public class gypController {
 					lastWord = gymPic.substring(gymPic.length()-1, gymPic.length());//마지막 글자 다시 세팅
 				}
 		
-				//GymHour 매장오픈시간 닫는시간 선택하는거 다 합쳐서 한 컬럼에 집어넣기
-				String gymHour1_1 = request.getParameter("gymHour1_1");
-				String gymHour1_2 = request.getParameter("gymHour1_2");
+		//======체육관 시간 등록===========
 				
-				String gymHour2_1 = request.getParameter("gymHour2_1");
-				String gymHour2_2 = request.getParameter("gymHour2_2");
-				
-				String gymHour3_1 = request.getParameter("gymHour3_1");
-				String gymHour3_2 = request.getParameter("gymHour3_2");
-				
-				String gymHour = "";
-				
-				String gymHour1 = gymHour1_1 + gymHour1_2;
-				String gymHour2 = gymHour2_1 + gymHour2_2;
-				String gymHour3 = gymHour3_1 + gymHour3_2;
-				
-				if(gymHour!=null) {
-					gymHour += gymHour1 + ",";
-				}
-				if(gymHour1!=null) {
-					gymHour += gymHour2 + ",";
-				}
-				if(gymHour2!=null) {
-					gymHour += gymHour3 ;
-				}
-			
-				
-				
-				
-				
+		//GymHour 매장오픈시간 닫는시간 선택하는거 다 합쳐서 한 컬럼에 집어넣기
+		String gymHour1_1 = request.getParameter("gymHour1_1");
+		String gymHour1_2 = request.getParameter("gymHour1_2");
+		
+		String gymHour2_1 = request.getParameter("gymHour2_1");
+		String gymHour2_2 = request.getParameter("gymHour2_2");
+		
+		String gymHour3_1 = request.getParameter("gymHour3_1");
+		String gymHour3_2 = request.getParameter("gymHour3_2");
+		
+		String gymHour1 = gymHour1_1 + gymHour1_2;
+		String gymHour2 = gymHour2_1 + gymHour2_2;
+		String gymHour3 = gymHour3_1 + gymHour3_2;
+		
+		String gymHour = "";
+		gymHour += gymHour1 + ",";
+		gymHour += gymHour2 + ",";
+		gymHour += gymHour3 ;
+		
+		System.out.println(gymHour);
+		
 		//dto에 setting
 		dto.setGymHour(gymHour);			
 		dto.setGymTrainerPic(gymTrainerPic);
@@ -2574,7 +2992,6 @@ public class gypController {
 		for(GymDTO eachGym : lists) {
 			List<String> subPic = new ArrayList<String>(Arrays.asList(eachGym.getGymPic().split(",")));
 			eachGym.setGymPicAryList(subPic);
-			System.out.println(subPic.get(0));
 		}
 		
 		req.setAttribute("lists", lists);
@@ -2686,7 +3103,6 @@ public class gypController {
 		for(GymDTO eachGym : lists) {
 			List<String> subPic = new ArrayList<String>(Arrays.asList(eachGym.getGymPic().split(",")));
 			eachGym.setGymPicAryList(subPic);
-			System.out.println(subPic.get(0));
 		}
 		
 		req.setAttribute("searchKey", searchKey);
@@ -2779,7 +3195,7 @@ public class gypController {
 	}
 	
 	
-	//*******************최원식*******************
+	//*******************최보경*******************
 	
 	//관리자 페이지로 이동
 	@RequestMapping(value = "/adminHome.action", method = { RequestMethod.GET, RequestMethod.POST })
@@ -3126,9 +3542,6 @@ public class gypController {
 		String mode = "update";
 		
 		
-		System.out.println(pageNum);
-		System.out.println(searchKey);
-		System.out.println(searchValue);
 		
 		
 		//상품 DTO 가져오기
@@ -3217,6 +3630,7 @@ public class gypController {
 		return "redirect:/adminProductList.action";
 	}
 	
+	//상품 삭제
 	@RequestMapping(value = "/adminProductDeleted.action",method = { RequestMethod.GET, RequestMethod.POST })
 	public String productDeleted(HttpServletRequest request) throws Exception {
 		
