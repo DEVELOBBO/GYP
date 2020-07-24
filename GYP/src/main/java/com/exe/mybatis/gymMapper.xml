@@ -8,13 +8,13 @@ PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
 
 <!-- 체육관 회원 데이터 불러오기 -->
 <select id="getgymReadData" parameterType="String" resultType="com.exe.dto.GymDTO"> 
-	select gymId,gymType,gymName,gymPwd,gymEmail,gymTel,gymAddr,gymCreated,gymPass,
+	select gymId,gymType,gymName,gymPwd,gymEmail,gymTel,gymAddr,gymAddrDetail,gymCreated,gymPass,
 	gymProgram,gymFacility,gymPic,gymTrainerPic,gymTrainer,gymHour from GYM where gymId=#{sessionId}
 </select>
 
 <!-- 회원정보 수정 -->
 <update id="gymUpdateData" parameterType="com.exe.dto.GymDTO">
-	update GYM set gymName=#{gymName}, gymPwd=#{gymPwd}, gymEmail=#{gymEmail}, gymAddr=#{gymAddr},
+	update GYM set gymName=#{gymName}, gymPwd=#{gymPwd}, gymEmail=#{gymEmail}, gymAddr=#{gymAddr},gymAddrDetail=#{gymAddrDetail},
 	gymProgram=#{gymProgram}, gymFacility=#{gymFacility}, gymTrainerPic=#{gymTrainerPic}, 
 	gymTrainer=#{gymTrainer}, gymPic=#{gymPic}, gymHour=#{gymHour}
 	where gymId=#{gymId}

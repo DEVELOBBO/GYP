@@ -9,7 +9,7 @@ PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
 
 <!-- customer 데이터 불러오기 -->
 <select id="getReadData" parameterType="hashMap" resultType="com.exe.dto.CustomerDTO"> 
-	select cusId,cusName,cusPwd,cusEmail,cusTel,cusAddr,cusPass,cusCreated from CUSTOMER where cusId=#{sessionId}
+	select cusId,cusName,cusPwd,cusEmail,cusTel,cusAddr,cusAddrDetail,cusPass,cusCreated from CUSTOMER where cusId=#{sessionId}
 </select>
 
 <!-- 회원정보 수정(비밀번호) -->
@@ -20,7 +20,7 @@ PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
 <!-- 회원정보 수정 -->
 <update id="updateData" parameterType="com.exe.dto.CustomerDTO">
 	update CUSTOMER set cusName=#{cusName}, cusPwd=#{cusPwd}, cusEmail=#{cusEmail}, 
-	cusTel=#{cusTel}, cusAddr=#{cusAddr}, cusPass=#{cusPass} where cusId =#{cusId}
+	cusTel=#{cusTel}, cusAddr=#{cusAddr}, cusAddrDetail=#{cusAddrDetail},cusPass=#{cusPass} where cusId =#{cusId}
 </update>
 
 

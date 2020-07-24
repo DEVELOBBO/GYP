@@ -475,7 +475,7 @@ $(function() {
 
 				<div class="bbsCreated_bottomLine">
 					<dl>
-						<dt>주소(상세주소 추가로 적어주세요^.^)</dt>
+						<dt>주소</dt>
 						<dd>
 							<input type="text" name="gymAddr" size="35" maxlength="50"
 								class="boxTF" value="${dto.gymAddr }" id="sample6_address" placeholder="주소" />
@@ -483,6 +483,14 @@ $(function() {
 								class="boxTF" onclick = "sample6_execDaumPostcode();" value="주소 찾기"/>
 						</dd>
 					</dl>
+					 <dl>
+						<dd class="bokyung_td_left"></td>
+							<input type="text" name="gymAddrDetail" value="${dto.gymAddrDetail }" 
+							style="width : 540px; maxlength="50" 
+							class="bokyung_member_text"  placeholder="상세주소를 입력해주세요" />
+						</dd>
+					</dl>
+		 
 				</div>
 				
 				<c:if test="${mode=='updated' }">	
@@ -609,7 +617,7 @@ $(function() {
 					<div style="height: 10px;"></div>
 					<c:if test="${mode!='updated' }">
 						<dl>
-							<dt>체육관 사진 등록<&nbsp;<font size='1'>(최소1장 이상)</font>/dt>
+							<dt>체육관 사진 등록&nbsp;<font size='1'>(최소1장 이상)</font></dt>
 							<dd>
 								<input type="file" name="upload2" class="boxTF" />
 							</dd>

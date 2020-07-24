@@ -29,7 +29,7 @@ public class AsyncTaskSample {
         	//예약리스트 하나씩 꺼내서
         	//화상링크 생성 (아이디+예약시간+트레이너)
         	Iterator<BookDTO> iterator = FiveBooklist.iterator();
-        	if(iterator.hasNext()) {
+        	while(iterator.hasNext()) {
         		BookDTO dto = iterator.next();
         		String faceLink = dto.getCusId();
         		faceLink += dto.getBookHour();
@@ -40,7 +40,7 @@ public class AsyncTaskSample {
         	//예약리스트 (예약시간 1시간 후인 리스트) - 삭제
         	List<BookDTO> oneHourlist = dao.getOneHourIdList();
         	Iterator<BookDTO> iterator2 = oneHourlist.iterator();
-        	if(iterator2.hasNext()) {
+        	while(iterator2.hasNext()) {
         		BookDTO dto = iterator2.next();
         		dao.delFaceLink(dto.getBookNum());
         	}

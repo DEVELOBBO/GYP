@@ -8,9 +8,20 @@ public class CustomerDTO {
 	private String cusEmail;// 회원 이메일
 	private String cusTel;	// 회원 전화번호
 	private String cusAddr;	// 회원 주소
+	private String cusAddrDetail; //상세주소
 	private int cusPass;	// 회원 소유 패스 갯수
 	private String cusCreated;	// 회원가입일
 	
+	
+	
+	
+	
+	public String getCusAddrDetail() {
+		return cusAddrDetail;
+	}
+	public void setCusAddrDetail(String cusAddrDetail) {
+		this.cusAddrDetail = cusAddrDetail;
+	}
 	public String getCusId() {
 		return cusId;
 	}

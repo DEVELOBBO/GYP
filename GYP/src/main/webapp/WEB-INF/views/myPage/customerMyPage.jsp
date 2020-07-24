@@ -80,7 +80,7 @@
             </tr>
             <tr>
                <th style="font-size: 20px;" >주소</th>
-               <td style="text-align: left;">${cusdto.cusAddr }</td>
+               <td style="text-align: left;">${cusdto.cusAddr }&nbsp;${cusdto.cusAddrDetail }</td>
             </tr>
          </table> 
          

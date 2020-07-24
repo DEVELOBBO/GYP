@@ -93,7 +93,7 @@
 					</tr>
 					<tr style="text-align: center">
 						<th style="font-size: 20px;" >주소</th>
-						<td style="text-align: left;">${gymdto.gymAddr }</td>
+						<td style="text-align: left;">${gymdto.gymAddr }&nbsp;${gymdto.gymAddrDetail }</td>
 					</tr>
 				</table>
 

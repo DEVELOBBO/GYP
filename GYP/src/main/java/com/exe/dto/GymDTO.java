@@ -11,6 +11,7 @@ public class GymDTO {
 	private String gymEmail;   	// 체육관 이메일
 	private String gymTel;   	// 체육관 전화번호
 	private String gymAddr;   	// 체육관 주소
+	private String gymAddrDetail;   	// 체육관 상세주소
 	private float gymLongitude;  // 체육관 경도
 	private float gymLatitude;   // 체육관 위도
 	private String gymTrainer;   // 체육관 트레이너 (1,2,3,4) - 파싱해서 사용
@@ -31,6 +32,12 @@ public class GymDTO {
 	private List<String> gymPicAryList; //map에서 사진 뿌리는 용도
 
 	
+	public String getGymAddrDetail() {
+		return gymAddrDetail;
+	}
+	public void setGymAddrDetail(String gymAddrDetail) {
+		this.gymAddrDetail = gymAddrDetail;
+	}
 	public List<String> getGymPicAryList() {
 		return gymPicAryList;
 	}

@@ -2976,28 +2976,13 @@ public class gypController {
 		String cusAddrJibun = request.getParameter("cusAddrJibun");
 		String cusAddrDetail = request.getParameter("cusAddrDetail");
 		
-		String cusAddr = "";
-		
-		
-		if(cusAddrJibun!=null) {
-			cusAddr += cusAddrJibun + ", ";
-		}
-		if(cusAddrDetail!=null) {
-			cusAddr += cusAddrDetail + ",";
-		}
-		
-		
-		//중간에 ,(쉼표) 빼기    ex)서울 송파구 풍납동,301호  <-쉼표빼주기 
-		String word = cusAddr.substring(0, cusAddr.length());
-		cusAddr = word.replace(",","");
-		
-		dto.setCusAddr(cusAddr);
-		
+		dto.setCusAddr(cusAddrJibun);
+		dto.setCusAddrDetail(cusAddrDetail);
 		
 		dao.cusCreated(dto);
 		return "redirect:/login.action";
 	}
-	
+
 	//체육관 회원가입 페이지로 이동
 	@RequestMapping(value = "/createGym.action",method = { RequestMethod.GET, RequestMethod.POST })
 	public String createGym(HttpServletRequest request, HttpSession session) {
@@ -3235,6 +3220,8 @@ public class gypController {
 	//제휴시설 찾기로 이동 (첫화면만)
 	@RequestMapping(value = "/map.action", method = { RequestMethod.GET, RequestMethod.POST })
 	public String map(HttpServletRequest req) throws Exception {
+		
+		CustomInfo customInfo = null;
 		String sessionId = "";
 		String cusAddrGoo = "";
 		HttpSession httpSession = req.getSession(true);		

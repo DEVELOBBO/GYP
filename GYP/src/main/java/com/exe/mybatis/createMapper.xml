@@ -8,15 +8,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <!-- 개인회원가입 --> 
 <insert id="insertCus" parameterType="com.exe.dto.CustomerDTO">
-	insert into CUSTOMER(cusId,cusName,cusPwd,cusEmail,cusTel,cusAddr,cusPass,cusCreated)
-	values (#{cusId},#{cusName},#{cusPwd},#{cusEmail},#{cusTel},#{cusAddr},0,sysdate)
+	insert into CUSTOMER(cusId,cusName,cusPwd,cusEmail,cusTel,cusAddr,cusAddrDetail,cusPass,cusCreated)
+	values (#{cusId},#{cusName},#{cusPwd},#{cusEmail},#{cusTel},#{cusAddr},#{cusAddrDetail},0,sysdate)
 </insert>
 
 <!-- 체육관회원가입 -->
 <insert id="insertGym" parameterType="com.exe.dto.GymDTO">
-	insert into GYM (gymId,gymType,gymName,gymPwd,gymEmail,gymTel,gymAddr,gymLongitude,gymLatitude
+	insert into GYM (gymId,gymType,gymName,gymPwd,gymEmail,gymTel,gymAddr,gymAddrDetail,gymLongitude,gymLatitude
 	,gymTrainer,gymTrainerPic,gymPic,gymProgram,gymFacility,gymHour,gymCreated,gymPass,gymOk)
-	values (#{gymId},#{gymType},#{gymName},#{gymPwd},#{gymEmail},#{gymTel},#{gymAddr},1,1,
+	values (#{gymId},#{gymType},#{gymName},#{gymPwd},#{gymEmail},#{gymTel},#{gymAddr},#{gymAddrDetail},1,1,
 	#{gymTrainer},#{gymTrainerPic},#{gymPic},#{gymProgram},#{gymFacility},#{gymHour},sysdate,1,'false')
 </insert>
 

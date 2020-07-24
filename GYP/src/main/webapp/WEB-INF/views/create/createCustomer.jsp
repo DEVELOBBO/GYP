@@ -353,16 +353,7 @@
 					 onclick = "sample6_execDaumPostcode();" value="주소 찾기" />		
 				</td>							
 		</tr>
-		
-			<tr>
-				<td class="bokyung_td_left"></td>
-				<td>	
-					<input type="text" name="cusAddrDetail" style="width : 540px; maxlength="50" 
-					class="bokyung_member_text"  placeholder="상세주소를 입력해주세요" />
-				</td>
-			</tr>
 		</c:if>
-		
 		
 		
 		<c:if test="${mode=='updated' }">	
@@ -375,9 +366,17 @@
 					 onclick = "sample6_execDaumPostcode();" value="주소 찾기" />		
 				</td>							
 		</tr>
-		
-		
 		</c:if>
+		 
+		 
+		 <tr>
+			<td class="bokyung_td_left"></td>
+			<td>	
+				<input type="text" name="cusAddrDetail" value="${dto.cusAddrDetail }" 
+				style="width : 540px; maxlength="50" 
+				class="bokyung_member_text"  placeholder="상세주소를 입력해주세요" />
+			</td>
+		</tr>
 		 
 		</table>
 		
