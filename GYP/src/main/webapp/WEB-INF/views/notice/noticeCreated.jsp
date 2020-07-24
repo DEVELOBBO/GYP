@@ -18,6 +18,7 @@
 	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400&display=swap" rel="stylesheet">
 	<!-- notice.css -->
 	<link rel="stylesheet" href="/gyp/resources/css/notice.css">	
+
 <title>GYP</title>
 <script type="text/javascript">
 function sendIt(){
@@ -62,61 +63,56 @@ function sendIt(){
 	<!-- 메인 : header_main.jsp / 그외 : header_below.jsp -->
 	<jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
 
-</head>
-<body style="font-family: 'Noto Sans KR', sans-serif;">
-	<div id="noticeList">
-		<c:if test="${mode=='insert'}">
-		<div id="noticeList_title">공지사항 등록</div>
-		</c:if>
-		
-		<c:if test="${mode=='update'}">
-		<div id="noticeList_title">공지사항 수정</div>
-		</c:if>
-			
-		<br><br>
-		
+
+	<section class="contact-area section-padding-100">
+	<div class="container">
+	<div class="row">
+	<div class="col-12">
+	<div class="contact-title">
+		<h2>공지사항</h2><hr><br>
+	</div>
+	</div>
+	</div>
+	<div class="row">
+	<div class="col-12">
+	<div class="contact-content">
+	<div class="contact-form-area">
 		<form method="post" action="/notice/noticeCreated.action" name="myForm">
 		
-		<table>
-			<tr>
-				<td>번호</td>
-				<td><input type="text" name="notiNum" size="74" maxlength="100" value="${dto.notiNum }" disabled="disabled"/></td>
-			</tr>
+			<div class="form-group">
+				번호<input type="text" name="notiNum" class="form-control" value="${dto.notiNum }" disabled="disabled"/>
+			</div>	
+			<div class="form-group">	
+				<br>제목<em style="color:red;">*</em><input type="text" name="notiTitle" class="form-control" placeholder="제목을 입력해주세요" value="${dto.notiTitle }"/>
+			</div>
+			<div class="form-group">
+				<br>내용<em style="color:red;">*</em><textarea name="notiContent" rows="12" cols="63" class="form-control" placeholder="내용을 입력해주세요">${dto.notiContent }</textarea>
+			</div>
 		
-			<tr>
-				<td>제목</td>
-				<td><input type="text" name="notiTitle" size="74" maxlength="100" value="${dto.notiTitle }"/></td>
-			</tr>
-			
-			<tr>
-				<td>내용</td>
-				<td><textarea name="notiContent" rows="12" cols="63" >${dto.notiContent }</textarea></td>
-			</tr>
-		</table>
-		<div id="notiCreated footer">
-		<br>
 		<input type="hidden" name="mode" value="${mode }" />
-						
-			<c:if test="${mode=='update'}">
-			<input type="hidden" name="notiNum" value="${dto.notiNum }"/>
-			</c:if>
-			<input type="hidden" name="pageNum"	value="${pageNum }"/>
-						
+		<input type="hidden" name="pageNum"	value="${pageNum }"/>
+		<!-- update -->
+		<input type="hidden" name="notiNum" value="${dto.notiNum }"/>
+		
 			<c:if test="${mode=='insert'}">
-			<input type="button" value="등록하기"  onclick="sendIt();"/>
-			<input type="button" value ="작성취소" 
+			<input type="button" value="등록하기" class="btn fitness-btn btn-2 mt-30" onclick="sendIt();"/>
+			<input type="button" value ="작성취소" class="btn fitness-btn btn-2 mt-30"
 			onclick="javascript:location.href='/gyp/noticeList.action';"/>
 			</c:if>
-						
+					
 			<c:if test="${mode=='update'}">
-			<input type="button" value="수정하기"  onclick="sendIt();"/>
-			<input type="button" value ="수정취소"
+			<input type="button" value="수정하기" class="btn fitness-btn btn-2 mt-30"  onclick="sendIt();"/>
+			<input type="button" value ="수정취소" class="btn fitness-btn btn-2 mt-30"
 			onclick="javascript:location.href='/gyp/noticeList.action';"/>
 			</c:if>
-						
-		</div>
 		</form>
-	</div>
+		</div>
+		</div>
+		</div>
+		</div>
+		</div>
+		</section>
+	<br><br><br>
 	<jsp:include page="/WEB-INF/views/layout/footer.jsp" />
 
 	
@@ -131,7 +127,6 @@ function sendIt(){
     <script src="/gyp/resources/js/plugins/plugins.js"></script>
     <!-- Active js -->
     <script src="/gyp/resources/js/active.js"></script>
-	
 	<!-- notice.js -->
 	<script src="/gyp/resources/js/notice.js"></script>
 </body>

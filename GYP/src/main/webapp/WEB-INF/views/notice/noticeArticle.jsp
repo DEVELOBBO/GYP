@@ -19,6 +19,7 @@ String cp = request.getContextPath();
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400&display=swap" rel="stylesheet">
 <!-- notice.css -->
 <link rel="stylesheet" href="/gyp/resources/css/notice.css">
+
 <title>GYP</title>
 <script type="text/javascript">
 function deleteData(){
@@ -52,60 +53,42 @@ function updateData(){
 	<!-- 메인 : header_main.jsp / 그외 : header_below.jsp -->
 	<jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
 
-	<div id="noticeList">
-		<br>
-		<br>
-		<br>
-		<h5>FITNESS GYM</h5>
-		<div id="noticeList_title">WORKING HOUR &nbsp;&nbsp; 공지사항</div>
-		<br>
-
-		<div>
-			<div id="noticeList_list">
-				<dl>
-					<dt>제목: ${dto.notiTitle }</dt>
-					<dt>이름 : 대표관리자</dt>
-					<dt>작성일: ${dto.notiCreated }</dt>
-				</dl>
-			</div>
-			<div id="lists">
-				<table width="600" border="0">
-					<tr>
-						<td style="padding: 20px 80px 20px 62px;" valign="top" height="200">${dto.notiContent }</td>
-					</tr>
-				</table>
-			</div>
+	<section class="contact-area section-padding-100">
+		<div class="container">
+		<div class="row">
+		<div class="col-12">
+		<div class="contact-form-area">
+			<div style="font-size:25px;font-weight: bold;colspan:4">${dto.notiTitle }</div>
+			<div style="colspan:4">작성일 : ${dto.notiCreated }<hr></div>
+			<div style="valign:top;colspan:4;">${dto.notiContent }</div>
 		</div>
+		</div>
+		</div>
+		<br><br>
 		<div>
 			이전글:
 			<c:if test="${!empty preNotiTitle  }">
 				<a href="<%=cp%>/noticeArticle.action?pageNum=${pageNum }&notiNum=${preNotiNum}">${preNotiTitle }</a>
 			</c:if>
 		</div>
-
+		
 		<div>
 			다음글:
 			<c:if test="${!empty nextNotiTitle  }">
 				<a href="<%=cp%>/noticeArticle.action?pageNum=${pageNum }&notiNum=${nextNotiNum}">${nextNotiTitle }</a>
 			</c:if>
 		</div>
-		<br>
-
-
-		<div id="noticeArticle_footer">
-			<div id="leftFooter">
-			<!-- 마이페이지에서 다 수정/삭제버튼 설정해놓을거 같아서, 지워도 된다.   -->
-			
-			<c:if test="${sessionScope.customInfo.sessionId =='admin' }">
-			<input type="button" value="수정" class="btn2" onclick="updateData();">
-			<input type="button" value="삭제" class="btn2" onclick="deleteData();">
-			</c:if>
-			</div>  
-				<input type="button" value="목록" onclick="javascript:location.href='<%=cp%>/noticeList.action?pageNum=${pageNum }';" />
-			</div>
+		
+		<div>
+		<c:if test="${result==0}"> 
+			<input type="button" class="btn fitness-btn btn-2 mt-30" value="수정" onclick="updateData();">
+			<input type="button" class="btn fitness-btn btn-2 mt-30" value="삭제" onclick="deleteData();">
+		</c:if>	
+			<input type="button" class="btn fitness-btn btn-2 mt-30" value="목록"
+				onclick="javascript:location.href='<%=cp%>/noticeList.action?pageNum=${pageNum }';" />
 		</div>
-
-	
+	</div>
+	</section>
 
 
 	<jsp:include page="/WEB-INF/views/layout/footer.jsp" />

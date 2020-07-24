@@ -500,9 +500,9 @@ private SqlSessionTemplate sessionTemplate;
 		
 	}
 
-	
+
 	//*******************서예지*******************
-	
+
 	// 공지사항 최댓값
 	public int getNoticeMaxNum(){
 		
@@ -642,12 +642,6 @@ private SqlSessionTemplate sessionTemplate;
 	//QnA수정
 	public void updateQnaData(QnaDTO dto){
 		sessionTemplate.update("qna.updateData",dto);
-	}
-	
-	//QnA타입 받아오기
-	public String getQnaType(int qnaNum) {
-		String qnaType = sessionTemplate.selectOne("qna.getQnaType",qnaNum);
-		return qnaType;
 	}
 
 	

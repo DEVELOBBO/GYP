@@ -20,6 +20,7 @@ String cp = request.getContextPath();
 <!-- qna.css -->
 <link rel="stylesheet" href="/gyp/resources/css/qna.css">
 
+
 <title>GYP</title>
 <script type="text/javascript">
 //삭제
@@ -63,31 +64,22 @@ function sendData() {
 	<!-- 메인 : header_main.jsp / 그외 : header_below.jsp -->
 	<jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
 
-	<div id="qnaList">
-		<br><br><br>
-		<!-- 제목 -->
-		<h5>FITNESS GYM</h5>
-		<div id="qnaList_title">WORKING HOUR &nbsp;&nbsp; Q&A</div>
-		<br>
-		<!-- 게시글 메인부분 -->
-		<div>
-			<div id="qnaList_list">
-				<dl>
-					<dt>제목: ${dto.qnaTitle }</dt>
-					<dt>이름 : ${dto.cusId }</dt>
-					<dt>작성일: ${dto.qnaCreated }</dt>
-					<dt>질문유형: ${dto.qnaType }</dt>
-				</dl>
-			</div>
-			<div id="lists">
-				<table width="600" border="0">
-					<tr>
-						<td class="content" style="padding: 20px 80px 20px 62px;" valign="top" height="200">${dto.qnaContent }</td>
-					</tr>
-				</table>
-			</div>
 
+	<section class="contact-area section-padding-100">
+		<div class="container">
+		<div class="row">
+		<div class="col-12">
+		<div class="contact-form-area">
+			<div style="font-size:25px;font-weight: bold;colspan:4">${dto.qnaTitle }</div>
+			<div>아이디 : ${dto.cusId }</div>
+			<div>작성일 : ${dto.qnaCreated }<hr></div>
+			<div style="valign:top;colspan:4;">${dto.qnaContent }</div>
 		</div>
+		</div>
+		</div>
+		
+		<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+		
 		<div>
 			이전글:
 			<c:if test="${!empty preQnaTitle  }">
@@ -101,19 +93,24 @@ function sendData() {
 				<a href="<%=cp%>/qnaArticle.action?pageNum=${pageNum }&qnaNum=${nextQnaNum}"> ${nextQnaTitle } </a>
 			</c:if>
 		</div>
-		<br>
 		<input type="hidden" value="${dto.qnaNum }">
 
-		<div id="qnaArticle_footer">
-			<div id="leftFooter">
-				<input type="button" value="테스트용 답글"  onclick="sendData();">
-				<input type="button" value="테스트용 수정"  onclick="updateData();"> 
-				<input type="button" value="테스트용 삭제" onclick="deleteData();">
-				<input type="button" value="목록" onclick="javascript:location.href='/gyp/qnaList.action?pageNum=${pageNum }';" />
-			</div>
+		
+		<div>
+			<c:if test="${result==0}"> 
+				<input type="button" class="btn fitness-btn btn-2 mt-30" value="답글" onclick="sendData();">
+			</c:if>
+			<%-- <c:if test="${result==2}"> --%> 	
+				<input type="button" class="btn fitness-btn btn-2 mt-30" value="수정" onclick="updateData();">
+				<input type="button" class="btn fitness-btn btn-2 mt-30" value="삭제" onclick="deleteData();">
+			<%-- </c:if>	 --%>
+				<input type="button" class="btn fitness-btn btn-2 mt-30" value="목록" onclick="javascript:location.href='/gyp/qnaList.action?pageNum=${pageNum }';" />
 		</div>
-	</div>
-
+		</div>
+	</section>
+	
+	
+	
 	<jsp:include page="/WEB-INF/views/layout/footer.jsp" />
 
 

@@ -17,7 +17,8 @@
 	<!-- font -->
 	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400&display=swap" rel="stylesheet">
 	<!-- notice.css -->
-	<link rel="stylesheet" href="/gyp/resources/css/notice.css">	
+	<link rel="stylesheet" href="/gyp/resources/css/notice.css">
+
 <title>GYP</title>
 </head>
 <body style="font-family: 'Noto Sans KR', sans-serif;">
@@ -26,49 +27,53 @@
 	<!-- 메인 : header_main.jsp / 그외 : header_below.jsp -->
 	<jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
 	
-	
-	<div id="noticeList">
-		<br><br>
-		<h5>FITNESS GYM</h5>
-		<div id="noticeList_title">WORKING HOURS &nbsp;&nbsp; 공지사항</div>
-		<br>
-		<c:if test="${sessionScope.customInfo.sessionId =='admin' }"> 
-		<button onclick="javascript:location.href='/gyp/noticeCreated.action'"> 글올리기 </button>
+	<section class="contact-area section-padding-100">
+	<div class="container">
+	<div class="row">
+	<div class="col-12">
+	<div class="contact-title">
+		<h5 style="color:#38b143;">FITNESS GYM</h5>
+		<h2>공지사항
+		<c:if test="${result==0}"> 
+		<input type="button" style="float:right;" class="btn fitness-btn m-2"  value="작성하기" onclick="javascript:location.href='/gyp/noticeCreated.action';">
 		</c:if>
 		<c:if test="${result==1}">
 		
 		</c:if>
+		</h2>
+	</div>
+	</div>
+	</div>
+	</div>
 		
-		<div id="noticeList_list">
+		<div class="container">
+		<div class="row">
+		<div class="col-12">
+		<div class="contact-form-area">
 			<c:forEach var="dto" items="${lists }">
 			<hr>
 			<div>
-				<table>
-					<tr>
-					<td>${dto.listNum }</td>
-					<td>+
-						<a href="${articleUrl}&notiNum=${dto.notiNum}">
-							${dto.notiTitle }
-						</a>
-					</td>
-					<td id="right">${dto.notiCreated }</td>
-					</tr>
-				</table>
+				<div>${dto.listNum }</div>
+				<div>
+					<a href="${articleUrl}&notiNum=${dto.notiNum}">
+						${dto.notiTitle }
+					</a>
+				</div>
+				<div>${dto.notiCreated }</div>
 			</div>	
 			</c:forEach>
 			<hr>
-		</div>
-				
-		<div id="noticeList_footer">
+		</div></div></div></div>
+		
+		<div class="container">		
 			<c:if test="${dataCount!=0 }">
 				${pageIndexList }
 			</c:if>
 			<c:if test="${dataCount==0 }">
 				등록된 게시물이 없습니다.
 			</c:if>
-		</div>
-			
-	</div>
+		</div>	
+	</section>		
 
 
 	<jsp:include page="/WEB-INF/views/layout/footer.jsp" />

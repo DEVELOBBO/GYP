@@ -18,91 +18,66 @@
 	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400&display=swap" rel="stylesheet">
 	<!-- qna.css -->
 	<link rel="stylesheet" href="/gyp/resources/css/qna.css">
+	
 <title>GYP</title>
-<script type="text/javascript">
-function search(){
-	
-	f = document.searchForm;
-	f.action="/gyp/qnaList.action";
-	f.submit();
-}
-
-function create(){
-	
-	f = document.searchForm;
-	
-	<c:if test="${empty sessionScope.customInfo.sessionId }">
-		alert("로그인 해주세요");
-		f.action = "/gyp/login.action";
-		f.submit();
-	</c:if>
-	
-	<c:if test="${!empty sessionScope.customInfo.sessionId }">
-		f.action="/gyp/qnaCreated.action";
-		f.submit();
-	</c:if>
-}
-
-</script>
 </head>
 <body style="font-family: 'Noto Sans KR', sans-serif;">
 	<jsp:include page="/WEB-INF/views/layout/header_over.jsp" />
 	<!-- 메인 : header_main.jsp / 그외 : header_below.jsp -->
 	<jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
 	
-	<div id="qnaList">
-		<br><br>
-		<h5>FITNESS GYM</h5>
-		<div id="qnaList_title">WORKING HOURS &nbsp;&nbsp; Q&A</div>
-		<br>
+	<section class="contact-area section-padding-100">
+	<div class="container">
+	<div class="row">
+	<div class="col-12">
+	<div class="contact-title">
+		<h5 style="color:#38b143;">FITNESS GYM</h5>
+		<h2>Q&A&nbsp;&nbsp;&nbsp;
+		<input type="button" style="float: right;" class="btn fitness-btn m-2" value="1:1 문의 남기기" onclick="javascript:location.href='/gyp/qnaCreated.action';"/>
+		</h2>
+	</div>
+	</div>
+	</div>
+	</div>	
 		
-		<div>
-			<div>
-				<form name="searchForm" method="post">
-					<select name="searchValue">
-						<option value="">전체</option>
-						<option value="체육관">체육관</option>
-						<option value="이용권">이용권</option>
-						<option value="쇼핑몰">쇼핑몰</option>				
-					</select>
-					<input type="text" name="searchValue2">
-					<input type="button" value="검색" onclick="search();"/>			
-				</form>		
-			</div>
-			
-			<div id="rightHeader">
-				<input type="button" value="질문올리기" class="btn2" onclick="create();"/>		
-			</div>
-			
-		<c:if test="${result==1}">
-		
-		</c:if>		
+		<div class="container">
+			<form name="searchForm" method="post">
+				<select name="searchValue" style="border: none;">
+					<option value="">전체</option>
+					<option value="체육관">체육관</option>
+					<option value="이용권">이용권</option>
+					<option value="쇼핑몰">쇼핑몰</option>				
+				</select>
+				<input type="text" placeholder="어떤 도움이 필요하세요?" name="searchValue2" 
+				style="border: none;">
+				<input type="submit" class="fas fa-search"  onclick="sendIt();"
+				style="width:42px;height:32px;border: none;background-color:#38b143;color: white;" value="&#xf002;"/>
+			</form>
 		</div>
-				
-		<div class="qnaList_list">
+		
+		<div class="container">
+		<div class="row">
+		<div class="col-12">
+		<div class="contact-form-area">
 			<c:forEach var="dto" items="${lists }">
 			<hr>
 			<div>
-				<table>
-					<tr>
-					<td>${dto.listNum }</td>
-					<td>
-						<c:if test="${dto.qnaDepth!=0}">
-							<c:forEach var="i" begin="1" end="${dto.qnaDepth }" step="1">
-								&nbsp;
-							</c:forEach>
-						</c:if>
-						<a href="${articleUrl}&qnaNum=${dto.qnaNum}">${dto.qnaTitle }</a>
-					</td>
-					<td id="right">${dto.qnaCreated }</td>
-					</tr>
-				</table>
+				<div>${dto.listNum }</div>
+				<div>	
+					<c:if test="${dto.qnaDepth!=0}">
+						<c:forEach var="i" begin="1" end="${dto.qnaDepth }" step="1">
+							&nbsp;
+						</c:forEach>
+					</c:if>
+					<a href="${articleUrl}&qnaNum=${dto.qnaNum}">${dto.qnaTitle }</a>
+				</div>	
+				<div>${dto.qnaCreated }</div>	
 			</div>
 			</c:forEach>
 			<hr>
-		</div>
+		</div></div></div></div>
 				
-		<div id="qnaList_footer">
+		<div class="container">	
 			<c:if test="${dataCount!=0 }">
 				${pageIndexList }
 			</c:if>
@@ -110,11 +85,21 @@ function create(){
 				등록된 게시물이 없습니다.
 			</c:if>
 		</div>
-			
-	</div>
+	</section>		
+	
 
 	<jsp:include page="/WEB-INF/views/layout/footer.jsp" />
+<script type="text/javascript">
+function sendIt(){
+	
+	f = document.searchForm;
+	f.action="/gyp/qnaList.action";
+	f.submit();
+}
 
+
+
+</script>
     <!-- ##### All Javascript Script ##### -->
     <!-- jQuery-2.2.4 js -->
     <script src="/gyp/resources/js/jquery/jquery-2.2.4.min.js"></script>
@@ -128,6 +113,7 @@ function create(){
     <script src="/gyp/resources/js/active.js"></script>
 	<!-- qna.js -->
 	<script src="/gyp/resources/js/qna.js"></script>
-
+<!-- fontawesome(검색버튼) -->
+	<script src="https://kit.fontawesome.com/4badd96a47.js" crossorigin="anonymous"></script>
 </body>
 </html>

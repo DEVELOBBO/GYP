@@ -37,7 +37,8 @@ function sendIt() {
 	
 	str = f.mode.value;
 	if(!($('input:radio[name="qnaType"]').is(':checked'))&&(str=="insert")){
-		alert("\n질문유형을 선택해주세요");
+		alert("\n문의유형을 선택해주세요");
+		location.reload();
 		return;
 	}
 	f.mode.value = str;
@@ -63,15 +64,15 @@ function sendIt() {
 }
 
 function qnaTypeCheck(){
-	   var chkcount = document.getElementsByName("qnaType").length;
-	   
-	   for(var i=0;i<chkcount;i++){
-	      if(document.getElementsByName("qnaType")[i].checked == true){
-	         var qnaTypeChk = document.getElementsByName("qnaType")[i].value;
-	         $('input[name=qnaTitle]').attr('value','['+qnaTypeChk+']');
-	      }
-	   }
+	var chkcount = document.getElementsByName("qnaType").length;
+	
+	for(var i=0;i<chkcount;i++){
+		if(document.getElementsByName("qnaType")[i].checked == true){
+			var qnaTypeChk = document.getElementsByName("qnaType")[i].value;
+			$('input[name=qnaTitle]').attr('value','['+qnaTypeChk+']');
+		}
 	}
+}
 
 </script>
 </head>
@@ -81,81 +82,75 @@ function qnaTypeCheck(){
 	<!-- 메인 : header_main.jsp / 그외 : header_below.jsp -->
 	<jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
 <!-- 제목 -->
-	<c:if test="${mode=='insert'}">
-		<h2>Q&A 등록</h2>
-	</c:if>
-	<c:if test="${mode=='update'}">
-		<h2>Q&A 수정</h2>
-	</c:if>
-	<c:if test="${mode=='reply'}">
-		<h2>Q&A 답글</h2>
-	</c:if>
-
-	<br><br>
-<!-- 메인 -->
+	<section class="contact-area section-padding-100">
+	<div class="container">
+	<div class="row">
+	<div class="col-12">
+	<div class="contact-title">
+		<h2>1:1 문의하기</h2><hr><br>
+	</div>
+	</div>
+	</div>
+	<div class="row">
+	<div class="col-12">
+	<div class="contact-content">
+	<div class="contact-form-area">
 	<form method="post" action="/gyp/qnaCreated.action" name="myForm">
 
-		<table>
-			<tr>
-				<td>번호</td>
-				<td><input type="text" name="qnaNum" value="${dto.qnaNum }" disabled="disabled" /></td>
-			</tr>
-			<tr>
-			<!-- 게시글 작성할 때만 나타나게 하고, 수정/답글할 때는 예전에 작성했던 것들을 불러오기위해. -->
+			<div class="form-group">
+				번호<input type="text" name="qnaNum" class="form-control" value="${dto.qnaNum }" disabled="disabled"/>
+			</div>
+			
 			<c:if test="${mode=='insert'}">	
-				<td>질문유형 </td>
-				<td>
-					<input type="radio" name="qnaType" value="체육관" onclick="qnaTypeCheck()"/>체육관
-					<input type="radio" name="qnaType" value="이용권" onclick="qnaTypeCheck()"/>이용권
-					<input type="radio" name="qnaType" value="쇼핑몰" onclick="qnaTypeCheck()"/>쇼핑몰
-				</td>
-			</c:if>	
-			</tr>
-			<tr>
-				<td>작성자</td>
-				<td><input type="text" name="cusId" value="${sessionScope.customInfo.sessionId }" disabled="disabled" /></td>
-			</tr>
-			<tr>
-				<td>제목</td>
-				<td><input type="text" name="qnaTitle" size="74" maxlength="100" value="${dto.qnaTitle }"></td>
-			</tr>
-			<tr>
-				<td>내용</td>
-				<td><textarea name="qnaContent" rows="12" cols="63">${dto.qnaContent }</textarea></td>
-			</tr>
-		</table>
-		<div id="qnaCreated footer">
-		<!-- reply필요한 파라미터 -->			
+				<br>문의유형<em style="color:red;">*</em>&nbsp;&nbsp;&nbsp;
+					<input type="radio" name="qnaType" value="체육관" onclick="qnaTypeCheck()"/>체육관&nbsp;&nbsp;
+					<input type="radio" name="qnaType" value="이용권" onclick="qnaTypeCheck()"/>이용권&nbsp;&nbsp;
+					<input type="radio" name="qnaType" value="쇼핑몰" onclick="qnaTypeCheck()"/>쇼핑몰&nbsp;&nbsp; 			
+			</c:if>
+			<div class="form-group">	
+				<br><br>작성자<input type="text" name="cusId" class="form-control" value="${dto.cusId }" disabled="disabled"/>
+			</div>
+			<div class="form-group">
+				<br>제목<em style="color:red;">*</em><input type="text" name="qnaTitle" class="form-control" placeholder="제목을 입력해주세요" value="${dto.qnaTitle }">
+			</div>
+			<div class="form-group">
+				<br>내용<em style="color:red;">*</em><textarea name="qnaContent" rows="12" cols="63" class="form-control" placeholder="운영체제와 브라우저를 함께 적어주시면 정확한 문제 해결에 도움이 됩니다.">${dto.qnaContent }</textarea>
+			</div>
+			
+		<!-- reply필요한 파라미터 -->
+			<input type="hidden" name="qnaType" value="${dto.qnaType }"/>			
 			<input type="hidden" name="qnaGroupNum" value="${dto.qnaGroupNum }"/>
 			<input type="hidden" name="qnaOrderNo" value="${dto.qnaOrderNo }"/>
 			<input type="hidden" name="qnaDepth" value="${dto.qnaDepth }"/>
 			<input type="hidden" name="qnaParent" value="${dto.qnaNum }"/>
 		<!-- insert 필요한 파라미터 -->	
-			<input type="hidden" name="qnaType" value="${dto.qnaType }"/>
 			<input type="hidden" name="mode" value="${mode }"/>
 		<!-- update 필요한 파라미터 -->	
 			<input type="hidden" name="pageNum" value="${pageNum }"/>
 			<input type="hidden" name="qnaNum" value="${dto.qnaNum }" />
-			
-
+		
 			<c:if test="${mode=='insert'}">
-				<input type="button" value="등록하기" onclick="sendIt();" />
-				<input type="button" value="작성취소" onclick="javascript:location.href='/gyp/qnaList.action';" />
+				<input type="button" class="btn fitness-btn btn-2 mt-30" value="등록하기" onclick="sendIt();" />
+				<input type="button" class="btn fitness-btn btn-2 mt-30" value="작성취소" onclick="javascript:location.href='/gyp/qnaList.action';" />
 			</c:if>
 
 			<c:if test="${mode=='update'}">
-				<input type="button" value="수정하기" onclick="sendIt();" />
-				<input type="button" value="수정취소" onclick="javascript:location.href='/gyp/qnaList.action';" />
+				<input type="button" class="btn fitness-btn btn-2 mt-30" value="수정하기" onclick="sendIt();" />
+				<input type="button" class="btn fitness-btn btn-2 mt-30" value="수정취소" onclick="javascript:location.href='/gyp/qnaList.action';" />
 			</c:if>
 			
 			<c:if test="${mode=='reply'}">
-				<input type="button" value="답변하기" onclick="sendIt();" />
-				<input type="button" value="작성취소" onclick="javascript:location.href='/gyp/qnaList.action';" />
+				<input type="button" class="btn fitness-btn btn-2 mt-30" value="답변하기" onclick="sendIt();" />
+				<input type="button" class="btn fitness-btn btn-2 mt-30" value="작성취소" onclick="javascript:location.href='/gyp/qnaList.action';" />
 			</c:if>
-
+		</form>
 		</div>
-	</form>
-
+		</div>
+		</div>
+		</div>
+		</div>
+		</section>
+	<br><br><br>	
 	<jsp:include page="/WEB-INF/views/layout/footer.jsp" />
 
 
