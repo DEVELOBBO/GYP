@@ -15,7 +15,9 @@
 	<!-- Favicon -->
 	<link rel="icon" href="/gyp/resources/img/core-img/favicon.ico">
 	<!-- Core Stylesheet -->
-	<link rel="stylesheet" href="/gyp/resources/css/style.css">
+	<link rel="stylesheet" href="/gyp/resources/css/phonmeStyle.css">
+	<link rel="stylesheet" href="/gyp/resources/css/createCustomer.css">
+	<link rel="stylesheet" href="/gyp/resources/css/phonmeMember.css">
 	<!-- font -->
 	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400&display=swap" rel="stylesheet">
 	
@@ -31,6 +33,12 @@
 
 
 <script type="text/javascript">
+
+
+
+
+
+
 
 		$(function (){
 			//아이디 중복체크
@@ -157,49 +165,65 @@
 			return false;
 	 	}
 	 	
-	 	if(!f.cusAddr.value){
-			alert("주소를 입력하세요.");
-			f.cusAddr.focus();
-			return; 
-		}
 	 	
-	 	if(!cc3.test(f.cusTel.value)) {
+	//개인회원가입시 주소 유효성 
+	if (f.mode.value != "updated") {
+			if (!f.cusAddrJibun.value) {
+				alert("지번주소를 입력하세요.");
+				f.cusJibunAddr.focus();
+				return;
+			}
+
+			if (!f.cusAddrDetail.value) {
+				alert("상세주소를 입력하세요.");
+				f.cusDetailAddr.focus();
+				return;
+			}
+
+		}
+	//수정시 주소 유효성
+		if (f.mode.value == "updated") {
+			if (!f.cusAddr.value) {
+				alert("주소를 입력하세요.");
+				f.cusAddr.focus();
+				return;
+			}
+		}
+
+		if (!cc3.test(f.cusTel.value)) {
 			alert('전화번호를 바르게 입력하세요');
 			f.cusTel.focus();
 			return false;
-	 	}
-	 	
-	 	if(f.mode.value!='updated'){
-		 	if(!chk) {
-		            alert('약관에 동의해주세요');
-		            return false;
-		    }
-	 	}
-	 	 
-	 	 
-	 	if(f.mode.value=="updated"){
-	 		alert("회원수정이 성공적으로 완료되었습니다.");
-			f.action = "/gyp/customerUpdate_ok.action" ;
+		}
 
-		}else{
-			alert("회원가입이 성공적으로 완료되었습니다.");	
-			f.action = "/gyp/createCustomer_ok.action";			
+		
+	if (f.mode.value != 'updated') {
+			if (!chk) {
+				alert('약관에 동의해주세요');
+				return false;
+			}
+		}
 
-		}	
+		if (f.mode.value == "updated") {
+			alert("회원수정이 성공적으로 완료되었습니다.");
+			f.action = "/gyp/customerUpdate_ok.action";
+
+		} else {
+			alert("회원가입이 성공적으로 완료되었습니다.");
+			f.action = "/gyp/createCustomer_ok.action";
+
+		}
 
 		f.submit();
-	 	
-		
+
 	}
-
 </script>
-
 </head>
-<body style="font-family: 'Noto Sans KR', sans-serif;">
+<body >
 	
 	<jsp:include page="/WEB-INF/views/layout/header_over.jsp" />
 	<jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
-<c:if test="${mode!='updated' }">
+<%-- <c:if test="${mode!='updated' }">
 <div id="bbs">
 	<div id="bbs_title">
 	개인회원 회원가입창☆	
@@ -213,168 +237,224 @@
 	회원정보수정창☆	
 	</div>
 </div>	
-</c:if>
-
+</c:if> --%>
+<center>
+ 	<br/><br/><br/>
 	
 	<form action="" name="myForm" method="post">
-	<table align="center" style="font-size: 13pt; color: #888"
+		<table align="center" style="font-size: 15pt; color: #888"
 		width="800" cellpadding="0" cellspacing="0" border="0">
 	
-		<tr valign="center">
-			<td colspan="3">
-				<font style="font-size: 20pt; color: black; ">&nbsp;회원가입</font>
-				<hr></td>
+	<c:if test="${mode!='updated' }">		
+		<td colspan="3" class="section-heading">	
+				<h6>Fitness Gym</h6>		
+				<font style="font-size: 18pt; color: black; ">개인회원 회원가입창</font>
+				<hr>
+		</td>
+			
+	</c:if>
+	 
+	 
+	<c:if test="${mode=='updated' }">	
+			<td colspan="3" class="section-heading">
+				<h6>Fitness Gym</h6>
+				<font style="font-size: 20pt; color: black; ">개인회원정보수정창☆</font>
+				<hr>
+			</td>
+	</c:if>
 		
-	
-				<dt>아이디</dt>
+
+			<tr>
+				<td class="bokyung_td_left" >아이디</td>
 				
 				<c:if test="${mode=='updated' }">	
-					<input type="text"  size="74" maxlength="100" class="boxTF"  value="${sessionScope.customInfo.sessionId }"
-					 disabled/>
+					<td><input type="text"  size="40" maxlength="50"  class="bokyung_member_text" value="${sessionScope.customInfo.sessionId }"
+					 disabled/></td>
 					<input type="hidden"  name="cusId" id="cusId" value="${sessionScope.customInfo.sessionId }"/>
 				</c:if>
 					
 				<c:if test="${mode!='updated' }">
-					<input type="text" name="cusId" id="cusId" size="74" maxlength="100" class="boxTF" 
+					<td><input type="text" name="cusId" id="cusId" size="40" maxlength="50" class="bokyung_member_text"
 					value="${sessionScope.customInfo.sessionId }"/>
-					<input type="button" id = "checkbutton1" name = "checkbutton1" value ="체크"/>
+					<input type="button" id = "checkbutton1" name = "checkbutton1" value ="중복체크"/></td>
 					<input type="hidden" id = "checkcusId" name = "checkcusId" value =""/>
 				</c:if>
-			</dl>		
-					
-		</div>
+			
+			</tr>		
+		
+		<!-- 선 -->
+		<tr height="1"><td colspan="2" bgcolor="#cccccc"></td>
 		
 		
-		<div class="bbsCreated_bottomLine">
-			<dl>
-				<dt>이름</dt>
-				<dd>
-					<input type="text" name="cusName" size="35" maxlength="20" class="boxTF"  value="${dto.cusName }"/>
-				</dd>							
-			</dl>		
-		</div>
+		<tr>
+			<td class="bokyung_td_left">이름</td>
+				<td>
+					<input type="text" name="cusName" size="35" maxlength="20" class="bokyung_member_text"  value="${dto.cusName }"/>
+				</td>							
+			</td>		
+		</tr>
 		
-		<div class="bbsCreated_bottomLine">
-			<dl>
-				<dt>비밀번호</dt>
-				<dd>
-					<input type="password" name="cusPwd" size="35" maxlength="50" class="boxTF" value="${dto.cusPwd }"/>
-				</dd>							
-			</dl>		
-		</div>
 		
-		<div class="bbsCreated_bottomLine">
-			<dl>
-				<dt>비밀번호 확인</dt>
-				<dd>
-					<input type="password" name="cusPwd2" size="35" maxlength="50" class="boxTF" value="${dto.cusPwd }"/>
-				</dd>							
-			</dl>		
-		</div>
+		<!-- 선 -->
+		<tr height="1"><td colspan="2" bgcolor="#cccccc"></td>
 		
-		<div class="bbsCreated_bottomLine">
-			<dl>
-				<dt>이메일</dt>
-				<dd>
-					<input type="text" name="cusEmail" size="35" maxlength="50" class="boxTF" value="${dto.cusEmail }"/>
-				</dd>							
-			</dl>		
-		</div>
+		<tr>
+			<td class="bokyung_td_left">비밀번호</td>
+				<td>
+					<input type="password" name="cusPwd" size="35" maxlength="50" class="bokyung_member_text" value="${dto.cusPwd }"/>
+				</td>							
+			</td>		
+		</tr>
 		
-		<div class="bbsCreated_bottomLine">
-			<dl>
-				<dt>전화번호</dt>
-				<dd>
-					<input type="text" name="cusTel" size="35" maxlength="50" class="boxTF" value="${dto.cusTel }"/>
-				</dd>							
-			</dl>		
-		</div>
+		<!-- 선 -->
+		<tr height="1"><td colspan="2" bgcolor="#cccccc"></td>
 		
-		<div class="bbsCreated_bottomLine">
-			<dl>
-				<dt>주소(상세주소 추가로 적어주세요^_^)</dt>
-				<dd>
-					<input type="text" name="cusAddr" size="35" maxlength="50" 
-					class="boxTF" value="${dto.cusAddr }" id="sample6_address"/>
+		<tr>
+			<td class="bokyung_td_left" style="font-size: 13pt">비밀번호 확인</dt>
+				<td>
+					<input type="password" name="cusPwd2" size="35" maxlength="50" class="bokyung_member_text" value="${dto.cusPwd }"/>
+				</td>							
+			</td>		
+		</tr>
+		
+		<!-- 선 -->
+		<tr height="1"><td colspan="2" bgcolor="#cccccc"></td>
+		
+		<tr>
+			<td class="bokyung_td_left">이메일</td>
+				<td>
+					<input type="text" name="cusEmail" size="35" maxlength="50" class="bokyung_member_text" value="${dto.cusEmail }"/>
+				</td>							
+			</td>		
+		</tr>
+		
+		<!-- 선 -->
+		<tr height="1"><td colspan="2" bgcolor="#cccccc"></td>
+		
+		<tr>
+			<td class="bokyung_td_left">전화번호</td>
+				<td>
+					<input type="text" name="cusTel" size="35" class="bokyung_member_text" maxlength="50"  value="${dto.cusTel }"/>
+				</td>							
+			</td>		
+		</tr>
+		
+		<!-- 선 -->
+		<tr height="1"><td colspan="2" bgcolor="#cccccc"></td>
+		
+		<c:if test="${mode!='updated' }">	
+		
+		<tr>
+			<td class="bokyung_td_left">주소</td>
+				<td>
+					<input type="text" name="cusAddrJibun" style="width : 540px; maxlength="50" 
+					class="bokyung_member_text"  id="sample6_address" readonly="readonly"/>
 					<input type="button" size="35" maxlength="50"
-					class="boxTF" onclick = "sample6_execDaumPostcode();" value="주소 찾기"/>
-				</dd>							
-			</dl>		
-		</div>
+					 onclick = "sample6_execDaumPostcode();" value="주소 찾기" />		
+				</td>							
+		</tr>
 		
-	
+			<tr>
+				<td class="bokyung_td_left"></td>
+				<td>	
+					<input type="text" name="cusAddrDetail" style="width : 540px; maxlength="50" 
+					class="bokyung_member_text"  placeholder="상세주소를 입력해주세요" />
+				</td>
+			</tr>
+		</c:if>
+		
+		
+		
+		<c:if test="${mode=='updated' }">	
+		<tr>
+			<td class="bokyung_td_left">주소</td>
+				<td>
+					<input type="text" name="cusAddr" style="width : 540px; maxlength="50" 
+					class="bokyung_member_text"  id="sample6_address" value="${dto.cusAddr }"/>
+					<input type="button" size="35" maxlength="50"
+					 onclick = "sample6_execDaumPostcode();" value="주소 찾기" />		
+				</td>							
+		</tr>
+		
+		
+		</c:if>
+		 
+		</table>
+		
+		 
+ 	<c:if test="${mode!='updated' }">
 	<table>	
 	<tr>
 		<td width="100%" height="50%" align="center">
    
-		<c:if test="${mode!='updated' }">
-		<span style="padding-left: 160px">약관동의</span>
-		<br>
+		
+		<span>약관동의</span>
+		</br>
 		<textarea 
-	     rows="20" cols="150" readonly="readonly">미안하다 이거 보여주려고 어그로끌었다.. 
-	     나루토 사스케 싸움수준 ㄹㅇ실화냐? 진짜 세계관최강자들의 싸움이다.. 
-	     그찐따같던 나루토가 맞나? 
-	     진짜 나루토는 전설이다..진짜옛날에 맨날나루토봘는데 왕같은존재인 호카게 되서 세계최강 전설적인 영웅이된나루토보면 
-	     진짜내가다 
-	     감격스럽고 나루토 노래부터 명장면까지 가슴울리는장면들이 뇌리에 스치면서 가슴이 웅장해진다.. 그리고 극장판에 
-	     카카시앞에 
-	     운석날라오는 거대한 걸 사스케가 갑자기 순식간에 나타나서 부숴버리곤 개간지나게 나루토가 없다면 마을을 지킬 자는 
-	     나밖에 없다 
-	     라며 바람처럼 사라진장면은 진짜 나루토처음부터 본사람이면 안울수가없더라 진짜 너무 감격스럽고 보루토를 최근에 알았는데 
-	     미안하다.. 지금20화보는데 진짜 나루토세대나와서 너무 감격스럽고 모두어엿하게 큰거보니 내가 다 뭔가 알수없는 
-	     추억이라해야되나 그런감정이 이상하게 얽혀있다.. 시노는 말이많아진거같다 좋은선생이고..
-	     그리고 보루토왜욕하냐 귀여운데 나루토를보는것같다 성격도 닮았어 그리고버루토에 나루토사스케 둘이싸워도 이기는 
-	     신같은존재 나온다는게 사실임?? 그리고인터닛에 쳐봣는디 이거 ㄹㅇㄹㅇ 진짜팩트냐?? 
-	     저적이 보루토에 나오는 신급괴물임?ㅡ 나루토사스케 합체한거봐라 진짜 ㅆㅂ 이거보고 개충격먹어가지고
-	      와 소리 저절로 나오더라 ;;
-	      진짜 저건 개오지는데.. 저게 ㄹㅇ이면 진짜 꼭봐야돼 진짜 세계도 파괴시키는거아니야 .. 와 진짜 
-	      나루토사스케가 저렇게 되다니 
-	      진짜 눈물나려고했다.. 버루토그라서 계속보는중인데 저거 ㄹㅇ이냐..? 하.. ㅆㅂ 사스케 보고싶다..  
-	      진짜언제 이렇게 신급 최강들이 되었을까 옛날생각나고 나 중딩때생각나고 뭔가 슬프기도하고 좋기도하고
-	       감격도하고 
-	      여러가지감정이 복잡하네.. 아무튼 나루토는 진짜 애니중최거명작임..
+	     rows="20" cols="110" readonly="readonly" class="jong_textarea">1장 총칙
+제1조 (목적)
+본 약관은 (주)GYP(이하 “당사”라 함)가 제공하는 TLX PASS 서비스 이용과 관련하여 당사와 회원의 제반 권리, 의무, 책임사항, 관련 절차, 기타 필요한 사항을 규정하는데 그 목적이 있습니다.
+
+제2조 (용어)
+본 약관에서 사용하는 주요 용어의 정의는 다음과 같습니다.
+1.“서비스”라 함은 구현되는 단말기(PC, TV, 휴대형 단말기 등의 각종 유무선 장치를 포함)와 상관없이 당사와 제휴시설이 “회원”에게 제공하는 TLX PASS 관련 제반 서비스 모두를 의미합니다.
+2."회원"이라 함은 당사의 약관 제5조에 정해진 가입 절차에 따라 가입하여 정상적으로 당사의 제휴시설과 TLX PASS 서비스를 이용할 수 있는 권한을 부여 받은 고객을 말합니다.
+
+
+제2장 회원가입과 멤버십
+
+제3조 (회원가입과 멤버십 구매)
+1.회원 가입은 서비스 홈페이지, 어플리케이션을 통해 가능합니다.
+회원으로 가입하고자 하는 고객은 당사에서 정한 서비스 홈페이지의 회원 가입 신청서에 정해진 사항을 기입한 후 본 약관과 ‘개인정보처리방침(‘개인정보 수집 제공 및 활용 동의’ 등)'에 동의함으로써 회원가입을 신청합니다.
+2.고객으로부터 회원가입 신청이 있는 경우 당사는 자체 기준에 따른 심사를 거친 후 고객에게 회원 자격을 부여 할 수 있으며 회원 자격이 부여된 고객은 당사로부터 가입 완료 공지를 받은 시점부터 회원으로서 지위를 취득하고, 멤버십을 구매/이용할 수 있습니다.
+3.회원은 회원자격을 타인에게 양도하거나 대여 또는 담보의 목적으로 이용할 수 없습니다.
+
+제4조 (멤버십 이용 및 관리)
+1.회원이 TLX PASS 서비스를 당사와 제휴시설에서 이용하고자 할 경우, 어플리케이션/모바일웹/RFID카드를 이용해야 하며, 당사와 제휴시설은 미성년자 여부나 본인 확인 등 합리적인 이유가 있을 때 회원에게 신분증 제시를 요청할 수 있습니다. 회원은 이러한 요청을 있을 경우 요청에 응해야 정상적이고 원활한 TLX PASS 서비스를 제공 받을 수 있습니다.
+2.회원에게 등록된 멤버십은 회원 본인만 사용 가능합니다. 회원 아이디 및 멤버십을 제3자에게 임의적으로 대여 사용하게 하거나 양도 또는 담보의 목적으로 사용 할 수 없으며, 해당 불법 행위로 인해 발생하는 모든 책임은 사용자가 부담합니다.
 		</textarea><br>
 		<input type="checkbox" name="check"> 약관에 동의합니다.
-		</c:if>
+	
 		</td>
 	</tr>
 	</table>
-   
+   	</c:if>
+	<table>
+	
 	<!-- 수정 시, 약관 숨김 -->
 	<c:if test="${mode=='updated' }">
    		&nbsp;
    </c:if>
 
-
-	</div>	
-	
+ 
 	
 	<c:if test="${mode!='updated' }">
-	<div id="bbsCreated_footer">
+
 	<input type="button" value=" 등록하기 " class="btn2" 
 	onclick="sendIt();"/>
 	<input type="reset" value=" 다시입력 " class="btn2" 
 	onclick="document.myForm.cusId.focus();"/>
 	<input type="button" value=" 작성취소 " class="btn2" 
 	onclick="javascript:location.href='<%=cp%>/list.action';"/>	
-	</div>
+	
 	</c:if>
 	
 	<c:if test="${mode=='updated' }">
-	<div id="bbsCreated_footer">
+	
 	<input type="button" value=" 수정하기 " class="btn2" 
 	onclick="sendIt();"/>
+	<input type="reset" value=" 다시입력 " class="btn2" 
+	onclick="document.myForm.cusId.focus();"/>
 	<input type="button" value=" 작성취소 " class="btn2" 
 	onclick="javascript:location.href='<%=cp%>/customerMyPage.action';"/>	
-	</div>
 	</c:if>
 	
 	<!-- 숨겨놓은 모드 -->	
-	<input type="hidden" name="mode" value="${mode }"/>
-	
+	<input type="hidden" name="mode" value="${mode }"/> 
+		</table>
 	</form>
-	
-</div>
+</center>	
+ 
 	
 	
 	

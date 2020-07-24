@@ -52,333 +52,326 @@ GymDTO dto = (GymDTO)request.getAttribute("dto");
 
 
 <script type="text/javascript">
-	$(function() {
-		//아이디 중복체크
-		$('#checkbutton2').click(function() {
-			$.ajax({
-				type : "POST",
-				url : "gymIdck",
-				data : {
-					"gymId" : $('#gymId').val()
-				},
-				success : function(data) { //data : checkSignup에서 넘겨준 결과값
-					if ($.trim(data) == "YES") {
-						if ($('#gymId').val() != '') {
-							alert("사용가능한 아이디입니다.");
-							var ff = $('#gymId').val();
-							$('#checkgymId').val(ff);
-
-						}
-					} else {
-						if ($('#gymId').val() != '') {
-							alert("중복된 아이디입니다.");
-							$('#gymId').val('');
-							$('#gymId').focus();
-						}
-					}
-				}
-			})
-		})
-
-	});
-	/* 
-	$(function() {
-		$("input[name='gymFacility']").each(function(){
-	var checkboxes = document.getElementsByName('gymFacility');
-	var vals = 0;
-	for (var i=0, n=checkboxes.length;i<n;i++) {
-	       if (checkboxes[i].checked) {
-	           vals += ","+gymFacility[i].value;
-	       }
-		}
-		}
-	} 
-	*/
 	
+$(function() {
+    //아이디 중복체크
+    $('#checkbutton2').click(function() {
+       $.ajax({
+          type : "POST",
+          url : "gymIdck",
+          data : {
+             "gymId" : $('#gymId').val()
+          },
+          success : function(data) { //data : checkSignup에서 넘겨준 결과값
+             if ($.trim(data) == "YES") {
+                if ($('#gymId').val() != '') {
+                   alert("사용가능한 아이디입니다.");
+                   var ff = $('#gymId').val();
+                   $('#checkgymId').val(ff);
+
+                }
+             } else {
+                if ($('#gymId').val() != '') {
+                   alert("중복된 아이디입니다.");
+                   $('#gymId').val('');
+                   $('#gymId').focus();
+                }
+             }
+          }
+       })
+    })
+
+ });
+ /* 
+ $(function() {
+    $("input[name='gymFacility']").each(function(){
+ var checkboxes = document.getElementsByName('gymFacility');
+ var vals = 0;
+ for (var i=0, n=checkboxes.length;i<n;i++) {
+        if (checkboxes[i].checked) {
+            vals += ","+gymFacility[i].value;
+        }
+    }
+    }
+ } 
+ */
+ 
+ 
+ /* 
+ $(function() {
+ 
+     $("input[name='gymFacility']").each(function(){
+        var thisVal1 = $("#checkF1").val();
+       var thisVal2 = $("#checkF2").val();
+       var thisVal3 = $("#checkF3").val();
+        if( thisVal1.length > 0 ){
+           $("#checkF1").attr("checked", true );
+        
+        }
+      if( thisVal2.length > 0 ){
+         $("#checkF2").attr("checked", true );
+      
+      }
+      if( thisVal3.length > 0 ){
+         $("#checkF3").attr("checked", true );
+      
+      }
+        
+     }); 
+   }
+ }
+  */
+    //주소 찾기 버튼(Daum카카오 주소API 기반)
+      function sample6_execDaumPostcode() {
+          new daum.Postcode({
+              oncomplete: function(data) {
+                  // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+                  // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+                  // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                  var addr = ''; // 주소 변수
+
+                  //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                  if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                      addr = data.roadAddress;
+                  } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                     addr = data.roadAddress;
+                      addr = data.jibunAddress;
+                  }
+
+                  // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                  document.getElementById("sample6_address").value = addr;
+                  // 커서를 상세주소 필드로 이동한다.
+                //  document.getElementById("sample6_detailAddress").focus();
+              }
+          }).open();
+      }
+ 
+  
+
+  
+ //실행 함수 
+  function sendIt() {
+
+    f = document.myForm;
+
+    //아이디 제약조건
+    var cc1 = /^[a-z0-9]{4,16}$/;
+
+    //패스워드 제약조건
+    var cc2 = /^[A-Za-z0-9]{4,16}$/;
+
+    //전화번호 제약조건
+    var cc3 = /^(01[016789]{1}|02|0[3-9]{1}[0-9]{1})-[0-9]{3,4}-[0-9]{4}$/;
+
+    //이메일 제약조건
+    var cc4 = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+
+    //4개의 인풋 트레이너사진을 한곳에 담기 , uploads[0]이런식으로 배열에 조건걸기 위해서..
+    var uploads = f.upload;
+
+    //4개의 인풋 체육관 시설등록을 한곳에 담기 , 
+    var uploads2 = f.upload2;
+
+    //약관 동의 제약조건
+    if (f.mode.value != 'updated')
+       var chk = f.check.checked;
+
+    /*
+    for(var i=0;i<uploads.length;i++){
+       if(uploads[i].value!=""&&gymTrainer[i].value==""){
+          alert((i+1)+"번째 트레이너 정보가 부족합니다");
+          gymTrainer[i].focus();
+          return;
+       }else if(uploads[i].value==""&&gymTrainer[i].value!=""){
+          alert((i+1)+"번째 트레이너 정보가 부족합니다");
+          uploads[i].focus();
+          return;
+       }else if(uploads[i].value!=""&&gymTrainer[i].value!=""){
+          f.tot.value=+1;
+          return;
+       }
+    }
+    
+    
+    if(f.tot.value<1){
+       alert("한명 이상의 트레이너 정보를 넣어야 합니다.");
+       return;
+    }
+    
+    
+    
+     */
+
+    if (!cc1.test(f.gymId.value)) {
+
+       alert('아이디 영문소문자/숫자 4~16자 이내로 입력하세요.');
+
+       f.gymId.focus();
+
+       return false;
+    }
+
+    if (f.mode.value != 'updated') {
+       if ($('#gymId').val() != $('#checkgymId').val()) {
+
+          alert('아이디 중복체크 버튼을 눌러주세요');
+
+          f.checkbutton2.focus();
+
+          return false;
+
+       }
+
+    }
+
+    if (!f.gymName.value) {
+       alert("체육관 이름을 입력하세요.");
+       f.gymName.focus();
+       return;
+    }
+
+    if (!cc2.test(f.gymPwd.value)) {
+
+       alert('패스워드 영문 대소문자/숫자 4~16자 이내로 입력하세요.');
+
+       f.gymPwd.focus();
+
+       return false;
+    }
+
+    if (!f.gymPwd2.value) {
+       alert("비밀번호를 한번 더 입력하세요.");
+       f.gymPwd2.value.focus();
+    }
+
+    if (f.gymPwd.value != f.gymPwd2.value) {
+       alert('비밀번호가 일치하지 않습니다.');
+
+       f.gymPwd.value = "";
+       f.gymPwd2.value = "";
+       f.gymPwd.focus();
+    }
+
+    if (!cc4.test(f.gymEmail.value)) {
+
+       alert('이메일을 바르게 입력하세요');
+
+       f.gymEmail.focus();
+
+       return false;
+    }
+
+    if (!cc3.test(f.gymTel.value)) {
+
+       alert('전화번호를 바르게 입력하세요');
+
+       f.gymTel.focus();
+
+       return false;
+    }
+
+    if (!f.gymAddr.value) {
+       alert("주소를 입력하세요.");
+       f.gymAddr.focus();
+       return;
+    }
+
+    if (!f.gymType.value) {
+       alert("체육관 유형을 선택해주세요.");
+       f.gymType.focus();
+       return;
+    }
+
+    //트레이너명,트레이너사진 업로드 유효성 검사! , 최소 1명이상 등록하라고 alert띄움
+    if (f.gymTrainer1.value != "" && uploads[0].value == "") {
+       alert("1번째 트레이너 사진을 입력해주세요!");
+       f.gymTrainer1.focus();
+       return;
+    }
+    if (f.gymTrainer1.value == "" && uploads[0].value != "") {
+       alert("1번째 트레이너명을 입력하세요 (최소1명 이상).");
+       f.gymTrainer1.focus();
+       return;
+    }
+    if (f.gymTrainer2.value != "" && uploads[1].value == "") {
+       alert("2번째 트레이너 사진을 입력해주세요!");
+       f.gymTrainer2.focus();
+       return;
+    }
+    if (f.gymTrainer2.value == "" && uploads[1].value != "") {
+       alert("2번째 트레이너명을 입력하세요 (최소1명 이상).");
+       f.gymTrainer2.focus();
+       return;
+    }
+    if (f.gymTrainer3.value != "" && uploads[2].value == "") {
+       alert("3번째 트레이너 사진을 입력해주세요!");
+       f.gymTrainer3.focus();
+       return;
+    }
+    if (f.gymTrainer3.value == "" && uploads[2].value != "") {
+       alert("3번째트레이너명을 입력하세요 (최소1명 이상).");
+       f.gymTrainer3.focus();
+       return;
+    }
+    if (f.gymTrainer4.value != "" && uploads[3].value == "") {
+       alert("4번째 트레이너 사진을 입력해주세요!");
+       f.gymTrainer4.focus();
+       return;
+    }
+    if (f.gymTrainer4.value == "" && uploads[3].value != "") {
+       alert("4번째 트레이너명을 입력하세요 (최소1명 이상).");
+       f.gymTrainer4.focus();
+       return;
+    }
+
+    if (!f.gymTrainer1.value) {
+       alert("1번째 트레이너명을 입력하세요 (최소1명 이상).");
+       f.gymTrainer1.focus();
+       return;
+    }
+
+    //체육관 사진등록 제약조건 (최소1장이상)
+    if (uploads2[0].value == "") {
+       alert("첫번째 체육관 사진등록을 해주세요 (최소 1장이상)");
+       f.uploads2[0].focus();
+       return;
+    }
+
+    if (!f.gymProgram.value) {
+       alert("프로그램 내용을 입력하세요 .");
+       f.gymProgram.focus();
+       return;
+    }
+
+    if (f.gymFacility[0].checked == false
+          && f.gymFacility[1].checked == false
+          && f.gymFacility[2].checked == false) {
+       alert("이용가능시설을 체크해주세요");
+       return false;
+
+    }
+    if (f.mode.value != 'updated') {
+       if (!f.check.checked) {
+          alert('약관에 동의해주세요');
+          return false;
+       }
+    }
+
+    if (f.mode.value == "updated") {
+       alert("체육관 회원수정이 성공적으로 완료되었습니다.");
+       f.action = "/gyp/gymUpdate_ok.action";
+
+    } else {
+       alert("체육관 회원가입이 성공적으로 완료되었습니다.");
+       f.action = "/gyp/createGym_ok.action";
+
+    }
+
+    f.submit();
+
+ }
 	
-	/* 
-	$(function() {
-	
-  	  $("input[name='gymFacility']").each(function(){
-  		  var thisVal1 = $("#checkF1").val();
-  		 var thisVal2 = $("#checkF2").val();
-  		 var thisVal3 = $("#checkF3").val();
-  		  if( thisVal1.length > 0 ){
-  			  $("#checkF1").attr("checked", true );
-  		  
-  		  }
-  		if( thisVal2.length > 0 ){
-			  $("#checkF2").attr("checked", true );
-		  
-		  }
-  		if( thisVal3.length > 0 ){
-			  $("#checkF3").attr("checked", true );
-		  
-		  }
-  		  
-  	  }); 
-  	}
-	}
-	 */
-	   //주소 찾기 버튼(Daum카카오 주소API 기반)
-	     function sample6_execDaumPostcode() {
-	         new daum.Postcode({
-	             oncomplete: function(data) {
-	                 // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
-
-	                 // 각 주소의 노출 규칙에 따라 주소를 조합한다.
-	                 // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
-	                 var addr = ''; // 주소 변수
-
-	                 //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
-	                 if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
-	                     addr = data.roadAddress;
-	                 } else { // 사용자가 지번 주소를 선택했을 경우(J)
-	                    addr = data.roadAddress;
-	                     addr = data.jibunAddress;
-	                 }
-
-	                 // 우편번호와 주소 정보를 해당 필드에 넣는다.
-	                 document.getElementById("sample6_address").value = addr;
-	                 // 커서를 상세주소 필드로 이동한다.
-	               //  document.getElementById("sample6_detailAddress").focus();
-	             }
-	         }).open();
-	     }
-	
-	 
-
-	 
-	//실행 함수 
-	 function sendIt() {
-
-		f = document.myForm;
-
-		//아이디 제약조건
-		var cc1 = /^[a-z0-9]{4,16}$/;
-
-		//패스워드 제약조건
-		var cc2 = /^[A-Za-z0-9]{4,16}$/;
-
-		//전화번호 제약조건
-		var cc3 = /^(01[016789]{1}|02|0[3-9]{1}[0-9]{1})-[0-9]{3,4}-[0-9]{4}$/;
-
-		//이메일 제약조건
-		var cc4 = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
-
-		//4개의 인풋 트레이너사진을 한곳에 담기 , uploads[0]이런식으로 배열에 조건걸기 위해서..
-		var uploads = f.upload;
-
-		//4개의 인풋 체육관 시설등록을 한곳에 담기 , 
-		var uploads2 = f.upload2;
-
-		//약관 동의 제약조건
-		if (f.mode.value != 'updated')
-			var chk = f.check.checked;
-
-		/*
-		for(var i=0;i<uploads.length;i++){
-			if(uploads[i].value!=""&&gymTrainer[i].value==""){
-				alert((i+1)+"번째 트레이너 정보가 부족합니다");
-				gymTrainer[i].focus();
-				return;
-			}else if(uploads[i].value==""&&gymTrainer[i].value!=""){
-				alert((i+1)+"번째 트레이너 정보가 부족합니다");
-				uploads[i].focus();
-				return;
-			}else if(uploads[i].value!=""&&gymTrainer[i].value!=""){
-				f.tot.value=+1;
-				return;
-			}
-		}
-		
-		
-		if(f.tot.value<1){
-			alert("한명 이상의 트레이너 정보를 넣어야 합니다.");
-			return;
-		}
-		
-		
-		
-		 */
-		//수정일때는 아이디 검사 안하는 것으로
-		
-		if (f.mode.value != 'updated') {
-			if (!cc1.test(f.gymId.value)) {
-	
-				alert('아이디 영문소문자/숫자 4~16자 이내로 입력하세요.');
-	
-				f.gymId.focus();
-	
-				return false;
-			}
-		}
-
-		if (f.mode.value != 'updated') {
-			if ($('#gymId').val() != $('#checkgymId').val()) {
-
-				alert('아이디 중복체크 버튼을 눌러주세요');
-
-				f.checkbutton2.focus();
-
-				return false;
-
-			}
-
-		}
-
-		if (!f.gymName.value) {
-			alert("체육관 이름을 입력하세요.");
-			f.gymName.focus();
-			return;
-		}
-
-		if (!cc2.test(f.gymPwd.value)) {
-
-			alert('패스워드 영문 대소문자/숫자 4~16자 이내로 입력하세요.');
-
-			f.gymPwd.focus();
-
-			return false;
-		}
-
-		if (!f.gymPwd2.value) {
-			alert("비밀번호를 한번 더 입력하세요.");
-			f.gymPwd2.value.focus();
-		}
-
-		if (f.gymPwd.value != f.gymPwd2.value) {
-			alert('비밀번호가 일치하지 않습니다.');
-
-			f.gymPwd.value = "";
-			f.gymPwd2.value = "";
-			f.gymPwd.focus();
-		}
-
-		if (!cc4.test(f.gymEmail.value)) {
-
-			alert('이메일을 바르게 입력하세요');
-
-			f.gymEmail.focus();
-
-			return false;
-		}
-
-		if (!cc3.test(f.gymTel.value)) {
-
-			alert('전화번호를 바르게 입력하세요');
-
-			f.gymTel.focus();
-
-			return false;
-		}
-
-		if (!f.gymAddr.value) {
-			alert("주소를 입력하세요.");
-			f.gymAddr.focus();
-			return;
-		}
-
-		if (!f.gymType.value) {
-			alert("체육관 유형을 선택해주세요.");
-			f.gymType.focus();
-			return;
-		}
-		
-		//처음 회원가입할때
-		if (f.mode.value != 'updated') {
-			//트레이너명,트레이너사진 업로드 유효성 검사! , 최소 1명이상 등록하라고 alert띄움
-			if (f.gymTrainer1.value != "" && uploads[0].value == "") {
-				alert("1번째 트레이너 사진을 입력해주세요!");
-				f.gymTrainer1.focus();
-				return;
-			}
-			if (f.gymTrainer1.value == "" && uploads[0].value != "") {
-				alert("1번째 트레이너명을 입력하세요 (최소1명 이상).");
-				f.gymTrainer1.focus();
-				return;
-			}
-			if (f.gymTrainer2.value != "" && uploads[1].value == "") {
-				alert("2번째 트레이너 사진을 입력해주세요!");
-				f.gymTrainer2.focus();
-				return;
-			}
-			if (f.gymTrainer2.value == "" && uploads[1].value != "") {
-				alert("2번째 트레이너명을 입력하세요 (최소1명 이상).");
-				f.gymTrainer2.focus();
-				return;
-			}
-			if (f.gymTrainer3.value != "" && uploads[2].value == "") {
-				alert("3번째 트레이너 사진을 입력해주세요!");
-				f.gymTrainer3.focus();
-				return;
-			}
-			if (f.gymTrainer3.value == "" && uploads[2].value != "") {
-				alert("3번째트레이너명을 입력하세요 (최소1명 이상).");
-				f.gymTrainer3.focus();
-				return;
-			}
-			if (f.gymTrainer4.value != "" && uploads[3].value == "") {
-				alert("4번째 트레이너 사진을 입력해주세요!");
-				f.gymTrainer4.focus();
-				return;
-			}
-			if (f.gymTrainer4.value == "" && uploads[3].value != "") {
-				alert("4번째 트레이너명을 입력하세요 (최소1명 이상).");
-				f.gymTrainer4.focus();
-				return;
-			}
-	
-			if (!f.gymTrainer1.value) {
-				alert("1번째 트레이너명을 입력하세요 (최소1명 이상).");
-				f.gymTrainer1.focus();
-				return;
-			}
-	
-			//체육관 사진등록 제약조건 (최소1장이상)
-			if (uploads2[0].value == "") {
-				alert("첫번째 체육관 사진등록을 해주세요 (최소 1장이상)");
-				f.uploads2[0].focus();
-				return;
-			}
-		}
-		
-		
-		
-		if (!f.gymProgram.value) {
-			alert("프로그램 내용을 입력하세요 .");
-			f.gymProgram.focus();
-			return;
-		}
-
-		if (f.gymFacility[0].checked == false
-				&& f.gymFacility[1].checked == false
-				&& f.gymFacility[2].checked == false) {
-			alert("이용가능시설을 체크해주세요");
-			return false;
-
-		}
-		if (f.mode.value != 'updated') {
-			if (!f.check.checked) {
-				alert('약관에 동의해주세요');
-				return false;
-			}
-		}
-
-		if (f.mode.value == "updated") {
-			alert("체육관 회원수정이 성공적으로 완료되었습니다.");
-			f.action = "/gyp/gymUpdate_ok.action";
-
-		} else {
-			alert("체육관 회원가입이 성공적으로 완료되었습니다.");
-			f.action = "/gyp/createGym_ok.action";
-
-		}
-
-		f.submit();
-
-	}
-	 
 	 
 	 
 	
@@ -593,13 +586,17 @@ GymDTO dto = (GymDTO)request.getAttribute("dto");
 								<dd>
 									*기존 트레이너 사진 : <input type="text" name="oldTrainerImage${status.count }" value="${oldTrainerImage }"
 											size="25" maxlength="7"/>
-									수정할 사진 : <input type="file" name="newTrainerImage${status.count }" class="boxTF" />
+									<input type="button" value=" 삭제 " 
+									onclick="javascript:location.href='/gyp/gymImageDelete.action?whatToDelete=oldTrainerImage${status.count }'">
+									<br>수정할 사진 : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="file" name="newTrainerImage${status.count }" class="boxTF" /><br><br>
 								</dd>
 							</c:forEach>
 							<!-- 4개보다 적으면 -->
 							<c:forEach var="i" begin="${startNumberForTrainer }" end="4" step="1" varStatus="status" >
 								<dd>
-									*추가할 사진(${i }) : <input type="file" name="newTrainerImage${i }" class="boxTF" />
+									*추가할 사진(${i }) :  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="file" name="newTrainerImage${i }" class="boxTF" />
 								</dd>
 							</c:forEach>
 						</c:if>
@@ -612,7 +609,7 @@ GymDTO dto = (GymDTO)request.getAttribute("dto");
 					<div style="height: 10px;"></div>
 					<c:if test="${mode!='updated' }">
 						<dl>
-							<dt>체육관 사진 등록</dt>
+							<dt>체육관 사진 등록<&nbsp;<font size='1'>(최소1장 이상)</font>/dt>
 							<dd>
 								<input type="file" name="upload2" class="boxTF" />
 							</dd>
@@ -631,17 +628,22 @@ GymDTO dto = (GymDTO)request.getAttribute("dto");
 					<!-- 수정일때 -->
 					<div style="height: 10px;"></div>
 					<c:if test="${mode=='updated' }">
+						<dt>체육관 사진 등록&nbsp;<font size='1'>(최소1장 이상)</font></dt>
 						<c:forEach var="oldGymImage" items="${gymPicLists }" varStatus="status" >
 								<dd>
-								기존 사진 : <input type="text" name="oldGymImage${status.count }" value="${oldGymImage}" size="25" maxlength="20" 
-									class="boxTF"/>&nbsp;&nbsp;&nbsp;     
-								수정할 사진 : <input type="file" name="newGymImage${status.count }" class="boxTF" />
+								기존 체육관 사진 : <input type="text" name="oldGymImage${status.count }" value="${oldGymImage}" size="25" maxlength="20" 
+									class="boxTF"/>
+								<input type="button" name="deleteTrainer" value=" 삭제 " 
+								onclick="javascript:location.href='/gyp/gymImageDelete.action?whatToDelete=oldGymImage${status.count }'">
+								<br>수정할 사진 : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<input type="file" name="newGymImage${status.count }" class="boxTF" /><br><br>
 							</dd>
 						</c:forEach>
 						<!-- 4개보다 적으면 -->
 						<c:forEach var="i" begin="${startNumberForGymPic }" end="4" step="1" varStatus="status" >
 							<dd>
-								*추가할 사진(${i }) : <input type="file" name="newGymImage${i }" class="boxTF" />
+								*추가할 사진(${i }) :  &nbsp;
+								<input type="file" name="newGymImage${i }" class="boxTF" />
 							</dd>
 						</c:forEach>
 					</c:if>

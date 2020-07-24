@@ -528,7 +528,7 @@ public class gypController {
 		return "login/login";
 	}
 
-	// 체육관 수정창으로 이동 (채종완)
+	// 체육관 수정창으로 이동 (채종완, 최보경)
 	@RequestMapping(value = "/gymUpdate.action", method = { RequestMethod.GET, RequestMethod.POST })
 	public String gymUpdate(HttpServletRequest request, HttpSession session) {
 		
@@ -604,7 +604,7 @@ public class gypController {
 		return "create/createGym";
 	}
 
-	// 체육관 정보 수정 후 업데이트(채종완)
+	// 체육관 정보 수정 후 업데이트(채종완, 최보경)
 	//※이름만 입력하고 사진을 입력하지 않은 경우는 등록되지 않는다※
 	@RequestMapping(value = "/gymUpdate_ok.action", method = { RequestMethod.GET, RequestMethod.POST })
 	public String gymUpdate_ok(HttpServletRequest request, HttpSession session, GymDTO gymdto,  MultipartHttpServletRequest multiReq) {
@@ -1028,6 +1028,76 @@ public class gypController {
 		return "redirect:/gymMyPage.action";
 	}
 
+	//체육관 정보 수정창에서 이미지 삭제
+	@RequestMapping(value = "/gymImageDelete.action", method = {RequestMethod.GET})
+	public String gymUpdate_deleteImage(HttpServletRequest request, HttpSession session) {
+		
+		//세션아이디로 체육관 정보 디비에서 dto가져옴
+		CustomInfo info = (CustomInfo) session.getAttribute("customInfo");
+		GymDTO dto = dao.getgymReadData(info.getSessionId());
+		
+		//지울 대상 넘어옴!!!!
+		String whatToDelete = request.getParameter("whatToDelete");
+		
+		//이미지 path (Controller최상단 PATH)
+		String gymTrainerPicImgPath = PATH + "gymTrainerPic\\";
+		String gymPicImgPath = PATH + "gymPic\\";
+		
+		//합쳐질 이름들
+		String gymTrainerNameCombine = "";
+		String gymTrainerPicCombine = "";
+		String gymPicCombine ="";
+
+		
+		//트레이너 사진을 지울때
+		if(whatToDelete.contains("Trainer")) {
+		
+			//기존 파일지우기
+			File deleteImage = new File(gymTrainerPicImgPath + whatToDelete);
+			deleteImage.delete();
+			
+			//DB내용 수정하기
+			String lastNumber = whatToDelete.substring(whatToDelete.length()-1, whatToDelete.length());
+			int TrainerNumber = Integer.parseInt(lastNumber);//몇번째 트레이너인가
+			
+			//기존의 
+			
+			
+			
+			
+			//쉼표 몇번째인지 체크해서 지우기
+			for(int i=1; i<=4; i++) {
+				if(TrainerNumber==i) {
+					
+					
+					
+				}
+			}
+			
+			
+			
+			
+			
+			
+		//체육관 사진을 지울때
+		}else if (whatToDelete.contains("Gym")) {
+			
+			
+			
+			
+			
+			
+			
+		}
+		
+		
+		
+		//다시 수정창으로
+		return "redirect:/gymUdate.action";
+	}
+	
+	
+	
 	// 체육관 회원 탈퇴
 	@RequestMapping(value = "/gymDeleted_ok.action", method = { RequestMethod.GET, RequestMethod.POST })
 	public String gymDeleted_ok(HttpServletRequest request, GymDTO dto, HttpSession session) {
@@ -2726,6 +2796,29 @@ public class gypController {
 	@RequestMapping(value = "/createCustomer_ok.action", method = {RequestMethod.GET,RequestMethod.POST})
 	public String createCustomer_ok(HttpServletRequest request,CustomerDTO dto,
 			HttpServletResponse response) throws Exception{
+		
+		//---------지번주소와 상세주소 이름 합치기---------
+		
+		String cusAddrJibun = request.getParameter("cusAddrJibun");
+		String cusAddrDetail = request.getParameter("cusAddrDetail");
+		
+		String cusAddr = "";
+		
+		
+		if(cusAddrJibun!=null) {
+			cusAddr += cusAddrJibun + ", ";
+		}
+		if(cusAddrDetail!=null) {
+			cusAddr += cusAddrDetail + ",";
+		}
+		
+		
+		//중간에 ,(쉼표) 빼기    ex)서울 송파구 풍납동,301호  <-쉼표빼주기 
+		String word = cusAddr.substring(0, cusAddr.length());
+		cusAddr = word.replace(",","");
+		
+		dto.setCusAddr(cusAddr);
+		
 		
 		dao.cusCreated(dto);
 		return "redirect:/login.action";

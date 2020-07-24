@@ -23,12 +23,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <!-- 개인회원 아이디 중복 체크 -->
 <select parameterType="com.exe.dto.GymDTO" id="cusidCheck" resultType="int">
-	SELECT nvl(count(*),0) FROM customer WHERE cusId = #{cusId} 
+	SELECT sum(a.a+b.a)
+     FROM
+           ( select count(*) a from CUSTOMER where cusId   = #{cusId} ) a
+        ,  ( select count(*) a from gym      where gymId = #{cusId} ) b
 </select>
 
 <!-- 체육관회원 아이디 중복 체크 -->
 <select parameterType="com.exe.dto.GymDTO" id="gymidCheck" resultType="int">
-	SELECT nvl(count(*),0) FROM gym WHERE gymId = #{gymId} 
+	SELECT sum(a.a+b.a)
+     FROM
+           ( select count(*) a from CUSTOMER where cusId   = #{gymId} ) a
+        ,  ( select count(*) a from gym      where gymId = #{gymId} ) b
 </select>
 
 <!-- 개인회원 아이디 중복 체크 -->
