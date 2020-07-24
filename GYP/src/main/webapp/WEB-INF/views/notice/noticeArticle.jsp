@@ -55,25 +55,28 @@ function updateData(){
 
 	<section class="contact-area section-padding-100">
 		<div class="container">
-		<div class="row">
 		<div class="col-12">
-		<div class="contact-form-area">
-			<div style="font-size:25px;font-weight: bold;colspan:4">${dto.notiTitle }</div>
-			<div style="colspan:4">작성일 : ${dto.notiCreated }<hr></div>
-			<div style="valign:top;colspan:4;">${dto.notiContent }</div>
+		<div class="contact-form-area row" style="width: 1100px; margin: 0 auto;">
+			<div style="width: 1140px; font-size:25px; font-weight: bold; colspan:4; height: 50px;" >
+				<!-- 제목 -->
+				${dto.notiTitle }
+			</div>
+			<!-- 날짜 -->
+			<div style="colspan:4; width:200px; float: right; margin: 0; padding-top: 10px;">
+			작성일 : ${dto.notiCreated }</div>
+			<div style="valign:top;colspan:4; width: 1100px;"><hr><br>${dto.notiContent }</div>
 		</div>
 		</div>
-		</div>
-		<br><br>
+		<br><br><hr>
 		<div>
-			이전글:
+			<font style="color: green; font-weight: bold;">이전글 : </font>
 			<c:if test="${!empty preNotiTitle  }">
 				<a href="<%=cp%>/noticeArticle.action?pageNum=${pageNum }&notiNum=${preNotiNum}">${preNotiTitle }</a>
 			</c:if>
 		</div>
 		
 		<div>
-			다음글:
+			<font style="color: green; font-weight: bold;">다음글 : </font>
 			<c:if test="${!empty nextNotiTitle  }">
 				<a href="<%=cp%>/noticeArticle.action?pageNum=${pageNum }&notiNum=${nextNotiNum}">${nextNotiTitle }</a>
 			</c:if>

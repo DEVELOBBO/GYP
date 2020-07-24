@@ -27,18 +27,18 @@
 	<!-- 메인 : header_main.jsp / 그외 : header_below.jsp -->
 	<jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
 	
+	<!-- 여백 -->
+	<div style="height: 50px;"></div>
+	<!-- 공지사항 시작 -->
 	<section class="contact-area section-padding-100">
 	<div class="container">
 	<div class="row">
 	<div class="col-12">
 	<div class="contact-title">
-		<h5 style="color:#38b143;">FITNESS GYM</h5>
+		<h5 style="color:#38b143;">NOTICE</h5>
 		<h2>공지사항
 		<c:if test="${result==0}"> 
 		<input type="button" style="float:right;" class="btn fitness-btn m-2"  value="작성하기" onclick="javascript:location.href='/gyp/noticeCreated.action';">
-		</c:if>
-		<c:if test="${result==1}">
-		
 		</c:if>
 		</h2>
 	</div>
@@ -51,31 +51,40 @@
 		<div class="col-12">
 		<div class="contact-form-area">
 			<c:forEach var="dto" items="${lists }">
-			<hr>
-			<div>
-				<div>${dto.listNum }</div>
-				<div>
+			<hr> 
+			<div class="row" >
+				<div style="width:1000px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+					<!-- 번호 -->
+					<font style="color: green; font-weight: bold;">${dto.listNum }</font>
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					<!-- 제목 -->
 					<a href="${articleUrl}&notiNum=${dto.notiNum}">
 						${dto.notiTitle }
 					</a>
 				</div>
-				<div>${dto.notiCreated }</div>
+				<!-- 날짜 -->
+				<div style="width:100px; float: right; margin: 0;">[${dto.notiCreated }]</div>
 			</div>	
 			</c:forEach>
 			<hr>
 		</div></div></div></div>
 		
+		<!-- 여백 -->
+		<div style="height: 50px;"></div>
+		
+		<!-- 페이징 -->
 		<div class="container">		
 			<c:if test="${dataCount!=0 }">
-				${pageIndexList }
+				<div style="width: 900px; margin: 0 auto; text-align: center;">
+				${pageIndexList }</div>
 			</c:if>
 			<c:if test="${dataCount==0 }">
-				등록된 게시물이 없습니다.
+				<div>등록된 게시물이 없습니다.</div>
 			</c:if>
 		</div>	
 	</section>		
 
-
+	<div style="height: 50px;"></div>
 	<jsp:include page="/WEB-INF/views/layout/footer.jsp" />
 	
     <!-- ##### All Javascript Script ##### -->

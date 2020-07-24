@@ -196,7 +196,14 @@ public class gypController {
 			}else if(gymType==null || gymType.equals("")) {
 				productRecommendLists = dao.getProductRecommendDefault();
 			}
-		}	
+		}
+		
+		//확장for문, 하나씩 꺼내서 글자길이 수정
+		for(ProductDTO dto : productRecommendLists) {
+			if(dto.getProductContent().length() > 13) { //프로그램 길면 자르기
+				dto.setProductContent(dto.getProductContent().substring(0, 13) + " ...");
+			}
+		}
 			
 		request.setAttribute("info", info);
 		request.setAttribute("gymRecommendLists", gymRecommendLists);
@@ -1130,8 +1137,6 @@ public class gypController {
 				//해당 번호면 기존 파일지우기
 				if(i == TrainerNumber-1) {
 				File deleteImage = new File(gymPicImgPath + gymImageLists[i]);
-				
-				System.out.println("지울파일경로 " + gymPicImgPath + gymImageLists[i]);
 				deleteImage.delete();
 				}
 				
@@ -1148,8 +1153,6 @@ public class gypController {
 				gymPicCombine = gymPicCombine.substring(0, gymPicCombine.length()-1);
 				lastWord = gymPicCombine.substring(gymPicCombine.length()-1, gymPicCombine.length());//마지막 글자 다시 세팅
 			}
-			
-			System.out.println("최종 : " + gymPicCombine);
 			
 			//dto에 세팅
 			dto.setGymPic(gymPicCombine);
@@ -1785,7 +1788,7 @@ public class gypController {
 		//확장for문, 하나씩 꺼내서 글자길이 수정
 		for(ProductDTO dto : productLists) {
 			if(dto.getProductContent().length() > 13) { //프로그램 길면 자르기
-				dto.setProductContent(dto.getProductContent().substring(0, 27) + " ...");
+				dto.setProductContent(dto.getProductContent().substring(0, 13) + " ...");
 			}
 		}
 		
@@ -2110,7 +2113,7 @@ public class gypController {
 		String totPrice = request.getParameter("totPrice2"); //나중에 결제 금액 넘김
 		String[] chkNums = request.getParameterValues("cartChk"); // 배열에 선택한 cartNum값이 들어온다
 		
-		for (int i = 0; i < chkNums.length; i++) { System.out.println(chkNums[i]); }//debug array of product
+		for (int i = 0; i < chkNums.length; i++) {/* System.out.println(chkNums[i]); */ }//debug array of product
 		
 		//결제할 상품 정보 리스트
 		int[] numI = null;
@@ -2146,7 +2149,7 @@ public class gypController {
 		String cusId = info.getSessionId();
 		
 		String params = request.getParameter("params");
-		System.out.println(params);
+		/* System.out.println(params); */
 		
 		String item = params.substring(params.indexOf("item=")+"item=".length(),params.indexOf("&"));
 		
@@ -2179,7 +2182,7 @@ public class gypController {
 			//charge 테이블 업데이트
 			dao.updateCusPass(hMap);
 
-			System.out.println("패스 결제 완료");
+			/* System.out.println("패스 결제 완료"); */
 			return;
 		}		
 		
@@ -2189,7 +2192,7 @@ public class gypController {
 		int cusPassLeft = dao.getCusPassLeft(cusId);
 
 		int proPayNumMax = dao.getProPayNumMax();
-		System.out.println("proPayNumMax: " + proPayNumMax);
+		/* System.out.println("proPayNumMax: " + proPayNumMax); */
 
 		String amount = params.substring(params.indexOf("amount=")+"amount=".length(),params.indexOf("&",params.indexOf("amount=")));
 		//String payMethod = params.substring(params.indexOf("payMethod=")+"payMethod=".length(),params.indexOf("&",params.indexOf("payMethod=")));
@@ -2228,7 +2231,7 @@ public class gypController {
 		//장바구니에서 삭제
 		dao.deleteFromCartAfterPayment(productIdList,cusId);
 		
-		System.out.println("상품 결제 완료");
+		/* System.out.println("상품 결제 완료"); */
 		return;
 	}
 	
@@ -2240,8 +2243,6 @@ public class gypController {
 		if(info==null) {//돌발적 로그아웃 대비
 			//return "redirect:/login.action";
 		}
-		
-		System.out.println("payment_ok.action 에 들어옴");
 		
 		return "payment/payment_ok";
 	}
@@ -2440,7 +2441,7 @@ public class gypController {
 		int result = 1;
 		
 		//0:관리자 / 로그인했을때만 qnaList.jsp 뜬다.(수정해야됨)
-		if(info.getSessionId().equals("admin")) {
+		if(info!=null && info.getSessionId().equals("admin")) {
 			result = 0;
 			session.getId();
 		}
@@ -2526,7 +2527,7 @@ public class gypController {
 		int result = 1;//1:일반회원 
 				
 		//0:관리자 / 관리자일 경우에만 qnaList.jsp 뜬다.(수정해야됨)
-		if(info.getSessionId().equals("admin")) {
+		if(info!=null && info.getSessionId().equals("admin")) {
 			result = 0;
 			session.getId();
 		}
@@ -2634,7 +2635,7 @@ public class gypController {
 		CustomInfo info = (CustomInfo)session.getAttribute("customInfo");
 		int result = 1;
 		
-		if(info.getSessionId()==null && info.getSessionId().equals("admin")) {
+		if(info!=null && info.getSessionId().equals("admin")) {
 			result = 0;
 			session.getId();
 		}
@@ -2786,21 +2787,14 @@ public class gypController {
 		String pageNum = request.getParameter("pageNum");
 		
 		session = request.getSession();
-		CustomInfo info = (CustomInfo)session.getAttribute("customInfo");//세션에 있는 정보를 받아온다. 
+		CustomInfo info = (CustomInfo)session.getAttribute("customInfo");
 		
 		int result=1;
 		
-		if(info.getSessionId()!=null && info.getSessionId().equals("admin")) {
+		if(info!=null && info.getSessionId().equals("admin")) {
 			result = 0;
 			session.getId();
 		}
-		/*
-		if(info.getSessionId()!=null && info.getSessionId().equals(dto.getCusId())){
-			result=2;
-			session.getId();
-		}
-		*/
-		
 		
 		//searchKey는 qnaType으로 고정
 		String searchKey = "qnaType";
@@ -2861,6 +2855,9 @@ public class gypController {
 		request.setAttribute("nextQnaTitle", nextQnaTitle);
 		request.setAttribute("pageNum", pageNum);
 		request.setAttribute("params", params);
+		request.setAttribute("info", info);
+		if(info!=null)
+			request.setAttribute("cusId", info.getSessionId());
 		
 		return "qna/qnaArticle";
 	}
@@ -2939,31 +2936,31 @@ public class gypController {
 	//질문게시판 답변처리
 	@RequestMapping(value="/qnaReply_ok.action",method = {RequestMethod.GET,RequestMethod.POST})
 	public String qnaReply_ok(HttpServletRequest request,QnaDTO dto) throws Exception{
-		
-		//값 가져오기
-		String pageNum = request.getParameter("pageNum");
-		int qnaGroupNum = Integer.parseInt(request.getParameter("qnaGroupNum"));
-		int qnaOrderNo = Integer.parseInt(request.getParameter("qnaOrderNo"));
-		
-		//답변작성
-		//orderNo 변경
-		dao.orderNoUpdate(qnaGroupNum,qnaOrderNo);
-		
-		//관리자아이디는 admin
-		dto.setCusId("admin");
-		//답변입력
-		dto.setQnaNum(dao.getQnaMaxNum() + 1);
-		//답변이 밑에 달리도록
-		dto.setQnaDepth(dto.getQnaDepth()+1);
-		dto.setQnaOrderNo(dto.getQnaOrderNo() + 1);
-		dao.insertQna(dto);
-				
-		return "redirect:/qnaList.action?pageNum="+pageNum;
-		
-		
-	}
-
-
+			
+			//값 가져오기
+			String pageNum = request.getParameter("pageNum");
+			int qnaGroupNum = Integer.parseInt(request.getParameter("qnaGroupNum"));
+			int qnaOrderNo = Integer.parseInt(request.getParameter("qnaOrderNo"));
+			
+			//답변작성
+			//orderNo 변경
+			dao.orderNoUpdate(qnaGroupNum,qnaOrderNo);
+			
+			//관리자아이디는 admin
+			dto.setCusId("admin");
+			//답변입력
+			dto.setQnaNum(dao.getQnaMaxNum() + 1);
+			//답변이 밑에 달리도록
+			dto.setQnaDepth(dto.getQnaDepth()+1);
+			dto.setQnaOrderNo(dto.getQnaOrderNo() + 1);
+			dao.insertQna(dto);
+					
+			return "redirect:/qnaList.action?pageNum="+pageNum;
+			
+			
+		}
+	
+	
 	
 	//*******************채종완*******************
 	

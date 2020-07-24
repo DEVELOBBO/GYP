@@ -97,14 +97,19 @@ function sendData() {
 
 		
 		<div>
+			<!-- 관리자 로그인 -->
 			<c:if test="${result==0}"> 
 				<input type="button" class="btn fitness-btn btn-2 mt-30" value="답글" onclick="sendData();">
+				<input type="button" class="btn fitness-btn btn-2 mt-30" value="삭제" onclick="deleteData();">
+				
 			</c:if>
-			<%-- <c:if test="${result==2}"> --%> 	
+			<!-- 본인 게시물일때 -->
+			<c:if test="${sessionScope.customInfo.sessionId == dto.cusId && cusId!=null && cusId!='admin'}">
 				<input type="button" class="btn fitness-btn btn-2 mt-30" value="수정" onclick="updateData();">
 				<input type="button" class="btn fitness-btn btn-2 mt-30" value="삭제" onclick="deleteData();">
-			<%-- </c:if>	 --%>
-				<input type="button" class="btn fitness-btn btn-2 mt-30" value="목록" onclick="javascript:location.href='/gyp/qnaList.action?pageNum=${pageNum }';" />
+			</c:if>
+			<!-- 로그인안했을때 -->
+			<input type="button" class="btn fitness-btn btn-2 mt-30" value="목록" onclick="javascript:location.href='/gyp/qnaList.action?pageNum=${pageNum }';" />
 		</div>
 		</div>
 	</section>

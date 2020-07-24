@@ -433,7 +433,7 @@
 				                </div>
 				                
 				                <div class="row">
-						                ${gymDto.gymAddr }&nbsp;${gymDto.gymAddrDetail
+						                ${gymDto.gymAddr }&nbsp;${gymDto.gymAddrDetail}
 				                </div>
 				                
 				                <div id="map" style="width:350px;height:300px;"></div>
