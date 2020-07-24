@@ -277,6 +277,8 @@ private SqlSessionTemplate sessionTemplate;
 	public void deleteProductReviewData(int reNum) {
 		sessionTemplate.delete("productMapper.deleteReviewData", reNum);
 	}
+	
+	
 
 	// getReviewNum : 체육관 하나에 달린 리뷰 갯수
 	public int getProductReviewNum(String productId) {

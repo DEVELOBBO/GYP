@@ -1028,7 +1028,7 @@ public class gypController {
 		return "redirect:/gymMyPage.action";
 	}
 
-	//체육관 정보 수정창에서 이미지 삭제
+	//체육관 정보 수정창에서 이미지 삭제 (최보경)
 	@RequestMapping(value = "/gymImageDelete.action", method = {RequestMethod.GET})
 	public String gymUpdate_deleteImage(HttpServletRequest request, HttpSession session) {
 		
@@ -1048,55 +1048,116 @@ public class gypController {
 		String gymTrainerPicCombine = "";
 		String gymPicCombine ="";
 
+		//몇번째 트레이너인가
+		String lastNumber = whatToDelete.substring(whatToDelete.length()-1, whatToDelete.length());
+		int TrainerNumber = Integer.parseInt(lastNumber);
 		
-		//트레이너 사진을 지울때
+		
+		//=======================================
+		//트레이너 이름과 사진을 지울때
+		//=======================================
 		if(whatToDelete.contains("Trainer")) {
-		
-			//기존 파일지우기
-			File deleteImage = new File(gymTrainerPicImgPath + whatToDelete);
-			deleteImage.delete();
 			
-			//DB내용 수정하기
-			String lastNumber = whatToDelete.substring(whatToDelete.length()-1, whatToDelete.length());
-			int TrainerNumber = Integer.parseInt(lastNumber);//몇번째 트레이너인가
+			//트레이너 이름 삭제 ----------------------------------------------------
+			//기존 트레이너 이름을 배열로 만들기
+			String[] gymTrainerNameLists = dto.getGymTrainer().split(",");
 			
-			//기존의 
-			
-			
-			
-			
-			//쉼표 몇번째인지 체크해서 지우기
-			for(int i=1; i<=4; i++) {
-				if(TrainerNumber==i) {
-					
-					
-					
+			//다시 이름들 합치기
+			for(int i=0; i<gymTrainerNameLists.length; i++) {
+				
+				//삭제할 인덱스번호는 빼고 쉼표로 합치기
+				if(i != TrainerNumber-1) {  
+				gymTrainerNameCombine += gymTrainerNameLists[i] + ",";
 				}
 			}
+			//마지막 쉼표 처리
+			//마지막 쉼표면, 쉼표 빼고 dto에 setting
+			String lastWord = gymTrainerNameCombine.substring(gymTrainerNameCombine.length()-1, gymTrainerNameCombine.length());
+			
+			while(lastWord.equals(",")) {
+				gymTrainerNameCombine = gymTrainerNameCombine.substring(0, gymTrainerNameCombine.length()-1);
+				lastWord = gymTrainerNameCombine.substring(gymTrainerNameCombine.length()-1, gymTrainerNameCombine.length());//마지막 글자 다시 세팅
+			}
+			//dto에 세팅
+			dto.setGymTrainer(gymTrainerNameCombine);
 			
 			
 			
+			//트레이너 이미지 (파일+DB) 삭제 ----------------------------------------------------
+			//기존 트레이너 이미지을 배열로 만들기
+			String[] gymTrainerImageLists = dto.getGymTrainerPic().split(",");
+			
+			//다시 이름들 합치기
+			for(int i=0; i<gymTrainerImageLists.length; i++) {
+				
+				//해당 번호면 기존 파일지우기
+				if(i == TrainerNumber-1) {
+				File deleteImage = new File(gymTrainerPicImgPath + gymTrainerImageLists[i]);
+				deleteImage.delete();
+				}
+				
+				//삭제할 인덱스번호는 빼고 쉼표로 합치기
+				if(i != TrainerNumber-1) {  
+				gymTrainerPicCombine += gymTrainerImageLists[i] + ",";
+				}
+			}
+			//마지막 쉼표 처리
+			//마지막 쉼표면, 쉼표 빼고 dto에 setting
+			lastWord = gymTrainerPicCombine.substring(gymTrainerPicCombine.length()-1, gymTrainerPicCombine.length());
+			
+			while(lastWord.equals(",")) {
+				gymTrainerPicCombine = gymTrainerPicCombine.substring(0, gymTrainerPicCombine.length()-1);
+				lastWord = gymTrainerPicCombine.substring(gymTrainerPicCombine.length()-1, gymTrainerPicCombine.length());//마지막 글자 다시 세팅
+			}
+			//dto에 세팅
+			dto.setGymTrainerPic(gymTrainerPicCombine);
 			
 			
-			
+		//=======================================			
 		//체육관 사진을 지울때
+		//=======================================
 		}else if (whatToDelete.contains("Gym")) {
 			
+			//기존 트레이너 이미지을 배열로 만들기
+			String[] gymImageLists = dto.getGymPic().split(",");
 			
+			//다시 이름들 합치기
+			for(int i=0; i<gymImageLists.length; i++) {
+				
+				//해당 번호면 기존 파일지우기
+				if(i == TrainerNumber-1) {
+				File deleteImage = new File(gymPicImgPath + gymImageLists[i]);
+				
+				System.out.println("지울파일경로 " + gymPicImgPath + gymImageLists[i]);
+				deleteImage.delete();
+				}
+				
+				//삭제할 인덱스번호는 빼고 쉼표로 합치기
+				if(i != TrainerNumber-1) {  
+				gymPicCombine += gymImageLists[i] + ",";
+				}
+			}
+			//마지막 쉼표 처리
+			//마지막 쉼표면, 쉼표 빼고 dto에 setting
+			String lastWord = gymPicCombine.substring(gymPicCombine.length()-1, gymPicCombine.length());
 			
+			while(lastWord.equals(",")) {
+				gymPicCombine = gymPicCombine.substring(0, gymPicCombine.length()-1);
+				lastWord = gymPicCombine.substring(gymPicCombine.length()-1, gymPicCombine.length());//마지막 글자 다시 세팅
+			}
 			
+			System.out.println("최종 : " + gymPicCombine);
 			
-			
-			
+			//dto에 세팅
+			dto.setGymPic(gymPicCombine);
 		}
 		
-		
+		dao.gymupdateData(dto);//수정 완료
 		
 		//다시 수정창으로
-		return "redirect:/gymUdate.action";
+		//수정창에서 dto는 세션에서 받아오므로 넘겨줄 필요 없다
+		return "redirect:/gymUpdate.action";
 	}
-	
-	
 	
 	// 체육관 회원 탈퇴
 	@RequestMapping(value = "/gymDeleted_ok.action", method = { RequestMethod.GET, RequestMethod.POST })
