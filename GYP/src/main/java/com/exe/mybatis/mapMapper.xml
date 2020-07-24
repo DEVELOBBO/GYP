@@ -32,10 +32,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <select id="getSearchGoo" parameterType="hashMap" resultType="com.exe.dto.GymDTO">
 	select * from(
-	select rownum rnum, gymAddr from (
-	select distinct RTRIM(substr(
-	gymAddr,7,instr(gymAddr,'구 ')-5)) gymAddr from gym)
-	where (gymAddr like #{searchValue} || '%구%' or gymAddr like #{searchValue}))
+	select rownum rnum, gymAddr from(
+	select distinct substr(gymAddr,1,instr(gymAddr,'구 ')) gymAddr from(
+	select substr(gymAddr,instr(gymAddr,' ')+1) gymAddr from gym))
+	where (gymAddr like #{searchValue} || '%구' or gymAddr like #{searchValue} and gymAddr is not null))
 <![CDATA[
 	where rnum>=#{start} and rnum<=#{end}
 ]]>
@@ -51,10 +51,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 </select>
 
 <select id="getCustomerGoo" parameterType="hashMap" resultType="com.exe.dto.CustomerDTO">
-	select RTRIM(substr(
-	cusAddr,7,instr(cusAddr,'구 ')-5)) cusAddr from(
-	select cusId,cusAddr from customer
-	where cusId = #{sessionId})
+	select substr(cusAddr,1,instr(cusAddr,'구 ')) cusAddr from(
+	select substr(cusAddr,instr(cusAddr,' ')+1) cusAddr from(
+	select cusAddr from customer where cusId = #{sessionId}))
 </select>
 
 </mapper>

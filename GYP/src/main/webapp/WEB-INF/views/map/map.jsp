@@ -17,7 +17,7 @@ String cp = request.getContextPath();
 <!-- Core Stylesheet -->
 <link rel="stylesheet" href="/gyp/resources/css/style.css">
 <!-- Map CSS -->
-<link rel="stylesheet" href="/gyp/resources/css/map.css?asddd">
+<link rel="stylesheet" href="/gyp/resources/css/map.css">
 <!-- font -->
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400&display=swap" rel="stylesheet">
 <!-- jQuery-2.2.4 js -->
@@ -29,39 +29,49 @@ String cp = request.getContextPath();
 	<jsp:include page="/WEB-INF/views/layout/header_over.jsp" />
 	<jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
 	
-	
-   <div>
-      <form method="post" name="searchForm" id="searchForm">
-      <select name="searchKey" id="searchKey" class="selectField" onchange="selectChange();">
-         <option value="gymName" <c:if test="${tempSearchKey eq 'gymName'}">selected</c:if>>이름</option>
-         <option value="gymAddr" <c:if test="${tempSearchKey eq 'gymAddr'}">selected</c:if>>지역</option>
-         <option value="gymType" <c:if test="${tempSearchKey eq 'gymType'}">selected</c:if>>종목</option>
-      </select>
-      <input type="text" name="searchValue" id="searchValue" value="${tempSearchValue}"
-         class="textField" onkeyup="sendKeyword();" onkeydown="enter('send');">
-      <input type="button" value=" 검색 " id="sendButton" class="btn2" onclick="searchMap('send');"/>
-      <input type="button" value=" MY " id="myButton" class="btn2" onclick="searchMap('my');"/>
-      <input type="hidden" id="tempSearchKey" value="${tempSearchKey}"/>
-      <input type="hidden" id="tempSearchValue" value="${tempSearchValue}"/>
-      <input type="hidden" id="cusAddrGoo" value="${cusAddrGoo}"/>
-      <input type="hidden" id="sessionId" value="${sessionId}"/>
-      
-      <div id="suggestDiv" class="suggest">
-         <div id="suggestListDiv"></div>
-      </div>
-
-      <div>
-         <span id="listData" style="display: none"></span>
-      </div>
-      
-      <div>
-         <!-- 지도시작 지도시작 지도시작 지도시작 지도시작 지도시작 -->
-         <div id="map" style="width: 800px; height: 600px; z-index: 1"></div>
-      </div>
-      </form>
-   </div>
-   
-
+	<center>
+	   <div class="mapContainerWrap">
+	      <form method="post" name="searchForm" id="searchForm">
+	      <!-- 검색창&리스트 웹 -->
+	      <div class="leftBox">
+	      	  <!-- 검색창 -->
+		      <div class="searchBar">
+			      <select name="searchKey" id="searchKey" class="selectField" onchange="selectChange();">
+			         <option value="gymName" <c:if test="${tempSearchKey eq 'gymName'}">selected</c:if>>이름</option>
+			         <option value="gymAddr" <c:if test="${tempSearchKey eq 'gymAddr'}">selected</c:if>>지역</option>
+			         <option value="gymType" <c:if test="${tempSearchKey eq 'gymType'}">selected</c:if>>종목</option>
+			      </select>
+			      <input type="text" name="searchValue" id="searchValue" value="${tempSearchValue}"
+			        class="textField" onkeyup="sendKeyword();" onkeydown="enter('send');">
+			      <input type="button" value=" 검색 " id="sendButton" class="btn2" onclick="searchMap('send');"/>
+			      <input type="button" value=" MY " id="myButton" class="btn2" onclick="searchMap('my');"/>
+			      <input type="hidden" id="tempSearchKey" value="${tempSearchKey}"/>
+			      <input type="hidden" id="tempSearchValue" value="${tempSearchValue}"/>
+			      <input type="hidden" id="cusAddrGoo" value="${cusAddrGoo}"/>
+			      <input type="hidden" id="sessionId" value="${sessionId}"/>
+		      </div>
+		      <!-- 검색창 끝 -->
+		      
+		      <!-- 검색어 제시 -->
+		      <div id="suggestDiv" class="suggest">
+		         <div id="suggestListDiv"></div>
+		      </div>
+		      <!-- 검색어 제시 끝 -->
+		      
+		      <!-- 리스트 -->
+	          <span id="listData" style="display: none"></span>
+	          <!-- 리스트 끝 -->
+	      </div>
+	      <!-- 검색창&리스트 웹 끝 -->
+	      
+	      <div class="rightBox">
+	         <!-- 지도시작 지도시작 지도시작 지도시작 지도시작 지도시작 -->
+	         <div id="map" style="width: 900px; height: 848px; z-index: 1"></div>
+	      </div>
+	      
+	      </form>
+	   </div>
+	</center>
 
 
    <!-- ##### Footer Area Start ##### -->
@@ -148,10 +158,6 @@ String cp = request.getContextPath();
       $("#listData").show();
    }
    
-   
-   
-   </script>
-   <script type="text/javascript">
       function sendKeyword() {
 
          var searchKey = document.getElementById("searchKey").value;
@@ -234,7 +240,6 @@ var tempOverlay="";
 function mapMake() {
          var container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
          var options = {
-            zIndex:1,
             center: new kakao.maps.LatLng(37.5532192,126.980466),// 위도경도
             <c:choose>
                 <c:when test="${searchKey eq 'gymAddr'}">
@@ -251,21 +256,30 @@ function mapMake() {
          map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
          var zoomControl = new kakao.maps.ZoomControl();
          map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
-         // ★ 주소-좌표 변환 객체를 생성
-         var geocoder = new kakao.maps.services.Geocoder();
+         
          /* 
          var imageSrc = '/gyp/resources/img/core-img/marker.png', // 마커이미지의 주소입니다    
           imageSize = new kakao.maps.Size(44, 49), // 마커이미지의 크기입니다
           imageOption = {offset: new kakao.maps.Point(27, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
           var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
            */
+         // ★ 주소-좌표 변환 객체를 생성
+         var geocoder = new kakao.maps.services.Geocoder();
          // ★ 주소로 좌표를 검색 
             <c:forEach items="${lists}" var="dto" varStatus="status">
+            	
             geocoder.addressSearch('${dto.gymAddr}', function(result, status) { // 정상적으로 검색이 완료됐으면
                if (status === kakao.maps.services.Status.OK) {
                var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
                yy = result[0].x;
                xx = result[0].y;
+               
+               //리스트 첫번째에 있는 체육관으로 좌표지정
+               <c:if test="${searchKey eq 'gymAddr'}">
+	               <c:if test="${status.first}">
+	               		map.setCenter(coords);
+	               </c:if>
+	           </c:if>
                // 결과값으로 받은 위치를 마커로 표시
                var marker = new kakao.maps.Marker({
                   map: map,
@@ -311,7 +325,6 @@ function mapMake() {
                   var customOverlay = new kakao.maps.CustomOverlay({
                       content: customContent,
                       position: coords,
-                      zIndex:99999999999999
                   });
                 
                    // 마커를 클릭했을 때 커스텀 오버레이를 표시합니다
@@ -385,10 +398,6 @@ function mapSetCenter(gymAddr) {
 
    </script>
    
-   <div style="height: 100px;"></div>
-   
-   <jsp:include page="/WEB-INF/views/layout/footer.jsp" />
-
     <!-- ##### All Javascript Script ##### -->
     <!-- Popper js -->
     <script src="/gyp/resources/js/bootstrap/popper.min.js"></script>
@@ -400,6 +409,6 @@ function mapSetCenter(gymAddr) {
     <script src="/gyp/resources/js/active.js"></script>
 	<!-- qna.js -->
 	<script src="/gyp/resources/js/qna.js"></script>
-
+	<jsp:include page="/WEB-INF/views/layout/footer.jsp" />
 </body>
 </html>

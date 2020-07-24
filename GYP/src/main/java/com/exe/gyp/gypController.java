@@ -3272,7 +3272,7 @@ public class gypController {
 		req.setAttribute("sessionId", sessionId);
 		req.setAttribute("cusAddrGoo", cusAddrGoo);
 		
-		return "map/mapBackUp";
+		return "map/map";
 	}
 
 	//페이징 처리 + 제휴시설 리스트 가져오기

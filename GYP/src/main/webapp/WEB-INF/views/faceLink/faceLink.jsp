@@ -28,18 +28,39 @@
 
 	<div style="height: 300px;"></div>
 
-<img src="/gyp/resources/img/check.png" width="300px"/>
+<h1 align="center"><div style="width:700px; margin:0 auto;">온라인 PT</div></h1>
+
 
 <c:if test="${dto == null}">
-	수업이 없습니다!
+	<div style="width:500px; margin:0 auto;">
+		<img src="/gyp/resources/img/check.png" width="200px"/>
+	</div>
+	<div>
+		수업이 없습니다!
+	</div>
+		
+	
 </c:if>
+
 <c:if test="${dto != null }">
 	<c:if test="${dto.faceLink == null }">
-		준비 중입니다...
-		(수업시작 시간 5분 전에 확인해주세요)
+		<div style="margin:0 auto; width: 600px">
+			<div style="width:200px; display:inline;">
+				<img src="/gyp/resources/img/check.png" width="200px"/>
+			</div>
+			<div style="display: inline;">
+				준비 중입니다...(수업시작 시간 5분 전에 확인해주세요)
+			</div>
+		</div>
 	</c:if>
+	
 	<c:if test="${dto.faceLink != null }">
-		<a href="https://gyp.herokuapp.com/#${dto.faceLink}">수업 바로가기</a>
+		<div style="width:700px; margin:0 auto;">
+		<img src="/gyp/resources/img/check.png" width="200px"/>
+		${dto.gymName} ${dto.bookHour} ${dto.gymTrainerPick} 트레이너 수업
+		<a target="_blank" href="https://gyp.herokuapp.com/#${dto.faceLink}" style="color: blue;">바로가기</a>
+		</div>
+		
 	</c:if>		
 </c:if>
 

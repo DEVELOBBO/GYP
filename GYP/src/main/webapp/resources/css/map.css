@@ -19,3 +19,28 @@
 .label .left {background: url("https://t1.daumcdn.net/localimg/localimages/07/2011/map/storeview/tip_l.png") no-repeat;display: inline-block;height: 24px;overflow: hidden;vertical-align: top;width: 7px;}
 .label .center {background: url(https://t1.daumcdn.net/localimg/localimages/07/2011/map/storeview/tip_bg.png) repeat-x;display: inline-block;height: 24px;font-size: 12px;line-height: 24px;}
 .label .right {background: url("https://t1.daumcdn.net/localimg/localimages/07/2011/map/storeview/tip_r.png") -1px 0  no-repeat;display: inline-block;height: 24px;overflow: hidden;width: 6px;}
+.mapContainerWrap{
+  display: inline-block;
+  width: 90%;
+  text-align: left;
+}
+.leftBox{
+  display: inline-block;
+  width: 43%;
+  margin-top: 75px;
+  float: left;
+}
+.rightBox{
+  display: inline-block;
+  width: 40%;
+  margin-top: 60px;
+}
+.searchBar{
+	margin-bottom: 10px;
+}
+hr{
+	width: 500px;
+}
+hr:first-child{
+	display: none;
+}

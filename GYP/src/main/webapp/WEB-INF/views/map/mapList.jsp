@@ -8,25 +8,28 @@
 <c:if test="${dataCount!=0 }">
 	<div id="mapList">
 	<c:forEach var="dto" items="${lists}">
+		<hr/>
+		<div class="mapDetail">
 		<dl>
 			<dd class="">
 				<a href="javascript:void(0);"
 				onclick='mapSetCenter("${dto.gymAddr }");'> ${dto.gymName } </a>
 			</dd>
-			<dd class="">${dto.gymType }</dd>
 			<dd class="">${dto.gymTel }</dd>
 			<dd class="">${dto.gymHour }</dd>
-			<dd class="">${dto.gymAddr }</dd>
-			<dd class="">${dto.gymPic }</dd>
+			<dd class="">${dto.gymAddr }
 			<a href="<%=cp%>/gymJjim.action?gymId=${dto.gymId}" target="_blank">
-			<img alt="찜하기" src="/gyp/resources/img/core-img/mapLikeIcon.JPG"></a>
-			<a href="<%=cp%>/gymCash.action?gymId=${dto.gymId}" target="_blank">
-			<img alt="예약하기" src="/gyp/resources/img/core-img/mpaCashIcon.JPG"></a>
-			
+			<img alt="찜하기" src="/gyp/resources/img/core-img/mapLikeIcon.JPG" style="width: 30px"></a>
+			<a href="<%=cp%>/gymDetail.action?gymId=${dto.gymId}" target="_blank">
+			<img alt="예약하기" src="/gyp/resources/img/core-img/mpaCashIcon.JPG" style="width: 30px"></a>
+			</dd>
 		</dl>
+		</div>
 	</c:forEach>
 	</div>
-	${ajaxPageIndexList}
+	<div style="width:300px; margin: 0 auto;">
+		${ajaxPageIndexList}
+	</div>
 </c:if>
 
 <c:if test="${dataCount==0 }">
