@@ -268,42 +268,57 @@ private SqlSessionTemplate sessionTemplate;
 		return productlists;
 	}
 
-	// insertReviewData : 리뷰 삽입
-	public void insertProductReviewData(ReviewDTO dto) {
-		sessionTemplate.insert("productMapper.insertReviewData", dto);
-	}
-
-	// deleteReviewData : 리뷰 삭제
-	public void deleteProductReviewData(int reNum) {
-		sessionTemplate.delete("productMapper.deleteReviewData", reNum);
+	////////////////////////
+	//리뷰
+	
+	// getReviewNumMax : 리뷰 전체의 최댓값 : 데이터 삽입시 필요
+	public int getProductReviewNumMax() {
+	int result = sessionTemplate.selectOne("productMapper.getProductReviewNumMax");
+	return result;
 	}
 	
-	
-
 	// getReviewNum : 체육관 하나에 달린 리뷰 갯수
 	public int getProductReviewNum(String productId) {
-		int result = sessionTemplate.selectOne("productMapper.getReviewNum", productId);
-		return result;
+	int result = sessionTemplate.selectOne("productMapper.getProductReviewNum", productId);
+	return result;
 	}
-
+	
 	// getReviewData : 체육관 하나의 전체 리뷰 리스트 받아오기
 	public List<ReviewDTO> getProductReviewList(Map<String, Object> hMap) {
-		List<ReviewDTO> productreviewLists = sessionTemplate.selectList("productMapper.getReviewList", hMap);
-		return productreviewLists;
+	List<ReviewDTO> reviewLists = sessionTemplate.selectList("productMapper.getProductReviewList", hMap);
+	return reviewLists;
 	}
-
+	
+	// insertReviewData : 리뷰 삽입
+	public void insertProductReviewData(ReviewDTO dto) {
+	sessionTemplate.insert("productMapper.insertProductReviewData", dto);
+	}
+	
+	// deleteReviewData : 리뷰 삭제
+	public void deleteProductReviewData(int reNum) {
+	sessionTemplate.delete("productMapper.deleteProductReviewData", reNum);
+	}
+	
 	// getAvgReview : 체육관 평점 평균
 	public int getProductAvgReview(String productId) {
-		int result = sessionTemplate.selectOne("productMapper.getAvgReview", productId);
-		return result;
+	int result = sessionTemplate.selectOne("productMapper.getProductAvgReview", productId);
+	return result;
 	}
-
+	
+	// getTimesCusReviewedGym : 체육관 리뷰 횟수 확인 : 세션의 사용자의 해당 체육관 리뷰 횟수
+	public int getTimesCusReviewedProduct(Map<String, Object> hMap) {
+	int result = sessionTemplate.selectOne("productMapper.getProductTimesCusReviewedProduct", hMap);
+	return result;
+	}
+	
+	//지우면안됨
 	// getTimesCusBookedGym : 체육관 예약 횟수 확인 : 세션의 사용자의 해당 체육관 이용 횟수
 	public int getProductTimesCusBookedGym(Map<String, Object> hMap) {
 		int result = sessionTemplate.selectOne("productMapper.getTimesCusBookedGym", hMap);
 		return result;
 	}
 
+	//지우면안됨
 	// getTimesCusReviewedGym : 체육관 리뷰 횟수 확인 : 세션의 사용자의 해당 체육관 리뷰 횟수
 	public int getProductTimesCusReviewedGym(Map<String, Object> hMap) {
 		int result = sessionTemplate.selectOne("productMapper.getTimesCusReviewedGym", hMap);

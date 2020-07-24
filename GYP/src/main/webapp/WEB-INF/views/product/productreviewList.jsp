@@ -20,7 +20,9 @@
 <c:if test="${totalDataCount!=0 }">
    <!-- 전체 리뷰 수 -->
    <input type="hidden" id="StarAvgParam" value="${starAvg }"/>
-   
+   <%-- 
+   <input type="hidden" id="rname" value="${info.sessionId }"/>
+    --%>
    <div>이용 회원들의 ${totalDataCount }개의 평가</div>
    <!-- 전체 평점 -->
    <div>
@@ -36,8 +38,8 @@
        <input type="radio" id="star1T" name="ratingT" class="total-rating" value="2" /><label class = "full" for="star1T" title="2점"></label>
        <input type="radio" id="starhalfT" name="ratingT" class="total-rating" value="1" /><label class="half" for="starhalfT" title="1점"></label>
    </fieldset>
-       ${starAvg }
     </div>
+    <br>
    <c:forEach var="dto" items="${productreviewLists }" varStatus="status">
       <hr>
       <div class="post-meta">
@@ -61,10 +63,10 @@
           <input type="radio" id="star1P" name="ratingP${status.count}" class="personal-rating${status.count}" value="2" /><label class = "full" for="star1P" title="2점"></label>
           <input type="radio" id="starhalfP" name="ratingP${status.count}" class="personal-rating${status.count}" value="1" /><label class="half" for="starhalfP" title="1점"></label>
       </fieldset>
-         ${dto.star}
          <input type="hidden" id="personalAvgParam-${status.count}" value="${dto.star }"/>
       </div>
-      
+      <br>
+      <br>
       <!-- 리뷰 내용 -->
       <div>
          ${dto.reContent }
@@ -81,6 +83,8 @@
       </script>
       
    </c:forEach>
+   <br><br>
+   
 
    <div>${pageIndexList }</div>
 </c:if>
@@ -89,11 +93,11 @@
    등록된 리뷰가 없습니다. 
 </c:if>
 
-
+<br><br>
 
 <!-- 리뷰 작성 -->
 <!-- 리뷰 작성 : 회원 세션에 cusId가 올라가있으면서, 해당 페이지의 gymId의 Book 목록에 cusId가 있으면 보이게하기 -->
-<c:if test="${!empty info.sessionId && timesCusBookedGym!=0 && timesCusReviewedGym<timesCusBookedGym}">
+<c:if test="${!empty info.sessionId }">
    <fieldset class="ratingM">
        <input type="radio" id="star5" name="rating" value="10" /><label class = "full" for="star5" title="10점"></label>
        <input type="radio" id="star4half" name="rating" value="9" /><label class="half" for="star4half" title="9점"></label>
@@ -106,6 +110,7 @@
        <input type="radio" id="star1" name="rating" value="2" /><label class = "full" for="star1" title="2점"></label>
        <input type="radio" id="starhalf" name="rating" value="1" /><label class="half" for="starhalf" title="1점"></label>
    </fieldset>
+   <br><br>
    <table width="600" border="0" cellpadding="0" cellspacing="0" align="center">
       <tr>
          <td width="600" colspan="4" height="3" bgcolor="#e6d4a6"></td>

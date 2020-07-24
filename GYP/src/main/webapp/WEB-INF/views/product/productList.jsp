@@ -62,7 +62,7 @@
 	<jsp:include page="/WEB-INF/views/layout/header_over.jsp" />
 	<jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
 	
-	<a href="/gyp/cart.action">장바구니 바로가기</a> 
+	<a href="/gyp/cart.action">바구니 바로가기</a> 
 	
 	<div class="wrapper">
 		<div class="wrapper_inner"
@@ -82,7 +82,7 @@
 			</form>
 
 			<form action="" method="get" name="orderby" class="form-signin">
-				<c:if test="${empty productType}">
+				<c:if test="${empty productType2}">
 					<input type="button" value=" 높은가격순"
 						style="float: right; background-color: white; border: 0em; color: #7a7ebf"
 						onclick="javascript:location.href='<%=cp%>/productList.action?type=1&searchValueCategory=${searchValueCategory }&searchValueWord=${searchValueWord }&pageNum=${pageNum }';">
@@ -94,7 +94,7 @@
 						onclick="javascript:location.href='<%=cp%>/productList.action?type=3&searchValueCategory=${searchValueCategory }&searchValueWord=${searchValueWord }&pageNum=${pageNum }';">
 				</c:if>
 				
-				<c:if test="${!empty productType}">
+				<c:if test="${!empty productType2}">
 				<!-- 헬스,필라테스,요가 검색시 -->
 				<input type="button" value=" 높은가격순"
 						style="float: right; background-color: white; border: 0em; color: #7a7ebf"

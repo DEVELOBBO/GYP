@@ -86,39 +86,60 @@ PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
 </select>
 
 
-<!-- 리뷰 삽입 -->
-	<insert id="insertReviewData" parameterType="com.exe.dto.ReviewDTO">
-		insert into review (reNum,reType,cusId,productId,star,reContent,reCreated)
-		values (#{reNum},#{reType},#{cusId},#{productId},#{star},#{reContent},sysdate)
-	</insert>
-	
-<!-- 리뷰 삭제 -->
-	<delete id="deleteReviewData" parameterType="int">
-		delete review where reNum=#{reNum}
-	</delete>
+
+
+
+
+
+<!-- 리뷰 전체의 최댓값 : 삽입용 -->
+	<select id="getProductReviewNumMax" resultType="int">
+		select nvl(max(reNum),0) from review
+	</select>
 	
 <!-- 한 체육관의 리뷰 갯수 -->
-	<select id="getReviewNum" parameterType="String" resultType="int">
-	select nvl(count(*),0) from review where productId=#{productId}
+	<select id="getProductReviewNum" parameterType="String" resultType="int">
+		select nvl(count(*),0) from review where productId = #{productId}
 	</select>
 
 <!-- 리뷰 리스트 가져오기 -->
-	<select id="getReviewList" parameterType="map" resultType="com.exe.dto.ReviewDTO">
+	<select id="getProductReviewList" parameterType="map" resultType="com.exe.dto.ReviewDTO">
 		select * from (
 		select rownum rnum, data.* from (
 		select reNum,reType,cusId,productId,star,reContent,reCreated 
-		from review where productId=#{productId}
+		from review where productId=#{productId} 
 		order by reNum desc) data)
 	<![CDATA[
 		where rnum>=#{start} and rnum<=#{end}
 	]]>
 	</select>
 	
-<!-- 체육관 평점 평균 -->
-	<select id="getAvgReview" parameterType="String" resultType="int">
-		select avg(nvl(star, 0)) from review where cusId=#{cusId}
-	</select>	
+<!-- 리뷰 삽입 -->
+	<insert id="insertProductReviewData" parameterType="com.exe.dto.ReviewDTO">
+		insert into review (reNum,reType,cusId,productId,star,reContent,reCreated)
+		values (#{reNum},#{reType},#{cusId},#{productId},#{star},#{reContent},sysdate)
+	</insert>
 	
+<!-- 리뷰 삭제 -->
+	<delete id="deleteProductReviewData" parameterType="int">
+		delete review where reNum=#{reNum}
+	</delete>
+
+<!-- 체육관 평점 평균 -->
+	<select id="getProductAvgReview" parameterType="String" resultType="int">
+		select nvl(avg(star), 0) from review where productId=#{productId}
+	</select>
+
+	
+<!-- 해당 체육관의 review 목록에 cusId가 있는 수 -->
+	<select id="getTimesCusReviewedProduct" parameterType="map" resultType="int">
+		select count(*) from (select * from review where productId=#{productId} and cusId=#{cusId})
+	</select>
+
+
+
+
+
+
 <!-- 해당 체육관의 Book 목록에 cusId가 있는 수 -->
 	<select id="getTimesCusBookedGym" parameterType="map" resultType="int">
 		select count(*) from (select * from book where productId=#{productId} and bookOk='true')
@@ -128,5 +149,9 @@ PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
 	<select id="getTimesCusReviewedGym" parameterType="map" resultType="int">
 		select count(*) from (select * from review where productId=#{productId})
 	</select>
+
+
+
+
 
 </mapper>
