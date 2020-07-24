@@ -2110,8 +2110,6 @@ public class gypController {
 		String totPrice = request.getParameter("totPrice2"); //나중에 결제 금액 넘김
 		String[] chkNums = request.getParameterValues("cartChk"); // 배열에 선택한 cartNum값이 들어온다
 		
-		System.out.println("totPrice: "+totPrice);
-		System.out.println("chkNums: "+chkNums);
 		for (int i = 0; i < chkNums.length; i++) { System.out.println(chkNums[i]); }//debug array of product
 		
 		//결제할 상품 정보 리스트
@@ -2200,14 +2198,11 @@ public class gypController {
 		String receiver_addr = params.substring(params.indexOf("receiver_addr=")+"receiver_addr=".length(),params.indexOf("&",params.indexOf("receiver_addr=")));
 		String productIdArr = params.substring(params.indexOf("productIdArr=")+"productIdArr=".length(),params.indexOf("&",params.indexOf("productIdArr=")));
 		String productCountArr = params.substring(params.indexOf("productCountArr=")+"productCountArr=".length());
-		System.out.println(productIdArr);
-		System.out.println(productCountArr);
 		
 		// productPay테이블에 삽입
 		ProductPayDTO ppdto = new ProductPayDTO();
 		ppdto.setProPayNum(proPayNumMax+1);
 		ppdto.setCusId(cusId);
-		//ppdto.setProPayCreated(); //mapper에서 sysdate넣기
 		ppdto.setPriceTotal(Integer.parseInt(amount));
 		ppdto.setProPayAddr(receiver_addr);
 		ppdto.setProPayTel(receiver_tel);
@@ -2340,6 +2335,7 @@ public class gypController {
 					naverCusDto.setCusEmail(naverEmail.replaceAll("\"", ""));
 					naverCusDto.setCusTel("naver");
 					naverCusDto.setCusAddr("naver");
+					naverCusDto.setCusAddrDetail("naver");
 					dao.cusCreated(naverCusDto);
 					System.out.println("데이터베이스에 네이버 회원 추가 완료");
 				}

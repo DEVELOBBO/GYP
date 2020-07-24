@@ -5,8 +5,11 @@
         IMP.init('imp43882577'); // 가맹점 식별코드
         
         $("#buyit").click(function(){
-        	validateUserInput();	// 사용자 입력 검사
-        	requestPay();	// 결제
+        	
+        	var check = validateUserInput();	// 사용자 입력 검사
+        	if(check!=false) {
+            	requestPay();	// 결제
+        	}
         });
         
         copyCusInfo();
@@ -47,7 +50,7 @@
 	    	    			+ "&payMethod=" + $("#payMethod").val()
 	    	    			+ "&receiver_name=" + $("#receiver_name").val()
 	    	    			+ "&receiver_tel=" + $("#receiver_tel").val()
-	    	    			+ "&receiver_addr=" + $("#receiver_addr").val()
+	    	    			+ "&receiver_addr=" + $("#sample6_address").val()+" "+ $("#detail_address").val()
 	    	    			+ "&productIdArr=" + productIdArr
 	    	    			+ "&productCountArr=" + productCountArr;
 		    	}
@@ -97,19 +100,79 @@
     /*--------- 사용자가 입력한 값을 검사하는 함수 ---------*/
     function validateUserInput() {
     	
+    	var f = document.payForm;
+    	
+    	//전화번호 제약조건
+	 	var cc3 = /^(01[016789]{1}|02|0[3-9]{1}[0-9]{1})-[0-9]{3,4}-[0-9]{4}$/;
+	 	
+	 	if(!cc3.test(f.buyerTel.value)) {
+			alert('전화번호를 바르게 입력하세요');
+			f.buyerTel.focus();
+			return false;
+	 	}
+	 	
+	 	if(!f.receiverName.value){
+			alert("이름을 입력하세요");
+			f.receiverName.focus();
+			return false; 
+		}
+	 	
+	 	if(!cc3.test(f.receiverTel.value)) {
+			alert('전화번호를 바르게 입력하세요');
+			f.receiverTel.focus();
+			return false;
+	 	}
+	 	
+	 	if(!f.receiverAddr.value || !f.receiverDetailAddr.value) {
+	 		alert("주소를 입력하세요");
+	 		return false
+	 	}
+	 	
+	 	if(f.receiverAddr.value) {
+	 		$("#detail_address").disabled=false;
+	 	}
+    	
     }
     
     /*--------- 배송지 입력 라디오버튼 기능 ---------*/
     function copyCusInfo() {
     	$("#receiver_name").val($("#buyer_name").val());
     	$("#receiver_tel").val($("#buyer_tel").val());
-    	$("#receiver_addr").val($("#buyer_addr").val());
+    	$("#sample6_address").val($("#buyer_addr").val());
+    	$("#detail_address").val($("#buyer_addr_detail").val());
     }
     
     function resetValue() {
     	$("#receiver_name").val("");
     	$("#receiver_tel").val("");
-    	$("#receiver_addr").val("");
+    	$("#sample6_address").val("");
+    	$("#detail_address").val("");
     }
     
+    /*--------- 주소지 api---------*/
+   function sample6_execDaumPostcode() {
+      new daum.Postcode({
+          oncomplete: function(data) {
+              // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+              // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+              // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+              var addr = ''; // 주소 변수
+
+              //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+              if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                  addr = data.roadAddress;
+              } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                 addr = data.roadAddress;
+                  addr = data.jibunAddress;
+              }
+
+              // 우편번호와 주소 정보를 해당 필드에 넣는다.
+              document.getElementById("sample6_address").value = addr;
+              // 커서를 상세주소 필드로 이동한다.
+            //  document.getElementById("sample6_detailAddress").focus();
+          }
+      }).open();
+   }
+
     

@@ -93,26 +93,31 @@
 	                                    <input type="text" class="form-control" id="buyer_name" placeholder="이름" disabled="disabled" value="${cusName }" />
 	                                </div>
 	                                <div class="form-group">
-	                                    <input type="text" class="form-control" id="buyer_tel" placeholder="전화번호" value="${cusTel }">
+	                                    <input type="text" class="form-control" id="buyer_tel" name="buyerTel" placeholder="전화번호" value="${cusTel }">
 	                                </div>
 	                                <div>
 	                                	<input type="hidden" id="buyer_addr" value="${cusAddr }">
+	                                	<input type="hidden" id="buyer_addr_detail" value="${cusAddrDetail }">
 	                                </div>
                             	</div>
-                                
+                                 
                                 <c:if test="${empty passSelected }">
 	                                <!-- 배송지 정보 -->
 	                            	<span>배송지</span>
 	                                <!-- c:if문 써서 주문 상품이 운동용품일때만 보이기 -->
 	                                <div id="배송지">
-										<input type="radio" name="deliveryInfo" value="originalDeliver" onclick="copyCusInfo();" checked="checked" >주문자 정보와 동일&nbsp;
+										<input type="radio" name="deliveryInfo" value="originalDeliver" onclick="copyCusInfo();" checked="checked" >
+										주문자 정보와 동일&nbsp;
 										<input type="radio" name="deliveryInfo" value="newDeliver" onclick="resetValue();">새로 입력
 										
 	                                	<div class="form-group">
-		                                    <input type="text" class="form-control" id="receiver_name" placeholder="수령인">
-		                                    <input type="text" class="form-control" id="receiver_tel" placeholder="연락처">
-		                                    <input type="text" class="form-control" id="receiver_addr" placeholder="배송지 주소">
-		                                </div>
+		                                    <input type="text" class="form-control" id="receiver_name" name="receiverName" placeholder="수령인"/>
+		                                    <input type="text" class="form-control" id="receiver_tel" name="receiverTel" placeholder="연락처"/>
+		                                    <input type="text" class="form-control" id="sample6_address" name="receiverAddr" 
+		                                    onclick = "sample6_execDaumPostcode();" readonly="readonly" placeholder="배송지 주소"/>
+		                                    <input type="text" class="form-control" id="detail_address" name="receiverDetailAddr" 
+		                                    placeholder="상세주소"/>
+		                                </div> 
 	                                </div>
 		                        </c:if>
 		                        <!-- 결제 수단 선택 -->
@@ -122,7 +127,6 @@
 										<option value="card" selected="selected">신용카드</option>
 										<option value="trans">실시간계좌이체</option>
 										<option value="vbank">가상계좌</option>
-										<option value="phone">휴대폰소액결제</option>
 									</select>
 		                        </div>
                             </form>
@@ -167,7 +171,8 @@
     <script src="/gyp/resources/js/plugins/plugins.js"></script>
     <!-- Active js -->
     <script src="/gyp/resources/js/active.js"></script>
-    
+    <!-- 다음 카카오 주소API -->
+	<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
 
 </body>
