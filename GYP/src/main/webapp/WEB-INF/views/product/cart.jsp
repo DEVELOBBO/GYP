@@ -78,26 +78,26 @@ function SelectOrder(checkboxName) {
 		return;
 	}
 	var f = document.myForm;
-	f.action = "<%=cp%>/order.action";
+	f.action = "<%=cp%>/payment.action";
 	f.submit();
 	}
 
 	//하나주문
-function OneOrder(checkboxName,cartChk) {
-	var obj = document.getElementsByName(checkboxName);
-	var obj2 = document.getElementById(cartChk);
-	for(var i=0; i< obj.length; i++){
-		if(obj[i].value==null||obj[i].value==""){
-	    	   alert("\n갯수를 입력하세요.");
-	    	   obj[i].focus();
-	    	   return;
-	     }
-		obj2.checked = true;	    	   
-	    
-	}
-	var f = document.myForm;
-	f.action = "<%=cp%>/order.action";
-	f.submit();
+	function OneOrder(checkboxName,cartChk,oneVal) {
+		var obj = document.getElementsByName(checkboxName);//갯수
+		var obj2 = document.getElementById(cartChk);//체크박스
+		for(var i=0; i< obj.length; i++){
+			if(obj[i].value==null||obj[i].value==""){
+		    	   alert("\n갯수를 입력하세요.");
+		    	   obj[i].focus();
+		    	   return;
+		     }
+			obj2.checked = true;	    	   
+			$("#totPrice").val($("#"+oneVal).val());
+		}
+		var f = document.myForm;
+		f.action = "<%=cp%>/payment.action";
+		f.submit();
 	}
 	//가격
 	function price(checkboxName,won) {
@@ -188,6 +188,7 @@ function OneOrder(checkboxName,cartChk) {
 										<input type="checkbox" id="cartChk${cart.cartNum}" name="cartChk"
 												value="${cart.cartNum}"
 												onchange="price('cartChk${cart.cartNum}','won${cart.cartNum}')" /> <!-- pid -->
+									</td>
 									<td align="left"><label for="cartChk${cart.cartNum}">${cart.productId}</label></td>
 									<!-- 이미지 -->
 									<td>&nbsp;&nbsp;&nbsp;</td>
@@ -205,7 +206,8 @@ function OneOrder(checkboxName,cartChk) {
 									<!-- 변경버튼 -->							
 									<td width="50px"><input type="button" value="변경" onclick="countUpdate('count${cart.cartNum}','${cart.cartNum}');"
 													class="bokyung_button_cart_change"/></td>
-									<td width="500px" style="text-align: center;"><a href="javascript:location.href='<%=cp%>/productDetail.action?productId=${cart.productId}&pageNum=1'"><h4>${cart.productName }</h4></a></td>
+									<td width="500px" style="text-align: center;"><a href="javascript:location.href='<%=cp%>/productDetail.action?productId=${cart.productId}&pageNum=1'">
+									<h4>${cart.productName }</h4></a></td>
 
 									<td width="400px" style="text-align: center;">${cart.productPrice}원
 									<input type="hidden" id="won${cart.cartNum}" value="${cart.productPrice * cart.count}"/></td>
@@ -214,12 +216,13 @@ function OneOrder(checkboxName,cartChk) {
 									<td><input type="button" value="구매하기"
 										class="btn fitness-btn btn-white mt-10"
 										style="min-width: 50px; float: right; margin: 10px 5px 10px 5px; padding: 5px; border-radius: 30px; vertical-align: middle;"
-										onclick="OneOrder('count${cart.cartNum}','cartChk${cart.cartNum}');">
+										onclick="OneOrder('count${cart.cartNum}','cartChk${cart.cartNum}','won${cart.cartNum }');">
 
 										<input type="button" value="삭제하기"
 										class="btn fitness-btn btn-white mt-10"
 										style="min-width: 50px; float: right; margin: 10px 5px 10px 5px; padding: 5px; border-radius: 30px; vertical-align: middle;"
-										onclick="location.href='<%=cp%>/cart_Onedelete.action?cartNum=${cart.cartNum}'"></td>
+										onclick="location.href='<%=cp%>/cart_Onedelete.action?cartNum=${cart.cartNum}'">
+									</td>
 								</tr>
 
 								<!-- 선 -->
@@ -231,9 +234,9 @@ function OneOrder(checkboxName,cartChk) {
 						</tr>
 						<tr valign="bottom" height="150">
 							<td colspan="8" align="right" style="padding-bottom: 15px;">
-								<font color="black">선택한 상품금액 : <input type="text"
-									readonly="readonly" value="0" id="totPrice" name="totPrice"
-									style="border: 0; background-color: #DFDFEB; padding-top: 2px; padding-right: 15px; width: 150px; height: 35px; font-size: 15pt; font-family: 'Do Hyeon'; text-align: right;">&nbsp;&nbsp;원
+								<font color="black">선택한 상품금액 : <input type="text" readonly="readonly" value="0" id="totPrice" name="totPrice2"
+									style="border: 0; background-color: #DFDFEB; padding-top: 2px; padding-right: 15px; width: 150px; height: 35px; 
+									font-size: 15pt; font-family: 'Do Hyeon'; text-align: right;">&nbsp;&nbsp;원
 							</font>
 							</td>
 							<td colspan="2" align="right"><input type="button"

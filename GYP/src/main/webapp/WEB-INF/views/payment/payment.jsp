@@ -55,13 +55,34 @@
                     
                         <!-- 주문 정보 폼 -->
                         <div class="contact-form-area">
-                            <form action="#" method="post" name="payForm" id="payForm">
+                            <form action="/getForm4Pay.action" method="post" name="payForm" id="payForm">
                             
                             	<!-- 주문 상품 -->
                             	<span>주문상품</span>
                             	<div id="주문 상품">
 	                            	<div class="form-group">
-	                                    <span class="form-control" id="item">${passSelected }</span>
+	                            		<!-- 패스 구매시 -->
+	                            		<c:if test="${not empty passSelected }">
+	                                    	<span class="form-control" id="item">${passSelected }</span>
+	                                    	<input type="hidden" id="itemVal" value="${passSelected }">
+	                                    </c:if>
+	                                    
+	                                    <!-- 운동용품 구매시 -->
+	                                    <c:if test="${empty passSelected }">
+	                                    	<div id="productList">
+	                                    	<span id="item" style="display: none;">운동용품</span>
+	                                    		<c:forEach var="dto" items="${listsToBuy }" >
+	                                    			<div class="row">
+	                                    				<span>${dto.productId}</span>	<input type="hidden" name="productIdArr" value="${dto.productId}">
+	                                    				<img src="${imagePath }/${dto.productImg }"/>
+	                                    				<span>${dto.productName }</span>
+	                                    				<span>${dto.productPrice }</span>
+	                                    				<span>${dto.count }</span>	<input type="hidden" name="productCountArr" value="${dto.count }">
+	                                    			</div>
+	                                    		</c:forEach>
+	                                    	</div>
+	                                    </c:if>
+	                                    
 	                                </div>
                             	</div>
                             	
@@ -72,7 +93,7 @@
 	                                    <input type="text" class="form-control" id="buyer_name" placeholder="이름" disabled="disabled" value="${cusName }" />
 	                                </div>
 	                                <div class="form-group">
-	                                    <input type="text" class="form-control" id="buyer_tel" placeholder="전화번호" disabled="disabled" value="${cusTel }">
+	                                    <input type="text" class="form-control" id="buyer_tel" placeholder="전화번호" value="${cusTel }">
 	                                </div>
 	                                <div>
 	                                	<input type="hidden" id="buyer_addr" value="${cusAddr }">

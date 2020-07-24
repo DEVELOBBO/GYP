@@ -123,7 +123,7 @@
 		                    <br/><br/>
 		                    
 		                    <c:forEach var="productDto" items="${productLists }">
-				                <div class="single-price-table mb-100">
+				                <div class="single-price-table mb-100 col-4">
 			                        <img src="/gyp/sfiles/product/${productDto.productImg}" alt="${productDto.productName }">
 			                        <div class="price-table-content">
 			                            <!-- price -->
@@ -256,29 +256,29 @@
 										    <option value="${gymTrainer[i]}">${gymTrainer[i]}</option>
 									  	  </c:forEach>
 									  </select>
-							        </div>
+							        </div> 
 	
 									<!-- 예약 날짜 선택 -->
-									<div class="modal-body-select">
+									<div class="modal-body-select"> 
 							        	<label for="datepicker">날짜 : </label>
 										<div id="datepicker" class="input-group date">
 										    <input class="form-control" type="text" readonly />
 										    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
 										    <input type="hidden" id="datePick" name="datePick" value=""/>
 										</div>
-							        </div>
-							        
+							        </div>  
+							         	
 							        <!-- 시간 선택 -->
-							        <div class="modal-body-select">
+							        <div class="modal-body-select">  
 							        	<label for="time-select-style">시간 : </label>
 							        	<div class="time-select-style">
 								        		<select id="select-options-wdays" class="select-options" name="bookHourWd">
 										    		<option value="" disabled="disabled" selected="selected">시간을 선택해주세요</option>
-												  <c:forEach var="i" begin="0" end="${optionTimes0.size()-1 }">
+										 		  <c:forEach var="i" begin="0" end="${optionTimes0.size()-1 }">
 												    <option value="${optionTimes0[i] }">${optionTimes0[i] }</option>
 												  </c:forEach>
 											 	</select>
-											  
+											 
 											  <select id="select-options-sat" class="select-options" name="bookHourSat">
 										    		<option value="" disabled="disabled" selected="selected">시간을 선택해주세요</option>
 										  		  <c:forEach var="i" begin="0" end="${optionTimes1.size()-1 }">
@@ -292,7 +292,7 @@
 												    <option value="${optionTimes2[i] }">${optionTimes2[i] }</option>
 												  </c:forEach>
 											  </select>
-											  
+											   
 										</div>
 							        </div>
 							        

@@ -56,6 +56,9 @@ import com.exe.util.MyUtil;
 import com.exe.util.MyUtil_Map;
 import com.exe.dto.NoticeDTO;
 import com.exe.dto.ProductDTO;
+import com.exe.dto.ProductOrderDTO;
+import com.exe.dto.ProductPayDTO;
+import com.exe.dto.ProductPayDetailDTO;
 import com.exe.dto.QnaDTO;
 
 @Controller
@@ -1372,7 +1375,11 @@ public class gypController {
 
 		// 장바구니 클릭시 로그인하게 만듦 (jsp에서)
 		CustomInfo info = (CustomInfo) session.getAttribute("customInfo"); // 세션에 로그인값 가져올려고 생성
-
+		
+		if(info==null) {//돌발적 로그아웃 대비
+			return "redirect:/login.action";
+		}
+		
 		// 넘어오는값
 		String productId = request.getParameter("productId");
 		String pageNum = request.getParameter("pageNum");
@@ -1422,11 +1429,12 @@ public class gypController {
 		String cp = request.getContextPath();
 
 		CustomInfo info = (CustomInfo) session.getAttribute("customInfo");
-
+		
+		if(info==null) {//돌발적 로그아웃 대비
+			return "redirect:/login.action";
+		}
+		
 		String cusId = info.getSessionId();
-
-		// 임시로 값 넣어줌
-		// String cusId = "suzi"; // 세션에 있는 로그인값으로 변경
 
 		List<CartDTO> cartLists = dao.cartList(cusId);
 
@@ -1520,9 +1528,6 @@ public class gypController {
 		CustomInfo info = (CustomInfo) session.getAttribute("customInfo");
 
 		String cusId = info.getSessionId();
-
-		// 임시로 아이디는 suzi로 고정
-		// String cusId = "suzi";
 
 		// String totPrice = req.getParameter("totPrice"); //나중에 결제 금액 넘김
 		String[] chkNums = request.getParameterValues("cartChk"); // 배열에 선택한 cartNum값이 들어온다
@@ -1776,6 +1781,14 @@ public class gypController {
 		List<String> gymPic = Arrays.asList(gymDto.getGymPic().split(","));
 		// 이용 가능 시설
 		List<String> gymFacility = Arrays.asList(gymDto.getGymFacility().split(","));
+		
+		//확장for문, 하나씩 꺼내서 글자길이 수정
+		for(ProductDTO dto : productLists) {
+			if(dto.getProductContent().length() > 13) { //프로그램 길면 자르기
+				dto.setProductContent(dto.getProductContent().substring(0, 27) + " ...");
+			}
+		}
+		
 		// request set
 		request.setAttribute("productLists", productLists);
 		request.setAttribute("gymDto", gymDto);
@@ -1861,6 +1874,7 @@ public class gypController {
 		List<ReviewDTO> lists = dao.getReviewList(hMap);
       
 		Iterator<ReviewDTO> it = lists.iterator();
+		
 		//전체 평점 평균
 		if(lists!=null) {
 			int starAvg = dao.getAvgReview(gymId);
@@ -2066,60 +2080,160 @@ public class gypController {
 		if(info==null) {//돌발적 로그아웃 대비
 			return "redirect:/login.action";
 		}
-		// 결제정보 작성을 위해 사용자 정보 불러오기
+		// 결제정보 작성을 위해 사용자 정보 불러와서 set시키기
 		CustomerDTO cusDto = dao.getCustromerDTOReadData(info);
+		
+		if(cusDto.getCusPwd()=="naver" || cusDto.getCusPwd().equals("naver")) {//네이버로 로그인한 경우
+			request.setAttribute("cusTel", null);
+			request.setAttribute("cusAddr", null);
+		} else {
+			request.setAttribute("cusTel", cusDto.getCusTel());
+			request.setAttribute("cusAddr", cusDto.getCusAddr());
+		}
 		request.setAttribute("cusId", info.getSessionId());
 		request.setAttribute("cusName", cusDto.getCusName());
-		request.setAttribute("cusTel", cusDto.getCusTel());
-		request.setAttribute("cusAddr", cusDto.getCusAddr());
 		
+		// passSelected가 null이 아니면 pass결제, null이면 상품 결제
 		String passSelected = request.getParameter("pass");
-		request.setAttribute("passSelected", passSelected);
-		//패스 결제
+
+		//패스 결제하기
 		if(passSelected!=null) {
 			int passNum = Integer.parseInt(passSelected.substring(5));
 			//int finalPayVal = passNum * 5000;
 			int finalPayVal = 100; //테스트용 결제 금액
-
+			
+			request.setAttribute("passSelected", passSelected);
 			request.setAttribute("finalPayVal", finalPayVal);
+			return "payment/payment";
+		}
+		
+		String totPrice = request.getParameter("totPrice2"); //나중에 결제 금액 넘김
+		String[] chkNums = request.getParameterValues("cartChk"); // 배열에 선택한 cartNum값이 들어온다
+		
+		System.out.println("totPrice: "+totPrice);
+		System.out.println("chkNums: "+chkNums);
+		for (int i = 0; i < chkNums.length; i++) { System.out.println(chkNums[i]); }//debug array of product
+		
+		//결제할 상품 정보 리스트
+		int[] numI = null;
+		if (chkNums != null) {
+				numI = new int[chkNums.length];
+				for (int i = 0; i < chkNums.length; i++) {
+					numI[i] = Integer.parseInt(chkNums[i]);
+				}
 		}
 		
 		//상품 결제
+		List<ProductOrderDTO> listsToBuy = dao.getProductOrderList(numI,info.getSessionId());
+
+//				Iterator<ProductDTO> itr = lists.iterator();
+//				while (itr.hasNext()) {
+//				    System.out.print(itr.next().getProductName() + " ");
+//				}
+		
+		String imagePath = "/gyp/sfiles/product"; // 이미지 경로
+
+		request.setAttribute("listsToBuy", listsToBuy);
+		request.setAttribute("finalPayVal", totPrice);
+		request.setAttribute("imagePath", imagePath);
+		
 		return "payment/payment";
 	}
 	
 	// 실제 결제
 	@RequestMapping(value="/actualPayment.action", method=RequestMethod.POST)
-	public void actualPayment(HttpServletRequest request, HttpSession session, ChargeDTO dto) throws Exception {
+	public void actualPayment(HttpServletRequest request, HttpSession session) throws Exception {
 		
 		CustomInfo info = (CustomInfo)session.getAttribute("customInfo");
 		String cusId = info.getSessionId();
 		
-		String params=request.getParameter("params");
-		String item = params.substring(params.indexOf("item=")+5,params.indexOf("&"));
-		int chargePass = Integer.parseInt(item.substring(5));
-		//int amount = Integer.parseInt(params.substring(params.indexOf("amount=")+7,params.indexOf("&",params.indexOf("amount=")))); //최종 결제 금액
-		String payMethod = params.substring(params.indexOf("payMethod=")+10);
+		String params = request.getParameter("params");
+		System.out.println(params);
 		
-		//chargeDTO num데이터 타입 string에서 int로 수정함
-		int chargeNumMax = dao.getChargeNumMax();
-		dto.setChargeNum(chargeNumMax+1);
-		dto.setCusId(cusId);
-		dto.setChargePass(chargePass);
-		dto.setChargeType(payMethod);
+		String item = params.substring(params.indexOf("item=")+"item=".length(),params.indexOf("&"));
 		
-		//charge테이블에 추가하기
-		dao.insertChargeData(dto);
+		// pass 결제시
+		if(item.startsWith("pass_")) {
+			
+			int chargePass = Integer.parseInt(item.substring(5)); // "pass_n"에서 n만 파싱해서 사용
+			String payMethod = params.substring(params.indexOf("payMethod=")+"payMethod=".length());
+			
+			ChargeDTO chargeDto = new ChargeDTO();
+			
+			//chargeDTO num데이터 타입 string에서 int로 수정함
+			int chargeNumMax = dao.getChargeNumMax();
+			chargeDto.setChargeNum(chargeNumMax+1);
+			chargeDto.setCusId(cusId);
+			chargeDto.setChargePass(chargePass);
+			chargeDto.setChargeType(payMethod);
+			
+			//charge테이블에 추가하기
+			dao.insertChargeData(chargeDto);
+			
+			//사용자 pass 수 수정
+			int cusPassLeft = dao.getCusPassLeft(cusId);
+
+			cusPassLeft += chargePass;
+			Map<String, Object> hMap = new HashMap<String, Object>();
+			hMap.put("cusId",cusId);
+			hMap.put("cusPass",cusPassLeft);
+			
+			//charge 테이블 업데이트
+			dao.updateCusPass(hMap);
+
+			System.out.println("패스 결제 완료");
+			return;
+		}		
+		
+		// 상품 결제시 -> item이 pass_로 시작하지 않으면
 		
 		//사용자 pass 수 수정
 		int cusPassLeft = dao.getCusPassLeft(cusId);
 
-		cusPassLeft += chargePass;
-		Map<String, Object> hMap = new HashMap<String, Object>();
-		hMap.put("cusId",cusId);
-		hMap.put("cusPass",cusPassLeft);
-		//charge 테이블 업데이트
-		dao.updateCusPass(hMap);
+		int proPayNumMax = dao.getProPayNumMax();
+		System.out.println("proPayNumMax: " + proPayNumMax);
+
+		String amount = params.substring(params.indexOf("amount=")+"amount=".length(),params.indexOf("&",params.indexOf("amount=")));
+		//String payMethod = params.substring(params.indexOf("payMethod=")+"payMethod=".length(),params.indexOf("&",params.indexOf("payMethod=")));
+		//String receiver_name = params.substring(params.indexOf("receiver_name=")+"receiver_name=".length(),params.indexOf("&",params.indexOf("receiver_name=")));
+		String receiver_tel = params.substring(params.indexOf("receiver_tel=")+"receiver_tel=".length(),params.indexOf("&",params.indexOf("receiver_tel=")));
+		String receiver_addr = params.substring(params.indexOf("receiver_addr=")+"receiver_addr=".length(),params.indexOf("&",params.indexOf("receiver_addr=")));
+		String productIdArr = params.substring(params.indexOf("productIdArr=")+"productIdArr=".length(),params.indexOf("&",params.indexOf("productIdArr=")));
+		String productCountArr = params.substring(params.indexOf("productCountArr=")+"productCountArr=".length());
+		System.out.println(productIdArr);
+		System.out.println(productCountArr);
+		
+		// productPay테이블에 삽입
+		ProductPayDTO ppdto = new ProductPayDTO();
+		ppdto.setProPayNum(proPayNumMax+1);
+		ppdto.setCusId(cusId);
+		//ppdto.setProPayCreated(); //mapper에서 sysdate넣기
+		ppdto.setPriceTotal(Integer.parseInt(amount));
+		ppdto.setProPayAddr(receiver_addr);
+		ppdto.setProPayTel(receiver_tel);
+		dao.insertProductPay(ppdto);	// 삽입
+		
+		// productPayDetail테이블에 삽입
+		int proPayDetailNumMax = dao.getProPayDetailNumMax();
+		
+		List<String> productIdList = new ArrayList<String>(Arrays.asList(productIdArr.split(",")));
+		List<String> productCountList = new ArrayList<String>(Arrays.asList(productCountArr.split(",")));
+		
+		for (int i = 0; i < productIdList.size(); i++) {
+			
+			ProductPayDetailDTO ppddto = new ProductPayDetailDTO();
+			ppddto.setProPayDetailNum(proPayDetailNumMax+(i+1));
+			ppddto.setProductId(productIdList.get(i));
+			ppddto.setProPayNum(ppdto.getProPayNum());
+			ppddto.setCount(Integer.parseInt(productCountList.get(i)));
+			dao.insertProductPayDetail(ppddto);
+			
+		}
+
+		//장바구니에서 삭제
+		dao.deleteFromCartAfterPayment(productIdList,cusId);
+		
+		System.out.println("상품 결제 완료");
 		return;
 	}
 	
@@ -2138,8 +2252,8 @@ public class gypController {
 	}
 	
 	//네이버 로그인 (사용자만 가능. 체육관 X)
-		@SuppressWarnings("null")
-		@RequestMapping(value = "/naverLogin_ok.action" , method = {RequestMethod.GET,RequestMethod.POST})
+	@SuppressWarnings("null")
+	@RequestMapping(value = "/naverLogin_ok.action" , method = {RequestMethod.GET,RequestMethod.POST})
 	public String naverLogin_ok(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception{
 			
 			String clientId = "P84rJHPRvVU6zfXj1ZXD";//애플리케이션 클라이언트 아이디값";
@@ -2188,7 +2302,7 @@ public class gypController {
 		    	// 사용자 회원정보 api response parsing
 		        String header = "Bearer " + access_token; // Bearer 다음에 공백 추가
 		        String apiURL2 = "https://openapi.naver.com/v1/nid/me";
-
+	
 		        Map<String, String> requestHeaders = new HashMap<String, String>();
 		        requestHeaders.put("Authorization", header);
 		        String responseBody = get(apiURL2,requestHeaders);
@@ -2252,72 +2366,71 @@ public class gypController {
 		
 	//네이버 로그인시 필요한 메소드(1)
 	private static String get(String apiUrl, Map<String, String> requestHeaders){
-        HttpURLConnection con = connect(apiUrl);
-        try {
-            con.setRequestMethod("GET");
-            for(Map.Entry<String, String> header :requestHeaders.entrySet()) {
-                con.setRequestProperty(header.getKey(), header.getValue());
-            }
-
-            int responseCode = con.getResponseCode();
-            if (responseCode == HttpURLConnection.HTTP_OK) { // 정상 호출
-                return readBody(con.getInputStream());
-            } else { // 에러 발생
-                return readBody(con.getErrorStream());
-            }
-        } catch (IOException e) {
-            throw new RuntimeException("API 요청과 응답 실패", e);
-        } finally {
-            con.disconnect();
-        }
-    }
+	    HttpURLConnection con = connect(apiUrl);
+	    try {
+	        con.setRequestMethod("GET");
+	        for(Map.Entry<String, String> header :requestHeaders.entrySet()) {
+	            con.setRequestProperty(header.getKey(), header.getValue());
+	        }
+	
+	        int responseCode = con.getResponseCode();
+	        if (responseCode == HttpURLConnection.HTTP_OK) { // 정상 호출
+	            return readBody(con.getInputStream());
+	        } else { // 에러 발생
+	            return readBody(con.getErrorStream());
+	        }
+	    } catch (IOException e) {
+	        throw new RuntimeException("API 요청과 응답 실패", e);
+	    } finally {
+	        con.disconnect();
+	    }
+	}
 	
 	//네이버 로그인시 필요한 메소드(2)
-    private static HttpURLConnection connect(String apiUrl){
-        try {
-            URL url = new URL(apiUrl);
-            return (HttpURLConnection)url.openConnection();
-        } catch (MalformedURLException e) {
-            throw new RuntimeException("API URL이 잘못되었습니다. : " + apiUrl, e);
-        } catch (IOException e) {
-            throw new RuntimeException("연결이 실패했습니다. : " + apiUrl, e);
-        }
-    }
-    
-    //네이버 로그인시 필요한 메소드(3)
-    private static String readBody(InputStream body){
-        InputStreamReader streamReader = new InputStreamReader(body);
-        
-        try{
-        	BufferedReader lineReader = new BufferedReader(streamReader);
-            StringBuilder responseBody = new StringBuilder();
-
-            String line;
-            while ((line = lineReader.readLine()) != null) {
-                responseBody.append(line);
-            }
-
-            return responseBody.toString();
-        } catch (IOException e) {
-            throw new RuntimeException("API 응답을 읽는데 실패했습니다.", e);
-        }
-    }
+	private static HttpURLConnection connect(String apiUrl){
+	    try {
+	        URL url = new URL(apiUrl);
+	        return (HttpURLConnection)url.openConnection();
+	    } catch (MalformedURLException e) {
+	        throw new RuntimeException("API URL이 잘못되었습니다. : " + apiUrl, e);
+	    } catch (IOException e) {
+	        throw new RuntimeException("연결이 실패했습니다. : " + apiUrl, e);
+	    }
+	}
 	
-    // 유니코드에서 String으로 변환
+	//네이버 로그인시 필요한 메소드(3)
+	private static String readBody(InputStream body){
+	    InputStreamReader streamReader = new InputStreamReader(body);
+	    
+	    try{
+	    	BufferedReader lineReader = new BufferedReader(streamReader);
+	        StringBuilder responseBody = new StringBuilder();
+	
+	        String line;
+	        while ((line = lineReader.readLine()) != null) {
+	            responseBody.append(line);
+	        }
+	
+	        return responseBody.toString();
+	    } catch (IOException e) {
+	        throw new RuntimeException("API 응답을 읽는데 실패했습니다.", e);
+	    }
+	}
+	
+	// 유니코드에서 String으로 변환
 	public static String convertString(String val) {
-	    	StringBuffer sb = new StringBuffer();
-	    	for (int i = 0; i < val.length(); i++) {
-	    	if ('\\' == val.charAt(i) && 'u' == val.charAt(i + 1)) {
-	    	Character r = (char) Integer.parseInt(val.substring(i + 2, i + 6), 16);
-	    	sb.append(r);
-	    	i += 5;
-	    	} else {
-	    	sb.append(val.charAt(i));
-	    	}
-	    	}
-	    	return sb.toString();
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < val.length(); i++) {
+		if ('\\' == val.charAt(i) && 'u' == val.charAt(i + 1)) {
+		Character r = (char) Integer.parseInt(val.substring(i + 2, i + 6), 16);
+		sb.append(r);
+		i += 5;
+		} else {
+		sb.append(val.charAt(i));
 		}
-	
+		}
+		return sb.toString();
+	}
 	
 	//*******************서예지*******************
 	//-------------------notice-------------------

@@ -46,7 +46,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</delete>
 <!-- 체육관 평점 평균 -->
 	<select id="getAvgReview" parameterType="String" resultType="int">
-		select avg(nvl(star, 0)) from review where gymId=#{gymId}
+		select nvl(avg(star), 0) from review where gymId=#{gymId}
 	</select>
 
 <!-- 해당 체육관의 Book 목록에 cusId가 있는 수 -->

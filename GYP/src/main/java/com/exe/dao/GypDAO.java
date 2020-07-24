@@ -1,5 +1,6 @@
 package com.exe.dao;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,9 @@ import com.exe.dto.GymDTO;
 import com.exe.dto.JjimDTO;
 import com.exe.dto.NoticeDTO;
 import com.exe.dto.ProductDTO;
+import com.exe.dto.ProductOrderDTO;
+import com.exe.dto.ProductPayDTO;
+import com.exe.dto.ProductPayDetailDTO;
 import com.exe.dto.QnaDTO;
 import com.exe.dto.ReviewDTO;
 
@@ -438,6 +442,64 @@ private SqlSessionTemplate sessionTemplate;
 	public void insertChargeData(ChargeDTO dto) {
 		sessionTemplate.insert("paymentMapper.insertChargeData", dto);
 	}
+	
+	// getProductOrderList : 상품 주문에 필요한 정보 가져오기
+	public List<ProductOrderDTO> getProductOrderList(int numI[],String cusId) {
+		
+		List<ProductOrderDTO> productOrderListForPayment  = new ArrayList<ProductOrderDTO>();
+				
+		for (int i : numI) {
+			ProductOrderDTO dto = new ProductOrderDTO();
+			
+			Map<String, Object> hMap = new HashMap<String, Object>();
+			hMap.put("cartNum", i);
+			hMap.put("cusId", cusId);
+			
+			dto = sessionTemplate.selectOne("paymentMapper.getProductOrderList",hMap);
+			
+			productOrderListForPayment.add(dto);
+		}
+		
+		return productOrderListForPayment;
+	}
+
+	// 상품 결제 최댓값 - ProductPay테이블
+	public int getProPayNumMax() {
+		int result = sessionTemplate.selectOne("paymentMapper.getProPayNumMax");
+		return result;
+	}
+	
+	// 상품 결제 삽입 - ProductPay 테이블
+	public void insertProductPay(ProductPayDTO ppdto) {
+		sessionTemplate.insert("paymentMapper.insertProductPay", ppdto);
+	}
+	
+	// 상품 결제 최댓값 - ProductPay테이블
+	public int getProPayDetailNumMax() {
+		int result = sessionTemplate.selectOne("paymentMapper.getProPayDetailNumMax");
+		return result;
+	}
+	
+	// 상품 결제 삽입 - ProductPayDetail 테이블
+	public void insertProductPayDetail(ProductPayDetailDTO ppddto) {
+		sessionTemplate.insert("paymentMapper.insertProductPayDetail", ppddto);
+	}
+	
+	// 상품 결제 이후 장바구니 삭제
+	public void deleteFromCartAfterPayment(List<String> productIdList,String cusId) {
+		for (int i = 0; i < productIdList.size(); i++) {
+
+			String productId = productIdList.get(i);
+			
+			Map<String, Object> hMap = new HashMap<String, Object>();
+			hMap.put("productId", productId);
+			hMap.put("cusId", cusId);
+			
+			sessionTemplate.delete("paymentMapper.deleteFromCartAfterPayment", hMap);
+		}
+		
+	}
+
 	
 	//*******************서예지*******************
 	

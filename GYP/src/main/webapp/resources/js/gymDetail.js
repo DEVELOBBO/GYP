@@ -140,8 +140,13 @@ function bookGym(){
 		location.href="/gyp/login.action";
 		return;
 	}
+
+	//현재 날짜
+	var today = new Date(); //Fri Jul 24 2020 09:47:54 GMT+0900 (대한민국 표준시)
+	var _today = getFormattedDate(today); //2020-7-24
+	var today_now_hour = today.getHours();//9
 	
-	//날짜 선택
+	//datepicker 세팅
 	$("#datepicker").datepicker({ 
 		format: "yyyy-mm-dd",
         autoclose: true, 
@@ -150,14 +155,30 @@ function bookGym(){
         endDate: '+15d'
 	}).datepicker('update', new Date());
 	
+	//오늘날짜 처리
+	$('#datepicker').datepicker('setDate(today)');//오늘날짜로 set
+	//이후 시간 비활성화
+	dis_en_ableFormerTime(today_now_hour,true);
+	
+		
 	//날짜 선택시마다 처리 (변경할때마다)
 	$('#datepicker').on('changeDate', function() {
-		//날짜 포맷 변경 및 input에 세팅
+
+    	dis_en_ableFormerTime(today_now_hour,false);
+		//날짜 input에 세팅하기
 	    $('#datePick').val(
-	        $('#datepicker').datepicker('getFormattedDate')
+    		$('#datepicker').datepicker('getDate')
 	    );
-	    //debug
-	    var selDate = new Date($('#datePick').val());
+	    
+	    // 선택한 날짜
+	    var selDate = new Date($('#datePick').val());//Sat Jul 25 2020 00:00:00 GMT+0900 (대한민국 표준시)
+	    var _selDate = getFormattedDate(selDate); //selDate: 2020-7-25 
+	    
+	    //선택한 날짜가 오늘이라면 현재 시간을 포함한 이전 강의option disable시키기
+	    if(_selDate == _today) {
+	    	dis_en_ableFormerTime(today_now_hour,true);
+	    }
+	    
 	    //input값에 따라 보여줄 time select box 변경 (변경시마다 타 selectbox 값 초기화)
 	    if(selDate.getDay()==0) {
 	    	// 일요일
@@ -215,6 +236,36 @@ function bookGym(){
 		
 	});
 	
+}
+
+
+//날짜 Formatting함수 - (2020-7-25)
+function getFormattedDate(date){
+	var resultDate = date.getFullYear() + "-" +
+			(date.getMonth() + 1) + "-" +
+			date.getDate();
+	return resultDate;
+}
+
+//현재 시간 이전시간 disable시키는 함수
+function dis_en_ableFormerTime(today_now_hour,bool) {
+	$('#select-options-wdays option').each(function(){
+		if(this.value.substring(0,this.value.indexOf(":")) <= today_now_hour) {
+			this.disabled=bool;
+		}
+	});	
+	
+	$('#select-options-sat option').each(function(){
+		if(this.value.substring(0,this.value.indexOf(":")) <= today_now_hour) {
+			this.disabled=bool;
+		}
+	});	
+	
+	$('#select-options-sun option').each(function(){
+		if(this.value.substring(0,this.value.indexOf(":")) <= today_now_hour) {
+			this.disabled=bool;
+		}
+	});	
 }
 
 /*------------ 찜 ------------*/
