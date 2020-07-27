@@ -39,71 +39,91 @@
                             <!-- Nav Start -->
                             <div class="classynav">
                                 <ul>
-                                    <li><a href="/gyp/map.action">제휴시설 찾기</a></li>
-                                    <li><a href="/gyp/howToUse.action">이용방법</a></li>
-                                    <li><a href="/gyp/noticeList.action">공지사항</a></li>
-                                    <li><a href="/gyp/qnaList.action">Q&A</a></li>
+                                	<!-- 로그인안한상태 -->
+                                	<c:if test="${empty sessionScope.customInfo.sessionId }">
+	                                    <li><a href="/gyp/map.action">제휴시설 찾기</a></li>
+	                                    <li><a href="/gyp/howToUse.action">이용방법</a></li>
+	                                    <li><a href="/gyp/noticeList.action">공지사항</a></li>
+	                                    <li><a href="/gyp/qnaList.action">Q&A</a></li>
+	                                    <li><a href="/gyp/login.action">로그인</a></li>
+	                                    <li><a href="/gyp/create.action">회원가입</a></li>
+	                                    <li><a href="/gyp/productList.action">스포츠용품</a>
+	                                    	<ul class="dropdown" style="width: 100px;">
+	                                            <li><a href="/gyp/productList.action?searchValueCategory=H">헬스</a></li>
+	                                            <li><a href="/gyp/productList.action?searchValueCategory=Y">요가</a></li>
+	                                            <li><a href="/gyp/productList.action?searchValueCategory=P">필라테스</a></li>
+	                                        </ul>
+	                                    </li>
+	                                    
+	                                    <a href="/gyp/passCharge.action" class="fitness-btn menu-btn ml-30" style="min-width: 100px;">
+		                                	이용권 구입</a>
+                                    </c:if>
                                     
-                                    
-                                    <c:if test="${empty sessionScope.customInfo.sessionId }">
-                                    <li><a href="/gyp/login.action">로그인</a></li></c:if>
-                                   
-                                    <c:if test="${!empty sessionScope.customInfo.sessionId }">
-                                    <li><a href="/gyp/logout.action">로그아웃</a></li></c:if>
-                                    
-                                    
-                                    <c:if test="${empty sessionScope.customInfo.sessionId }">
-                                    	<li><a href="/gyp/create.action">회원가입</a></li></c:if>
-                                    
-                                    
+                                   	<!-- 일반회원 로그인 -->
                                     <c:if test="${sessionScope.customInfo.loginType =='customer' && sessionScope.customInfo.sessionId !='admin' }">
-                                       <li><a href="/gyp/customerMyPage.action">마이페이지</a>
-                                        <ul class="dropdown" style="width: 100px;">
-                                            <li><a href="/gyp/customerMyPage.action#1">내 이용권</a></li>
-                                            <li><a href="/gyp/customerMyPage.action#2">예약 내역</a></li>
-                                            <li><a href="/gyp/customerMyPage.action#3">리뷰 목록</a></li>
-                                            <li><a href="/gyp/customerMyPage.action#4">찜 목록</a></li>
-                                            <li><a href="/gyp/customerMyPage.action#5">주문 내역</a></li>
-                                            <li><a href="/gyp/cart.action">장바구니</a>
-                                            
-                                        </ul>
-                                    </li></c:if>
+	                                    <li><a href="/gyp/map.action">제휴시설 찾기</a></li>
+	                                    <li><a href="/gyp/howToUse.action">이용방법</a></li>
+	                                    <li><a href="/gyp/noticeList.action">공지사항</a></li>
+	                                    <li><a href="/gyp/qnaList.action">Q&A</a></li>
+	                                    <li><a href="/gyp/logout.action">로그아웃</a></li>
+	                                    <li><a href="/gyp/customerMyPage.action">마이페이지</a>
+	                                        <ul class="dropdown" style="width: 100px;">
+	                                            <li><a href="/gyp/customerMyPage.action#1">내 이용권</a></li>
+	                                            <li><a href="/gyp/customerMyPage.action#2">예약 내역</a></li>
+	                                            <li><a href="/gyp/customerMyPage.action#3">리뷰 목록</a></li>
+	                                            <li><a href="/gyp/customerMyPage.action#4">찜 목록</a></li>
+	                                            <li><a href="/gyp/customerMyPage.action#5">주문 내역</a></li>
+	                                            <li><a href="/gyp/cart.action">장바구니</a>
+	                                            
+	                                        </ul>
+	                                    </li>
+	                                    <li><a href="/gyp/productList.action">스포츠용품</a>
+	                                    	<ul class="dropdown" style="width: 100px;">
+	                                            <li><a href="/gyp/productList.action?searchValueCategory=H">헬스</a></li>
+	                                            <li><a href="/gyp/productList.action?searchValueCategory=Y">요가</a></li>
+	                                            <li><a href="/gyp/productList.action?searchValueCategory=P">필라테스</a></li>
+	                                        </ul>
+	                                    </li>
+	                                    
+	                                    <a href="/gyp/passCharge.action" class="fitness-btn menu-btn ml-30" style="min-width: 100px;">
+	                                	이용권 구입</a>
+	                                	<a href="/gyp/faceLink.action" class="fitness-btn menu-btn ml-30" style="min-width: 100px; 
+	                                			margin-left: 20px!important; background: linear-gradient(to right, #38b143, #00B38F); ">
+	                                	수업하기</a>
+                                    </c:if>
                                     
                                     
-                                    <c:if test="${sessionScope.customInfo.loginType =='gym' }">
-                                    	<li><a href="/gyp/gymMyPage.action">마이페이지</a>
-                                    	 <ul class="dropdown" style="width: 100px;">
-                                            <li><a href="/gyp/gymMyPage.action#">회원정보</a></li>
-                                            <li><a href="/gyp/gymMyPage.action#1">누적 매출</a></li>
-                                            <li><a href="/gyp/gymMyPage.action#2">예약 현황</a></li>
-                                            <li><a href="/gyp/gymMyPage.action#3">리뷰 목록</a></li>
-                                        </ul>
-                                    </li></c:if>
-                                    
+                                    <!-- 관리자 로그인 -->
                                     <c:if test="${sessionScope.customInfo.sessionId =='admin' }">
+                                    	<li><a href="/gyp/map.action">제휴시설 찾기</a></li>
+                                    	<li><a href="/gyp/howToUse.action">이용방법</a></li>
+                                    	<li><a href="/gyp/noticeList.action">공지사항</a></li>
+                                    	<li><a href="/gyp/qnaList.action">Q&A</a></li>
                                     	<li><a href="/gyp/adminHome.action">관리자페이지</a>
-                                    </li></c:if>
+                                    </c:if>
                                     
                                     
-                                    <li><a href="/gyp/productList.action">스포츠용품</a>
-                                    	<ul class="dropdown" style="width: 100px;">
-                                            <li><a href="/gyp/productList.action?searchValueCategory=H">헬스</a></li>
-                                            <li><a href="/gyp/productList.action?searchValueCategory=Y">요가</a></li>
-                                            <li><a href="/gyp/productList.action?searchValueCategory=P">필라테스</a></li>
-                                        </ul>
-                                    </li>
+                                    
+                                    
+                                    <!-- 체육관 로그인 -->
+                                    <c:if test="${sessionScope.customInfo.loginType =='gym' }">
+	                                   	<li><a href="/gyp/map.action">제휴시설 찾기</a></li>
+	                                    <li><a href="/gyp/howToUse.action">이용방법</a></li>
+	                                    <li><a href="/gyp/noticeList.action">공지사항</a></li>
+	                                    <li><a href="/gyp/qnaList.action">Q&A</a></li>
+	                                    <li><a href="/gyp/logout.action">로그아웃</a></li>
+                                    	<li><a href="/gyp/gymMyPage.action">마이페이지</a>
+                                   	 		<ul class="dropdown" style="width: 100px;">
+	                                           <li><a href="/gyp/gymMyPage.action#">회원정보</a></li>
+	                                           <li><a href="/gyp/gymMyPage.action#1">누적 매출</a></li>
+	                                           <li><a href="/gyp/gymMyPage.action#2">예약 현황</a></li>
+	                                           <li><a href="/gyp/gymMyPage.action#3">리뷰 목록</a></li>
+	                                       	</ul>
+                                    	</li>
+                                	</c:if>
                                 </ul>
 
-                                <!-- Call Button -->
-                                <a href="/gyp/passCharge.action" class="fitness-btn menu-btn ml-30" style="min-width: 100px;">
-                                	이용권 구입</a>
-                                
-                                <!-- 수업하기 Button -->
-                                <c:if test="${!empty sessionScope.customInfo.sessionId }">
-                                <a href="/gyp/faceLink.action" class="fitness-btn menu-btn ml-30" style="min-width: 100px; 
-                                			margin-left: 20px!important; background: linear-gradient(to right, #38b143, #00B38F); ">
-                                	수업하기</a>
-                                </c:if>
+
 
                             </div>
                             <!-- Nav End -->

@@ -3333,7 +3333,7 @@ public class gypController {
 		int dataCount = dao.getMapDataCount(searchKey, searchValue);
 
 		// 페이징
-		int numPerPage = 5;
+		int numPerPage = 4;
 		int totalPage = myUtilMap.getPageCount(numPerPage, dataCount);
 
 		if (currentPage > totalPage) {

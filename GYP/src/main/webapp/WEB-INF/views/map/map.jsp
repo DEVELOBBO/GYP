@@ -77,7 +77,7 @@ String cp = request.getContextPath();
 
 	      <div class="rightBox">
 	         <!-- 지도시작 -->
-	         <div id="map" style="width: 610px; height: 790px; z-index: 1; margin-left: 20px;"></div>
+	         <div id="map" style="width: 610px; height: 630px; z-index: 1; margin-left: 20px;"></div>
 	      </div>
 	      </form>
 	   </div>
