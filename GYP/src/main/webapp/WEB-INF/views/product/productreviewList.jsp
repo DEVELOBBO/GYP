@@ -96,7 +96,7 @@
 <br><br>
 
 <!-- 리뷰 작성 -->
-<!-- 리뷰 작성 : 회원 세션에 cusId가 올라가있으면서, 해당 페이지의 gymId의 Book 목록에 cusId가 있으면 보이게하기 -->
+<!-- 리뷰 작성 : 회원 세션에 cusId가 올라가있으면서, 해당 사용자가 상품을 구매한 내역이 있고, 구매한 수보다 리뷰수가 적으면 보이게 하기 -->
 <c:if test="${!empty info.sessionId }">
    <fieldset class="ratingM">
        <input type="radio" id="star5" name="rating" value="10" /><label class = "full" for="star5" title="10점"></label>
@@ -121,7 +121,7 @@
          
          <td width="240" height="30" style="padding-left: 10px;">
             <!-- session에서 로그인 아이디 가져와서 입력 -->
-            <input type="text" id="rname" size="35" maxlength="20" class="boxTF" value="${info.sessionId }" disabled/>
+            <input type="text" id="rname" size="35" maxlength="20" class="boxTF" value="${info.sessionId }" readonly/>
          </td>
       </tr>
        

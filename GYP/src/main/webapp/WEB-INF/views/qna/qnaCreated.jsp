@@ -87,44 +87,52 @@ function qnaTypeCheck(){
 	<div class="container">
 	<div class="row">
 	<div class="col-12">
-	<div class="contact-title">
+	<div class="contact-title" style="width: 700px; margin: 0 auto;">
 		<h2>1:1 문의하기</h2><hr><br>
 	</div>
 	</div>
 	</div>
+	
+	
 	<div class="row">
 	<div class="col-12">
 	<div class="contact-content">
 	<div class="contact-form-area">
-		<form method="post" action="/gyp/qnaCreated.action" name="myForm">
+		<form method="post" action="/gyp/qnaCreated.action" name="myForm" style="width: 700px; margin: 0 auto;">
 		<!-- (참고) form-group 하나에 1개의 form-control만 작동함... -->
 				<!-- 번호 -->
 				<div class="form-group">
 					<font class = "bokyung_qnaCreatedFont">질문 번호</font>
 					<input type="text" name="qnaNum" class="form-control" value="${dto.qnaNum }" disabled="disabled"
-					style="margin-top: 10px;"/>
+					style="margin-top: 10px; font-size: 12pt;"/>
+				</div>
+				
+				<div class="form-group"><br>	
+					<font class = "bokyung_qnaCreatedFont">작성자</font>
+					<input type="text" name="cusId" class="form-control" value="${dto.cusId }" disabled="disabled"
+					style="margin-top: 10px; font-size: 12pt;"/>
 				</div>
 				
 				<!-- 문의 -->
 				<c:if test="${mode=='insert'}"><br>	
-					<font class = "bokyung_qnaCreatedFont">문의유형</font>
-					<em style="color:red;">*</em>&nbsp;&nbsp;&nbsp;<br><!-- 별표 -->
-					<div style="height: 10px;"></div>
-						<input type="radio" name="qnaType" value="체육관" onclick="qnaTypeCheck()"/>체육관&nbsp;&nbsp;
-						<input type="radio" name="qnaType" value="이용권" onclick="qnaTypeCheck()"/>이용권&nbsp;&nbsp;
-						<input type="radio" name="qnaType" value="쇼핑몰" onclick="qnaTypeCheck()"/>쇼핑몰&nbsp;&nbsp; 			
+					<font class = "bokyung_qnaCreatedFont">문의유형 선택</font>
+					<em style="color:red;">*</em><!-- 별표 -->&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="radio" name="qnaType" value="체육관" onclick="qnaTypeCheck()" style="font-size: 12pt;"/>&nbsp;&nbsp;체육관&nbsp;&nbsp;&nbsp;&nbsp; 
+						<input type="radio" name="qnaType" value="이용권" onclick="qnaTypeCheck()" style="font-size: 12pt;"/>&nbsp;&nbsp;이용권&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="radio" name="qnaType" value="쇼핑몰" onclick="qnaTypeCheck()" style="font-size: 12pt;"/>&nbsp;&nbsp;쇼핑몰&nbsp;&nbsp;&nbsp;&nbsp; 			
 				</c:if>
-				<div class="form-group">	
-					<font class = "bokyung_qnaCreatedFont">작성자</font>
-					<input type="text" name="cusId" class="form-control" value="${dto.cusId }" disabled="disabled"/>
-				</div>
-				<div class="form-group">
+				
+				<div class="form-group"><br><br>
 					<font class = "bokyung_qnaCreatedFont">제목</font>
-					<em style="color:red;">*</em><input type="text" name="qnaTitle" class="form-control" placeholder="제목을 입력해주세요" value="${dto.qnaTitle }">
+					<em style="color:red;">*</em><!-- 별표 -->
+					<input type="text" name="qnaTitle" class="form-control" placeholder="제목을 입력해주세요" value="${dto.qnaTitle }" 
+					style="margin-top: 10px; font-size: 12pt; ">
 				</div>
-				<div class="form-group">
+				<div class="form-group" style="margin-top: 10px;"><br><br>
 					<font class = "bokyung_qnaCreatedFont">내용</font>
-					<em style="color:red;">*</em><textarea name="qnaContent" rows="12" cols="63" class="form-control" placeholder="운영체제와 브라우저를 함께 적어주시면 정확한 문제 해결에 도움이 됩니다.">${dto.qnaContent }</textarea>
+					<em style="color:red;">*</em><!-- 별표 -->
+					<textarea name="qnaContent" rows="12" cols="63" class="form-control" placeholder="운영체제와 브라우저를 함께 적어주시면 정확한 문제 해결에 도움이 됩니다." 
+					style="margin-top: 10px; font-size: 12pt;">${dto.qnaContent }</textarea>
 				</div>
 				
 			<!-- reply필요한 파라미터 -->
@@ -138,7 +146,8 @@ function qnaTypeCheck(){
 			<!-- update 필요한 파라미터 -->	
 				<input type="hidden" name="pageNum" value="${pageNum }"/>
 				<input type="hidden" name="qnaNum" value="${dto.qnaNum }" />
-			
+				
+				<div style="width: 700px; margin: 0 auto; justify-content: center; text-align: center;">
 				<c:if test="${mode=='insert'}">
 					<input type="button" class="btn fitness-btn btn-2 mt-30" value="등록하기" onclick="sendIt();" />
 					<input type="button" class="btn fitness-btn btn-2 mt-30" value="작성취소" onclick="javascript:location.href='/gyp/qnaList.action';" />
@@ -153,6 +162,7 @@ function qnaTypeCheck(){
 					<input type="button" class="btn fitness-btn btn-2 mt-30" value="답변하기" onclick="sendIt();" />
 					<input type="button" class="btn fitness-btn btn-2 mt-30" value="작성취소" onclick="javascript:location.href='/gyp/qnaList.action';" />
 				</c:if>
+				</div>
 			</form>
 		</div>
 		</div>

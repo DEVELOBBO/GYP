@@ -315,19 +315,6 @@ private SqlSessionTemplate sessionTemplate;
 	return result;
 	}
 	
-	//지우면안됨
-	// getTimesCusBookedGym : 체육관 예약 횟수 확인 : 세션의 사용자의 해당 체육관 이용 횟수
-	public int getProductTimesCusBookedGym(Map<String, Object> hMap) {
-		int result = sessionTemplate.selectOne("productMapper.getTimesCusBookedGym", hMap);
-		return result;
-	}
-
-	//지우면안됨
-	// getTimesCusReviewedGym : 체육관 리뷰 횟수 확인 : 세션의 사용자의 해당 체육관 리뷰 횟수
-	public int getProductTimesCusReviewedGym(Map<String, Object> hMap) {
-		int result = sessionTemplate.selectOne("productMapper.getTimesCusReviewedGym", hMap);
-		return result;
-	}
 
 	//*******************김세이*******************
 	// getGymList : 체육관 하나의 정보 받아오기

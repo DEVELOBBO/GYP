@@ -30,14 +30,21 @@ String cp = request.getContextPath();
 	<jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
 	
 	<center>
+	
+	<div style="height: 130px;"></div>
+	
+	
 	   <div class="mapContainerWrap">
 	      <form method="post" name="searchForm" id="searchForm">
 	      <!-- 검색창&리스트 웹 -->
-	      <div class="leftBox">
-	      	  <!-- 검색창 -->
+	      
+	      <div class="topBox">
+	      <!-- 검색창 -->
 		      <div class="searchBar">
-		      	  <h5 style="color:#38b143;">FIND GYM</h5>
+		      	  <h5 style="color:#38b143;">SEARCH GYM</h5>
 				  <h2>제휴시설 찾기</h2>
+				  <div style="height: 10px;"><!-- 여백 --></div>
+				  <!-- 검색 -->
 			      <select name="searchKey" id="searchKey" class="selectField" onchange="selectChange();">
 			         <option value="gymName" <c:if test="${tempSearchKey eq 'gymName'}">selected</c:if>>이름</option>
 			         <option value="gymAddr" <c:if test="${tempSearchKey eq 'gymAddr'}">selected</c:if>>지역</option>
@@ -52,28 +59,31 @@ String cp = request.getContextPath();
 			      <input type="hidden" id="cusAddrGoo" value="${cusAddrGoo}"/>
 			      <input type="hidden" id="sessionId" value="${sessionId}"/>
 		      </div>
-		      
-		      <!-- 검색창 끝 -->
-		      
 		      <!-- 검색어 제시 -->
 		      <div id="suggestDiv" class="suggest">
 		         <div id="suggestListDiv"></div>
 		      </div>
-		      <!-- 검색어 제시 끝 -->
-		      
+	      </div>
+	      
+	      
+	      
+	      <div class="leftBox">
 		      <!-- 리스트 -->
+	          <div style="height: 30px;"></div>
 	          <span id="listData" style="display: none"></span>
-	          <!-- 리스트 끝 -->
 	      </div>
-	      <!-- 검색창&리스트 웹 끝 -->
 	      
+
+
 	      <div class="rightBox">
-	         <!-- 지도시작 지도시작 지도시작 지도시작 지도시작 지도시작 -->
-	         <div id="map" style="width: 900px; height: 848px; z-index: 1"></div>
+	         <!-- 지도시작 -->
+	         <div id="map" style="width: 630px; height: 720px; z-index: 1; margin-left: 10px;"></div>
 	      </div>
-	      
 	      </form>
 	   </div>
+	   
+	   <div style="height: 150px;"></div>
+	   
 	</center>
 
 

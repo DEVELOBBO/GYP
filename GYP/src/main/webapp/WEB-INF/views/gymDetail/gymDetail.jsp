@@ -150,7 +150,7 @@
 				<!-- ------------우측 컬럼 시작------------- -->
                 <div class="col-12 col-md-4">
                     <div class="fitness-blog-sidebar">
-
+					<c:if test="${empty info || info.loginType ne 'gym'}">
 						<div class="row">
 							<!-- 예약 모달 버튼 -->
 							<div class="single-blog-post mb-100 gymDetailHeadLine">
@@ -226,10 +226,8 @@
 									</div>
 								</div>
 							</div>
-							
-
 						</div>
-
+					
 						<!-- 예약 모달 -->
                         <div id="bookModal" class="modal fade" role="dialog">
 						  <div class="modal-dialog modal-lg">
@@ -326,7 +324,7 @@
 						        </div>
 						    </div>
 						</div>
-
+					</c:if>
 						<hr style="width: 100%; margin-left: 0px; text-align: left,border-bottom:0px;">
                         <!-- 제휴시설 미리보기 -->
                         <div class="blog-post-categories mb-100">

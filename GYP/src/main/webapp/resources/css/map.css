@@ -21,9 +21,17 @@
 .label .right {background: url("https://t1.daumcdn.net/localimg/localimages/07/2011/map/storeview/tip_r.png") -1px 0  no-repeat;display: inline-block;height: 24px;overflow: hidden;width: 6px;}
 .mapContainerWrap{
   display: inline-block;
-  width: 90%;
+  width: 1110px;
+  margin: 0 auto;
   text-align: left;
 }
+.topBox{
+  display: inline-block;
+  width: 100%;
+  margin-top: 20px;
+  float: left;
+}
+
 .leftBox{
   display: inline-block;
   width: 43%;
@@ -50,12 +58,13 @@ input[type=button]{
 	border: none;
 	background-color:#38b143;
 	color: white;
-	font-family : FontAwesome;
+	font-size:11pt;
 }
 #searchKey{
 	height:32px;
 	border: none;
 	background-color:#eaeaea;
+	font-size:11pt;
 }
 #searchValue{
 	width:200px;
@@ -63,4 +72,23 @@ input[type=button]{
 	border: none;
 	background-color:#eaeaea;
 	padding-left: 3px;
+	font-size:11pt;
 }
+
+#suggestDiv{
+	width: 200px;
+	
+	
+}
+
+#suggestListDiv{
+	margin-left: 53px;
+	
+}
+
+
+
+
+
+
+

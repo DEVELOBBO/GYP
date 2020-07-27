@@ -55,18 +55,20 @@
                                     <c:if test="${empty sessionScope.customInfo.sessionId }">
                                     	<li><a href="/gyp/create.action">회원가입</a></li></c:if>
                                     
+                                    
                                     <c:if test="${sessionScope.customInfo.loginType =='customer' && sessionScope.customInfo.sessionId !='admin' }">
-                                    	<li><a href="/gyp/customerMyPage.action">마이페이지</a>
-                                    	 <ul class="dropdown" style="width: 100px;">
-                                            <li><a href="/gyp/customerMyPage.action#">회원정보</a></li>
-                                            <li><a href="/gyp/customerMyPage.action#1">이용권</a></li>
+                                       <li><a href="/gyp/customerMyPage.action">마이페이지</a>
+                                        <ul class="dropdown" style="width: 100px;">
+                                            <li><a href="/gyp/customerMyPage.action#1">내 이용권</a></li>
                                             <li><a href="/gyp/customerMyPage.action#2">예약 내역</a></li>
                                             <li><a href="/gyp/customerMyPage.action#3">리뷰 목록</a></li>
                                             <li><a href="/gyp/customerMyPage.action#4">찜 목록</a></li>
+                                            <li><a href="/gyp/customerMyPage.action#5">주문 내역</a></li>
                                             <li><a href="/gyp/cart.action">장바구니</a>
                                             
                                         </ul>
                                     </li></c:if>
+                                    
                                     
                                     <c:if test="${sessionScope.customInfo.loginType =='gym' }">
                                     	<li><a href="/gyp/gymMyPage.action">마이페이지</a>

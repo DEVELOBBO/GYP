@@ -75,14 +75,14 @@ function makeQuestion(){
 				<div style="display: inline-block;">
 					<div class="row">
 						<div style="width: 800px; padding-top: 10px;">&nbsp;&nbsp;&nbsp;&nbsp;
-							<select name="searchValue" style="border: none; background-color:#EAEAEA; height: 32px;">
+							<select name="searchValue" style="border: none; background-color:#EAEAEA; height: 32px; font-size: 11pt;">
 								<option value="">전체</option>
 								<option value="체육관">체육관</option>
 								<option value="이용권">이용권</option>
 								<option value="쇼핑몰">쇼핑몰</option>				
 							</select>
-							<input type="text" placeholder="어떤 도움이 필요하세요?" name="searchValue2" 
-							style="border: none; background-color:#EAEAEA; height: 32px;">
+							<input type="text" placeholder="&nbsp;&nbsp;어떤 도움이 필요하세요?" name="searchValue2" 
+							style="border: none; background-color:#EAEAEA; height: 32px; font-size: 11pt;">
 							<input type="submit" class="fas fa-search"  onclick="sendIt();"
 							style="width:42px;height:32px;border: none;background-color:#38b143;color: white;" value="&#xf002;"/>
 						</div>

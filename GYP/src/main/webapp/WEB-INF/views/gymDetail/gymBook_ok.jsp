@@ -61,9 +61,9 @@
 						   		<!-- 운동용품 쇼핑하기 -->	
 						         <a href="/gyp/productList.action" class="btn fitness-btn btn-2 m-2">운동용품 쇼핑하기</a>
 						         <!-- 더 둘러보기 -->
-						         <a href="/gyp/gymList.action" class="btn fitness-btn btn-2 m-2">더 둘러보기</a>
+						         <a href="/gyp/map.action" class="btn fitness-btn btn-2 m-2">더 둘러보기</a>
 						         <!-- 예약 확인하기 -->
-						         <a href="/gyp/myPage.action" class="btn fitness-btn btn-2 m-2">예약 확인하기</a>
+						         <a href="/gyp/customerMyPage.action#2" class="btn fitness-btn btn-2 m-2">예약 확인하기</a>
 						     </div>
                         </div>
                     </div>

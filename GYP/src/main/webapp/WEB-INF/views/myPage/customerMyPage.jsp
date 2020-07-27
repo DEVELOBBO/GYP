@@ -17,6 +17,8 @@
 <link rel="stylesheet" href="/gyp/resources/css/style.css">
 <!-- font -->
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400&display=swap" rel="stylesheet">
+<!-- jQuery-2.2.4 js -->
+<script src="/gyp/resources/js/jquery/jquery-2.2.4.min.js"></script>
 
 <!-- 마이페이지 -->
 <link rel="stylesheet" href="/gyp/resources/css/myPage.css">
@@ -49,25 +51,60 @@
              f.action = "<%=cp%>/customerUpdate.action";
              f.submit();
       }
+      
+      $(function(){
+    	  
+    	  $(".td_proPayNum").each(function() {
+    		  var proPayNum_rows = $(".td_proPayNum:contains('" + $(this).text() + "')");
+    		  var len = proPayNum_rows.length-1;
+    		  var productImg_rows = proPayNum_rows.siblings(".td_productImg");
+    		  var productInfo_rows = proPayNum_rows.siblings(".td_productInfo");
+    		  var priceTotal_rows = proPayNum_rows.siblings(".td_priceTotal");
+    		  var review_rows = proPayNum_rows.siblings(".td_review");
+    		  var deliverInfo_rows = proPayNum_rows.siblings(".td_deliverInfo");
+    		  
+    		  if (proPayNum_rows.length > 1) {
+    			  proPayNum_rows.eq(0).attr("rowspan", proPayNum_rows.length);
+    			  priceTotal_rows.eq(0).attr("rowspan", proPayNum_rows.length);
+    			  deliverInfo_rows.eq(0).attr("rowspan", proPayNum_rows.length);
+    			  
+    			  proPayNum_rows.not(":eq(0)").remove();
+    			  priceTotal_rows.not(":eq(0)").remove();
+    			  deliverInfo_rows.not(":eq(0)").remove();
+    			  
+    			  var style = "border-bottom:1px solid gray; padding-bottom: 10px;";
+        		  productImg_rows.eq(len).attr("style",style);
+    			  productInfo_rows.eq(len).attr("style",style);
+    			  review_rows.eq(len).attr("style",style);
+    			  proPayNum_rows.eq(0).attr("style",style);
+    			  priceTotal_rows.eq(0).attr("style",style);
+    			  deliverInfo_rows.eq(0).attr("style",style);
+    		  }
+    		  
+    		  
+    		});
+    	  
+      });
+      
    </script>
 </head>
 <body style="font-family: 'Noto Sans KR', sans-serif;">
-	
+	 
 	<jsp:include page="/WEB-INF/views/layout/header_over.jsp" />
 	<jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
 
 <div id="myPage_wrapper" style="font-family: 'Noto Sans KR', sans-serif;">
-   <div id="content">
-   	  <h5 style="color: green;">CUSTOMER MY PAGE</h5>
+   <div id="content">   
+   	  <h5 style="color: green;">CUSTOMER MY PAGE</h5> 
       <h2>마이 페이지</h2>
       
-      <!-- 회원정보 -->
-      <div class="container" id="1">
-      
+      <!-- 회원정보 --> 
+      <div class="container" id="1"> 
+       
          <span class="mp_title" style="font-size: 19px;">회원정보</span>
          <table  border="0" cellpadding="10" cellspacing="10" style="padding: 2em; text-align: center" >
             <tr>
-               <th style="font-size: 20px;" >아이디</th>
+               <th style="font-size: 20px;" >아이디</th>  
                <td style="text-align: left;"> ${cusdto.cusId }</td>
             </tr>
             <tr>
@@ -113,7 +150,6 @@
                잔여 패스가 없습니다.
             </c:if>
          </div>
-         
       </div>
       
       
@@ -165,17 +201,24 @@
                <th colspan="2" align="left">&nbsp;게시글 관리</th>
             </tr>
             
-            <c:forEach var="reviewdto" items="${ reviewlists }">
-               <tr class="tr_white" style="text-align: center;">
-                  <td>${reviewdto.reNum }</td>
-                  <td>${reviewdto.gymName }</td>
-                  <td>${reviewdto.reCreated }</td>
-                  <td>${reviewdto.star }</td>
-                  <td width="350" style="padding-right: 20px">${reviewdto.reContent }</td>
-                  <td><a href="" class="bokyung_mypage_link">수정(임시)</a></td>
-                  <td style="text-align: left;"><a href="<%=cp %>/reviewDelete.action?reNum=${reviewdto.reNum}" class="bokyung_mypage_link_D">삭제</a></td>
-               </tr>
+            <c:forEach var="reviewdto" items="${reviewlists }">
+            	<c:if test="${reviewdto.gymId!=null}">
+	               <tr class="tr_white" style="text-align: center;">
+	                  <td>${reviewdto.reNum }</td>
+	                  <td>${reviewdto.gymName }</td>
+	                  <td>${reviewdto.reCreated }</td>
+	                  <td>${reviewdto.star }</td>
+	                  <td width="350" style="padding-right: 20px">${reviewdto.reContent }</td>
+	                  <td><a href="" class="bokyung_mypage_link">수정(임시)</a></td>
+	                  <td style="text-align: left;"><a href="<%=cp %>/reviewDelete.action?reNum=${reviewdto.reNum}" class="bokyung_mypage_link_D">삭제</a></td>
+	               </tr>
+               </c:if>
+               <c:if test="${reviewDto.gymId!=null}">
+               		등록된 체육관 리뷰가 없습니다. 
+               </c:if>
             </c:forEach>
+            
+            
          </table>
          <div class="check">
             <c:if test="${empty reviewlists }">
@@ -196,7 +239,7 @@
                <th>전화번호</th>
                <th colspan="2" align="left">&nbsp;게시글 관리</th>
             </tr>
-            
+             
             <c:forEach var="jjimdto" items="${ jjimlists }">
                <tr class="tr_white" style="text-align: center;">
                   <td>${jjimdto.gymName}</td>
@@ -212,6 +255,39 @@
             </c:if>
          </div>
       </div>
+      
+      <br><br> 
+      <!-- 상품 주문 내역 -->
+      <div class="container5" id="6">
+         <span class="mp_title">상품 주문 내역</span>
+         <table class="table01 table_Oproduct" border="0" cellpadding="10" cellspacing="10">
+            <tr style="text-align: center;">
+               <th>주문 번호</th>
+               <th colspan="2">주문 상품</th><!-- 사진, 상품명, 수량, -->
+               <th>결제 금액</th><!-- 총금액 -->
+               <th>배송 정보</th>
+               <th>리뷰</th>  
+            </tr> 
+               
+            <c:forEach var="orderDto" items="${orderLists }">
+               <tr class="tr_white" style="text-align: center;" >
+                  <td class="td_proPayNum">주문번호: ${orderDto.proPayNum}<br/>(${orderDto.proPayCreated })</td>
+                  <td class="td_productImg">
+                  	<img alt="${orderDto.productName }" src="${imagePath }${orderDto.productImg }" style="width:120px; height:120px;">
+                  </td> 
+                  <td class="td_productInfo">[${orderDto.productId }] ${orderDto.productName }&nbsp;&nbsp;(${orderDto.productPrice}원) X ${orderDto.count }개</td>
+                  <td class="td_priceTotal">${orderDto.priceTotal}</td>
+                  <td class="td_deliverInfo">${orderDto.proPayTel }<br/>${orderDto.proPayAddr }</td>
+                  <td class="td_review"><a href="/gyp/productDetail.action?pageNum=1&productId=${orderDto.productId }">리뷰쓰기</a></td>
+               </tr>
+            </c:forEach> 
+         </table>  
+         <div class="check">
+            <c:if test="${empty orderLists }">
+               결제한 상품이 없습니다.
+            </c:if>
+         </div>
+      </div>
    </div>
 </div>
 
@@ -219,8 +295,6 @@
 	<jsp:include page="/WEB-INF/views/layout/footer.jsp" />
 
  <!-- ##### All Javascript Script ##### -->
-    <!-- jQuery-2.2.4 js -->
-    <script src="/gyp/resources/js/jquery/jquery-2.2.4.min.js"></script>
     <!-- Popper js -->
     <script src="/gyp/resources/js/bootstrap/popper.min.js"></script>
     <!-- Bootstrap js -->

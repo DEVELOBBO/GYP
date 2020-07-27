@@ -6,9 +6,9 @@
 %>
 
 <c:if test="${dataCount!=0 }">
-	<div id="mapList">
+	<div id="mapList" style="width: 470px;">
 	<c:forEach var="dto" items="${lists}">
-		<hr/>
+		<hr style="width: 470px;">
 		<div class="mapDetail">
 		<dl>
 			<dd class="">
@@ -27,7 +27,7 @@
 		</div>
 	</c:forEach>
 	</div>
-	<div style="width:300px; margin: 0 auto;">
+	<div style="width:300px; margin: 0 auto; text-align: center;">
 		${ajaxPageIndexList}
 	</div>
 </c:if>

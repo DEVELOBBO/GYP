@@ -372,7 +372,7 @@ public class gypController {
 		// 예약 아이디값 검색하기 위해
 		String bookId = info.getSessionId();
 
-		// 리뷰리스트
+		// 체육관 리뷰리스트
 		List<ReviewDTO> reviewlists = dao.reviewgetList(reviewId);
 		// 찜리스트
 		List<JjimDTO> jjimlists = dao.jjimgetList(jjimId);
@@ -1567,11 +1567,11 @@ public class gypController {
 		if (info != null) {
 			request.setAttribute("info", info);
 		}
-		int numMax = dao.getReviewNumMax(); // 삽입용 전체 리뷰 최댓값
+		int numMax = dao.getProductReviewNumMax(); // 삽입용 전체 리뷰 최댓값
 
 		dto.setReNum(numMax + 1);
 		dto.setReType("product");
-		dao.insertReviewData(dto);
+		dao.insertProductReviewData(dto);
 
 		String productId = dto.getProductId();
 
@@ -1648,11 +1648,6 @@ public class gypController {
 			hMap.put("cusId", cusInfo);
 			hMap.put("productId", productId);
 			
-			int timesCusBookedGym = dao.getProductTimesCusBookedGym(hMap);
-			request.setAttribute("timesCusBookedGym", timesCusBookedGym);
-
-			int timesCusReviewedGym = dao.getProductTimesCusReviewedGym(hMap);
-			request.setAttribute("timesCusReviewedGym", timesCusReviewedGym);
 		}
 
 		request.setAttribute("starAvg", starAvg);
@@ -1689,12 +1684,15 @@ public class gypController {
 		//세션에 올라온값 확인
 		CustomInfo info = (CustomInfo)session.getAttribute("customInfo");
 		String cusId = null;
-		if(info!=null) {
+		if(info!=null && info.getLoginType()!="gym") {
 			request.setAttribute("info", info);
 			cusId = info.getSessionId();
 			//예약시 사용할 사용자 잔여 pass 정보
 			int cusPassLeft = dao.getCusPassLeft(cusId);
 			request.setAttribute("cusPassLeft", cusPassLeft);
+		}else if(info!=null && info.getLoginType()=="gym") {
+			request.setAttribute("info", info);
+			cusId = info.getSessionId();
 		}
 		
 		String gymId = request.getParameter("gymId");

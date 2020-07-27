@@ -60,6 +60,12 @@ public class ReviewDTO {
 	public void setReCreated(String reCreated) {
 		this.reCreated = reCreated;
 	}
+	public String getGymName() {
+		return gymName;
+	}
+	public void setGymName(String gymName) {
+		this.gymName = gymName;
+	}
 
 	
 
