@@ -27,7 +27,7 @@
 .leftBox{
   display: inline-block;
   width: 43%;
-  margin-top: 75px;
+  margin-top: 20px;
   float: left;
 }
 .rightBox{
@@ -43,4 +43,24 @@ hr{
 }
 hr:first-child{
 	display: none;
+}
+input[type=button]{
+	width:42px;
+	height:32px;
+	border: none;
+	background-color:#38b143;
+	color: white;
+	font-family : FontAwesome;
+}
+#searchKey{
+	height:32px;
+	border: none;
+	background-color:#eaeaea;
+}
+#searchValue{
+	width:200px;
+	height:32px;
+	border: none;
+	background-color:#eaeaea;
+	padding-left: 3px;
 }

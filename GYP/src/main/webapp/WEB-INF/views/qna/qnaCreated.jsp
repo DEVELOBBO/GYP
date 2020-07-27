@@ -75,6 +75,7 @@ function qnaTypeCheck(){
 }
 
 </script>
+
 </head>
 <body style="font-family: 'Noto Sans KR', sans-serif;">
 
@@ -95,56 +96,64 @@ function qnaTypeCheck(){
 	<div class="col-12">
 	<div class="contact-content">
 	<div class="contact-form-area">
-	<form method="post" action="/gyp/qnaCreated.action" name="myForm">
-
-			<div class="form-group">
-				<font style="font-size: " >번호</font>
-				<input type="text" name="qnaNum" class="form-control" value="${dto.qnaNum }" disabled="disabled"/>
-			</div>
+		<form method="post" action="/gyp/qnaCreated.action" name="myForm">
+		<!-- (참고) form-group 하나에 1개의 form-control만 작동함... -->
+				<!-- 번호 -->
+				<div class="form-group">
+					<font class = "bokyung_qnaCreatedFont">질문 번호</font>
+					<input type="text" name="qnaNum" class="form-control" value="${dto.qnaNum }" disabled="disabled"
+					style="margin-top: 10px;"/>
+				</div>
+				
+				<!-- 문의 -->
+				<c:if test="${mode=='insert'}"><br>	
+					<font class = "bokyung_qnaCreatedFont">문의유형</font>
+					<em style="color:red;">*</em>&nbsp;&nbsp;&nbsp;<br><!-- 별표 -->
+					<div style="height: 10px;"></div>
+						<input type="radio" name="qnaType" value="체육관" onclick="qnaTypeCheck()"/>체육관&nbsp;&nbsp;
+						<input type="radio" name="qnaType" value="이용권" onclick="qnaTypeCheck()"/>이용권&nbsp;&nbsp;
+						<input type="radio" name="qnaType" value="쇼핑몰" onclick="qnaTypeCheck()"/>쇼핑몰&nbsp;&nbsp; 			
+				</c:if>
+				<div class="form-group">	
+					<font class = "bokyung_qnaCreatedFont">작성자</font>
+					<input type="text" name="cusId" class="form-control" value="${dto.cusId }" disabled="disabled"/>
+				</div>
+				<div class="form-group">
+					<font class = "bokyung_qnaCreatedFont">제목</font>
+					<em style="color:red;">*</em><input type="text" name="qnaTitle" class="form-control" placeholder="제목을 입력해주세요" value="${dto.qnaTitle }">
+				</div>
+				<div class="form-group">
+					<font class = "bokyung_qnaCreatedFont">내용</font>
+					<em style="color:red;">*</em><textarea name="qnaContent" rows="12" cols="63" class="form-control" placeholder="운영체제와 브라우저를 함께 적어주시면 정확한 문제 해결에 도움이 됩니다.">${dto.qnaContent }</textarea>
+				</div>
+				
+			<!-- reply필요한 파라미터 -->
+				<input type="hidden" name="qnaType" value="${dto.qnaType }"/>			
+				<input type="hidden" name="qnaGroupNum" value="${dto.qnaGroupNum }"/>
+				<input type="hidden" name="qnaOrderNo" value="${dto.qnaOrderNo }"/>
+				<input type="hidden" name="qnaDepth" value="${dto.qnaDepth }"/>
+				<input type="hidden" name="qnaParent" value="${dto.qnaNum }"/>
+			<!-- insert 필요한 파라미터 -->	
+				<input type="hidden" name="mode" value="${mode }"/>
+			<!-- update 필요한 파라미터 -->	
+				<input type="hidden" name="pageNum" value="${pageNum }"/>
+				<input type="hidden" name="qnaNum" value="${dto.qnaNum }" />
 			
-			<c:if test="${mode=='insert'}">	
-				<br>문의유형<em style="color:red;">*</em>&nbsp;&nbsp;&nbsp;
-					<input type="radio" name="qnaType" value="체육관" onclick="qnaTypeCheck()"/>체육관&nbsp;&nbsp;
-					<input type="radio" name="qnaType" value="이용권" onclick="qnaTypeCheck()"/>이용권&nbsp;&nbsp;
-					<input type="radio" name="qnaType" value="쇼핑몰" onclick="qnaTypeCheck()"/>쇼핑몰&nbsp;&nbsp; 			
-			</c:if>
-			<div class="form-group">	
-				<br><br>작성자<input type="text" name="cusId" class="form-control" value="${dto.cusId }" disabled="disabled"/>
-			</div>
-			<div class="form-group">
-				<br>제목<em style="color:red;">*</em><input type="text" name="qnaTitle" class="form-control" placeholder="제목을 입력해주세요" value="${dto.qnaTitle }">
-			</div>
-			<div class="form-group">
-				<br>내용<em style="color:red;">*</em><textarea name="qnaContent" rows="12" cols="63" class="form-control" placeholder="운영체제와 브라우저를 함께 적어주시면 정확한 문제 해결에 도움이 됩니다.">${dto.qnaContent }</textarea>
-			</div>
-			
-		<!-- reply필요한 파라미터 -->
-			<input type="hidden" name="qnaType" value="${dto.qnaType }"/>			
-			<input type="hidden" name="qnaGroupNum" value="${dto.qnaGroupNum }"/>
-			<input type="hidden" name="qnaOrderNo" value="${dto.qnaOrderNo }"/>
-			<input type="hidden" name="qnaDepth" value="${dto.qnaDepth }"/>
-			<input type="hidden" name="qnaParent" value="${dto.qnaNum }"/>
-		<!-- insert 필요한 파라미터 -->	
-			<input type="hidden" name="mode" value="${mode }"/>
-		<!-- update 필요한 파라미터 -->	
-			<input type="hidden" name="pageNum" value="${pageNum }"/>
-			<input type="hidden" name="qnaNum" value="${dto.qnaNum }" />
-		
-			<c:if test="${mode=='insert'}">
-				<input type="button" class="btn fitness-btn btn-2 mt-30" value="등록하기" onclick="sendIt();" />
-				<input type="button" class="btn fitness-btn btn-2 mt-30" value="작성취소" onclick="javascript:location.href='/gyp/qnaList.action';" />
-			</c:if>
-
-			<c:if test="${mode=='update'}">
-				<input type="button" class="btn fitness-btn btn-2 mt-30" value="수정하기" onclick="sendIt();" />
-				<input type="button" class="btn fitness-btn btn-2 mt-30" value="수정취소" onclick="javascript:location.href='/gyp/qnaList.action';" />
-			</c:if>
-			
-			<c:if test="${mode=='reply'}">
-				<input type="button" class="btn fitness-btn btn-2 mt-30" value="답변하기" onclick="sendIt();" />
-				<input type="button" class="btn fitness-btn btn-2 mt-30" value="작성취소" onclick="javascript:location.href='/gyp/qnaList.action';" />
-			</c:if>
-		</form>
+				<c:if test="${mode=='insert'}">
+					<input type="button" class="btn fitness-btn btn-2 mt-30" value="등록하기" onclick="sendIt();" />
+					<input type="button" class="btn fitness-btn btn-2 mt-30" value="작성취소" onclick="javascript:location.href='/gyp/qnaList.action';" />
+				</c:if>
+	
+				<c:if test="${mode=='update'}">
+					<input type="button" class="btn fitness-btn btn-2 mt-30" value="수정하기" onclick="sendIt();" />
+					<input type="button" class="btn fitness-btn btn-2 mt-30" value="수정취소" onclick="javascript:location.href='/gyp/qnaList.action';" />
+				</c:if>
+				
+				<c:if test="${mode=='reply'}">
+					<input type="button" class="btn fitness-btn btn-2 mt-30" value="답변하기" onclick="sendIt();" />
+					<input type="button" class="btn fitness-btn btn-2 mt-30" value="작성취소" onclick="javascript:location.href='/gyp/qnaList.action';" />
+				</c:if>
+			</form>
 		</div>
 		</div>
 		</div>

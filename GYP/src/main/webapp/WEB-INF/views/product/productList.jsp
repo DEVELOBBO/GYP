@@ -68,19 +68,21 @@
 		<div class="wrapper_inner"
 			style="font-family: 'Noto Sans KR', sans-serif;">
 			<!-- Gallery -->
-			<font color="#7a7ebf">&nbsp;&nbsp;Total ${dataCount }
+			<h5 style="color:#38b143;">SPORTING GOODS</h5>
+			<h2>스포츠용품</h2>
+			<font color="#000000;">&nbsp;&nbsp;Total ${dataCount }
 				articles, ${totalPage } pages / Now page is ${currentPage }</font>
 			<form action="" method="get" name="searchForm" class="form-signin">
-				<select name="searchValueCategory" class="selectField">
+				<select name="searchValueCategory" id="searchKey" class="selectField">
 					<option value="all"  <c:if test="${searchValueCategory eq 'all'}">selected</c:if>>전체</option>
 					<option value="H" <c:if test="${searchValueCategory eq 'H'}">selected</c:if>>헬스</option>
 					<option value="Y" <c:if test="${searchValueCategory eq 'Y'}">selected</c:if>>요가</option>
 					<option value="P" <c:if test="${searchValueCategory eq 'P'}">selected</c:if>>필라테스</option>
 					<!-- <option value="prod_price">가격</option> -->
-				</select> <input type="text" name="searchValueWord" class="textField" value="${searchValueWord }"/>
+				</select>
+				<input type="text" name="searchValueWord" class="textField" value="${searchValueWord }" id="searchValue"/>
 				<input type="button" value="검 색" class="btn2" onclick="search();" />
 			</form>
-
 			<form action="" method="get" name="orderby" class="form-signin">
 				<c:if test="${empty productType2}">
 					<input type="button" value=" 높은가격순"

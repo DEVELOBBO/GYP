@@ -138,7 +138,7 @@ PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
 
 <!-- 해당 체육관의 Book 목록에 cusId가 있는 수 -->
 	<select id="getTimesCusBookedGym" parameterType="map" resultType="int">
-		select count(*) from (select * from book where cusId=#{cusId} and bookOk='true')
+		select count(*) from (select * from book where productId=#{cusId} and bookOk='true')
 	</select>
 	
 <!-- 해당 체육관의 review 목록에 cusId가 있는 수 -->

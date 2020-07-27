@@ -556,3 +556,24 @@ body {
     max-height: 550px;
   }
 }
+
+#searchKey{
+	height:32px;
+	border: none;
+	background-color:#eaeaea;
+}
+#searchValue{
+	width:200px;
+	height:32px;
+	border: none;
+	background-color:#eaeaea;
+	padding-left: 3px;
+}
+.btn2{
+	width:42px;
+	height:32px;
+	border: none;
+	background-color:#38b143;
+	color: white;
+	font-family : FontAwesome;
+}

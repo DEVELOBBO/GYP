@@ -36,20 +36,23 @@ String cp = request.getContextPath();
 	      <div class="leftBox">
 	      	  <!-- 검색창 -->
 		      <div class="searchBar">
+		      	  <h5 style="color:#38b143;">FIND GYM</h5>
+				  <h2>제휴시설 찾기</h2>
 			      <select name="searchKey" id="searchKey" class="selectField" onchange="selectChange();">
 			         <option value="gymName" <c:if test="${tempSearchKey eq 'gymName'}">selected</c:if>>이름</option>
 			         <option value="gymAddr" <c:if test="${tempSearchKey eq 'gymAddr'}">selected</c:if>>지역</option>
 			         <option value="gymType" <c:if test="${tempSearchKey eq 'gymType'}">selected</c:if>>종목</option>
 			      </select>
-			      <input type="text" name="searchValue" id="searchValue" value="${tempSearchValue}"
+			      <input type="text" name="searchValue" id="searchValue" value="${tempSearchValue}" placeholder="검색어"
 			        class="textField" onkeyup="sendKeyword();" onkeydown="enter('send');">
-			      <input type="button" value=" 검색 " id="sendButton" class="btn2" onclick="searchMap('send');"/>
-			      <input type="button" value=" MY " id="myButton" class="btn2" onclick="searchMap('my');"/>
+			      <input type="button" value=" 검색 " id="sendButton" onclick="searchMap('send');"/>
+			      <input type="button" value=" MY " id="myButton" onclick="searchMap('my');"/>
 			      <input type="hidden" id="tempSearchKey" value="${tempSearchKey}"/>
 			      <input type="hidden" id="tempSearchValue" value="${tempSearchValue}"/>
 			      <input type="hidden" id="cusAddrGoo" value="${cusAddrGoo}"/>
 			      <input type="hidden" id="sessionId" value="${sessionId}"/>
 		      </div>
+		      
 		      <!-- 검색창 끝 -->
 		      
 		      <!-- 검색어 제시 -->

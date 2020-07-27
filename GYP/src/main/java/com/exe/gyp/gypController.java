@@ -1229,6 +1229,7 @@ public class gypController {
 	} else if (searchValueCategory.equals("all")) {
 		searchValueCategory = "";
 	}
+	
 	// 타이핑 검색 널 처리 + 인코딩 처리
 	if (searchValueWord == null) {
 		searchValueWord = "";

@@ -74,3 +74,9 @@ td {
 input[type="submit"]{
    font-family : FontAwesome;
 }
+
+ 
+.bokyung_qnaCreatedFont{
+	font-size : 12pt;
+	font-weight : bold;
+}
