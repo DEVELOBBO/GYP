@@ -59,7 +59,7 @@ public class MyUtil {
 			
 			if(page == currentPage){				
 				
-				sb.append("<font color=\"#38b143\">" + page + "</font>&nbsp;");				
+				sb.append("<font color=\"#38b143\">&nbsp;&nbsp;" + page + "&nbsp;&nbsp;</font>&nbsp;");				
 			
 			}else{
 				

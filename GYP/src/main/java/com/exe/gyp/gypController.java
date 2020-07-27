@@ -3197,7 +3197,7 @@ public class gypController {
 		}
 
 	//체육관회원 아이디 중복체크
-		@RequestMapping(value = "/gymIdck", method = RequestMethod.POST)
+	@RequestMapping(value = "/gymIdck", method = RequestMethod.POST)
 	public @ResponseBody String AjaxView2(  
 			        @RequestParam("gymId") String gymId){
 			String str = "";
@@ -3213,6 +3213,42 @@ public class gypController {
 			}
 			return str;
 		}
+		
+	//개인회원 전화번호 중복체크
+	@RequestMapping(value = "/cusTelck", method = RequestMethod.POST)
+	public @ResponseBody String AjaxView3(  
+			        @RequestParam("cusTel") String cusTel){
+			String str = "";
+			
+			//int idcheck = dbPro.idCheck(id);
+			
+			int telcheck = dao.custelCheck(cusTel);
+			
+			if(telcheck==1){ //이미 존재하는 계정
+				str = "NO";	
+			}else{	//사용 가능한 계정
+				str = "YES";	
+			}
+			return str;
+		}
+	
+	//체육관회원 전화번호 중복체크
+	@RequestMapping(value = "/gymTelck", method = RequestMethod.POST)
+	public @ResponseBody String AjaxView4(  
+					      @RequestParam("gymTel") String gymTel){
+			String str = "";
+					
+			//int idcheck = dbPro.idCheck(id);
+					
+			int telcheck = dao.gymtelCheck(gymTel);
+					
+			if(telcheck==1){ //이미 존재하는 계정
+				str = "NO";	
+			}else{	//사용 가능한 계정
+				str = "YES";	
+			}
+			return str;
+		}	
 	
 	
 	//*******************경기민*******************

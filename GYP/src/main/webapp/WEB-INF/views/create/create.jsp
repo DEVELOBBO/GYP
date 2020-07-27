@@ -16,27 +16,45 @@
 	<link rel="icon" href="/gyp/resources/img/core-img/favicon.ico">
 	<!-- Core Stylesheet -->
 	<link rel="stylesheet" href="/gyp/resources/css/style.css">
-	<!-- font -->
+	<link rel="stylesheet" href="/gyp/resources/css/create.css">
+	<!-- font -->	
 	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400&display=swap" rel="stylesheet">
 	
+	
+	
+
 <title>GYP</title>
 </head>
 <body style="font-family: 'Noto Sans KR', sans-serif;">
-	
+<center>	
+	<table>
 	<jsp:include page="/WEB-INF/views/layout/header_over.jsp" />
 	<jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
 
+	<div style="height: 100px;"></div>
+	
+	<dt>
+	<input type="button" class="fas fa-id-card-alt fa-10x"   style="border: none;font-size:200px;width:250px;height:220px; color: #000042;" value="&#xf47f;" 
+	 onclick="javascript:location.href='<%=cp%>/createCustomer.action';"></input>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<input type="button" class="fas fa-id-card-alt fa-10x"   style="border: none;font-size:200px;width:250px;height:220px; color:#0BC904" value="&#xf47f;" 
+	 onclick="javascript:location.href='<%=cp%>/createGym.action';"></input> 
+	</dt> 
+	
+	<dd>
+	<input type="button" class="btn fitness2-btn btn-2" style="font-size:20px; width:210px;height:50px;" value="개인 회원가입">
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<input type="button" class="btn fitness-btn btn-2" style="font-size:20px; width:210px;height:50px;"  value="체육관 회원가입">
+	</dd>
+	
+
+	
+	
+	
+	
 	<div style="height: 300px;"></div>
-
-
-
-	<a href="/gyp/createCustomer.action">클릭: 일반 회원 가입</a> <br>
-	<a href="/gyp/createGym.action">클릭 : 체육관 회원 가입</a>
-
 	
-	
-	
-	<div style="height: 300px;"></div>
 	
 
 	<jsp:include page="/WEB-INF/views/layout/footer.jsp" />
@@ -54,7 +72,11 @@
     <!-- Active js -->
     <script src="/gyp/resources/js/active.js"></script>
     
+    <!-- font awesome -->
+	<script src="https://kit.fontawesome.com/4badd96a47.js" crossorigin="anonymous"></script>
 
-
+	</table>
+</center>
 </body>
+
 </html>

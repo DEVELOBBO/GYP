@@ -662,6 +662,19 @@ private SqlSessionTemplate sessionTemplate;
 		return result;
 	}
 	
+	//개인회원 전화번호 중복체크
+	public int custelCheck(String cusTel) {
+		int result = sessionTemplate.selectOne("createMapper.custelCheck", cusTel);
+		return result;
+	}
+	
+	//개인회원 전화번호 중복체크
+	public int gymtelCheck(String gymTel) {
+		int result = sessionTemplate.selectOne("createMapper.gymtelCheck", gymTel);
+		return result;
+	}	
+	
+	
 	//*******************최보경*******************
 	
 	//로그인한 회원의 주소 가져오기

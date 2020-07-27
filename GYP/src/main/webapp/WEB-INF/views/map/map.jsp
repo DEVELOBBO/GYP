@@ -50,7 +50,7 @@ String cp = request.getContextPath();
 			         <option value="gymAddr" <c:if test="${tempSearchKey eq 'gymAddr'}">selected</c:if>>지역</option>
 			         <option value="gymType" <c:if test="${tempSearchKey eq 'gymType'}">selected</c:if>>종목</option>
 			      </select>
-			      <input type="text" name="searchValue" id="searchValue" value="${tempSearchValue}" placeholder="검색어"
+			      <input type="text" name="searchValue" id="searchValue" value="${tempSearchValue}" placeholder="&nbsp;검색어"
 			        class="textField" onkeyup="sendKeyword();" onkeydown="enter('send');">
 			      <input type="button" value=" 검색 " id="sendButton" onclick="searchMap('send');"/>
 			      <input type="button" value=" MY " id="myButton" onclick="searchMap('my');"/>
@@ -77,7 +77,7 @@ String cp = request.getContextPath();
 
 	      <div class="rightBox">
 	         <!-- 지도시작 -->
-	         <div id="map" style="width: 630px; height: 720px; z-index: 1; margin-left: 10px;"></div>
+	         <div id="map" style="width: 610px; height: 790px; z-index: 1; margin-left: 20px;"></div>
 	      </div>
 	      </form>
 	   </div>
@@ -101,6 +101,11 @@ String cp = request.getContextPath();
    <script src="/gyp/resources/js/active.js"></script>
 
    <script src="/gyp/resources/js/httpRequest.js"></script>
+   
+    <!-- font awesome -->
+	<script src="https://kit.fontawesome.com/4badd96a47.js" crossorigin="anonymous"></script>
+	
+   
    <script type="text/javascript">
    function enter(mode) {
       if (window.event.keyCode == 13) {

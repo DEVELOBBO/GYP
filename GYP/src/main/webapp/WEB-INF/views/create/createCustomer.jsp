@@ -15,9 +15,9 @@
 	<!-- Favicon -->
 	<link rel="icon" href="/gyp/resources/img/core-img/favicon.ico">
 	<!-- Core Stylesheet -->
-	<link rel="stylesheet" href="/gyp/resources/css/phonmeStyle.css">
+	<link rel="stylesheet" href="/gyp/resources/css/createStyle.css">
 	<link rel="stylesheet" href="/gyp/resources/css/createCustomer.css">
-	<link rel="stylesheet" href="/gyp/resources/css/phonmeMember.css">
+	 <link rel="stylesheet" href="/gyp/resources/css/customer.css"> 
 	<!-- font -->
 	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400&display=swap" rel="stylesheet">
 	
@@ -70,6 +70,54 @@
 			      
 		
 			});
+		
+		
+		$(function (){
+			//전화번호 중복체크
+			
+			f = document.myForm;
+			
+			    $('#cusTel').blur(function(){
+			        $.ajax({
+				     type:"POST",
+				     url:"cusTelck",
+				     data:{
+				            "cusTel":$('#cusTel').val()
+				     },
+		  
+				     success:function(data){	//data : cusidck에서 넘겨준 결과값
+				            if($.trim(data)=="YES"){
+				               if($('#cusTel').val()!=''){ 
+				               	alert("사용가능한 전화번호입니다.");
+				        
+				               }
+				           	}else{
+				             
+				           		if(f.mode.value!="updated"){
+				           		
+				           		if($('#cusTel').val()!=''){
+				                  alert("중복된 전화번호입니다.");
+				                 
+				                  $('#cusTel').val('');				               
+				                  $('#cusTel').focus();
+				           			}  
+				           		}
+				           		if(f.mode.value=="updated"){
+				           			if($('#cusTel').val()!=''){
+						         alert("중복된 전화번호입니다.");
+					
+				           			
+				           			
+				           			}
+				               }
+				            }
+				         }
+				    }) 
+			     })
+			      
+		
+			});
+		
 
 		//주소 찾기 버튼(Daum카카오 주소API 기반)
 	     function sample6_execDaumPostcode() {
@@ -334,7 +382,7 @@
 		<tr>
 			<td class="bokyung_td_left">전화번호</td>
 				<td>
-					<input type="text" name="cusTel" size="35" class="bokyung_member_text" maxlength="50"  value="${dto.cusTel }"/>
+					<input type="text" name="cusTel" id="cusTel" size="35" class="bokyung_member_text" maxlength="50"  value="${dto.cusTel }"/>
 				</td>							
 			</td>		
 		</tr>
