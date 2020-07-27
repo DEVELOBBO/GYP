@@ -32,7 +32,7 @@
 
 
 <c:if test="${dto == null}">
-	<div style="width:500px; margin:0 auto;">
+	<div style="width:400px; margin:0 auto;">
 		<img src="/gyp/resources/img/check.png" width="200px"/>
 	</div>
 	<div>
@@ -45,7 +45,7 @@
 <c:if test="${dto != null }">
 	<c:if test="${dto.faceLink == null }">
 		<div style="margin:0 auto; width: 600px">
-			<div style="width:200px; display:inline;">
+			<div style="width:600px; display:inline;">
 				<img src="/gyp/resources/img/check.png" width="200px"/>
 			</div>
 			<div style="display: inline;">

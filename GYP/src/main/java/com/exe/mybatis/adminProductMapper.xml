@@ -44,7 +44,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <update id="updateData" parameterType="com.exe.dto.ProductDTO">
 	update product set
-	productName=#{productName}, productImg=#{productImg}, productPrice=#{productPrice}, productHit=#{productHit}, productContent=#{productContent}
+	productName=#{productName}, productImg=#{productImg}, productPrice=#{productPrice},productContent=#{productContent}
 	where productId=#{productId}
 </update>
 

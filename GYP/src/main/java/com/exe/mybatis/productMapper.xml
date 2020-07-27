@@ -9,7 +9,7 @@ PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
 <!-- 예약 데이터 개수 -->
 <select id="getDataCount"  parameterType="hashMap" resultType="int">
 	select nvl(count(*),0) from product
-	where productId like '%' || #{serachValueCategory} ||'%'
+	where productId like '%' || #{searchValueCategory} ||'%'
 	and productName like '%' || #{searchValueWord} || '%'
 </select>
 
@@ -18,7 +18,7 @@ PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
 		select * from (
 		select rownum rnum, data.* from (
 		select productId,productName,productImg,productPrice,productHit,productContent 
-		from PRODUCT where productId like '%' || #{serachValueCategory} ||'%'
+		from PRODUCT where productId like '%' || #{searchValueCategory} ||'%'
 		and productName like '%' || #{searchValueWord} || '%'
 		order by productName desc) data)
 	<![CDATA[
@@ -42,7 +42,7 @@ PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
 		select * from (
 		select rownum rnum, data.* from (
 		select productId,productName,productImg,productPrice,productHit,productContent 
-		from PRODUCT where productId like '%' || #{serachValueCategory} ||'%'
+		from PRODUCT where productId like '%' || #{searchValueCategory} ||'%'
 		and productName like '%' || #{searchValueWord} || '%'
 		order by productPrice desc) data)
 	<![CDATA[
@@ -55,7 +55,7 @@ PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
 		select * from (
 		select rownum rnum, data.* from (
 		select productId,productName,productImg,productPrice,productHit,productContent 
-		from PRODUCT where productId like '%' || #{serachValueCategory} ||'%'
+		from PRODUCT where productId like '%' || #{searchValueCategory} ||'%'
 		and productName like '%' || #{searchValueWord} || '%'
 		order by productPrice asc) data)
 	<![CDATA[
@@ -68,7 +68,7 @@ PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
 		select * from (
 		select rownum rnum, data.* from (
 		select productId,productName,productImg,productPrice,productHit,productContent 
-		from PRODUCT where productId like '%' || #{serachValueCategory} ||'%'
+		from PRODUCT where productId like '%' || #{searchValueCategory} ||'%'
 		and productName like '%' || #{searchValueWord} || '%'
 		order by productHit desc) data)
 	<![CDATA[
@@ -136,13 +136,9 @@ PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
 	</select>
 
 
-
-
-
-
 <!-- 해당 체육관의 Book 목록에 cusId가 있는 수 -->
 	<select id="getTimesCusBookedGym" parameterType="map" resultType="int">
-		select count(*) from (select * from book where productId=#{productId} and bookOk='true')
+		select count(*) from (select * from book where cusId=#{cusId} and bookOk='true')
 	</select>
 	
 <!-- 해당 체육관의 review 목록에 cusId가 있는 수 -->

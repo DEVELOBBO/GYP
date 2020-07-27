@@ -166,7 +166,7 @@
 		<div class="col-12">
 			<div class="single-blog-post mb-100 gymDetailHeadLine">
 				<!-- Post Title -->
-				<a href="#" class="post-title">체육관 리뷰</a> <br>
+				<a href="#" class="post-title">상품 리뷰</a> <br>
 
 				<!-- ajax를 이용한 리뷰 리스트 및 리뷰 작성 : reviewList.jsp 참조 -->
 				<span id="listData" style="display: none"></span>

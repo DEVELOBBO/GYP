@@ -72,12 +72,12 @@
 				articles, ${totalPage } pages / Now page is ${currentPage }</font>
 			<form action="" method="get" name="searchForm" class="form-signin">
 				<select name="searchValueCategory" class="selectField">
-					<option value="all">전체</option>
-					<option value="H">헬스</option>
-					<option value="Y">요가</option>
-					<option value="P">필라테스</option>
+					<option value="all"  <c:if test="${searchValueCategory eq 'all'}">selected</c:if>>전체</option>
+					<option value="H" <c:if test="${searchValueCategory eq 'H'}">selected</c:if>>헬스</option>
+					<option value="Y" <c:if test="${searchValueCategory eq 'Y'}">selected</c:if>>요가</option>
+					<option value="P" <c:if test="${searchValueCategory eq 'P'}">selected</c:if>>필라테스</option>
 					<!-- <option value="prod_price">가격</option> -->
-				</select> <input type="text" name="searchValueWord" class="textField" />
+				</select> <input type="text" name="searchValueWord" class="textField" value="${searchValueWord }"/>
 				<input type="button" value="검 색" class="btn2" onclick="search();" />
 			</form>
 
@@ -98,13 +98,13 @@
 				<!-- 헬스,필라테스,요가 검색시 -->
 				<input type="button" value=" 높은가격순"
 						style="float: right; background-color: white; border: 0em; color: #7a7ebf"
-						onclick="javascript:location.href='<%=cp%>/productList.action?type=1&searchValueCategory=${productType }&searchValueWord=${searchValueWord }&pageNum=${pageNum }';">
+						onclick="javascript:location.href='<%=cp%>/productList.action?type=1&searchValueCategory=${searchValueCategory }&searchValueWord=${searchValueWord }&pageNum=${pageNum }';">
 					<input type="button" value=" 낮은가격순 |"
 						style="float: right; background-color: white; border: 0em; color: #7a7ebf"
-						onclick="javascript:location.href='<%=cp%>/productList.action?type=2&searchValueCategory=${productType }&searchValueWord=${searchValueWord }&pageNum=${pageNum }';">
+						onclick="javascript:location.href='<%=cp%>/productList.action?type=2&searchValueCategory=${searchValueCategory }&searchValueWord=${searchValueWord }&pageNum=${pageNum }';">
 					<input type="button" value="조회수 |"
 						style="float: right; background-color: white; border: 0em; color: #7a7ebf"
-						onclick="javascript:location.href='<%=cp%>/productList.action?type=3&searchValueCategory=${productType }&searchValueWord=${searchValueWord }&pageNum=${pageNum }';">
+						onclick="javascript:location.href='<%=cp%>/productList.action?type=3&searchValueCategory=${searchValueCategory }&searchValueWord=${searchValueWord }&pageNum=${pageNum }';">
 				
 				</c:if>
 				

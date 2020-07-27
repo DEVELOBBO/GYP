@@ -63,37 +63,38 @@ function sendData() {
 	<jsp:include page="/WEB-INF/views/layout/header_over.jsp" />
 	<!-- 메인 : header_main.jsp / 그외 : header_below.jsp -->
 	<jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
-
+ 
 
 	<section class="contact-area section-padding-100">
-		<div class="container">
-		<div class="row">
-		<div class="col-12">
+		<div class="container" style="width: 1140px;">
+		<div class="col-12" style="width: 1140px;">
 		<div class="contact-form-area">
-			<div style="font-size:25px;font-weight: bold;colspan:4">${dto.qnaTitle }</div>
-			<div>아이디 : ${dto.cusId }</div>
-			<div>작성일 : ${dto.qnaCreated }<hr></div>
-			<div style="valign:top;colspan:4;">${dto.qnaContent }</div>
-		</div>
-		</div>
+			<div style="font-size:25px;font-weight: bold;colspan:4; height: 50px;'">
+			<!-- 제목 -->
+			${dto.qnaTitle }</div>
+			<!-- 아이디 , 날짜 -->
+			<div style="colspan:4; width:200px;margin: 0; padding-top: 10px;">
+			아이디 : ${dto.cusId } <br>
+			작성일 : ${dto.qnaCreated }</div>
+			<div style="valign:top;colspan:4; width: 1100px;"><hr><br>${dto.qnaContent }</div>
 		</div>
 		
 		<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 		
 		<div>
-			이전글:
+			<font style="color: green; font-weight: bold;">이전글 : </font>
 			<c:if test="${!empty preQnaTitle  }">
 				<a href="<%=cp%>/qnaArticle.action?pageNum=${pageNum }&qnaNum=${preQnaNum}"> ${preQnaTitle } </a>
 			</c:if>
 		</div>
 
 		<div>
-			다음글:
+			<font style="color: green; font-weight: bold;">다음글 : </font>
 			<c:if test="${!empty nextQnaTitle  }">
 				<a href="<%=cp%>/qnaArticle.action?pageNum=${pageNum }&qnaNum=${nextQnaNum}"> ${nextQnaTitle } </a>
 			</c:if>
+			<input type="hidden" value="${dto.qnaNum }">
 		</div>
-		<input type="hidden" value="${dto.qnaNum }">
 
 		
 		<div>
@@ -110,6 +111,7 @@ function sendData() {
 			</c:if>
 			<!-- 로그인안했을때 -->
 			<input type="button" class="btn fitness-btn btn-2 mt-30" value="목록" onclick="javascript:location.href='/gyp/qnaList.action?pageNum=${pageNum }';" />
+		</div>
 		</div>
 		</div>
 	</section>

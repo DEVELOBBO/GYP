@@ -25,15 +25,17 @@
 		
 		f = document.myForm;
 		
-		//상품아이디 체크
-		str = f.productId.value;
-		str = str.trim();
-		if(!str){
-			alert("\n상품 ID를 입력하세요.");
-			f.productId.focus();
-			return;
+		if(f.mode.value!='update'){
+			//상품아이디 체크
+			str = f.productId.value;
+			str = str.trim();
+			if(!str){
+				alert("\n상품 ID를 입력하세요.");
+				f.productId.focus();
+				return;
+			}
+			f.productId.value = str;
 		}
-		f.productId.value = str;
 		
 		//상품이름 체크
 		str = f.productName.value;
@@ -74,12 +76,8 @@
 		f.productContent.value = str;
 		
 
-		if(f.mode.value=='update'){
-			f.action = "<%=cp%>/adminProductUpdated_ok.action?";
-		}else if(f.mode.value!='update' || f.mode.value == null || f.mode.value == ""){
-			f.action = "<%=cp%>/adminProductCreated_ok.action";
-		}
 		
+		f.action = "<%=cp%>/adminProductUpdated_ok.action";
 		f.submit();
 	}
 	
@@ -183,6 +181,7 @@
 						<input type="hidden" name="mode" value="${mode }">
 						<input type="hidden" name="oldImageName" value="${oldImageName }">
 						<input type="hidden" name="productImg" value="${dto.productImg }">
+						<input type="hidden" name="productId" value="${dto.productId }">
 						<input type="hidden" name="params" value="${params }">
 						</td>
 					</tr>

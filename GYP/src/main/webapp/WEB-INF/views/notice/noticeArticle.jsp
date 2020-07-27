@@ -54,9 +54,9 @@ function updateData(){
 	<jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
 
 	<section class="contact-area section-padding-100">
-		<div class="container">
-		<div class="col-12">
-		<div class="contact-form-area row" style="width: 1100px; margin: 0 auto;">
+		<div class="container"">
+		<div class="col-12"">
+		<div class="contact-form-area row" style="width: 1140px; margin: 0 auto;">
 			<div style="width: 1140px; font-size:25px; font-weight: bold; colspan:4; height: 50px;" >
 				<!-- 제목 -->
 				${dto.notiTitle }
@@ -66,29 +66,30 @@ function updateData(){
 			작성일 : ${dto.notiCreated }</div>
 			<div style="valign:top;colspan:4; width: 1100px;"><hr><br>${dto.notiContent }</div>
 		</div>
-		</div>
-		<br><br><hr>
-		<div>
-			<font style="color: green; font-weight: bold;">이전글 : </font>
-			<c:if test="${!empty preNotiTitle  }">
-				<a href="<%=cp%>/noticeArticle.action?pageNum=${pageNum }&notiNum=${preNotiNum}">${preNotiTitle }</a>
-			</c:if>
-		</div>
 		
-		<div>
-			<font style="color: green; font-weight: bold;">다음글 : </font>
-			<c:if test="${!empty nextNotiTitle  }">
-				<a href="<%=cp%>/noticeArticle.action?pageNum=${pageNum }&notiNum=${nextNotiNum}">${nextNotiTitle }</a>
-			</c:if>
-		</div>
-		
-		<div>
-		<c:if test="${result==0}"> 
-			<input type="button" class="btn fitness-btn btn-2 mt-30" value="수정" onclick="updateData();">
-			<input type="button" class="btn fitness-btn btn-2 mt-30" value="삭제" onclick="deleteData();">
-		</c:if>	
-			<input type="button" class="btn fitness-btn btn-2 mt-30" value="목록"
-				onclick="javascript:location.href='<%=cp%>/noticeList.action?pageNum=${pageNum }';" />
+			<br><br><hr>
+			<div>
+				<font style="color: green; font-weight: bold;">이전글 : </font>
+				<c:if test="${!empty preNotiTitle  }">
+					<a href="<%=cp%>/noticeArticle.action?pageNum=${pageNum }&notiNum=${preNotiNum}">${preNotiTitle }</a>
+				</c:if>
+			</div>
+			
+			<div>
+				<font style="color: green; font-weight: bold;">다음글 : </font>
+				<c:if test="${!empty nextNotiTitle  }">
+					<a href="<%=cp%>/noticeArticle.action?pageNum=${pageNum }&notiNum=${nextNotiNum}">${nextNotiTitle }</a>
+				</c:if>
+			</div>
+			
+			<div>
+			<c:if test="${result==0}"> 
+				<input type="button" class="btn fitness-btn btn-2 mt-30" value="수정" onclick="updateData();">
+				<input type="button" class="btn fitness-btn btn-2 mt-30" value="삭제" onclick="deleteData();">
+			</c:if>	
+				<input type="button" class="btn fitness-btn btn-2 mt-30" value="목록"
+					onclick="javascript:location.href='<%=cp%>/noticeList.action?pageNum=${pageNum }';" />
+			</div>
 		</div>
 	</div>
 	</section>

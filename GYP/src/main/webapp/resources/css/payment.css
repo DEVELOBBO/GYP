@@ -1,5 +1,32 @@
 @charset "UTF-8";
 
+/* 상품 정보 */
+#buying_items {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#buying_items td, #buying_items th {
+  border-bottom: 1px solid #ddd;
+  padding: 8px;
+}
+
+#buying_items tr:nth-child(even){background-color: #f2f2f2;}
+
+#buying_items tr:hover {background-color: #ddd;}
+
+#buying_items th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  background-color: #38b143;
+  color: white;
+  text-align: center;
+}
+#buying_items td {
+  text-align: center;
+}
+
+
 .col-12.col-md-6.col-lg-4 {
     flex: 0 0 25%;
     max-width: 25%;
@@ -31,7 +58,7 @@
 
 .price-table-content h2, .price-table-content h5,
 .price-table-content .description{
-	text-align:center;
+   text-align:center;
 }
 
 div#결제 {
@@ -41,9 +68,9 @@ div#결제 {
 }
 
 .pay-right{
-	float: right;
+   float: right;
 }
 
 .pay-left{
-	float: left;
+   float: left;
 }

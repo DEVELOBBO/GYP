@@ -241,7 +241,7 @@ public class gypController {
 		history = history.substring(history.lastIndexOf("/"), history.length()); // 주소의 마지막 슬래시 추출
 
 		// 회원가입 후, 로그인창으로 이동했을때, 로그인하고 이전페이지(회원가입 등)으로 돌아가기 방지
-		if (history.equals("/createCustomer.action") || history.equals("/login.action")) {
+		if (history.equals("/createCustomer.action") || history.equals("/login.action") || history.equals("/searchpw.action")) {
 			history = "/";
 		}
 		// 제품 상세에서 로그인 안했을 경우, 로그인 창으로 이동했다가 productId를 못갖고 와서 에러 뜨는것 방지
@@ -322,7 +322,7 @@ public class gypController {
 			request.setAttribute("message", "비밀번호는 [" + dto.getCusPwd() + "] 입니다");
 
 		}
-		return "login/login";
+		return login();
 	}
 
 	// 유저 아이디 찾는 보여주는창
@@ -351,7 +351,7 @@ public class gypController {
 			return "login/searchid";
 
 		} else if (dto.getCusName().equals(cusName) || dto.getCusTel().equals(cusTel)) {
-			request.setAttribute("message", "이름는 [" + dto.getCusId() + "] 입니다");
+			request.setAttribute("message", "아이디는 [" + dto.getCusId() + "] 입니다");
 		}
 		return "login/login";
 	}
@@ -1199,127 +1199,111 @@ public class gypController {
 		dao.bookdeleteData(bookNum);
 		return "redirect:/gymMyPage.action";
 	}
-
 	//////////////////
 	// 상품 리스트
 	@RequestMapping(value = "/productList.action", method = { RequestMethod.GET, RequestMethod.POST })
 	public String productList(HttpServletRequest request) throws Exception {
-
-		String productType = "";
-
-		// 리스트 생성
-		List<ProductDTO> lists = null;
-
-		// 절대 경로 생성
-		String cp = request.getContextPath();
-
-		// 맵 객체 추가
-		Map<String, Object> hMap = new HashMap<String, Object>();
-
-		// 넘어오는값
-		String pageNum = request.getParameter("pageNum");
-		String searchValueCategory = request.getParameter("searchValueCategory"); // 카테고리
-		String searchValueWord = request.getParameter("searchValueWord"); // 키보드 타이핑한 글자
-		String type = request.getParameter("type");// 정렬타입
-
-		//productType 세팅
-		if (searchValueCategory!=null) {
-			productType = searchValueCategory;
-		}else if(searchValueCategory==null) {
-			productType="";
-		}
-
-		// 카테고리 검색 널 처리 + 인코딩 처리
-		if (searchValueCategory == null) {
-			searchValueCategory = ""; // 키워드 헬스 요가 필라테스
-		} else if (request.getMethod().equalsIgnoreCase("GET")) {
-			searchValueCategory = URLDecoder.decode(searchValueCategory, "UTF-8");
-		}
-
-		// 타이핑 검색 널 처리 + 인코딩 처리
-		if (searchValueWord == null) {
-			searchValueWord = "";
-		} else if (request.getMethod().equalsIgnoreCase("GET")) {
-			searchValueWord = URLDecoder.decode(searchValueWord, "UTF-8");
-		}
-
-		// type 널처리
-		if (searchValueCategory.equals("all")) {
-			searchValueCategory = "";
-			type = "0";
-		} else if (type == null) {
-			type = "0";
-		}
-
-		// 페이징
-		int currentPage = 1;
-
-		if (pageNum != null) {
-			currentPage = Integer.parseInt(pageNum);
-		} else {
-			pageNum = "1"; // 처음 페이지값
-		}
-
-		// 검색한 경우를 위한 페이징용 hMap
-		hMap.put("serachValueCategory", searchValueCategory);
-		hMap.put("searchValueWord", searchValueWord);
-
-		int dataCount = dao.getProductCount(hMap);
-		int numPerPage = 12;// 페이지에 보여주는 게시물수
-		int totalPage = myUtil.getPageCount(numPerPage, dataCount);
-
-		if (currentPage > totalPage) {
-			currentPage = totalPage;
-		}
-
-		// 한 페이지의 첫과 끝 게시물 번호
-		int start = (currentPage - 1) * numPerPage + 1;
-		int end = currentPage * numPerPage;
-		hMap.put("start", start);
-		hMap.put("end", end);
-
-		// 파람 생성
-		String param = "";
-		if (!searchValueCategory.equals("")) {
-			param = "serachValueCategory=" + searchValueCategory;
-			param += "&searchValueWord=" + URLEncoder.encode(searchValueWord, "UTF-8");
-		}
-
-		// 전달할 url과 path
-		String articleUrl = cp + "/productDetail.action?pageNum=" + currentPage;
-		if (!param.equals(""))
-			articleUrl = articleUrl + "&" + param;
-
-		String searchUrl = "productList.action?" + param;
-		String pageIndexList = myUtil.pageIndexList(currentPage, totalPage, searchUrl);
-		String imagePath = "/gyp/sfiles/product"; // 이미지 경로
-
-		// 정렬 타입에 따라 리스트가 달라진다
-		// 1.높은가격순 2.낮은가격순 3.조회수 0.그냥 검색
-		if (type.equals("1")) {
-			lists = dao.searchListpayup(hMap);
-		} else if (type.equals("2")) {
-			lists = dao.searchListpaydown(hMap);
-		} else if (type.equals("3")) {
-			lists = dao.searchListhit(hMap);
-		} else if (type.equals("0")) {
-			lists = dao.searchList(hMap);
-		}
-
-		request.setAttribute("productType", productType);
-		request.setAttribute("lists", lists);
-		request.setAttribute("serachValueCategory", searchValueCategory);
-		request.setAttribute("searchValueWord", searchValueWord);
-		request.setAttribute("pageNum", pageNum);
-		request.setAttribute("dataCount", dataCount);
-		request.setAttribute("totalPage", totalPage);
-		request.setAttribute("currentPage", currentPage);
-		request.setAttribute("pageIndexList", pageIndexList);
-		request.setAttribute("imagePath", imagePath);
-		request.setAttribute("articleUrl", articleUrl);
-
-		return "product/productList";
-
+	
+	String type = "0";
+	
+	// 리스트 생성
+	List<ProductDTO> lists = null;
+	
+	// 절대 경로 생성
+	String cp = request.getContextPath();
+	
+	// 맵 객체 추가
+	Map<String, Object> hMap = new HashMap<String, Object>();
+	
+	// 넘어오는값
+	String pageNum = request.getParameter("pageNum");
+	String searchValueCategory = request.getParameter("searchValueCategory"); // 카테고리
+	String searchValueWord = request.getParameter("searchValueWord"); // 키보드 타이핑한 글자
+	if(request.getParameter("type")!=null) {
+		type = request.getParameter("type");// 정렬타입   
+	}
+	
+	// 카테고리 검색 널 처리 + 인코딩 처리
+	if (searchValueCategory == null) {
+		searchValueCategory = ""; // 키워드 헬스 요가 필라테스
+	} else if (searchValueCategory.equals("all")) {
+		searchValueCategory = "";
+	}
+	// 타이핑 검색 널 처리 + 인코딩 처리
+	if (searchValueWord == null) {
+		searchValueWord = "";
+	} else if (request.getMethod().equalsIgnoreCase("GET")) {
+		searchValueWord = URLDecoder.decode(searchValueWord, "UTF-8");
+	}
+	
+	
+	// 페이징
+	int currentPage = 1;
+	
+	if (pageNum != null) {
+		currentPage = Integer.parseInt(pageNum);
+	} else {
+		pageNum = "1"; // 처음 페이지값
+	}
+	
+	// 검색한 경우를 위한 페이징용 hMap
+	hMap.put("searchValueCategory", searchValueCategory);
+	hMap.put("searchValueWord", searchValueWord);
+	
+	int dataCount = dao.getProductCount(hMap);
+	int numPerPage = 12;// 페이지에 보여주는 게시물수
+	int totalPage = myUtil.getPageCount(numPerPage, dataCount);
+	
+	if (currentPage > totalPage) {
+		currentPage = totalPage;
+	}
+	
+	// 한 페이지의 첫과 끝 게시물 번호
+	int start = (currentPage - 1) * numPerPage + 1;
+	int end = currentPage * numPerPage;
+	hMap.put("start", start);
+	hMap.put("end", end);
+	
+	String param="";
+	// 파람 생성
+	if (!searchValueCategory.equals("")) {
+		param = "searchValueCategory=" + searchValueCategory;
+		param += "&searchValueWord=" + URLEncoder.encode(searchValueWord, "UTF-8");
+		param += "&type=" + type;
+	}
+	
+	// 전달할 url과 path
+	String articleUrl = cp + "/productDetail.action?pageNum=" + currentPage;
+	if (!param.equals(""))
+		articleUrl = articleUrl + "&" + param;
+	String searchUrl = "productList.action?" + param;
+	String pageIndexList = myUtil.pageIndexList(currentPage, totalPage, searchUrl);
+	String imagePath = "/gyp/sfiles/product"; // 이미지 경로
+	
+	// 정렬 타입에 따라 리스트가 달라진다
+	// 1.높은가격순 2.낮은가격순 3.조회수 0.그냥 검색
+	if (type.equals("1")) {
+		lists = dao.searchListpayup(hMap);
+	} else if (type.equals("2")) {
+		lists = dao.searchListpaydown(hMap);
+	} else if (type.equals("3")) {
+		lists = dao.searchListhit(hMap);
+	} else if (type.equals("0")) {
+		lists = dao.searchList(hMap);
+	}
+	request.setAttribute("lists", lists);
+	request.setAttribute("searchValueCategory", searchValueCategory);
+	request.setAttribute("searchValueWord", searchValueWord);
+	request.setAttribute("pageNum", pageNum);
+	request.setAttribute("dataCount", dataCount);
+	request.setAttribute("totalPage", totalPage);
+	request.setAttribute("currentPage", currentPage);
+	request.setAttribute("pageIndexList", pageIndexList);
+	request.setAttribute("imagePath", imagePath);
+	request.setAttribute("articleUrl", articleUrl);
+	
+	return "product/productList";
+	
 	}
 
 	// 제품상세 페이지
@@ -2076,164 +2060,167 @@ public class gypController {
 		return "payment/passCharge";
 	}
 	
+	
 	// 결제하기(창)
 	@RequestMapping(value="/payment.action", method = {RequestMethod.GET, RequestMethod.POST})
-	public String Payment(HttpServletRequest request, HttpSession session) throws Exception {
-		CustomInfo info = (CustomInfo)session.getAttribute("customInfo");
-		if(info==null) {//돌발적 로그아웃 대비
-			return "redirect:/login.action";
-		}
-		// 결제정보 작성을 위해 사용자 정보 불러와서 set시키기
-		CustomerDTO cusDto = dao.getCustromerDTOReadData(info);
-		
-		if(cusDto.getCusPwd()=="naver" || cusDto.getCusPwd().equals("naver")) {//네이버로 로그인한 경우
-			request.setAttribute("cusTel", null);
-			request.setAttribute("cusAddr", null);
-		} else {
-			request.setAttribute("cusTel", cusDto.getCusTel());
-			request.setAttribute("cusAddr", cusDto.getCusAddr());
-		}
-		request.setAttribute("cusId", info.getSessionId());
-		request.setAttribute("cusName", cusDto.getCusName());
-		
-		// passSelected가 null이 아니면 pass결제, null이면 상품 결제
-		String passSelected = request.getParameter("pass");
+   	public String Payment(HttpServletRequest request, HttpSession session) throws Exception {
+	   CustomInfo info = (CustomInfo)session.getAttribute("customInfo");
+	   if(info==null) {//돌발적 로그아웃 대비
+		   return "redirect:/login.action";
+	   }
+	   // 결제정보 작성을 위해 사용자 정보 불러와서 set시키기
+	   CustomerDTO cusDto = dao.getCustromerDTOReadData(info);
+      
+	   if(cusDto.getCusPwd()=="naver" || cusDto.getCusPwd().equals("naver")) {//네이버로 로그인한 경우
+		   request.setAttribute("cusTel", null);
+		   request.setAttribute("cusAddr", null);
+	   } else {
+		   request.setAttribute("cusTel", cusDto.getCusTel());
+		   request.setAttribute("cusAddr", cusDto.getCusAddr());
+	   }
+	   request.setAttribute("cusId", info.getSessionId());
+	   request.setAttribute("cusName", cusDto.getCusName());
+	   
+	   // passSelected가 null이 아니면 pass결제, null이면 상품 결제
+	   String passSelected = request.getParameter("pass");
 
-		//패스 결제하기
-		if(passSelected!=null) {
-			int passNum = Integer.parseInt(passSelected.substring(5));
-			//int finalPayVal = passNum * 5000;
-			int finalPayVal = 100; //테스트용 결제 금액
-			
-			request.setAttribute("passSelected", passSelected);
-			request.setAttribute("finalPayVal", finalPayVal);
-			return "payment/payment";
-		}
-		
-		String totPrice = request.getParameter("totPrice2"); //나중에 결제 금액 넘김
-		String[] chkNums = request.getParameterValues("cartChk"); // 배열에 선택한 cartNum값이 들어온다
-		
-		for (int i = 0; i < chkNums.length; i++) {/* System.out.println(chkNums[i]); */ }//debug array of product
-		
-		//결제할 상품 정보 리스트
-		int[] numI = null;
-		if (chkNums != null) {
-				numI = new int[chkNums.length];
-				for (int i = 0; i < chkNums.length; i++) {
-					numI[i] = Integer.parseInt(chkNums[i]);
-				}
-		}
-		
-		//상품 결제
-		List<ProductOrderDTO> listsToBuy = dao.getProductOrderList(numI,info.getSessionId());
+	   //패스 결제하기
+	   if(passSelected!=null) {
+		   int passNum = Integer.parseInt(passSelected.substring(5));
+		   //int finalPayVal = passNum * 5000;
+		   int finalPayVal = 100; //테스트용 결제 금액
+         
+		   request.setAttribute("passSelected", passSelected);
+		   request.setAttribute("finalPayVal", finalPayVal);
+		   return "payment/payment";
+	   }
+      
+	   String totPrice = request.getParameter("totPrice2"); //나중에 결제 금액 넘김
+	   String[] chkNums = request.getParameterValues("cartChk"); // 배열에 선택한 cartNum값이 들어온다
+      
+	   for (int i = 0; i < chkNums.length; i++) { System.out.println(chkNums[i]); }//debug array of product
+      
+	   //결제할 상품 정보 리스트
+	   int[] numI = null;
+	   if (chkNums != null) {
+		   numI = new int[chkNums.length];
+		   for (int i = 0; i < chkNums.length; i++) {
+			   numI[i] = Integer.parseInt(chkNums[i]);
+		   }
+	   }
+      
+	   //상품 결제
+	   List<ProductOrderDTO> listsToBuy = dao.getProductOrderList(numI,info.getSessionId());
 
-//				Iterator<ProductDTO> itr = lists.iterator();
-//				while (itr.hasNext()) {
-//				    System.out.print(itr.next().getProductName() + " ");
-//				}
-		
-		String imagePath = "/gyp/sfiles/product"; // 이미지 경로
+//            Iterator<ProductDTO> itr = lists.iterator();
+//            while (itr.hasNext()) {
+//                System.out.print(itr.next().getProductName() + " ");
+//            }
+      
+	   String imagePath = "/gyp/sfiles/product"; // 이미지 경로
 
-		request.setAttribute("listsToBuy", listsToBuy);
-		request.setAttribute("finalPayVal", totPrice);
-		request.setAttribute("imagePath", imagePath);
-		
-		return "payment/payment";
-	}
+	   request.setAttribute("listsToBuy", listsToBuy);
+	   request.setAttribute("finalPayVal", totPrice);
+	   request.setAttribute("imagePath", imagePath);
+      
+	   return "payment/payment";
+   }
+   
+   	// 실제 결제
+   	@RequestMapping(value="/actualPayment.action", method=RequestMethod.POST)
+   	public void actualPayment(HttpServletRequest request, HttpSession session) throws Exception {
+      
+   		CustomInfo info = (CustomInfo)session.getAttribute("customInfo");
+   		String cusId = info.getSessionId();
+      
+   		String params = request.getParameter("params");
+   		System.out.println(params);
+      
+   		String item = params.substring(params.indexOf("item=")+"item=".length(),params.indexOf("&"));
+      
+   		// pass 결제시
+   		if(item.startsWith("pass_")) {
+         
+   			int chargePass = Integer.parseInt(item.substring(5)); // "pass_n"에서 n만 파싱해서 사용
+   			String payMethod = params.substring(params.indexOf("payMethod=")+"payMethod=".length());
+         
+   			ChargeDTO chargeDto = new ChargeDTO();
+         
+   			//chargeDTO num데이터 타입 string에서 int로 수정함
+   			int chargeNumMax = dao.getChargeNumMax();
+   			chargeDto.setChargeNum(chargeNumMax+1);
+   			chargeDto.setCusId(cusId);
+   			chargeDto.setChargePass(chargePass);
+   			chargeDto.setChargeType(payMethod);
+         
+   			//charge테이블에 추가하기
+   			dao.insertChargeData(chargeDto);
+         
+   			//사용자 pass 수 수정
+   			int cusPassLeft = dao.getCusPassLeft(cusId);
+
+   			cusPassLeft += chargePass;
+   			Map<String, Object> hMap = new HashMap<String, Object>();
+   			hMap.put("cusId",cusId);
+   			hMap.put("cusPass",cusPassLeft);
+         
+   			//charge 테이블 업데이트
+   			dao.updateCusPass(hMap);
+
+   			System.out.println("패스 결제 완료");
+   			return;
+   		}      
+      
+   		// 상품 결제시 -> item이 pass_로 시작하지 않으면
+      
+   		//사용자 pass 수 수정
+   		int cusPassLeft = dao.getCusPassLeft(cusId);
+
+   		int proPayNumMax = dao.getProPayNumMax();
+   		System.out.println("proPayNumMax: " + proPayNumMax);
+
+   		String amount = params.substring(params.indexOf("amount=")+"amount=".length(),params.indexOf("&",params.indexOf("amount=")));
+   		//String payMethod = params.substring(params.indexOf("payMethod=")+"payMethod=".length(),params.indexOf("&",params.indexOf("payMethod=")));
+   		//String receiver_name = params.substring(params.indexOf("receiver_name=")+"receiver_name=".length(),params.indexOf("&",params.indexOf("receiver_name=")));
+   		String receiver_tel = params.substring(params.indexOf("receiver_tel=")+"receiver_tel=".length(),params.indexOf("&",params.indexOf("receiver_tel=")));
+   		String receiver_addr = params.substring(params.indexOf("receiver_addr=")+"receiver_addr=".length(),params.indexOf("&",params.indexOf("receiver_addr=")));
+   		String productIdArr = params.substring(params.indexOf("productIdArr=")+"productIdArr=".length(),params.indexOf("&",params.indexOf("productIdArr=")));
+   		String productCountArr = params.substring(params.indexOf("productCountArr=")+"productCountArr=".length());
+      
+   		// productPay테이블에 삽입
+   		ProductPayDTO ppdto = new ProductPayDTO();
+   		ppdto.setProPayNum(proPayNumMax+1);
+   		ppdto.setCusId(cusId);
+   		ppdto.setPriceTotal(Integer.parseInt(amount));
+   		ppdto.setProPayAddr(receiver_addr);
+   		ppdto.setProPayTel(receiver_tel);
+   		dao.insertProductPay(ppdto);   // 삽입
+      
+   		// productPayDetail테이블에 삽입
+   		int proPayDetailNumMax = dao.getProPayDetailNumMax();
+   		
+   		List<String> productIdList = new ArrayList<String>(Arrays.asList(productIdArr.split(",")));
+   		List<String> productCountList = new ArrayList<String>(Arrays.asList(productCountArr.split(",")));
+      
+   		for (int i = 0; i < productIdList.size(); i++) {
+         
+   			ProductPayDetailDTO ppddto = new ProductPayDetailDTO();
+   			ppddto.setProPayDetailNum(proPayDetailNumMax+(i+1));
+   			ppddto.setProductId(productIdList.get(i));
+   			ppddto.setProPayNum(ppdto.getProPayNum());
+   			ppddto.setCount(Integer.parseInt(productCountList.get(i)));
+   			dao.insertProductPayDetail(ppddto);
+         
+   		}
+
+   		//장바구니에서 삭제
+   		dao.deleteFromCartAfterPayment(productIdList,cusId);
+      
+   		System.out.println("상품 결제 완료");
+   		return;
+   	}
 	
-	// 실제 결제
-	@RequestMapping(value="/actualPayment.action", method=RequestMethod.POST)
-	public void actualPayment(HttpServletRequest request, HttpSession session) throws Exception {
-		
-		CustomInfo info = (CustomInfo)session.getAttribute("customInfo");
-		String cusId = info.getSessionId();
-		
-		String params = request.getParameter("params");
-		/* System.out.println(params); */
-		
-		String item = params.substring(params.indexOf("item=")+"item=".length(),params.indexOf("&"));
-		
-		// pass 결제시
-		if(item.startsWith("pass_")) {
-			
-			int chargePass = Integer.parseInt(item.substring(5)); // "pass_n"에서 n만 파싱해서 사용
-			String payMethod = params.substring(params.indexOf("payMethod=")+"payMethod=".length());
-			
-			ChargeDTO chargeDto = new ChargeDTO();
-			
-			//chargeDTO num데이터 타입 string에서 int로 수정함
-			int chargeNumMax = dao.getChargeNumMax();
-			chargeDto.setChargeNum(chargeNumMax+1);
-			chargeDto.setCusId(cusId);
-			chargeDto.setChargePass(chargePass);
-			chargeDto.setChargeType(payMethod);
-			
-			//charge테이블에 추가하기
-			dao.insertChargeData(chargeDto);
-			
-			//사용자 pass 수 수정
-			int cusPassLeft = dao.getCusPassLeft(cusId);
-
-			cusPassLeft += chargePass;
-			Map<String, Object> hMap = new HashMap<String, Object>();
-			hMap.put("cusId",cusId);
-			hMap.put("cusPass",cusPassLeft);
-			
-			//charge 테이블 업데이트
-			dao.updateCusPass(hMap);
-
-			/* System.out.println("패스 결제 완료"); */
-			return;
-		}		
-		
-		// 상품 결제시 -> item이 pass_로 시작하지 않으면
-		
-		//사용자 pass 수 수정
-		int cusPassLeft = dao.getCusPassLeft(cusId);
-
-		int proPayNumMax = dao.getProPayNumMax();
-		/* System.out.println("proPayNumMax: " + proPayNumMax); */
-
-		String amount = params.substring(params.indexOf("amount=")+"amount=".length(),params.indexOf("&",params.indexOf("amount=")));
-		//String payMethod = params.substring(params.indexOf("payMethod=")+"payMethod=".length(),params.indexOf("&",params.indexOf("payMethod=")));
-		//String receiver_name = params.substring(params.indexOf("receiver_name=")+"receiver_name=".length(),params.indexOf("&",params.indexOf("receiver_name=")));
-		String receiver_tel = params.substring(params.indexOf("receiver_tel=")+"receiver_tel=".length(),params.indexOf("&",params.indexOf("receiver_tel=")));
-		String receiver_addr = params.substring(params.indexOf("receiver_addr=")+"receiver_addr=".length(),params.indexOf("&",params.indexOf("receiver_addr=")));
-		String productIdArr = params.substring(params.indexOf("productIdArr=")+"productIdArr=".length(),params.indexOf("&",params.indexOf("productIdArr=")));
-		String productCountArr = params.substring(params.indexOf("productCountArr=")+"productCountArr=".length());
-		
-		// productPay테이블에 삽입
-		ProductPayDTO ppdto = new ProductPayDTO();
-		ppdto.setProPayNum(proPayNumMax+1);
-		ppdto.setCusId(cusId);
-		ppdto.setPriceTotal(Integer.parseInt(amount));
-		ppdto.setProPayAddr(receiver_addr);
-		ppdto.setProPayTel(receiver_tel);
-		dao.insertProductPay(ppdto);	// 삽입
-		
-		// productPayDetail테이블에 삽입
-		int proPayDetailNumMax = dao.getProPayDetailNumMax();
-		
-		List<String> productIdList = new ArrayList<String>(Arrays.asList(productIdArr.split(",")));
-		List<String> productCountList = new ArrayList<String>(Arrays.asList(productCountArr.split(",")));
-		
-		for (int i = 0; i < productIdList.size(); i++) {
-			
-			ProductPayDetailDTO ppddto = new ProductPayDetailDTO();
-			ppddto.setProPayDetailNum(proPayDetailNumMax+(i+1));
-			ppddto.setProductId(productIdList.get(i));
-			ppddto.setProPayNum(ppdto.getProPayNum());
-			ppddto.setCount(Integer.parseInt(productCountList.get(i)));
-			dao.insertProductPayDetail(ppddto);
-			
-		}
-
-		//장바구니에서 삭제
-		dao.deleteFromCartAfterPayment(productIdList,cusId);
-		
-		/* System.out.println("상품 결제 완료"); */
-		return;
-	}
+	
 	
 	// 결제 완료 (창)
 	@RequestMapping(value="/payment_ok.action")

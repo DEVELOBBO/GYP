@@ -98,7 +98,8 @@ function qnaTypeCheck(){
 	<form method="post" action="/gyp/qnaCreated.action" name="myForm">
 
 			<div class="form-group">
-				번호<input type="text" name="qnaNum" class="form-control" value="${dto.qnaNum }" disabled="disabled"/>
+				<font style="font-size: " >번호</font>
+				<input type="text" name="qnaNum" class="form-control" value="${dto.qnaNum }" disabled="disabled"/>
 			</div>
 			
 			<c:if test="${mode=='insert'}">	
