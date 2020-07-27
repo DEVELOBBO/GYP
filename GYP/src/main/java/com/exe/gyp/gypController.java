@@ -313,7 +313,10 @@ public class gypController {
 		String cusId = request.getParameter("cusId");
 		String custel = request.getParameter("custel");
 		CustomerDTO dto = dao.getLoginReadData(cusId);
-
+		
+		System.out.println(cusId);
+		System.out.println(custel);
+		
 		if (dto == null || !dto.getCusTel().equals(custel)) { // 아이디가 틀리거나 전화번호가 틀린경우
 			request.setAttribute("message", "아이디 또는 전화번호가 일치하지 않습니다");
 			return "login/searchpw";
@@ -1199,7 +1202,8 @@ public class gypController {
 		dao.bookdeleteData(bookNum);
 		return "redirect:/gymMyPage.action";
 	}
-	//////////////////
+	
+	////////////////
 	// 상품 리스트
 	@RequestMapping(value = "/productList.action", method = { RequestMethod.GET, RequestMethod.POST })
 	public String productList(HttpServletRequest request) throws Exception {
@@ -2651,7 +2655,7 @@ public class gypController {
 		int numPerPage = 6;
 		
 		// Q&A 데이터 갯수 가져오기
-		int dataCount = dao.getQnaDataCount(searchKey,searchValue);
+		int dataCount = dao.getQnaDataCount(searchKey,searchValue,searchValue2);
 		
 		if(pageNum != null)
 			currentPage = Integer.parseInt(pageNum);
@@ -3267,7 +3271,9 @@ public class gypController {
 			sessionId = customInfo.getSessionId();
 			loginType = customInfo.getLoginType();
 			CustomerDTO dto = dao.getCustomerGoo(sessionId);
-			cusAddrGoo = dto.getCusAddr();
+			if(dto != null) {
+	               cusAddrGoo = dto.getCusAddr();
+	            }
 		}
 		String searchKey = "gymName";
 		String searchValue = "";

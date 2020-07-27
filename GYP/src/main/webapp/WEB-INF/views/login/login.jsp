@@ -74,8 +74,8 @@ String cp = request.getContextPath();
 					<div class="form-group mb-0">
 						<input type="password" class="form-control" name="sessionpwd" id="loginPwd"
 							placeholder="패스워드" style="width: 400px;">
-						<font color="red"><b>${message }</b></font>
 					</div>
+					<div style="text-align: center;"><br><font color="red"><b>${message }</b></font></div>
 					<%-- <div id="naver_id_login" class="btn mt-50" style="padding: 0;"><img alt="네이버 로그인" src="<%=cp %>/resources/img/core-img/네이버 아이디로 로그인_완성형_Green.PNG" style="width: 200px;"/></div> --%>
 					
 					 <%
@@ -102,10 +102,13 @@ String cp = request.getContextPath();
 				<br>
 				<center>
 					<table style="width: 400px" >
-					<tr style="text-align: center; color: gray;">
-						<td width="33.33%"><a href="<%=cp %>/create.action">회원가입</a></td>
-						<td width="33.33%"><a href="<%=cp%>/searchid.action">아이디 찾기</a></td>
-						<td width="33.33%"><a href="<%=cp%>/searchpw.action">비밀번호 찾기</a></td>
+					<tr style="text-align: center;">
+						<td width="33.33%"><a href="<%=cp %>/create.action">
+						<font style="color: gray;">회원가입</font></a></td>
+						<td width="33.33%"><a href="<%=cp%>/searchid.action">
+						<font style="color: gray;">아이디 찾기</font></a></td>
+						<td width="33.33%"><a href="<%=cp%>/searchpw.action">
+						<font style="color: gray;">비밀번호 찾기</font></a></td>
 					</tr>
 					</table>
 				</center>

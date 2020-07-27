@@ -35,8 +35,8 @@
 					<a href="<%=cp%>/gymJjim.action?gymId=${dto.gymId}" target="_blank">
 					<img alt="찜하기" src="/gyp/resources/img/core-img/mapLikeIcon.JPG" style="width: 30px">&nbsp;
 					<font style="color:#F29DAA; vertical-align:-2px;">찜하기</font></a>
-				</c:if>
 					&nbsp;&nbsp;&nbsp;&nbsp;
+				</c:if>
 					<a href="<%=cp%>/gymDetail.action?gymId=${dto.gymId}" target="_blank">
 					<img alt="예약하기" src="/gyp/resources/img/core-img/mpaCashIcon.JPG" style="width: 30px">&nbsp;
 					<font style="color:#74BE5F; vertical-align:-2px;">체육관 상세페이지</font></a>

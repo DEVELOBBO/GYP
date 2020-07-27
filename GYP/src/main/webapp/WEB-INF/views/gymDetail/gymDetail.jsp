@@ -45,20 +45,20 @@
 	            <!-- 체육관 이름 + 타입 -->
 	            <div class="row" id="gymDetailTitle">
 		            <a href="<%=cp %>/gymDetail.action?gymId=${gymDto.gymId }" class="gymName-title">
-		            <span>${gymDto.gymName }</span></a>
-		            &nbsp;<span class="gymName-type">&gt;&gt; ${gymDto.gymType }</span>
+		            <span style="height: 60px; vertical-align: bottom;">
+		            &nbsp;${gymDto.gymName }</span></a>
+		            <span class="gymName-type" style="height: 60px; font-weight:bold; vertical-align: bottom;">
+		            &nbsp;&nbsp;&nbsp;&gt;&gt; ${gymDto.gymType }</span>
 	            </div>
 	            <br/>
-	            <hr style="width: 100%; margin-left: 0px; text-align: left,border-bottom:0px;">
 	            <!-- 체육관 프로그램 내용 -->
-	            <div class="col-12">
+	            <div class="col-12" style="padding: 0;">
 		            <div class="single-blog-post">
-		              	<div id="gymDetailGymProgram">
-			            	${gymDto.gymProgram } 
+		              	<div id="gymDetailGymProgram" style="font-size: 12pt; color: #A6A6A6;">
+			            	[프로그램 설명]&nbsp;&nbsp;${gymDto.gymProgram }
 		                </div>
 	                </div>
 	            </div>
-	            <div class="col-12 col-md-4">&nbsp;</div>
             </div>
             
             <hr style="width: 100%; margin-left: 0px; text-align: left,border-bottom:0px;">
@@ -71,15 +71,15 @@
                         <div class="row">
 
                             <!-- 체육관 트레이너 -->
-                            <div class="col-12">
+                            <div class="col-12" style="height: 450;">
                                 <div class="single-blog-post mb-100 gymDetailHeadLine">
                                     <!-- Post Title -->
-                                    <a href="#" class="post-title">체육관 트레이너</a>
-                                    
+									<a href="#" class="post-title" style="font-size:20pt;">체육관 트레이너</a>                                    
+                                    <div style="height: 10px;"></div>
                                     <!-- 체육관 트레이너 목록 -->
 					                <div class="row">
 						                <c:forEach var="i" begin="0" end="${gymTrainerPic.size()-1 }">
-							                <div class="col-3">
+							                <div class="col-3" style="height:300px; ">
 									           <div class="single-teachers-area mb-100">
 							                        <!-- Bg Gradients -->
 							                        <div class="teachers-bg-gradients"></div>
@@ -98,15 +98,11 @@
 					                </div>
                                 </div>
                             </div>
-							<hr style="width: 100%; margin-left: 0px; text-align: left,border-bottom:0px;">
-							
+							<!-- <hr style="width: 100%; margin-left: 0px; text-align: left,border-bottom:0px;"> -->
+							<div style="height: 50px;"></div>
                             <!-- 체육관 리뷰 -->
                             <div class="col-12">
                                 <div class="single-blog-post mb-100 gymDetailHeadLine">
-                                    <!-- Post Title -->
-                                    <a href="#" class="post-title">체육관 리뷰</a>
-                                    <br>
-                                    
                                     <!-- ajax를 이용한 리뷰 리스트 및 리뷰 작성 : reviewList.jsp 참조 -->
                                     <span id="listData" style="display:none"></span>
 									

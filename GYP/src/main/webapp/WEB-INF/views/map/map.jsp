@@ -58,6 +58,7 @@ String cp = request.getContextPath();
 			      <input type="hidden" id="tempSearchValue" value="${tempSearchValue}"/>
 			      <input type="hidden" id="cusAddrGoo" value="${cusAddrGoo}"/>
 			      <input type="hidden" id="sessionId" value="${sessionId}"/>
+			      <input type="hidden" id="loginType" value="${loginType}"/>
 		      </div>
 		      <!-- 검색어 제시 -->
 		      <div id="suggestDiv" class="suggest">
@@ -144,7 +145,10 @@ String cp = request.getContextPath();
    
    function searchMap(mode) {
       var searchForm = document.searchForm;
-      var sessionId = $("#sessionId").val();
+      if(sessionId==""||loginType=="gym"||sessionId=="admin"){
+          alert("일반 회원 로그인이 필요합니다!");
+          return;
+       }
       var searchValue = $("#searchValue").val();
       var loginType = $("#loginType").val();
       if(mode=='send'){

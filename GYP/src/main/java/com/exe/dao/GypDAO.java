@@ -605,12 +605,14 @@ private SqlSessionTemplate sessionTemplate;
 	}
 	
 	// Q&A 데이터 갯수 가져오기
-	public int getQnaDataCount(String searchKey,String searchValue){
-		HashMap<String,Object> params = new HashMap<String,Object>();
-		params.put("searchKey", searchKey);
-		params.put("searchValue", searchValue);
-		int result = sessionTemplate.selectOne("qna.getDataCount",params);
-		return result;
+	public int getQnaDataCount(String searchKey,String searchValue,String
+			searchValue2){
+			HashMap<String,Object> params = new HashMap<String,Object>();
+			params.put("searchKey", searchKey);
+			params.put("searchValue", searchValue);
+			params.put("searchValue2", searchValue2);
+			int result = sessionTemplate.selectOne("qna.getDataCount",params);
+			return result;
 	}
 
 	//orderNo 정렬

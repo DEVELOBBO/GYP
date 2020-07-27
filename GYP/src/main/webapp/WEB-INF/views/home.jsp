@@ -71,19 +71,22 @@
 	      <c:forEach var="productDTO" items="${productRecommendLists }">
 		        <div class="single-price-table mb-100" style="width: 282px; display: inline-block;">
 		             <div class="price-table-content">
-		             	 <!-- image -->
-		             	 <img src="/gyp/sfiles/product/${productDTO.productImg}" alt="${productDTO.productName }"
+		             	<!-- image -->
+		             	<img src="/gyp/sfiles/product/${productDTO.productImg}" alt="${productDTO.productName }"
 		             	 	style="width: 282px;">
-		                 <!-- price -->
-		                 <h4 class="price"><span>${productDTO.productId }(조회수: ${productDTO.productHit })</span></h4>
-		                 <h6>${productDTO.productName }</h6>
-		                 <!-- Price Data -->
-		                 <ul class="price-data">
-		                     <li><i class="fa fa-circle" aria-hidden="true"></i> &#8361;${productDTO.productPrice }</li>
-		                     <li><i class="fa fa-circle" aria-hidden="true"></i>${productDTO.productContent }</li>
-		                 </ul>
-		                 <!-- btn -->
-		                 <a href="/gyp/productDetail.action?productId=${productDTO.productId }" class="btn fitness-btn mt-30">자세히 보기</a>
+	             	 	<!-- 여백 -->
+	             	 	<div style="height: 10px;"></div>
+		                <!-- price -->
+		                <h4 class="price"><span>${productDTO.productId }(조회수: ${productDTO.productHit })</span></h4>
+		                <!-- Name -->
+		                <h5>${productDTO.productName }</h5>
+		                <!-- Price Data -->
+		                <ul class="price-data">
+		                    <li><i class="fa fa-circle" aria-hidden="true"></i> &#8361;${productDTO.productPrice }</li>
+		                    <li><i class="fa fa-circle" aria-hidden="true"></i>${productDTO.productContent }</li>
+		                </ul>
+		                <!-- btn -->
+		                <a href="/gyp/productDetail.action?productId=${productDTO.productId }" class="btn fitness-btn mt-30">자세히 보기</a>
 		             </div>
 		         </div>
 	      </c:forEach>

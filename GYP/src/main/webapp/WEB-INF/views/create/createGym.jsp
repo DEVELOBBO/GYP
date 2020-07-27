@@ -276,14 +276,15 @@ GymDTO dto = (GymDTO)request.getAttribute("dto");
 		
 		
 		 */
-
-		if (!cc1.test(f.gymId.value)) {
-
-			alert('아이디 영문소문자/숫자 4~16자 이내로 입력하세요.');
-
-			f.gymId.focus();
-
-			return false;
+		if (f.mode.value != 'updated') {
+			if (!cc1.test(f.gymId.value)) {
+	
+				alert('아이디 영문소문자/숫자 4~16자 이내로 입력하세요.');
+	
+				f.gymId.focus();
+	
+				return false;
+			}
 		}
 
 		if (f.mode.value != 'updated') {
@@ -304,14 +305,16 @@ GymDTO dto = (GymDTO)request.getAttribute("dto");
 			f.gymName.focus();
 			return;
 		}
-
-		if (!cc2.test(f.gymPwd.value)) {
-
-			alert('패스워드 영문 대소문자/숫자 4~16자 이내로 입력하세요.');
-
-			f.gymPwd.focus();
-
-			return false;
+	
+		if (f.mode.value != 'updated') {
+			if (!cc2.test(f.gymPwd.value)) {
+	
+				alert('패스워드 영문 대소문자/숫자 4~16자 이내로 입력하세요.');
+	
+				f.gymPwd.focus();
+	
+				return false;
+			}
 		}
 
 		if (!f.gymPwd2.value) {
@@ -356,82 +359,84 @@ GymDTO dto = (GymDTO)request.getAttribute("dto");
 			f.gymType.focus();
 			return;
 		}
-
-		//트레이너명,트레이너사진 업로드 유효성 검사! , 최소 1명이상 등록하라고 alert띄움
-		if (f.gymTrainer1.value != "" && uploads[0].value == "") {
-			alert("1번째 트레이너 사진을 입력해주세요!");
-			f.gymTrainer1.focus();
-			return;
-		}
-		if (f.gymTrainer1.value == "" && uploads[0].value != "") {
-			alert("1번째 트레이너명을 입력하세요 (최소1명 이상).");
-			f.gymTrainer1.focus();
-			return;
-		}
-		if (f.gymTrainer2.value != "" && uploads[1].value == "") {
-			alert("2번째 트레이너 사진을 입력해주세요!");
-			f.gymTrainer2.focus();
-			return;
-		}
-		if (f.gymTrainer2.value == "" && uploads[1].value != "") {
-			alert("2번째 트레이너명을 입력하세요 (최소1명 이상).");
-			f.gymTrainer2.focus();
-			return;
-		}
-		if (f.gymTrainer3.value != "" && uploads[2].value == "") {
-			alert("3번째 트레이너 사진을 입력해주세요!");
-			f.gymTrainer3.focus();
-			return;
-		}
-		if (f.gymTrainer3.value == "" && uploads[2].value != "") {
-			alert("3번째트레이너명을 입력하세요 (최소1명 이상).");
-			f.gymTrainer3.focus();
-			return;
-		}
-		if (f.gymTrainer4.value != "" && uploads[3].value == "") {
-			alert("4번째 트레이너 사진을 입력해주세요!");
-			f.gymTrainer4.focus();
-			return;
-		}
-		if (f.gymTrainer4.value == "" && uploads[3].value != "") {
-			alert("4번째 트레이너명을 입력하세요 (최소1명 이상).");
-			f.gymTrainer4.focus();
-			return;
-		}
-
-		if (!f.gymTrainer1.value) {
-			alert("1번째 트레이너명을 입력하세요 (최소1명 이상).");
-			f.gymTrainer1.focus();
-			return;
-		}
-
-		//체육관 사진등록 제약조건 (최소1장이상)
-		if (uploads2[0].value == "") {
-			alert("첫번째 체육관 사진등록을 해주세요 (최소 1장이상)");
-			f.uploads2[0].focus();
-			return;
-		}
-
-		if (!f.gymProgram.value) {
-			alert("프로그램 내용을 입력하세요 .");
-			f.gymProgram.focus();
-			return;
-		}
-
-		if (f.gymFacility[0].checked == false
-				&& f.gymFacility[1].checked == false
-				&& f.gymFacility[2].checked == false) {
-			alert("이용가능시설을 체크해주세요");
-			return false;
-
-		}
+	
 		if (f.mode.value != 'updated') {
-			if (!f.check.checked) {
-				alert('약관에 동의해주세요');
+			//트레이너명,트레이너사진 업로드 유효성 검사! , 최소 1명이상 등록하라고 alert띄움
+			if (f.gymTrainer1.value != "" && uploads[0].value == "") {
+				alert("1번째 트레이너 사진을 입력해주세요!");
+				f.gymTrainer1.focus();
+				return;
+			}
+			if (f.gymTrainer1.value == "" && uploads[0].value != "") {
+				alert("1번째 트레이너명을 입력하세요 (최소1명 이상).");
+				f.gymTrainer1.focus();
+				return;
+			}
+			if (f.gymTrainer2.value != "" && uploads[1].value == "") {
+				alert("2번째 트레이너 사진을 입력해주세요!");
+				f.gymTrainer2.focus();
+				return;
+			}
+			if (f.gymTrainer2.value == "" && uploads[1].value != "") {
+				alert("2번째 트레이너명을 입력하세요 (최소1명 이상).");
+				f.gymTrainer2.focus();
+				return;
+			}
+			if (f.gymTrainer3.value != "" && uploads[2].value == "") {
+				alert("3번째 트레이너 사진을 입력해주세요!");
+				f.gymTrainer3.focus();
+				return;
+			}
+			if (f.gymTrainer3.value == "" && uploads[2].value != "") {
+				alert("3번째트레이너명을 입력하세요 (최소1명 이상).");
+				f.gymTrainer3.focus();
+				return;
+			}
+			if (f.gymTrainer4.value != "" && uploads[3].value == "") {
+				alert("4번째 트레이너 사진을 입력해주세요!");
+				f.gymTrainer4.focus();
+				return;
+			}
+			if (f.gymTrainer4.value == "" && uploads[3].value != "") {
+				alert("4번째 트레이너명을 입력하세요 (최소1명 이상).");
+				f.gymTrainer4.focus();
+				return;
+			}
+	
+			if (!f.gymTrainer1.value) {
+				alert("1번째 트레이너명을 입력하세요 (최소1명 이상).");
+				f.gymTrainer1.focus();
+				return;
+			}
+	
+			//체육관 사진등록 제약조건 (최소1장이상)
+			if (uploads2[0].value == "") {
+				alert("첫번째 체육관 사진등록을 해주세요 (최소 1장이상)");
+				f.uploads2[0].focus();
+				return;
+			}
+	
+			if (!f.gymProgram.value) {
+				alert("프로그램 내용을 입력하세요 .");
+				f.gymProgram.focus();
+				return;
+			}
+	
+			if (f.gymFacility[0].checked == false
+					&& f.gymFacility[1].checked == false
+					&& f.gymFacility[2].checked == false) {
+				alert("이용가능시설을 체크해주세요");
 				return false;
+	
+			}
+			if (f.mode.value != 'updated') {
+				if (!f.check.checked) {
+					alert('약관에 동의해주세요');
+					return false;
+				}
 			}
 		}
-
+		
 		if (f.mode.value == "updated") {
 			alert("체육관 회원수정이 성공적으로 완료되었습니다.");
 			f.action = "/gyp/gymUpdate_ok.action";

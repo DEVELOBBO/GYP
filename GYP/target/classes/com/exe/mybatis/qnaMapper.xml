@@ -18,7 +18,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <!-- 등록된 데이터 총 갯수 -->
 <select id="getDataCount"  resultType="int" parameterType="HashMap">
 	select nvl(count(*),0) from qna 
-	where ${searchKey} like '%' || #{searchValue} || '%'
+	where ${searchKey} like '%' || #{searchValue} || '%' and qnaTitle like '%' || #{searchValue2} || '%'
 </select>
 <!-- 리스트 나열 -->
 <select id="getLists" parameterType="HashMap" resultType="com.exe.dto.QnaDTO">

@@ -111,7 +111,7 @@ public class MyUtil_Map {
         page = currentPageSetUp + 1;
         while((page <= totalPage) && (page <= currentPageSetUp + numPerBlock)) {
            if(page == currentPage) {
-               strList = strList + "<font color='#38b143'>&nbsp;&nbsp;"+page+"&nbsp;&nbsp;</font>";
+               strList = strList + "<font color='#38b143'>&nbsp;&nbsp;"+page+"&nbsp;&nbsp;</font>&nbsp;";
            }
            else {
                strList = strList +"<a onclick='listPage(\""+page+"\",\""+searchKey+"\",\""+searchValue+"\");'>&nbsp;&nbsp;"+page+"&nbsp;&nbsp;</a>";

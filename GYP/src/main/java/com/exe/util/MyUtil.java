@@ -64,7 +64,7 @@ public class MyUtil {
 			}else{
 				
 				sb.append("<a href=\"" + listUrl + "pageNum=" +  page + "\">"
-						+ page + "</a>&nbsp;");
+						+ page + "</a>&nbsp;&nbsp;&nbsp;");
 				
 			}
 			
@@ -112,7 +112,7 @@ public class MyUtil {
         page = currentPageSetUp + 1;
         while((page <= total_page) && (page <= currentPageSetUp + numPerBlock)) {
            if(page == current_page) {
-               strList = strList + "<font color='Fuchsia'>"+page+" </font>";
+               strList = strList + "<font color='#38b143'>"+page+" </font>";
            }
            else {
                strList = strList +"<a onclick='listPage("+page+");'>"+page+"</a> ";

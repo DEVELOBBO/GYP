@@ -20,6 +20,7 @@
 <title>GYP</title>
 
 <script type="text/javascript">
+	
 	function search() {
 		
 		var f = document.myForm;
@@ -51,30 +52,33 @@
 
 
 
-	<div class="col-12 col-lg-6" style="position:relative; left:25%; top:25%">
-
-		<div class="our-newsletter-area mb-100" >
-			<div class="section-heading">
-				<h6>Fitness Gym</h6>
-				<h2>비밀번호 찾기</h2>
+	<div style="position: relative;  margin-left: auto; margin-right: auto;">
+		<div style="width:1110px!important; margin-left: auto; margin-right: auto;
+				 justify-content: center; ">
+			<div class="our-newsletter-area mb-100" style="width: 400px; margin: 0 auto;">
+				<div class="section-heading">
+				<h6 align="center">SEARCH PASSWORD</h6>
+				<h2 align="center">비밀번호 찾기</h2>
+				</div>
+	
+				<form action="" method="post" name="myForm">
+					<div class="form-group">
+						<input type="text" class="form-control" name="cusId" id="name"
+							placeholder="아이디" style="width: 400px; align-self: center;">
+					</div>
+					<div class="form-group mb-0">
+						<input type="text" class="form-control" name="custel" id="name"
+							placeholder="휴대전화" style="width: 400px; align-self: center;">
+					<div style="text-align: center;"><br><font color="red"><b>${message }</b></font></div>
+					
+					<div>
+					<button type="button" class="btn fitness-btn btn-white mt-50" style="min-width: 198px;"
+						onclick="javascript:location.href='<%=cp%>/login.action';">뒤로가기</button>
+					<button type="button" class="btn fitness-btn btn-white mt-50" style="min-width: 198px;"
+						onclick="search();">비밀번호 찾기</button>
+					</div>
+				</form>
 			</div>
-
-			<form action="" method="post" name="myForm">
-				<div class="form-group">
-					<input type="text" class="form-control" name="cusId" id="name"
-						placeholder="아이디" style="width: 400px;">
-				</div>
-				<div class="form-group mb-0">
-					<input type="text" class="form-control" name="custel" id="name"
-						placeholder="휴대전화" style="width: 400px;">
-					<font color="red"><b>${message }</b></font>
-				</div>
-				<button type="button" class="btn fitness-btn btn-white mt-50"
-					onclick="javascript:location.href='<%=cp%>/login.action';">뒤로가기</button>
-				<button type="button" class="btn fitness-btn btn-white mt-50"
-					onclick="search();">비밀번호 찾기</button>
-			</form>
-			
 		</div>
 	</div>
 	

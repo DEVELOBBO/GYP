@@ -67,12 +67,13 @@
 					<div class="form-group mb-0">
 						<input type="text" class="form-control" name="cusTel" id="name"
 							placeholder="휴대전화" style="width: 400px; align-self: center;">
-						<font color="red"><b>${message }</b></font>
 					</div>
+					<div style="text-align: center;"><br><font color="red"><b>${message }</b></font></div>
+					
 					<div>
-						<button type="button" class="btn fitness-btn btn-white mt-50"
+						<button type="button" class="btn fitness-btn btn-white mt-50" style="min-width: 198px;"
 							onclick="javascript:location.href='<%=cp%>/login.action';">뒤로가기</button>
-						<button type="button" class="btn fitness-btn btn-white mt-50"
+						<button type="button" class="btn fitness-btn btn-white mt-50" style="min-width: 198px;"
 							onclick="search();">아이디 찾기</button>
 					</div>
 				</form>
