@@ -49,6 +49,7 @@
 	<!-- 
         로그인 체크 필터
         .action 요청마다 로그인 여부 판단
+    -->
     
     <filter>
         <filter-name>loginCheckFilter</filter-name>
@@ -58,6 +59,6 @@
         <filter-name>loginCheckFilter</filter-name>
         <url-pattern>*.action</url-pattern>
     </filter-mapping>
-	 -->
+	 
 	
 </web-app>

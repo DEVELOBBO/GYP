@@ -27,49 +27,38 @@ public class LoginCheckFilter implements Filter {
 			throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) resp;
-		boolean isRedirect = false;
         String requestURI = request.getRequestURI();
         CustomInfo dto = null;
         dto = (CustomInfo) request.getSession().getAttribute("customInfo");
-        
-        //전체 필터
-        if(requestURI.equals("/gyp/customerUpdate_ok")||
-        	requestURI.equals("/gyp/customerDeleted_ok")) {
-        	//요청 URI가 /gyp/customerUpdate_ok 혹은 /gyp/customerDeleted_ok가 아닐 때
-        	isRedirect = true;
-        }
-        
+        System.out.println(requestURI);
+        System.out.println(dto);
         //특정 조건 로그인 필터
         if(dto!=null) {
         	if(dto.getLoginType().equals("customer")) {
-        		if(requestURI.equals("/gyp/customerUpdate_ok")||
-                	requestURI.equals("/gyp/customerDeleted_ok")){
+        		if(false){
                     //요청 URI가 /gyp/customerUpdate_ok 혹은 /gyp/customerDeleted_ok가 아닐 때
-                    isRedirect = true;
+        			return;
                 }
         	}else if(dto.getLoginType().equals("gym")) {
-        		if(requestURI.equals("/gyp/customerUpdate_ok")||
-                	requestURI.equals("/gyp/customerDeleted_ok")){
-                    //요청 URI가 /gyp/customerUpdate_ok 혹은 /gyp/customerDeleted_ok가 아닐 때
-                    isRedirect = true;
+        		if(requestURI.equals("/gyp/gymJjim")){
+        			response.sendRedirect("/gymMyPage");
+        			return;
                 }
         	}else if(dto.getSessionId().equals("admin")) {
-        		if(requestURI.equals("/gyp/customerUpdate_ok")||
-        			requestURI.equals("/gyp/customerDeleted_ok")){
+        		if(false){
                     //요청 URI가 /gyp/customerUpdate_ok 혹은 /gyp/customerDeleted_ok가 아닐 때
-                    isRedirect = true;
+        			return;
                 }
         	}
+        //전체 필터
+        }else if(requestURI.equals("/gyp/faceLink.action")) {
+        	System.out.println("전체필터 작동");
+        	response.sendRedirect("/gyp/login.action");
+        	return;
         }
-        
-        
-        
-        if(isRedirect == true){
-            req.getRequestDispatcher("/login.action").forward(req, resp);            
-        } else {
-            chain.doFilter(req, resp);
-        }
-        
+       
+        chain.doFilter(req, resp);
+       
 	}
 
 	//필터가 소멸하면서 실행될 메소드

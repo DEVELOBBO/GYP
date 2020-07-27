@@ -3262,6 +3262,14 @@ public class gypController {
 	@RequestMapping(value = "/mapSearchList.action", method = { RequestMethod.GET, RequestMethod.POST })
 	public String mapSearchList(HttpServletRequest req) throws Exception {
 		
+		CustomInfo customInfo = null;
+		String loginType = "";
+		HttpSession httpSession = req.getSession(true);		
+		if(httpSession.getAttribute("customInfo")!=null) {
+			customInfo = (CustomInfo)httpSession.getAttribute("customInfo");
+			loginType = customInfo.getLoginType();
+		}
+		
 		String cp = req.getContextPath();
 
 		String searchGymAddr = req.getParameter("searchGymAddr");
@@ -3318,6 +3326,7 @@ public class gypController {
 		String searchGymAddrUrl = cp + "/map.action?searchGymAddr=";
 		
 		
+		req.setAttribute("loginType", loginType);
 		req.setAttribute("searchGymAddr", searchGymAddr);
 		req.setAttribute("lists", lists);
 		req.setAttribute("ajaxPageIndexList", ajaxPageIndexList);
@@ -3339,10 +3348,12 @@ public class gypController {
 	//지도만 불러오기 (뷰로 이동) (검색결과가 있을때)
 	@RequestMapping(value = "/mapReload.action", method = {RequestMethod.POST })
 	public String mapReload(HttpServletRequest req) throws Exception {
+		CustomInfo customInfo = null;
 		String sessionId = "";
 		HttpSession httpSession = req.getSession(true);		
-		if(httpSession.getAttribute("sessionId")!=null) {
-			sessionId = (String)httpSession.getAttribute("sessionId");
+		if(httpSession.getAttribute("customInfo")!=null) {
+			customInfo = (CustomInfo)httpSession.getAttribute("customInfo");
+			sessionId = customInfo.getSessionId();
 		}
 		String searchKey = req.getParameter("searchKey");
 		String searchValue = req.getParameter("searchValue");
@@ -3372,7 +3383,7 @@ public class gypController {
 	}
 	
 	//검색어 제시 (자동완성)
-	@RequestMapping(value = "/map_ok.action", method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value = "/map_ok.action", method = { RequestMethod.GET, RequestMethod.POST})
 	public String map_ok(HttpServletRequest req) throws Exception {
 
 		String cp = req.getContextPath();

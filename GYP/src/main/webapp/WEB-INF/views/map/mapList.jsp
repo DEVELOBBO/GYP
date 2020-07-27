@@ -18,10 +18,12 @@
 			<dd class="">${dto.gymTel }</dd>
 			<dd class="">${dto.gymHour }</dd>
 			<dd class="">${dto.gymAddr }
-			<a href="<%=cp%>/gymJjim.action?gymId=${dto.gymId}" target="_blank">
-			<img alt="찜하기" src="/gyp/resources/img/core-img/mapLikeIcon.JPG" style="width: 30px"></a>
-			<a href="<%=cp%>/gymDetail.action?gymId=${dto.gymId}" target="_blank">
-			<img alt="예약하기" src="/gyp/resources/img/core-img/mpaCashIcon.JPG" style="width: 30px"></a>
+			<c:if test="${loginType == '' || loginType == 'customer' }">
+				<a href="<%=cp%>/gymJjim.action?gymId=${dto.gymId}" target="_blank">
+				<img alt="찜하기" src="/gyp/resources/img/core-img/mapLikeIcon.JPG" style="width: 30px"></a>
+			</c:if>
+				<a href="<%=cp%>/gymDetail.action?gymId=${dto.gymId}" target="_blank">
+				<img alt="예약하기" src="/gyp/resources/img/core-img/mpaCashIcon.JPG" style="width: 30px"></a>
 			</dd>
 		</dl>
 		</div>
