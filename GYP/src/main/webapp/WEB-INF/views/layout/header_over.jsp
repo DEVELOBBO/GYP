@@ -99,6 +99,7 @@
                                     	<li><a href="/gyp/howToUse.action">이용방법</a></li>
                                     	<li><a href="/gyp/noticeList.action">공지사항</a></li>
                                     	<li><a href="/gyp/qnaList.action">Q&A</a></li>
+                                    	<li><a href="/gyp/logout.action">로그아웃</a></li>
                                     	<li><a href="/gyp/adminHome.action">관리자페이지</a>
                                     </c:if>
                                     

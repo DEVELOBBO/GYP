@@ -3259,10 +3259,13 @@ public class gypController {
 		
 		CustomInfo customInfo = null;
 		String sessionId = "";
+		String loginType = "";
 		String cusAddrGoo = "";
 		HttpSession httpSession = req.getSession(true);		
-		if(httpSession.getAttribute("sessionId")!=null) {
-			sessionId = (String)httpSession.getAttribute("sessionId");
+		if(httpSession.getAttribute("customInfo")!=null) {
+			customInfo = (CustomInfo)httpSession.getAttribute("customInfo");
+			sessionId = customInfo.getSessionId();
+			loginType = customInfo.getLoginType();
 			CustomerDTO dto = dao.getCustomerGoo(sessionId);
 			cusAddrGoo = dto.getCusAddr();
 		}
@@ -3288,6 +3291,7 @@ public class gypController {
 		req.setAttribute("tempSearchKey", searchKey);
 		req.setAttribute("tempSearchValue", searchValue);
 		req.setAttribute("mode", "print");
+		req.setAttribute("loginType", loginType);
 		req.setAttribute("sessionId", sessionId);
 		req.setAttribute("cusAddrGoo", cusAddrGoo);
 		
@@ -3386,10 +3390,17 @@ public class gypController {
 	public String mapReload(HttpServletRequest req) throws Exception {
 		CustomInfo customInfo = null;
 		String sessionId = "";
+		String loginType = "";
+		String cusAddrGoo = "";
 		HttpSession httpSession = req.getSession(true);		
 		if(httpSession.getAttribute("customInfo")!=null) {
 			customInfo = (CustomInfo)httpSession.getAttribute("customInfo");
 			sessionId = customInfo.getSessionId();
+			loginType = customInfo.getLoginType();
+			CustomerDTO dto = dao.getCustomerGoo(sessionId);
+				if(dto != null) {
+					cusAddrGoo = dto.getCusAddr();
+				}
 		}
 		String searchKey = req.getParameter("searchKey");
 		String searchValue = req.getParameter("searchValue");
@@ -3409,6 +3420,8 @@ public class gypController {
 		req.setAttribute("searchKey", searchKey);
 		req.setAttribute("searchValue", searchValue);
 		req.setAttribute("sessionId", sessionId);
+		req.setAttribute("loginType", loginType);
+		req.setAttribute("cusAddrGoo", cusAddrGoo);
 		req.setAttribute("lists", lists);
 		req.setAttribute("tempSearchKey", searchKey);
 		req.setAttribute("tempSearchValue", searchValue);

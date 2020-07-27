@@ -146,13 +146,14 @@ String cp = request.getContextPath();
       var searchForm = document.searchForm;
       var sessionId = $("#sessionId").val();
       var searchValue = $("#searchValue").val();
+      var loginType = $("#loginType").val();
       if(mode=='send'){
          searchForm.action = "<%=cp%>/mapReload.action";
          searchForm.submit();
          return;
       }
-      if(sessionId==""){
-         alert("로그인 해라!");
+      if(sessionId==""||loginType=="gym"||sessionId=="admin"){
+          alert("일반 회원 로그인이 필요합니다!");
          return;
       }else{
          var cusAddrGoo = $("#cusAddrGoo").val(); 

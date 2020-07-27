@@ -58,27 +58,25 @@ String cp = request.getContextPath();
 	
 	
 	<div style="position: relative;  margin-left: auto; margin-right: auto;">
-		<div class="col-12 col-lg-6" 
-			 style="position:relative; margin-left: auto; margin-right: auto;">
-			<div class="our-newsletter-area mb-100" style="" >
+		<div style="width:1110px!important; margin-left: auto; margin-right: auto;
+			 justify-content: center; ">
+			<div class="our-newsletter-area mb-100" style="width: 400px; margin: 0 auto;">
 				<div class="section-heading">
-					<h6>Fitness Gym</h6>
-					<h2>로그인</h2>
+					<h6 align="center">LOGIN GYP</h6>
+					<h2 align="center">로그인</h2>
 				</div>
 	
-				<form action="" method="post" name="myForm">
+				<form action="" method="post" name="myForm" style="">
 					<div class="form-group">
 						<input type="text" class="form-control" name="sessionId" id="loginId"
-							placeholder="아이디" style="width: 400px;">
+							placeholder="아이디" style="width: 400px; align-self: center;">
 					</div>
 					<div class="form-group mb-0">
 						<input type="password" class="form-control" name="sessionpwd" id="loginPwd"
 							placeholder="패스워드" style="width: 400px;">
 						<font color="red"><b>${message }</b></font>
-						
 					</div>
 					<%-- <div id="naver_id_login" class="btn mt-50" style="padding: 0;"><img alt="네이버 로그인" src="<%=cp %>/resources/img/core-img/네이버 아이디로 로그인_완성형_Green.PNG" style="width: 200px;"/></div> --%>
-					
 					
 					 <%
 					    String clientId = "P84rJHPRvVU6zfXj1ZXD";//애플리케이션 클라이언트 아이디값";
@@ -91,22 +89,26 @@ String cp = request.getContextPath();
 					    apiURL += "&state=" + state;
 					    session.setAttribute("state", state);
 					 %>
-					  <div id="naver_id_login" class="btn mt-50" style="padding: 0;">
-					  	<a href="<%=apiURL%>"><img height="50" src="/gyp/resources/img/core-img/네이버 아이디로 로그인_완성형_Green.PNG" style="width: 200px;"/></a>
-					  </div>
+					 
+				 	<!-- 네이버 로그인 -->
+				  	<div id="naver_id_login" class="btn mt-50" style="padding: 0;">
+				  		<a href="<%=apiURL%>"><img height="50" src="/gyp/resources/img/core-img/네이버 아이디로 로그인_완성형_Green.PNG" style="width: 200px;"/></a>
+				  	</div>
 					
-					
-					<button type="button" class="btn fitness-btn btn-white mt-50"
+					<!-- 로그인 버튼 -->
+					<button type="button" class="btn fitness-btn btn-white mt-50" style="min-width: 194px;"
 						onclick="sendIt();">로그인</button>
 				</form>
 				<br>
-				<table style="width: 400px" >
-				<tr style="text-align: center">
-					<td style="padding: 10px;"><a>회원가입</a></td>
-					<td style="padding: 10px;"><a href="<%=cp%>/searchid.action">아이디 찾기</a></td>
-					<td style="padding: 10px;"><a href="<%=cp%>/searchpw.action">비밀번호 찾기</a></td>
-				</tr>
-				</table>
+				<center>
+					<table style="width: 400px" >
+					<tr style="text-align: center; color: gray;">
+						<td width="33.33%"><a href="<%=cp %>/create.action">회원가입</a></td>
+						<td width="33.33%"><a href="<%=cp%>/searchid.action">아이디 찾기</a></td>
+						<td width="33.33%"><a href="<%=cp%>/searchpw.action">비밀번호 찾기</a></td>
+					</tr>
+					</table>
+				</center>
 			</div>
 		</div>
 	</div>

@@ -50,34 +50,36 @@
 	<div style="height: 100px;"></div>
 
 
-
-	<div class="col-12 col-lg-6" style="position:relative; left:25%; top:25%";>
-
-		<div class="our-newsletter-area mb-100" >
-			<div class="section-heading">
-				<h6>Fitness Gym</h6>
-				<h2>아이디 찾기</h2>
+	<div style="position: relative;  margin-left: auto; margin-right: auto;">
+		<div style="width:1110px!important; margin-left: auto; margin-right: auto;
+				 justify-content: center; ">
+			<div class="our-newsletter-area mb-100" style="width: 400px; margin: 0 auto;">
+				<div class="section-heading">
+					<h6 align="center">SEARCH ID</h6>
+					<h2 align="center">아이디 찾기</h2>
+				</div>
+	
+				<form action="" method="post" name="myForm">
+					<div class="form-group">
+						<input type="text" class="form-control" name="cusName" id="name"
+							placeholder="이름" style="width: 400px; align-self: center;">
+					</div>
+					<div class="form-group mb-0">
+						<input type="text" class="form-control" name="cusTel" id="name"
+							placeholder="휴대전화" style="width: 400px; align-self: center;">
+						<font color="red"><b>${message }</b></font>
+					</div>
+					<div>
+						<button type="button" class="btn fitness-btn btn-white mt-50"
+							onclick="javascript:location.href='<%=cp%>/login.action';">뒤로가기</button>
+						<button type="button" class="btn fitness-btn btn-white mt-50"
+							onclick="search();">아이디 찾기</button>
+					</div>
+				</form>
+				
 			</div>
-
-			<form action="" method="post" name="myForm">
-				<div class="form-group">
-					<input type="text" class="form-control" name="cusName" id="name"
-						placeholder="이름" style="width: 400px;">
-				</div>
-				<div class="form-group mb-0">
-					<input type="text" class="form-control" name="cusTel" id="name"
-						placeholder="휴대전화" style="width: 400px;">
-					<font color="red"><b>${message }</b></font>
-				</div>
-				<button type="button" class="btn fitness-btn btn-white mt-50"
-					onclick="javascript:location.href='<%=cp%>/login.action';">뒤로가기</button>
-				<button type="button" class="btn fitness-btn btn-white mt-50"
-					onclick="search();">아이디 찾기</button>
-			</form>
-			
 		</div>
 	</div>
-	
 	
 	
 	
