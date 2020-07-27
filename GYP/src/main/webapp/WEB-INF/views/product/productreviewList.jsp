@@ -97,7 +97,7 @@
 
 <!-- 리뷰 작성 -->
 <!-- 리뷰 작성 : 회원 세션에 cusId가 올라가있으면서, 해당 페이지의 gymId의 Book 목록에 cusId가 있으면 보이게하기 -->
-<c:if test="${!empty info.sessionId }">
+<c:if test="${!empty info.sessionId && reviewaccect==1}">
    <fieldset class="ratingM">
        <input type="radio" id="star5" name="rating" value="10" /><label class = "full" for="star5" title="10점"></label>
        <input type="radio" id="star4half" name="rating" value="9" /><label class="half" for="star4half" title="9점"></label>

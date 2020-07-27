@@ -88,9 +88,6 @@ PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
 
 
 
-
-
-
 <!-- 리뷰 전체의 최댓값 : 삽입용 -->
 	<select id="getProductReviewNumMax" resultType="int">
 		select nvl(max(reNum),0) from review
@@ -116,7 +113,8 @@ PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
 <!-- 리뷰 삽입 -->
 	<insert id="insertProductReviewData" parameterType="com.exe.dto.ReviewDTO">
 		insert into review (reNum,reType,cusId,productId,star,reContent,reCreated)
-		values (#{reNum},#{reType},#{cusId},#{productId},#{star},#{reContent},sysdate)
+		select #{reNum},#{reType},#{cusId},#{productId},#{star},#{reContent},sysdate from dual
+		where not exists (select * from review where cusId = #{cusId} and productId = #{productId})
 	</insert>
 	
 <!-- 리뷰 삭제 -->
@@ -147,7 +145,39 @@ PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
 	</select>
 
 
+<!-- 상품 결제 최댓값 - ProductPay테이블 
+	<select id="getProductProPayNumMax" resultType="int">
+		select nvl(max(proPayNum),0) from productPay
+	</select>
+	-->
+<!-- 상품 결제 삽입 - ProductPay 테이블
+	<insert id="insertProductProductPay" parameterType="com.exe.dto.ProductPayDTO">
+		insert into productPay (proPayNum, cusId, proPayCreated, priceTotal, proPayAddr, proPayTel)
+		values (#{proPayNum}, #{cusId}, sysdate, #{priceTotal}, #{proPayAddr}, #{proPayTel})
+	</insert>
+ -->
 
+<!-- productpay 데이터 불러오기 -->
+<select id="getProductPayData" resultType="com.exe.dto.ProductPayDTO"> 
+	select proPayNum,cusId,proPayCreated,priceTotal,proPayAddr,proPayTel 
+	from PRODUCTPAY
+</select>
 
+<!-- productpay 데이터 불러오기 -->
+<select id="getProductPayReadData" parameterType="String" resultType="com.exe.dto.ProductPayDTO"> 
+	select proPayNum,cusId,proPayCreated,priceTotal,proPayAddr,proPayTel 
+	from PRODUCTPAY where cusId=#{cusId}
+</select>
+
+<!-- productpaydetail 데이터 불러오기 -->
+<select id="getProductPayList" parameterType="int" resultType="com.exe.dto.ProductPayDetailDTO"> 
+	select proPayDetailNum,productId,proPayNum,count
+	from PRODUCTPAYDETAIL where proPayNum=#{proPayNum}
+</select>
+
+<!-- 한 체육관의 리뷰 갯수 -->
+<select id="getProductPayDetailDataCount" parameterType="int" resultType="int">
+	select nvl(count(*),0) from PRODUCTPAYDETAIL where proPayNum=#{proPayNum}
+</select>
 
 </mapper>

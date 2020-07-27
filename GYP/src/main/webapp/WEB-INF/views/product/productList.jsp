@@ -62,14 +62,13 @@
 	<jsp:include page="/WEB-INF/views/layout/header_over.jsp" />
 	<jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
 	
-	<a href="/gyp/cart.action">바구니 바로가기</a> 
 	
 	<div class="wrapper">
 		<div class="wrapper_inner"
 			style="font-family: 'Noto Sans KR', sans-serif;">
 			<!-- Gallery -->
-			<font color="#7a7ebf">&nbsp;&nbsp;Total ${dataCount }
-				articles, ${totalPage } pages / Now page is ${currentPage }</font>
+			<font color="#7a7ebf">&nbsp;&nbsp;총 상품 ${dataCount }
+				개, ${totalPage } 페이지 / 현재 페이지 ${currentPage }</font>
 			<form action="" method="get" name="searchForm" class="form-signin">
 				<select name="searchValueCategory" class="selectField">
 					<option value="all"  <c:if test="${searchValueCategory eq 'all'}">selected</c:if>>전체</option>
@@ -96,7 +95,7 @@
 				
 				<c:if test="${!empty productType2}">
 				<!-- 헬스,필라테스,요가 검색시 -->
-				<input type="button" value=" 높은가격순"
+					<input type="button" value=" 높은가격순"
 						style="float: right; background-color: white; border: 0em; color: #7a7ebf"
 						onclick="javascript:location.href='<%=cp%>/productList.action?type=1&searchValueCategory=${searchValueCategory }&searchValueWord=${searchValueWord }&pageNum=${pageNum }';">
 					<input type="button" value=" 낮은가격순 |"
@@ -105,7 +104,7 @@
 					<input type="button" value="조회수 |"
 						style="float: right; background-color: white; border: 0em; color: #7a7ebf"
 						onclick="javascript:location.href='<%=cp%>/productList.action?type=3&searchValueCategory=${searchValueCategory }&searchValueWord=${searchValueWord }&pageNum=${pageNum }';">
-				
+					
 				</c:if>
 				
 			</form>
@@ -118,7 +117,7 @@
 					<span class="gallery_item_preview"> 
 					<a href="${articleUrl}&productId=${dto.productId}" >
 							<img alt="그림" src="${imagePath }/${dto.productImg}" width="250" height="250">
-							<h3>${dto.productId}/${dto.productName}</h3>
+							<h4>${dto.productId}/${dto.productName}</h4>
 							<p>${dto.productPrice }원/조회수${dto.productHit }</p>
 					</a>
 					</span>

@@ -23,13 +23,13 @@ import com.exe.dto.QnaDTO;
 import com.exe.dto.ReviewDTO;
 
 public class GypDAO {
-	
-private SqlSessionTemplate sessionTemplate;
-	
-	public void setSessionTemplate(SqlSessionTemplate sessionTemplate) throws Exception{
-		this.sessionTemplate = sessionTemplate; 
+
+	private SqlSessionTemplate sessionTemplate;
+
+	public void setSessionTemplate(SqlSessionTemplate sessionTemplate) throws Exception {
+		this.sessionTemplate = sessionTemplate;
 	}
-	
+
 	// *******************원도현*******************
 
 	// 일반유저 로그인
@@ -273,65 +273,92 @@ private SqlSessionTemplate sessionTemplate;
 	}
 
 	////////////////////////
-	//리뷰
-	
+	// 리뷰
+
 	// getReviewNumMax : 리뷰 전체의 최댓값 : 데이터 삽입시 필요
 	public int getProductReviewNumMax() {
-	int result = sessionTemplate.selectOne("productMapper.getProductReviewNumMax");
-	return result;
+		int result = sessionTemplate.selectOne("productMapper.getProductReviewNumMax");
+		return result;
 	}
-	
+
 	// getReviewNum : 체육관 하나에 달린 리뷰 갯수
 	public int getProductReviewNum(String productId) {
-	int result = sessionTemplate.selectOne("productMapper.getProductReviewNum", productId);
-	return result;
+		int result = sessionTemplate.selectOne("productMapper.getProductReviewNum", productId);
+		return result;
 	}
-	
+
 	// getReviewData : 체육관 하나의 전체 리뷰 리스트 받아오기
 	public List<ReviewDTO> getProductReviewList(Map<String, Object> hMap) {
-	List<ReviewDTO> reviewLists = sessionTemplate.selectList("productMapper.getProductReviewList", hMap);
-	return reviewLists;
+		List<ReviewDTO> reviewLists = sessionTemplate.selectList("productMapper.getProductReviewList", hMap);
+		return reviewLists;
 	}
-	
+
 	// insertReviewData : 리뷰 삽입
 	public void insertProductReviewData(ReviewDTO dto) {
-	sessionTemplate.insert("productMapper.insertProductReviewData", dto);
+		sessionTemplate.insert("productMapper.insertProductReviewData", dto);
 	}
-	
+
 	// deleteReviewData : 리뷰 삭제
 	public void deleteProductReviewData(int reNum) {
-	sessionTemplate.delete("productMapper.deleteProductReviewData", reNum);
+		sessionTemplate.delete("productMapper.deleteProductReviewData", reNum);
 	}
-	
+
 	// getAvgReview : 체육관 평점 평균
 	public int getProductAvgReview(String productId) {
-	int result = sessionTemplate.selectOne("productMapper.getProductAvgReview", productId);
-	return result;
+		int result = sessionTemplate.selectOne("productMapper.getProductAvgReview", productId);
+		return result;
 	}
-	
+
 	// getTimesCusReviewedGym : 체육관 리뷰 횟수 확인 : 세션의 사용자의 해당 체육관 리뷰 횟수
 	public int getTimesCusReviewedProduct(Map<String, Object> hMap) {
-	int result = sessionTemplate.selectOne("productMapper.getProductTimesCusReviewedProduct", hMap);
-	return result;
+		int result = sessionTemplate.selectOne("productMapper.getProductTimesCusReviewedProduct", hMap);
+		return result;
 	}
-	
-	//지우면안됨
+
+	// 지우면안됨
 	// getTimesCusBookedGym : 체육관 예약 횟수 확인 : 세션의 사용자의 해당 체육관 이용 횟수
 	public int getProductTimesCusBookedGym(Map<String, Object> hMap) {
 		int result = sessionTemplate.selectOne("productMapper.getTimesCusBookedGym", hMap);
 		return result;
 	}
 
-	//지우면안됨
+	// 지우면안됨
 	// getTimesCusReviewedGym : 체육관 리뷰 횟수 확인 : 세션의 사용자의 해당 체육관 리뷰 횟수
 	public int getProductTimesCusReviewedGym(Map<String, Object> hMap) {
 		int result = sessionTemplate.selectOne("productMapper.getTimesCusReviewedGym", hMap);
 		return result;
 	}
 
-	//*******************김세이*******************
+	// productpay 불러오기
+	public ProductPayDTO getProductPayData() {
+		ProductPayDTO paydto = sessionTemplate.selectOne("productMapper.getProductPayData");
+		return paydto;
+	}
+
+	// productpay 불러오기
+	public ProductPayDTO getProductPayReadData(String cusId) {
+		ProductPayDTO paydto = sessionTemplate.selectOne("productMapper.getProductPayReadData", cusId);
+		if (paydto == null) { // review 테이블 안에 없는 cusId 로 조회할경우 오류가 나기 때문에 null값으로 보내줌
+			paydto = null;
+		} 
+		return paydto;
+	}
+
+	// 상품결제 리스트
+	public List<ProductPayDetailDTO> getProductPayList(int proPayNum) {
+		List<ProductPayDetailDTO> lists = sessionTemplate.selectList("productMapper.getProductPayList", proPayNum);
+		return lists;
+	}
+
+	// productpatdetail 갯수
+	public int getProductPayDetailDataCount(int proPayNum) {
+		int result = sessionTemplate.selectOne("productMapper.getProductPayDetailDataCount", proPayNum);
+		return result;
+	}
+
+	// *******************김세이*******************
 	// getGymList : 체육관 하나의 정보 받아오기
-	public GymDTO getGymData(String gymId){
+	public GymDTO getGymData(String gymId) {
 		GymDTO gymDto = sessionTemplate.selectOne("gymDetailMapper.getGymData", gymId);
 		return gymDto;
 	}
@@ -341,27 +368,27 @@ private SqlSessionTemplate sessionTemplate;
 		int result = sessionTemplate.selectOne("gymDetailMapper.getReviewNumMax");
 		return result;
 	}
-	
+
 	// getReviewNum : 체육관 하나에 달린 리뷰 갯수
 	public int getReviewNum(String gymId) {
 		int result = sessionTemplate.selectOne("gymDetailMapper.getReviewNum", gymId);
 		return result;
 	}
-	
+
 	// getReviewData : 체육관 하나의 전체 리뷰 리스트 받아오기
 	public List<ReviewDTO> getReviewList(Map<String, Object> hMap) {
-		List<ReviewDTO> reviewLists  = sessionTemplate.selectList("gymDetailMapper.getReviewList",hMap);
+		List<ReviewDTO> reviewLists = sessionTemplate.selectList("gymDetailMapper.getReviewList", hMap);
 		return reviewLists;
 	}
-	
+
 	// insertReviewData : 리뷰 삽입
 	public void insertReviewData(ReviewDTO dto) {
 		sessionTemplate.insert("gymDetailMapper.insertReviewData", dto);
 	}
-	
+
 	// deleteReviewData : 리뷰 삭제
 	public void deleteReviewData(int reNum) {
-		sessionTemplate.delete("gymDetailMapper.deleteReviewData",reNum);
+		sessionTemplate.delete("gymDetailMapper.deleteReviewData", reNum);
 	}
 
 	// getAvgReview : 체육관 평점 평균
@@ -372,22 +399,22 @@ private SqlSessionTemplate sessionTemplate;
 
 	// getTimesCusBookedGym : 체육관 예약 횟수 확인 : 세션의 사용자의 해당 체육관 이용 횟수
 	public int getTimesCusBookedGym(Map<String, Object> hMap) {
-		int result = sessionTemplate.selectOne("gymDetailMapper.getTimesCusBookedGym",hMap);
+		int result = sessionTemplate.selectOne("gymDetailMapper.getTimesCusBookedGym", hMap);
 		return result;
 	}
-	
+
 	// getTimesCusReviewedGym : 체육관 리뷰 횟수 확인 : 세션의 사용자의 해당 체육관 리뷰 횟수
 	public int getTimesCusReviewedGym(Map<String, Object> hMap) {
-		int result = sessionTemplate.selectOne("gymDetailMapper.getTimesCusReviewedGym",hMap);
+		int result = sessionTemplate.selectOne("gymDetailMapper.getTimesCusReviewedGym", hMap);
 		return result;
 	}
 
 	// getCusPassLeft : 사용자 잔여 pass 수
 	public int getCusPassLeft(String cusId) {
-		int result = sessionTemplate.selectOne("gymDetailMapper.getCusPassLeft",cusId);
+		int result = sessionTemplate.selectOne("gymDetailMapper.getCusPassLeft", cusId);
 		return result;
 	}
-	
+
 	// checkDuplicateBook : 예약 중복확인
 	public int checkDuplicateBook(BookDTO checkDto) {
 		int result = sessionTemplate.selectOne("gymDetailMapper.checkDuplicateBook", checkDto);
@@ -398,7 +425,7 @@ private SqlSessionTemplate sessionTemplate;
 	public void insertBookData(BookDTO dto) {
 		sessionTemplate.insert("gymDetailMapper.insertBookData", dto);
 	}
-	
+
 	// getBookNumMax : 예약 최댓값 : 삽입에 필요
 	public int getBookNumMax() {
 		int result = sessionTemplate.selectOne("gymDetailMapper.getBookNumMax");
@@ -428,10 +455,10 @@ private SqlSessionTemplate sessionTemplate;
 
 	// getProductListForGym : 체육관 상세페이지에 뿌릴 관련 인기 상품 품목 3가지
 	public List<ProductDTO> getProductListForGym(String c) {
-		List<ProductDTO> productListForGym  = sessionTemplate.selectList("gymDetailMapper.getProductListForGym",c);
+		List<ProductDTO> productListForGym = sessionTemplate.selectList("gymDetailMapper.getProductListForGym", c);
 		return productListForGym;
 	}
-	
+
 	// getChargeNumMax : 충전 전체의 최댓값 : pass 결제 삽입용
 	public int getChargeNumMax() {
 		int result = sessionTemplate.selectOne("paymentMapper.getChargeNumMax");
@@ -442,24 +469,24 @@ private SqlSessionTemplate sessionTemplate;
 	public void insertChargeData(ChargeDTO dto) {
 		sessionTemplate.insert("paymentMapper.insertChargeData", dto);
 	}
-	
+
 	// getProductOrderList : 상품 주문에 필요한 정보 가져오기
-	public List<ProductOrderDTO> getProductOrderList(int numI[],String cusId) {
-		
-		List<ProductOrderDTO> productOrderListForPayment  = new ArrayList<ProductOrderDTO>();
-				
+	public List<ProductOrderDTO> getProductOrderList(int numI[], String cusId) {
+
+		List<ProductOrderDTO> productOrderListForPayment = new ArrayList<ProductOrderDTO>();
+
 		for (int i : numI) {
 			ProductOrderDTO dto = new ProductOrderDTO();
-			
+
 			Map<String, Object> hMap = new HashMap<String, Object>();
 			hMap.put("cartNum", i);
 			hMap.put("cusId", cusId);
-			
-			dto = sessionTemplate.selectOne("paymentMapper.getProductOrderList",hMap);
-			
+
+			dto = sessionTemplate.selectOne("paymentMapper.getProductOrderList", hMap);
+
 			productOrderListForPayment.add(dto);
 		}
-		
+
 		return productOrderListForPayment;
 	}
 
@@ -468,251 +495,247 @@ private SqlSessionTemplate sessionTemplate;
 		int result = sessionTemplate.selectOne("paymentMapper.getProPayNumMax");
 		return result;
 	}
-	
+
 	// 상품 결제 삽입 - ProductPay 테이블
 	public void insertProductPay(ProductPayDTO ppdto) {
 		sessionTemplate.insert("paymentMapper.insertProductPay", ppdto);
 	}
-	
+
 	// 상품 결제 최댓값 - ProductPay테이블
 	public int getProPayDetailNumMax() {
 		int result = sessionTemplate.selectOne("paymentMapper.getProPayDetailNumMax");
 		return result;
 	}
-	
+
 	// 상품 결제 삽입 - ProductPayDetail 테이블
 	public void insertProductPayDetail(ProductPayDetailDTO ppddto) {
 		sessionTemplate.insert("paymentMapper.insertProductPayDetail", ppddto);
 	}
-	
+
 	// 상품 결제 이후 장바구니 삭제
-	public void deleteFromCartAfterPayment(List<String> productIdList,String cusId) {
+	public void deleteFromCartAfterPayment(List<String> productIdList, String cusId) {
 		for (int i = 0; i < productIdList.size(); i++) {
 
 			String productId = productIdList.get(i);
-			
+
 			Map<String, Object> hMap = new HashMap<String, Object>();
 			hMap.put("productId", productId);
 			hMap.put("cusId", cusId);
-			
+
 			sessionTemplate.delete("paymentMapper.deleteFromCartAfterPayment", hMap);
 		}
-		
+
 	}
 
-
-	//*******************서예지*******************
+	// *******************서예지*******************
 
 	// 공지사항 최댓값
-	public int getNoticeMaxNum(){
-		
+	public int getNoticeMaxNum() {
+
 		int maxNum = 0;
 		maxNum = sessionTemplate.selectOne("notice.maxNum");
 		return maxNum;
 	}
-	
+
 	// 공지사항 추가
-	public void insertNotice(NoticeDTO dto){
-		sessionTemplate.insert("notice.insertData",dto);
+	public void insertNotice(NoticeDTO dto) {
+		sessionTemplate.insert("notice.insertData", dto);
 	}
-	
+
 	// 공지사항 데이터 갯수
-	public List<NoticeDTO> getNoticeList(int start, int end){
-		HashMap<String,Object> params = new HashMap<String,Object>();
+	public List<NoticeDTO> getNoticeList(int start, int end) {
+		HashMap<String, Object> params = new HashMap<String, Object>();
 		params.put("start", start);
 		params.put("end", end);
-		List<NoticeDTO> lists = sessionTemplate.selectList("notice.getLists",params);
+		List<NoticeDTO> lists = sessionTemplate.selectList("notice.getLists", params);
 		return lists;
 	}
-	
-	//공지사항 1개 가져오기
-	public NoticeDTO getNoticeReadData(int notiNum){
-		NoticeDTO dto = sessionTemplate.selectOne("notice.getReadData",notiNum);
+
+	// 공지사항 1개 가져오기
+	public NoticeDTO getNoticeReadData(int notiNum) {
+		NoticeDTO dto = sessionTemplate.selectOne("notice.getReadData", notiNum);
 		return dto;
 	}
-	
-	//공지사항 이전글
-	public NoticeDTO getNoticePreReadData(int notiNum){
-		NoticeDTO dto = sessionTemplate.selectOne("notice.preReadData",notiNum);
+
+	// 공지사항 이전글
+	public NoticeDTO getNoticePreReadData(int notiNum) {
+		NoticeDTO dto = sessionTemplate.selectOne("notice.preReadData", notiNum);
 		return dto;
 	}
-	
-	//공지사항 다음글
-	public NoticeDTO getNoticeNextReadData(int notiNum){
-		NoticeDTO dto = sessionTemplate.selectOne("notice.nextReadData",notiNum);
+
+	// 공지사항 다음글
+	public NoticeDTO getNoticeNextReadData(int notiNum) {
+		NoticeDTO dto = sessionTemplate.selectOne("notice.nextReadData", notiNum);
 		return dto;
 	}
-	
+
 	// 공지사항 데이터 리스트 가져오기
-	public int getNoticeDataCount(){
+	public int getNoticeDataCount() {
 		int result = sessionTemplate.selectOne("notice.getDataCount");
 		return result;
 	}
-	
-	//공지사항 삭제
-	public void deleteNoticeData(int notiNum){
-		sessionTemplate.delete("notice.deleteData",notiNum);
-	}
-	
-	//공지사항 수정
-	public void updateNoticeData(NoticeDTO dto){
-		sessionTemplate.update("notice.updateData",dto);
+
+	// 공지사항 삭제
+	public void deleteNoticeData(int notiNum) {
+		sessionTemplate.delete("notice.deleteData", notiNum);
 	}
 
-	//-------------qna--------------------
-	
+	// 공지사항 수정
+	public void updateNoticeData(NoticeDTO dto) {
+		sessionTemplate.update("notice.updateData", dto);
+	}
+
+	// -------------qna--------------------
+
 	// Q&A 최댓값
-	public int getQnaMaxNum(){
+	public int getQnaMaxNum() {
 		int maxNum = 0;
 		maxNum = sessionTemplate.selectOne("qna.maxNum");
 		return maxNum;
 	}
-	
+
 	// Q&A 추가
-	public void insertQna(QnaDTO dto){
-		sessionTemplate.insert("qna.insertData",dto);
+	public void insertQna(QnaDTO dto) {
+		sessionTemplate.insert("qna.insertData", dto);
 	}
-	
+
 	// Q&A 데이터 갯수
-	public List<QnaDTO> getQnaList(int start, int end,String searchKey,String searchValue, String searchValue2){
-		HashMap<String,Object> params = new HashMap<String,Object>();
+	public List<QnaDTO> getQnaList(int start, int end, String searchKey, String searchValue, String searchValue2) {
+		HashMap<String, Object> params = new HashMap<String, Object>();
 		params.put("start", start);
 		params.put("end", end);
 		params.put("searchKey", searchKey);
 		params.put("searchValue", searchValue);
 		params.put("searchValue2", searchValue2);
-		List<QnaDTO> lists = sessionTemplate.selectList("qna.getLists",params);
+		List<QnaDTO> lists = sessionTemplate.selectList("qna.getLists", params);
 		return lists;
 	}
-	
-	//Q&A 데이터 1개
-	public QnaDTO getQnaReadData(int qnaNum){
-		QnaDTO dto = sessionTemplate.selectOne("qna.getReadData",qnaNum);
-		return dto;
-	}
-	
-	//Q&A 이전글
-	public QnaDTO getQnaPreReadData(int qnaNum,String searchKey,String searchValue,int groupNum,String orderNo){
-		HashMap<String,Object> params = new HashMap<String,Object>();
-		params.put("searchKey", searchKey);
-		params.put("searchValue", searchValue);
-		params.put("groupNum", groupNum);
-		params.put("orderNo",orderNo);
-		params.put("qnaNum", qnaNum);
-		
-		QnaDTO dto = sessionTemplate.selectOne("qna.preReadData",params);
+
+	// Q&A 데이터 1개
+	public QnaDTO getQnaReadData(int qnaNum) {
+		QnaDTO dto = sessionTemplate.selectOne("qna.getReadData", qnaNum);
 		return dto;
 	}
 
-	//Q&A 다음글
-	public QnaDTO getQnaNextReadData(int qnaNum,String searchKey,String searchValue,int groupNum,String orderNo){
-		HashMap<String,Object> params = new HashMap<String,Object>();
+	// Q&A 이전글
+	public QnaDTO getQnaPreReadData(int qnaNum, String searchKey, String searchValue, int groupNum, String orderNo) {
+		HashMap<String, Object> params = new HashMap<String, Object>();
 		params.put("searchKey", searchKey);
 		params.put("searchValue", searchValue);
 		params.put("groupNum", groupNum);
-		params.put("orderNo",orderNo);
+		params.put("orderNo", orderNo);
 		params.put("qnaNum", qnaNum);
-		
-		QnaDTO dto = sessionTemplate.selectOne("qna.nextReadData",params);
+
+		QnaDTO dto = sessionTemplate.selectOne("qna.preReadData", params);
 		return dto;
 	}
-	
-	// Q&A 데이터 갯수 가져오기
-	public int getQnaDataCount(String searchKey,String searchValue){
-		HashMap<String,Object> params = new HashMap<String,Object>();
+
+	// Q&A 다음글
+	public QnaDTO getQnaNextReadData(int qnaNum, String searchKey, String searchValue, int groupNum, String orderNo) {
+		HashMap<String, Object> params = new HashMap<String, Object>();
 		params.put("searchKey", searchKey);
 		params.put("searchValue", searchValue);
-		int result = sessionTemplate.selectOne("qna.getDataCount",params);
+		params.put("groupNum", groupNum);
+		params.put("orderNo", orderNo);
+		params.put("qnaNum", qnaNum);
+
+		QnaDTO dto = sessionTemplate.selectOne("qna.nextReadData", params);
+		return dto;
+	}
+
+	// Q&A 데이터 갯수 가져오기
+	public int getQnaDataCount(String searchKey, String searchValue) {
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("searchKey", searchKey);
+		params.put("searchValue", searchValue);
+		int result = sessionTemplate.selectOne("qna.getDataCount", params);
 		return result;
 	}
 
-	//orderNo 정렬
-	public void orderNoUpdate(int qnaGroupNum,int qnaOrderNo) {
-		HashMap<String,Object> params = new HashMap<String,Object>();
+	// orderNo 정렬
+	public void orderNoUpdate(int qnaGroupNum, int qnaOrderNo) {
+		HashMap<String, Object> params = new HashMap<String, Object>();
 		params.put("qnaGroupNum", qnaGroupNum);
 		params.put("qnaOrderNo", qnaOrderNo);
-		sessionTemplate.update("qna.orderNoUpdate",params);
-	}
-	
-	//QnA삭제
-	public void deleteQnaData(int qnaNum){
-		sessionTemplate.delete("qna.deleteData",qnaNum);
-	}
-	
-	//QnA수정
-	public void updateQnaData(QnaDTO dto){
-		sessionTemplate.update("qna.updateData",dto);
+		sessionTemplate.update("qna.orderNoUpdate", params);
 	}
 
-	
-	//*******************채종완*******************
-	 
-	//cusCreated : 개인회원가입정보 삽입
-	public void cusCreated(CustomerDTO dto) {
-		sessionTemplate.insert("createMapper.insertCus",dto);
+	// QnA삭제
+	public void deleteQnaData(int qnaNum) {
+		sessionTemplate.delete("qna.deleteData", qnaNum);
 	}
-	
+
+	// QnA수정
+	public void updateQnaData(QnaDTO dto) {
+		sessionTemplate.update("qna.updateData", dto);
+	}
+
+	// *******************채종완*******************
+
+	// cusCreated : 개인회원가입정보 삽입
+	public void cusCreated(CustomerDTO dto) {
+		sessionTemplate.insert("createMapper.insertCus", dto);
+	}
+
 	// gymCreated : 체육관 회원가입정보 삽입
 	public void gymCreated(GymDTO dto) {
-		sessionTemplate.insert("createMapper.insertGym",dto);
+		sessionTemplate.insert("createMapper.insertGym", dto);
 	}
-	
-	//아이디 체크
+
+	// 아이디 체크
 	public void idCheck(CustomerDTO dto) {
 		sessionTemplate.selectOne("createMapper.idCheck", dto);
 	}
-	
-	
-	//개인회원 아이디 중복체크
+
+	// 개인회원 아이디 중복체크
 	public int cusidCheck(String cusId) {
 		int result = sessionTemplate.selectOne("createMapper.cusidCheck", cusId);
 		return result;
 	}
-	
-	//체육관회원 아이디 중복체크
+
+	// 체육관회원 아이디 중복체크
 	public int gymidCheck(String gymId) {
 		int result = sessionTemplate.selectOne("createMapper.gymidCheck", gymId);
 		return result;
 	}
-	
-	//*******************최보경*******************
-	
-	//로그인한 회원의 주소 가져오기
+
+	// *******************최보경*******************
+
+	// 로그인한 회원의 주소 가져오기
 	public String getCusAddr(String sessionId) {
 		String customerAddr = sessionTemplate.selectOne("recommend.customerAddr", sessionId);
 		return customerAddr;
 	}
-	
-	//회원 주소를 기반으로 메인화면에서 체육관 추천 
-	public List<GymDTO> getGymRecommend(String customerAddr){
+
+	// 회원 주소를 기반으로 메인화면에서 체육관 추천
+	public List<GymDTO> getGymRecommend(String customerAddr) {
 		List<GymDTO> nearGymLists = sessionTemplate.selectList("recommend.nearGymList", customerAddr);
 		return nearGymLists;
 	}
-	
-	//로그인하지 않은 화면에서 체육관 추천
-	public List<GymDTO> getGymRecommendDefault(){
+
+	// 로그인하지 않은 화면에서 체육관 추천
+	public List<GymDTO> getGymRecommendDefault() {
 		List<GymDTO> nearGymDefaultLists = sessionTemplate.selectList("recommend.nearGymDefaultLists");
 		return nearGymDefaultLists;
 	}
 
-	//최신 예약한 체육관 타입 추출
+	// 최신 예약한 체육관 타입 추출
 	public String getCusRecentBookType(String sessionId) {
 		String gymType = sessionTemplate.selectOne("recommend.customerRecentBookType", sessionId);
 		return gymType;
 	}
-	
-	//최신 예약을 기반으로 메인화면에서 제품 추천
+
+	// 최신 예약을 기반으로 메인화면에서 제품 추천
 	public List<ProductDTO> getProductRecommend(String productType) {
 		List<ProductDTO> productRecommendLists = sessionTemplate.selectList("recommend.productRecommend", productType);
 		return productRecommendLists;
 	}
-	
-	//로그인 하지 않은 화면에서 제품추천
+
+	// 로그인 하지 않은 화면에서 제품추천
 	public List<ProductDTO> getProductRecommendDefault() {
 		List<ProductDTO> productRecommendLists = sessionTemplate.selectList("recommend.productRecommendDefault");
 		return productRecommendLists;
 	}
-
 
 	// *******************경기민*******************
 	// 체육관 검색
@@ -765,7 +788,7 @@ private SqlSessionTemplate sessionTemplate;
 		List<GymDTO> lists = sessionTemplate.selectList("mapMapper.getSearchType", params);
 		return lists;
 	}
-	
+
 	// 회원 주소 정보로 검색(DB 내용 기반)
 	public CustomerDTO getCustomerGoo(String sessionId) {
 		HashMap<String, Object> params = new HashMap<String, Object>();
@@ -773,41 +796,40 @@ private SqlSessionTemplate sessionTemplate;
 		CustomerDTO dto = sessionTemplate.selectOne("mapMapper.getCustomerGoo", params);
 		return dto;
 	}
-	
+
 	// 온라인 예약 5분 전인 계정들 조회
-	public List<BookDTO> getFiveBookIdList(){
+	public List<BookDTO> getFiveBookIdList() {
 		List<BookDTO> lists = sessionTemplate.selectList("bookCheckMapper.getFiveBookIdList");
 		return lists;
 	}
-	
+
 	// 온라인 예약 1시간 후인 계정들 조회
-	public List<BookDTO> getOneHourIdList(){
+	public List<BookDTO> getOneHourIdList() {
 		List<BookDTO> lists = sessionTemplate.selectList("bookCheckMapper.getOneHourIdList");
 		return lists;
 	}
-	
+
 	// FACE LINK 삭제
-	public void delFaceLink(int bookNum){
+	public void delFaceLink(int bookNum) {
 		sessionTemplate.delete("bookCheckMapper.delFaceLink", bookNum);
 		System.out.println(Integer.toString(bookNum) + "번의 FaceLink가 삭제됐습니다.");
 	}
-	
+
 	// FACE LINK 생성
-	public void setFaceLink(String faceLink,int bookNum){
+	public void setFaceLink(String faceLink, int bookNum) {
 		HashMap<String, Object> params = new HashMap<String, Object>();
 		params.put("faceLink", faceLink);
 		params.put("bookNum", bookNum);
 		sessionTemplate.update("bookCheckMapper.setFaceLink", params);
 		System.out.println(Integer.toString(bookNum) + "번의 FaceLink : " + faceLink + "가 생성됐습니다.");
 	}
-	
-	// SessionID로 온라인 예약 검색 
-	public BookDTO getOnlineBookSearch(CustomInfo info){
-		BookDTO dto = sessionTemplate.selectOne("bookCheckMapper.getOnlineBookSearch",info);
+
+	// SessionID로 온라인 예약 검색
+	public BookDTO getOnlineBookSearch(CustomInfo info) {
+		BookDTO dto = sessionTemplate.selectOne("bookCheckMapper.getOnlineBookSearch", info);
 		return dto;
 	}
 
-	
 	// *******************최원식*******************
 
 	// 체육관 리스트 갯수
@@ -841,7 +863,7 @@ private SqlSessionTemplate sessionTemplate;
 		return falselists;
 	}
 
-	//체육관 gymOk false -> true
+	// 체육관 gymOk false -> true
 	public void gymUpdateData(GymDTO dto) {
 		sessionTemplate.update("adminGymMapper.updateData", dto);
 	}
@@ -982,34 +1004,7 @@ private SqlSessionTemplate sessionTemplate;
 
 	// 상품 삭제
 	public void productDeleteData(String productId) {
-			sessionTemplate.delete("adminProductMapper.deleteData", productId);
-		}
+		sessionTemplate.delete("adminProductMapper.deleteData", productId);
+	}
 
-
-	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
