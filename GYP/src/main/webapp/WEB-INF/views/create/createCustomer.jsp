@@ -140,10 +140,10 @@
 		f = document.myForm;
 
 		//아이디 제약조건
-		var cc1 = /^[a-z0-9]{4,16}$/;
+		var cc1 = /^[a-z0-9]{1,16}$/;
 
 		//패스워드 제약조건
-		var cc2 = /^[A-Za-z0-9]{4,16}$/;
+		var cc2 = /^[A-Za-z0-9]{1,16}$/;
 
 		//전화번호 제약조건
 		var cc3 = /^(01[016789]{1}|02|0[3-9]{1}[0-9]{1})-[0-9]{3,4}-[0-9]{4}$/;
@@ -156,7 +156,7 @@
 			var chk = f.check.checked;
 
 		if (!cc1.test(f.cusId.value)) {
-			alert('아이디 영문소문자/숫자 4~16자 이내로 입력하세요.');
+			alert('아이디 영문소문자/숫자 1~16자 이내로 입력하세요.');
 			f.cusId.focus();
 			return false;
 		}
@@ -176,7 +176,7 @@
 		}
 
 		if (!cc2.test(f.cusPwd.value)) {
-			alert('패스워드 영문 대소문자/숫자 4~16자 이내로 입력하세요.');
+			alert('패스워드 영문 대소문자/숫자 1~16자 이내로 입력하세요.');
 			f.cusPwd.focus();
 			return false;
 		}

@@ -28,10 +28,12 @@
 	<jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
 	<div style="height: 100px;"></div>
 	
-	<div class="our-newsletter-area mb-100" style="width: 400px; margin: 0 auto; margin-bottom: 15px;">
+	<div class="our-newsletter-area mb-100" style="width: 630px; margin: 0 auto; margin-bottom: 15px!important;">
 		<div class="section-heading">
 			<h6 align="center">FACELINK CLASS</h6>
 			<h2 align="center">온라인 수업하기</h2>
+			<div style="height: 10px;"></div>
+			<hr>
 		</div>
 	</div>
 	
@@ -47,10 +49,10 @@
                      
                      	<!-- 예약 내역이 없을 때 -->
                      	<c:if test="${dto == null}">
-	                     	<div class="row" align="center" style="text-align: center; justify-content: center;">
-	                        	<div class="mb-70"> 
-									<h4>예약한 수업이 없습니다</h4>
-									<h6>수업을 신청하러 가보는게 어떨까요?</h6>
+	                     	<div class="row" align="center" style="text-align: center; justify-content: center; margin: 20px;">
+	                        	<div class="mb-70" > 
+									<h4 style="color: #38b143;">예약한 수업이 없습니다</h4>
+									<h7 style="color: gray">수업을 신청하러 가보는게 어떨까요?</h7>
 								</div>
 	                     	</div> 
 						
@@ -71,9 +73,9 @@
 					     	
 						     	<div class="row" align="center" style="text-align: center; justify-content: center;">
 		                        	<div class="mb-50"> 
-										<h4>예약한 수업의 트레이너님이 열심히 준비중입니다 :)</h4>
-							     		<h6>(수업시작 시간 5분전에 다시 확인해주세요)</h6>
-										<font color="green">기다리시는 동안 아래 활동을 해보시면 어떨까요?</font>
+										<h4 style="color: #38b143;">예약한 수업의 트레이너님이 열심히 준비중입니다 :)</h4>
+							     		<h7 style="color: gray;">(수업시작 시간 5분전에 다시 확인해주세요)</h7><br>
+										<font color="gray">기다리시는 동안 아래 활동을 해보시면 어떨까요?</font>
 									</div> 
 		                     	</div> 
 		                     	
@@ -86,15 +88,14 @@
 							         <!-- 예약 확인하기 -->
 							         <a href="/gyp/customerMyPage.action#2" class="btn fitness-btn btn-2 m-2">예약 내역 확인하기</a>
 						     	</div>
-					     		
-					     	</c:if>
+					     	</c:if>	
 					     
 					     	<!-- 예약 내역이 있고, 링크가 생성되었을 때 -->
 					     	<c:if test="${dto.faceLink != null }">
 					     		<div class="row" align="center" style="text-align: center; justify-content: center;">
 		                        	<div class="mb-50"> 
-										<h4>수업 준비가 완료되었습니다!<br/>트레이너님이 기다리고 있어요</h4><br/>
-										<div style="color: green;">(수업 전에 앞서 캠과 마이크를 준비해주세요)</div>
+										<h4 style="color: #38b143;">수업 준비가 완료되었습니다!<br/>트레이너님이 기다리고 있어요</h4>
+										<h7 style="color: gray;">(수업 전에 앞서 캠과 마이크를 준비해주세요)</h7>
 									</div> 
 		                     	</div> 
 		                     	<div class="row" align="center" style="text-align: center; justify-content: center;">
