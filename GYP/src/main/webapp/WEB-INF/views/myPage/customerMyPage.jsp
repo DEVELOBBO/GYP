@@ -158,9 +158,10 @@
          <table class="table01" border="0" cellpadding="10" cellspacing="10">
             <tr align="left" style="text-align: center;">
                <th width="70">리뷰번호</th>
-               <th width="180">체육관</th>
-               <th width="170">등록일</th>
-               <th width="170">평점</th>
+               <th width="70">리뷰타입</th>
+               <th width="150">이름(상품/체육관)</th>
+               <th width="150">등록일</th>
+               <th width="70">평점</th>
                <th>내용</th>
                <th colspan="2" align="left">&nbsp;게시글 관리</th>
             </tr>
@@ -168,7 +169,8 @@
             <c:forEach var="reviewdto" items="${ reviewlists }">
                <tr class="tr_white" style="text-align: center;">
                   <td>${reviewdto.reNum }</td>
-                  <td>${reviewdto.gymName }</td>
+                  <td>${reviewdto.reType }</td>
+                  <td>${reviewdto.gymName }${reviewdto.productName }</td>
                   <td>${reviewdto.reCreated }</td>
                   <td>${reviewdto.star }</td>
                   <td width="350" style="padding-right: 20px">${reviewdto.reContent }</td>

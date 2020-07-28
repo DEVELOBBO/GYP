@@ -367,16 +367,16 @@ public class gypController {
 		String jjimId = info.getSessionId();
 		// 예약 아이디값 검색하기 위해
 		String bookId = info.getSessionId();
-
-		// 리뷰리스트
-		List<ReviewDTO> reviewlists = dao.reviewgetList(reviewId);
+		
+		//리뷰리스트
+		List<ReviewDTO> reviewlists = dao.reviewList(reviewId);
 		// 찜리스트
 		List<JjimDTO> jjimlists = dao.jjimgetList(jjimId);
 		// 예약 리스트
 		List<BookDTO> booklists = dao.bookgetList(bookId);
 
-		request.setAttribute("booklists", booklists);
 		request.setAttribute("reviewlists", reviewlists);
+		request.setAttribute("booklists", booklists);
 		request.setAttribute("jjimlists", jjimlists);
 		request.setAttribute("cusdto", cusdto);
 
@@ -1676,9 +1676,6 @@ public class gypController {
 					proId[i] = paydetaildto.getProductId(); // 스트링 배열에 선택한 productId값을 넘겨준다
 					i++;
 				}
-
-				System.out.println(proId[0]);
-				System.out.println(proId[1]);
 
 				for (i = 0; i < result; i++) {
 
