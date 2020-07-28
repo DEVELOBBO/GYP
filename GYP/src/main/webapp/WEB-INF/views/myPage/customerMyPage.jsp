@@ -85,7 +85,7 @@
          </table> 
          
          <div class="right_float">
-            <form action="" name="myForm">
+            <form action="" name="myForm" method="post">
                <input type="hidden" name="cusPwdck" value=${cusdto.cusPwd }>
                비밀번호 입력: &nbsp;
                <input type="password" name="cusPwd" class="bokyung_mypage_text"/>&nbsp;&nbsp;

@@ -361,8 +361,16 @@
 						    </div>
 						</div>
 					</c:if>
-					
-						<div style="height: 150px;"></div>
+						
+						<!-- 일반회원이면 여백 -->
+						<c:if test="${empty info || info.loginType ne 'gym'}">
+							<div style="height: 150px;"></div>
+						</c:if>
+						
+						<!-- 체육관회원이면 여백 -->
+						<c:if test="${empty info || info.loginType == 'gym'}">
+							<div style="height: 50px;"></div>
+						</c:if>
 						
                         <!-- 제휴시설 미리보기 -->
                         <div class="blog-post-categories mb-100" >

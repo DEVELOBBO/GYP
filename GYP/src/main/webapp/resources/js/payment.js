@@ -28,9 +28,11 @@
            buyer_tel : realTimeValIn("#buyer_tel"),
            buyer_addr : realTimeValIn("#buyer_addr"),
            buyer_postcode : '123-456',
-           card_quota : undefined
+           card_quota : undefined,
+           m_redirect_url: "/gyp/gymBook_ok.action"
        }, function(rsp) {
            if ( rsp.success ) {
+           
              if($("#item").html().startsWith("pass_")) {
                 var params = "item=" + $("#item").html() 
                        + "&payMethod=" + $("#payMethod").val();
@@ -53,36 +55,33 @@
                        + "&receiver_addr=" + $("#sample6_address").val()+" "+ $("#detail_address").val()
                        + "&productIdArr=" + productIdArr
                        + "&productCountArr=" + productCountArr;
-             }
+         	}
               
-               jQuery.ajax({
-                url: "/gyp/actualPayment.action",
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                  imp_uid: rsp.imp_uid,
-                 //기타 필요한 데이터가 있으면 추가 전달
-                    merchant_uid: rsp.merchant_uid,
-                    params
-                },
-                error: function(e){
-                   alert(e.responseText);
-                }
-               })
-               
-                window.location.replace("/gyp/payment_ok.action");
-             
-           } else {
-               var msg = '결제에 실패하였습니다.';
-               msg += '에러내용 : ' + rsp.error_msg;
-
-               alert(msg);
-           }
+           jQuery.ajax({
+            url: "/gyp/actualPayment.action",
+            type: 'POST',
+            dataType: 'json',
+            data: {
+              imp_uid: rsp.imp_uid,
+             //기타 필요한 데이터가 있으면 추가 전달
+                merchant_uid: rsp.merchant_uid,
+                params
+            }
+           });
            
-       });
-        
-      }//end of function requestPay
+           window.location.replace("/gyp/payment_ok.action");
+             
+       } else {
+           var msg = '결제에 실패하였습니다.';
+           msg += '에러내용 : ' + rsp.error_msg;
+
+           alert(msg);
+       }
+       
+   });
     
+  }//end of function requestPay
+
     
     /*--------- input값이 변할때마다 값 세팅하는 함수 ---------*/
     function realTimeValIn(inputId) {

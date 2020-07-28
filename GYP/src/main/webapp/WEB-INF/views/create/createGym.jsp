@@ -278,11 +278,8 @@ $(function() {
 		 }
 		}
 		if (!cc3.test(f.gymTel.value)) {
-
 			alert('전화번호를 바르게 입력하세요');
-
 			f.gymTel.focus();
-
 			return false;
 		}
 

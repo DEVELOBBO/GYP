@@ -81,6 +81,33 @@
 	f.submit();
 
 	}
+	
+	function buyNow(){
+		var f = document.myForm;
+		
+		//비로그인 시 로그인 창으로
+		<c:if test="${empty sessionScope.customInfo.sessionId }">
+			alert("\n로그인 해주세요")
+			location.href = "/gyp/login.action";
+			return;
+		</c:if>
+		
+		//수량 빈칸 체크
+		str = f.count.value;
+		str = str.trim();
+		if (!str) {
+			alert("\n수량을 입력하세요.");
+			f.count.focus();
+			return;
+		}
+		f.count.value = str;
+		
+		f.action = "<%=cp%>/payment.action?productSelected=${dto.productId}";
+		f.submit();
+	}
+	
+	
+	
 </script>
 
 <title>GYP</title>
@@ -111,10 +138,10 @@
 			<div class="article_item">
 				<form action="" name="myForm" method="post">
 					<!-- 제목 -->
-
-					<input type="hidden" id="productId" value="${dto.productId }">
-					<input type="hidden" id="cusId" value="${info.sessionId }" /> <font
-						size="4pt" color="#BDBDBD">상품코드&nbsp;${dto.productId}&nbsp;
+					<input type="hidden" id="productId" name="productId" value="${dto.productId }">
+					<input type="hidden" id="cusId" name="cusId" value="${info.sessionId }" /> 
+					<input type="hidden" id="price" name="price" value="${dto.productPrice }">
+					<font size="4pt" color="#BDBDBD">상품코드&nbsp;${dto.productId}&nbsp;
 					</font><br> <font style="font-size: 35pt" color="black">${dto.productName}</font>
 					<br>
 					<hr>
@@ -123,16 +150,16 @@
 					<font size="6pt" color="#2E338C">${dto.productPrice }원&nbsp;</font>
 
 
-					<font size="4pt">&nbsp;|&nbsp;조회:${dto.productHit }</font>
+					<font size="4pt">&nbsp;|&nbsp;조회:${dto.productHit } </font>
 
 					<!-- 옵션 -->
 					<br> <br> <br> <input type="hidden" name="pid"
 						value="${dto.productId }" />
-					<!-- 갯수 선택 -->
+						
 					<!-- 수량 -->
 					<font style="font-size: 16pt; color: #666; vertical-align: middle;">
 
-						갯수&nbsp;&nbsp;</font> <input type="text" name="count"
+						갯수&nbsp;&nbsp;</font> <input type="text" name="count" value="1"
 						style="width: 50px; height: 45px; padding-top: 2px; text-align: center; color: #F23D4C; font-size: 20pt; vertical-align: middle;"
 						onkeydown='return onlyNumber(event)' onkeyup='removeChar(event)'>
 					<br> <br>
@@ -142,7 +169,7 @@
 					<input type="button" class="btn fitness-btn btn-white mt-10"
 						style="min-width: 100px;" value=" 장바구니 " onclick="sendIt();" /> <input
 						type="button" class="btn fitness-btn btn-white mt-10"
-						style="min-width: 100px;" value=" 구매하기" onclick="byenow();" /> <br>
+						style="min-width: 100px;" value=" 구매하기" onclick="buyNow();" /> <br>
 					<br>
 
 
@@ -151,10 +178,10 @@
 					<font size="4px" color="#8C8C8C">&nbsp;${dto.productContent }&nbsp;</font>
 
 
-					<!-- 리뷰보기 -->
-					<input type="button" onclick="" value="리뷰 보기"
-						class="bokyung_review"><br> <br> <br> <input
-						type="button" class="bokyung_back" value="◀목록으로"
+					<br><br><br><br><br>
+					<!-- 목록으로 -->
+
+					<input type="button" class="bokyung_back" value="◀목록으로"
 						onclick="javascript:location.href='<%=cp%>/productList.action?searchValueCategory=${searchValueCategory }&searchValueWord=${searchValueWord }&pageNum=${pageNum }';" />
 
 				</form>
@@ -176,7 +203,7 @@
 
 	<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 	<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-	<div style="height: 100px;]"></div>
+
 
 
 

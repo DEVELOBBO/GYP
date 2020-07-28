@@ -98,7 +98,7 @@
 				</table>
 
 				<div class="right_float">
-					<form action="" name="myForm">
+					<form action="" name="myForm" method="post">
 						<input type="hidden" name="gymPwdck" value=${gymdto.gymPwd }>
 						비밀번호 입력: &nbsp; <input type="password" name="gymPwd"
 							class="bokyung_mypage_text" />&nbsp;&nbsp; 

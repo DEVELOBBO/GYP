@@ -105,7 +105,7 @@ public class MyUtil {
         // [Prev] : 총 페이지수가 numPerBlock 이상인 경우 이전 numPerBlock 보여줌
         n = current_page - numPerBlock;
         if (total_page > numPerBlock && currentPageSetUp > 0) {
-            strList = strList + "[<a onclick='listPage("+n+");'>◀</a>] ";
+        	 strList = strList + "[<a onclick='listPage("+n+");' style='cursor:pointer;'>◀</a>] ";
         }
 
         // 바로가기 페이지 구현
@@ -115,7 +115,7 @@ public class MyUtil {
                strList = strList + "<font color='#38b143'>"+page+" </font>";
            }
            else {
-               strList = strList +"<a onclick='listPage("+page+");'>"+page+"</a> ";
+        	   strList = strList +"<a onclick='listPage("+page+")'; style='cursor:pointer;'>"+page+"</a> ";
            }
            page++;
         }
@@ -124,7 +124,7 @@ public class MyUtil {
         // n = currentPageSetUp + numPerBlock + 1;
         n = current_page + numPerBlock;
         if (total_page - currentPageSetUp > numPerBlock) {
-            strList = strList + "[<a onclick='listPage("+n+");'>▶</a>] ";
+        	 strList = strList + "[<a onclick='listPage("+n+");' style='cursor:pointer;'>▶</a>] ";
         }
 
         return strList;

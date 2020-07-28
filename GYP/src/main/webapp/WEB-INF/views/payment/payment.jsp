@@ -61,38 +61,65 @@
                                <h6>주문상품</h6>
                                <div id="주문 상품">
                                   <div class="form-group">
-                                     <!-- 패스 구매시 -->
-                                     <c:if test="${not empty passSelected }">
-                                          <span class="form-control" id="item">${passSelected }</span>
-                                          <input type="hidden" id="itemVal" value="${passSelected }">
-                                       </c:if>
-                                       
-                                       <!-- 운동용품 구매시 -->
-                                       <c:if test="${empty passSelected }">
-                                          <div id="productList">
-                                          <span id="item" style="display: none;">운동용품</span>
-                                          <table id="buying_items">
-                                    <tr>
-                                       <th width="70px">상품ID</th>
-                                       <th width="200px">이미지</th> 
-                                       <th width="180px">상품명</th>
-                                       <th width="100px">상품가격</th>
-                                       <th width="50px">갯수</th> 
-                                    </tr>
-                                    <c:forEach var="dto" items="${listsToBuy }" >
-                                                <tr>
-                                                   <td>${dto.productId}<input type="hidden" name="productIdArr" value="${dto.productId}"></td>
-                                                   <td><img src="${imagePath }/${dto.productImg }" style="width:120px; height:120px;"/></td>                                          
-                                                   <td>${dto.productName }</td>
-                                                   <td>${dto.productPrice }</td>
-                                                   <td>${dto.count }<input type="hidden" name="productCountArr" value="${dto.count }"></td>
-                                                </tr>
-                                             </c:forEach>
-                                          </table>   
-                                          </div>
-                                       </c:if>
-                                       
-                                   </div>
+                                     		<!-- 패스 구매시 -->
+											<c:if test="${not empty passSelected and empty productToBuy}">
+												<span class="form-control" id="item">${passSelected }</span>
+												<input type="hidden" id="itemVal" value="${passSelected }">
+											</c:if>
+											
+											<!-- 운동용품 하나 구매시(상품상세에서 바로 넘어옴) -->
+											<c:if test="${not empty productToBuy and empty passSelected}">
+												<span id="item" style="display: none;">운동용품</span>
+													<table id="buying_items">
+														<tr>
+															<th width="70px">상품ID</th>
+															<th width="200px">이미지</th>
+															<th width="180px">상품명</th>
+															<th width="100px">상품가격</th>
+															<th width="50px">갯수</th>
+														</tr> 
+															<tr> 
+																<td>${productToBuy.productId}<input type="hidden"
+																	name="productIdArr" value="${productToBuy.productId}"></td>
+																<td><img src="${imagePath }/${productToBuy.productImg }"
+																	style="width: 120px; height: 120px;" /></td>
+																<td>${productToBuy.productName }</td>
+																<td>${productToBuy.productPrice }</td>
+																<td>${count }<input type="hidden"
+																	name="productCountArr" value="${count }"></td>
+															</tr>
+													</table>
+											</c:if>
+
+											<!-- 운동용품 구매시 -->
+											<c:if test="${empty passSelected and empty productToBuy}">
+												<div id="productList">
+													<span id="item" style="display: none;">운동용품</span>
+													<table id="buying_items">
+														<tr>
+															<th width="70px">상품ID</th>
+															<th width="200px">이미지</th>
+															<th width="180px">상품명</th>
+															<th width="100px">상품가격</th>
+															<th width="50px">갯수</th>
+														</tr>
+														<c:forEach var="dto" items="${listsToBuy }">
+															<tr>
+																<td>${dto.productId}<input type="hidden"
+																	name="productIdArr" value="${dto.productId}"></td>
+																<td><img src="${imagePath }/${dto.productImg }"
+																	style="width: 120px; height: 120px;" /></td>
+																<td>${dto.productName }</td>
+																<td>${dto.productPrice }</td>
+																<td>${dto.count }<input type="hidden"
+																	name="productCountArr" value="${dto.count }"></td>
+															</tr>
+														</c:forEach>
+													</table>
+												</div>
+											</c:if>
+
+										</div>
                                </div>
                                <br/><hr/>
                                <!-- 주문자 정보 -->

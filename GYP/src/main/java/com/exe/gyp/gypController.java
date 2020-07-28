@@ -1741,8 +1741,9 @@ public class gypController {
 	
 	//*******************김세이*******************
 	
+	
 	// 체육관 상세 페이지 
-	@RequestMapping(value="/gymDetail.action", method = {RequestMethod.GET, RequestMethod.POST})
+		@RequestMapping(value="/gymDetail.action", method = {RequestMethod.GET, RequestMethod.POST})
 	public String gymDetail(HttpServletRequest request, HttpSession session) throws Exception {
 		//세션에 올라온값 확인
 		CustomInfo info = (CustomInfo)session.getAttribute("customInfo");
@@ -1799,19 +1800,27 @@ public class gypController {
 			
 			int startTime = Integer.parseInt(gymHour.get(i).substring(0,2));
 			int endTime = Integer.parseInt(gymHour.get(i).substring(8,10));
+			
+			if(startTime == endTime) {
+				endTime += 24;
+			}
+			
 			for (int j = startTime; j < endTime; j++) {
 				String time;
-
+				
 				if (j<9) {
 					time = "0" + j+":00~"+ "0" + (j+1)+":00";	// 08:00~09:00
 				} else if(j==9) {
 					time = "0" + j+":00~"+ (j+1)+":00";	// 09:00~10:00
+				} else if(j==24) {
+					time = "24:00~01:00";
 				} else {
 					time = j+":00~"+(j+1)+":00";	// 10:00~11:00
 				}
-				
 				optionTimes.add(time);
 			}
+			
+			
 			request.setAttribute("optionTimes"+i, optionTimes);
 		}
 		
@@ -1833,8 +1842,8 @@ public class gypController {
 		
 		//확장for문, 하나씩 꺼내서 글자길이 수정
 		for(ProductDTO dto : productLists) {
-			if(dto.getProductContent().length() > 11) { //프로그램 길면 자르기
-				dto.setProductContent(dto.getProductContent().substring(0, 11) + " ...");
+			if(dto.getProductContent().length() > 13) { //프로그램 길면 자르기
+				dto.setProductContent(dto.getProductContent().substring(0, 13) + " ...");
 			}
 		}
 		
@@ -1854,23 +1863,23 @@ public class gypController {
 	// 리뷰 추가 : 체육관 상세페이지 리뷰 추가 (ajax)
 	@RequestMapping(value="/reviewCreated.action")
 	public String reviewCreated(HttpServletRequest request, ReviewDTO dto, HttpSession session) throws Exception {
-		CustomInfo info = (CustomInfo)session.getAttribute("customInfo");
-		if(info!=null) {
-			request.setAttribute("info", info);
+			CustomInfo info = (CustomInfo)session.getAttribute("customInfo");
+			if(info!=null) {
+				request.setAttribute("info", info);
+			}
+			int numMax = dao.getReviewNumMax(); //삽입용 전체 리뷰 최댓값
+			
+			dto.setReNum(numMax+1);
+			dto.setReType("gym");
+			dao.insertReviewData(dto);
+			
+			String gymId = dto.getGymId();
+			
+			//return reviewList(request,gymId);	//리다이렉팅 안하고 메소드로 가야 한다. 왜? ajax이므로 새로고침하면 안된다. 
+			//이전에는 리다이렉팅을 통해 페이지 이동이므로 새로고침이 들어갔다. 
+			return reviewList(request,gymId,session);
 		}
-		int numMax = dao.getReviewNumMax(); //삽입용 전체 리뷰 최댓값
-		
-		dto.setReNum(numMax+1);
-		dto.setReType("gym");
-		dao.insertReviewData(dto);
-		
-		String gymId = dto.getGymId();
-		
-		//return reviewList(request,gymId);	//리다이렉팅 안하고 메소드로 가야 한다. 왜? ajax이므로 새로고침하면 안된다. 
-		//이전에는 리다이렉팅을 통해 페이지 이동이므로 새로고침이 들어갔다. 
-		return reviewList(request,gymId,session);
-	}
-		
+	
 	// 리뷰 리스트 : 체육관 상세페이지 리뷰 리스트 (ajax)
 	@RequestMapping(value="/reviewList.action", method={RequestMethod.GET, RequestMethod.POST})
 	public String reviewList(HttpServletRequest request, String gymId,HttpSession session) throws Exception{
@@ -1996,13 +2005,13 @@ public class gypController {
 		String bookHourSun = request.getParameter("bookHourSun");
 		String bookHour = "";
 		
-		if(bookHourWd!=null) {
+		if(!bookHourWd.equals("") && bookHourWd!=null) {
 			bookHour = datePick + "," + bookHourWd;
 		}
-		if(bookHourSat!=null) {
+		if(!bookHourSat.equals("") && bookHourSat!=null) {
 			bookHour = datePick + "," + bookHourSat;
 		}
-		if(bookHourSun!=null) {
+		if(!bookHourSun.equals("") && bookHourSun!=null) {
 			bookHour = datePick + "," + bookHourSun;
 		}
 		
@@ -2149,13 +2158,35 @@ public class gypController {
 	   //패스 결제하기
 	   if(passSelected!=null) {
 		   int passNum = Integer.parseInt(passSelected.substring(5));
-		   //int finalPayVal = passNum * 5000;
-		   int finalPayVal = 100; //테스트용 결제 금액
+		   int finalPayVal = passNum * 5000;
          
 		   request.setAttribute("passSelected", passSelected);
 		   request.setAttribute("finalPayVal", finalPayVal);
 		   return "payment/payment";
 	   }
+	   
+	   String productSelected = request.getParameter("productSelected");
+	   System.out.println("productSelected: "+productSelected);
+	   //상품상세에서 결제하기
+	   if(productSelected!=null) {
+		   System.out.println("상품상세에서 넘어옴");
+
+		   String productId = request.getParameter("productId");
+		   int count = Integer.parseInt(request.getParameter("count"));
+		   int price = Integer.parseInt(request.getParameter("price"));
+		   
+		   int finalPayVal = count * price;
+		   ProductDTO productToBuy = dao.getProductReadData(productId);
+		   
+		   String imagePath = "/gyp/sfiles/product"; // 이미지 경로
+		   
+		   request.setAttribute("productToBuy", productToBuy);
+		   request.setAttribute("count", count);
+		   request.setAttribute("finalPayVal", finalPayVal);
+		   request.setAttribute("imagePath", imagePath);
+		   return "payment/payment";
+	   }
+	   
       
 	   String totPrice = request.getParameter("totPrice2"); //나중에 결제 금액 넘김
 	   String[] chkNums = request.getParameterValues("cartChk"); // 배열에 선택한 cartNum값이 들어온다
@@ -2235,9 +2266,6 @@ public class gypController {
       
    		// 상품 결제시 -> item이 pass_로 시작하지 않으면
       
-   		//사용자 pass 수 수정
-   		int cusPassLeft = dao.getCusPassLeft(cusId);
-
    		int proPayNumMax = dao.getProPayNumMax();
    		System.out.println("proPayNumMax: " + proPayNumMax);
 
