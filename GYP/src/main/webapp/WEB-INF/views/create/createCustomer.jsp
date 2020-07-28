@@ -34,12 +34,6 @@
 
 <script type="text/javascript">
 
-
-
-
-
-
-
 		$(function (){
 			//아이디 중복체크
 			    $('#checkbutton1').click(function(){
@@ -68,11 +62,7 @@
 				         }
 				    }) 
 			     })
-			      
-		
 			});
-		
-		
 		
 	
 	$(function() {
@@ -314,58 +304,58 @@
 		<table align="center" style="font-size: 15pt; color: #888"
 		width="800" cellpadding="0" cellspacing="0" border="0">
 	
-	<c:if test="${mode!='updated' }">		
-		<td colspan="3" class="section-heading">	
-				<h6>Fitness Gym</h6>		
-				<font style="font-size: 18pt; color: black; ">개인회원 회원가입창</font>
-				<hr>
-		</td>
-			
-	</c:if>
-	 
-	 
-	<c:if test="${mode=='updated' }">	
-			<td colspan="3" class="section-heading">
-				<h6>Fitness Gym</h6>
-				<font style="font-size: 20pt; color: black; ">개인회원정보수정창☆</font>
-				<hr>
+		<c:if test="${mode!='updated' }">		
+			<td colspan="3" class="section-heading">	
+					<div class="our-newsletter-area mb-100" style="width: 1100px; margin: 0 auto;">
+						<div class="section-heading">
+							<h6>CUSTOMER JOIN</h6>
+							<h2>개인회원 회원가입</h2>
+						</div>
+					</div>
 			</td>
-	</c:if>
+		</c:if>
 		
+		<c:if test="${mode=='updated' }">		
+			<td colspan="3" class="section-heading">	
+				<div class="our-newsletter-area mb-100" style="width: 1100px; margin: 0 auto;">
+					<div class="section-heading">
+						<h6>CUSTOMER JOIN</h6>
+						<h2>개인회원 회원정보수정</h2>
+					</div>
+				</div>
+			</td>
+		</c:if>
+	 
 
-			<tr>
-				<td class="bokyung_td_left" >아이디</td>
-				
-				<c:if test="${mode=='updated' }">	
-					<td><input type="text"  size="40" maxlength="50"  class="bokyung_member_text" value="${sessionScope.customInfo.sessionId }"
-					 disabled/></td>
-					<input type="hidden"  name="cusId" id="cusId" value="${sessionScope.customInfo.sessionId }"/>
-				</c:if>
-					
-				<c:if test="${mode!='updated' }">
-					<td><input type="text" name="cusId" id="cusId" size="40" maxlength="50" class="bokyung_member_text"
-					value="${sessionScope.customInfo.sessionId }"/>
-					<input type="button" id = "checkbutton1" name = "checkbutton1" value ="중복체크"/></td>
-					<input type="hidden" id = "checkcusId" name = "checkcusId" value =""/>
-				</c:if>
+		<tr>
+			<td style="font-size: 14pt; color: #888; padding-left: 10px; padding-bottom: 10px;">
+			아이디</td>
 			
-			</tr>		
+			<c:if test="${mode=='updated' }">	
+				<td><input type="text"  size="40" maxlength="50"  class="bokyung_member_text" value="${sessionScope.customInfo.sessionId }"
+				 disabled/></td>
+				<input type="hidden"  name="cusId" id="cusId" value="${sessionScope.customInfo.sessionId }"/>
+			</c:if>
+				
+			<c:if test="${mode!='updated' }">
+				<td><input type="text" name="cusId" id="cusId" size="40" maxlength="50" class="bokyung_member_text"
+				value="${sessionScope.customInfo.sessionId }"/>
+				<input type="button" id = "checkbutton1" name = "checkbutton1" value ="중복체크"/></td>
+				<input type="hidden" id = "checkcusId" name = "checkcusId" value =""/>
+			</c:if>
+		</tr>		
 		
-		<!-- 선 -->
-		<tr height="1"><td colspan="2" bgcolor="#cccccc"></td>
 		
+		<!-- 선 --><tr height="1"><td colspan="2" bgcolor="#cccccc"></td>
 		
 		<tr>
-			<td class="bokyung_td_left">이름</td>
-				<td>
-					<input type="text" name="cusName" size="35" maxlength="20" class="bokyung_member_text"  value="${dto.cusName }"/>
-				</td>							
-			</td>		
+			<td style="font-size: 14pt; color: #888; padding-left: 10px; padding-bottom: 10px;">
+			이름</td>
+			<td><input type="text" name="cusName" size="35" maxlength="20" class="bokyung_member_text"  value="${dto.cusName }"/>
 		</tr>
 		
+		<!-- 선 --><tr height="1"><td colspan="2" bgcolor="#cccccc"></td>
 		
-		<!-- 선 -->
-		<tr height="1"><td colspan="2" bgcolor="#cccccc"></td>
 		
 		<tr>
 			<td class="bokyung_td_left">비밀번호</td>

@@ -12,6 +12,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta http-equiv="refresh" content="60; URL=/gyp/gymMyPage.action">
 	<!-- Favicon -->
 	<link rel="icon" href="/gyp/resources/img/core-img/favicon.ico">
 	<!-- Core Stylesheet -->
@@ -98,7 +99,7 @@
 				</table>
 
 				<div class="right_float">
-					<form action="" name="myForm" method="post">
+					<form action="" name="myForm">
 						<input type="hidden" name="gymPwdck" value=${gymdto.gymPwd }>
 						비밀번호 입력: &nbsp; <input type="password" name="gymPwd"
 							class="bokyung_mypage_text" />&nbsp;&nbsp; 
@@ -149,9 +150,13 @@
 							<td>${bookdto.cusId }</td>
 							<td>${bookdto.gymTrainerPick }</td>
 							<td>${bookdto.bookCreated }</td>
-							<td style="text-align: center;"><a href="" class="bokyung_mypage_link">수업하기(임시)</a></td>
-							<td style="text-align: left;"><a
-								href="<%=cp %>/bookDelete.action?bookNum=${bookdto.bookNum}"
+							<c:if test="${!empty bookdto.faceLink }">
+								<td style="text-align: center;"><a href="https://gyp.herokuapp.com/#${bookdto.faceLink }" class="bokyung_mypage_link">수업하기</a></td>
+							</c:if>
+							<c:if test="${empty bookdto.faceLink }">
+								<td style="text-align: center;"><a href="/gyp/gymMyPage.action" class="bokyung_mypage_link">수업 준비중</a></td>
+							</c:if>
+							<td style="text-align: left;"><a href="<%=cp %>/bookDelete.action?bookNum=${bookdto.bookNum}"
 								class="bokyung_mypage_link_D">거절</a></td>
 						</tr>
 					</c:forEach>

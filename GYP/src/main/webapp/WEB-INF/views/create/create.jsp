@@ -18,46 +18,55 @@
 	<link rel="stylesheet" href="/gyp/resources/css/style.css">
 	<!-- font -->	
 	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400&display=swap" rel="stylesheet">
-	
 
 <title>GYP</title>
 </head>
 <body style="font-family: 'Noto Sans KR', sans-serif;">
-<center>	
 	<jsp:include page="/WEB-INF/views/layout/header_over.jsp" />
 	<jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
 
-	<div style="height: 100px;"></div>
+	<div style="height: 130px;"></div>
 	
-	<div>
-	
+	<div class="our-newsletter-area mb-100" style="width: 400px; margin: 0 auto;">
+		<div class="section-heading">
+			<h6 align="center">JOIN GYP</h6>
+			<h2 align="center">회원가입</h2>
+		</div>
 	</div>
 	
 	
-	<dt>
-		<input type="button" class="fas fa-id-card-alt fa-10x"   
-		style="cursor: pointer;border: none;font-size:200px;width:250px;height:220px; color: #000042;" value="&#xf47f;" 
-		onclick="javascript:location.href='<%=cp%>/createCustomer.action';"></input>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<input type="button" class="fas fa-id-card-alt fa-10x"   style="cursor: pointer;border: none;font-size:200px;width:250px;height:220px; color:#0BC904" value="&#xf2c2;" 
-		onclick="javascript:location.href='<%=cp%>/createGym.action';"></input> 
-	</dt> 
+	<div style="width: 525px; margin: 0 auto;">	
 	
-	<dd>
-		<input type="button" class="btn fitness2-btn btn-2" style="font-size:20px; width:210px;height:50px;" value="개인 회원가입"
-		 onclick="javascript:location.href='<%=cp%>/createCustomer.action';"/>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<input type="button" class="btn fitness-btn btn-2" style="font-size:20px; width:210px;height:50px;"  value="체육관 회원가입"
-		onclick="javascript:location.href='<%=cp%>/createGym.action';"/>
-	</dd>
+		<div style="display: inline-block; text-align: center; justify-content: center;">		
+			<!-- 개인회원가입 -->
+			<div style="margin-left:25px; margin-right: 25px; opacity: 60%; color: #38b143">
+				<i class="fas fa-id-card-alt fa-10x" onclick="javascript:location.href='<%=cp%>/createCustomer.action';"></i>
+			</div>
+			<div style="height: 30px;"></div>
+			<div style="margin-left:25px; margin-right: 25px;">
+				<input type="button" class="btn fitness-btn btn-2" 
+				style="font-size:14pt; width:210px;height:50px; background-color:#38b143; border: none;" value="개인 회원가입" 
+				onclick="javascript:location.href='<%=cp%>/createCustomer.action';"/>
+			</div>
+		</div>
+		
+		<div style="display: inline-block; text-align: center; justify-content: center;"">
+			<!-- 체육관회원가입 -->
+			<div style="margin-left:25px; margin-right: 25px;  opacity: 40%; color:#002266">
+				<i class="fas fa-id-card-alt fa-10x" onclick="javascript:location.href='<%=cp%>/createGym.action';"></i>			
+			</div>
+			<div style="height: 30px;"></div>
+			<div style="margin-left:25px; margin-right: 25px;">
+				<input type="button" class="btn fitness-btn btn-2"
+				style="font-size:14pt; width:210px;height:50px;  background-color:#002266; border: none;"  value="체육관 회원가입"
+				onclick="javascript:location.href='<%=cp%>/createGym.action';"/>
+			</div>
+		</div>
+		
+	</div>
 	
-
 	
-	
-	
-	
-	<div style="height: 300px;"></div>
+	<div style="height: 200px;"></div>
 	
 	
 
@@ -75,11 +84,9 @@
     <script src="/gyp/resources/js/plugins/plugins.js"></script>
     <!-- Active js -->
     <script src="/gyp/resources/js/active.js"></script>
-    
     <!-- font awesome -->
 	<script src="https://kit.fontawesome.com/4badd96a47.js" crossorigin="anonymous"></script>
 
-</center>
 </body>
 
 </html>

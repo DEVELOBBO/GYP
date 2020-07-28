@@ -172,15 +172,11 @@
 						style="min-width: 100px;" value=" 구매하기" onclick="buyNow();" /> <br>
 					<br>
 
-
 					<!-- 상품설명 -->
-
 					<font size="4px" color="#8C8C8C">&nbsp;${dto.productContent }&nbsp;</font>
-
-
 					<br><br><br><br><br>
+					
 					<!-- 목록으로 -->
-
 					<input type="button" class="bokyung_back" value="◀목록으로"
 						onclick="javascript:location.href='<%=cp%>/productList.action?searchValueCategory=${searchValueCategory }&searchValueWord=${searchValueWord }&pageNum=${pageNum }';" />
 

@@ -16,8 +16,6 @@
 	<link rel="icon" href="/gyp/resources/img/core-img/favicon.ico">
 	<!-- Core Stylesheet -->
 	<link rel="stylesheet" href="/gyp/resources/css/style.css">
-	<!-- 플로팅 -->
-	<link rel="stylesheet" href="/gyp/resources/css/floating.css">
 	<!-- font -->
 	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400&display=swap" rel="stylesheet">
 	
@@ -31,33 +29,32 @@
     <!-- ##### Contact Area Start ##### -->
     <section class="contact-area section-padding-100">
         <div class="container">
-            <div class="row">
+        <div style="width: 750px; margin: 0 auto;">
+            <div class="row" >
                 <div class="col-12">
                     <div class="contact-title">
-                        <h3>예약 완료</h3>
+                        <h3 style="text-align: center;">예약 완료</h3>
                     </div>
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row"> 
                 <div class="col-12">
                     <div class="contact-content">
                         <!-- Contact Form Area -->
                         <div class="contact-form-area">
-                        	<div class="row">
-	                        	<div class="col-2">
-	                        		<img alt="reservation-check" src="/gyp/resources/img/check.png" width="180px" >
-	                        	</div>
-	                          	<div class="mb-70 col-10">
+                        	<div class="row" align="center" style="text-align: center; justify-content: center;">
+	                        		<img alt="reservation-check" src="/gyp/resources/img/check.png"
+	                        		style="width:110px; height:110px; margin-right: 40px;">
+	                          	<div class="mb-70"> 
 									<h4>고객님의 예약이 완료되었습니다.</h4>
 									<h6>주문내역은 마이페이지에서 확인할 수 있습니다.</h6>
-									주문 내역 및 배송에 관한 문의는 <a href="#">Q&A</a> 게시판으로 <br/>
+									주문 내역 및 배송에 관한 문의는 <a href="#">Q&amp;A</a> 게시판으로 <br/>
 									문의해주시기 바랍니다. 
 								</div>
                         	</div> 
 								
-							<!-- 임시 링크..! 링크 수정 필요 -->
-						     <div class="fitness-buttons-area mb-100">
+						     <div class="fitness-buttons-area mb-100" style="text-align: center;">
 						   		<!-- 운동용품 쇼핑하기 -->	
 						         <a href="/gyp/productList.action" class="btn fitness-btn btn-2 m-2">운동용품 쇼핑하기</a>
 						         <!-- 더 둘러보기 -->
@@ -68,7 +65,8 @@
                         </div>
                     </div>
                 </div>
-            </div>
+           </div> 
+           </div>
         </div>
     </section>
     <!-- ##### Contact Area End ##### -->

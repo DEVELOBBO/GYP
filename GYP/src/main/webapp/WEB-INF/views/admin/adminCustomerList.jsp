@@ -79,7 +79,7 @@
 							<td>${dto.cusPass }</td>
 							<td>${dto.cusCreated }</td>
 							<td><input type="button" value=" 삭제 " class="btn2" 
-								onclick="javascript:location.href='<%=cp%>/customerDeleted.action?cusId=${dto.cusId}&pageNum=${pageNum}'"/></td>
+								onclick="javascript:location.href='<%=cp%>/customerDeleted_ok_admin.action?cusId=${dto.cusId}&pageNum=${pageNum}'"/></td>
 						</tr>
 						</c:forEach>
 					</table><br><br>

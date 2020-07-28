@@ -550,7 +550,7 @@ public class gypController {
 		// 임시 회원탈퇴시 로그인창으로 넘어가기
 		return "login/login";
 	}
-
+	
 	// 체육관 수정창으로 이동 (채종완, 최보경)
 	@RequestMapping(value = "/gymUpdate.action", method = { RequestMethod.GET, RequestMethod.POST })
 	public String gymUpdate(HttpServletRequest request, HttpSession session) {
@@ -3614,6 +3614,19 @@ public class gypController {
 		return "admin/adminHome";
 	}
 	
+	
+	//관리자가 일반회원 강제 탈퇴
+	@RequestMapping(value = "/customerDeleted_ok_admin.action", method = { RequestMethod.GET, RequestMethod.POST })
+	public String customerDeleted_ok_admin(HttpServletRequest request, CustomerDTO dto, HttpSession session,
+			HttpServletResponse response) throws IOException {
+
+		dao.deleteData(dto);
+
+		// 임시 회원탈퇴시 로그인창으로 넘어가기
+		return "redirect:adminCustomerList.action";
+	}
+
+	
 	//체육관(매장) 리스트
 	@RequestMapping(value = "/adminGymList.action", method = { RequestMethod.GET, RequestMethod.POST })
 	public String gymList(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
@@ -3779,9 +3792,7 @@ public class gypController {
 		int start = (currentPage - 1) * numPerPage + 1;
 		int end = currentPage * numPerPage;
 
-		List<CustomerDTO> lists =
-
-				dao.customerGetList(start, end, searchKey, searchValue);
+		List<CustomerDTO> lists = dao.customerGetList(start, end, searchKey, searchValue);
 
 		//파람 생성
 		String param = "";
@@ -3798,9 +3809,7 @@ public class gypController {
 			listUrl = listUrl + "?" + param;
 		}
 
-		String pageIndexList =
-
-				myUtil.pageIndexList(currentPage, totalPage, listUrl);
+		String pageIndexList = myUtil.pageIndexList(currentPage, totalPage, listUrl);
 
 		//request set
 		request.setAttribute("lists", lists);
