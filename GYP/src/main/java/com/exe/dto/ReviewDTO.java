@@ -11,6 +11,7 @@ public class ReviewDTO {
 	private String reContent;	// 리뷰 내용
 	private String reCreated;	// 리뷰 작성일
 	private String gymName; 	//체육관 이름
+	private String productName; //상품 이름
 	
 	public int getReNum() {
 		return reNum;
@@ -66,6 +67,13 @@ public class ReviewDTO {
 	public void setGymName(String gymName) {
 		this.gymName = gymName;
 	}
+	public String getProductName() {
+		return productName;
+	}
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+	
 
 	
 

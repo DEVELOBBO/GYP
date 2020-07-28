@@ -123,16 +123,16 @@
 					<font size="6pt" color="#2E338C">${dto.productPrice }원&nbsp;</font>
 
 
-					<font size="4pt">&nbsp;|&nbsp;조회:${dto.productHit } </font>
+					<font size="4pt">&nbsp;|&nbsp;조회:${dto.productHit }</font>
 
 					<!-- 옵션 -->
 					<br> <br> <br> <input type="hidden" name="pid"
 						value="${dto.productId }" />
-						
+					<!-- 갯수 선택 -->
 					<!-- 수량 -->
 					<font style="font-size: 16pt; color: #666; vertical-align: middle;">
 
-						갯수&nbsp;&nbsp;</font> <input type="text" name="count" value="1"
+						갯수&nbsp;&nbsp;</font> <input type="text" name="count"
 						style="width: 50px; height: 45px; padding-top: 2px; text-align: center; color: #F23D4C; font-size: 20pt; vertical-align: middle;"
 						onkeydown='return onlyNumber(event)' onkeyup='removeChar(event)'>
 					<br> <br>
@@ -151,10 +151,10 @@
 					<font size="4px" color="#8C8C8C">&nbsp;${dto.productContent }&nbsp;</font>
 
 
-					<br><br><br><br><br>
-					<!-- 목록으로 -->
-
-					<input type="button" class="bokyung_back" value="◀목록으로"
+					<!-- 리뷰보기 -->
+					<input type="button" onclick="" value="리뷰 보기"
+						class="bokyung_review"><br> <br> <br> <input
+						type="button" class="bokyung_back" value="◀목록으로"
 						onclick="javascript:location.href='<%=cp%>/productList.action?searchValueCategory=${searchValueCategory }&searchValueWord=${searchValueWord }&pageNum=${pageNum }';" />
 
 				</form>
@@ -176,7 +176,7 @@
 
 	<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 	<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-
+	<div style="height: 100px;]"></div>
 
 
 

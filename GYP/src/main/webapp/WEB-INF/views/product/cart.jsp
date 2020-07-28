@@ -137,6 +137,24 @@ function SelectOrder(checkboxName) {
 
 	}
 	
+	//이 이벤트들은 갯수칸에 영어나한글을 넣지못하게 하는 기능
+	function onlyNumber(event){
+	    event = event || window.event;
+	    var keyID = (event.which) ? event.which : event.keyCode;
+	    if ( (keyID >= 48 && keyID <= 57) || (keyID >= 96 && keyID <= 105) || keyID == 8 || keyID == 46 || keyID == 37 || keyID == 39 ) 
+	        return;
+	    else
+	        return false;
+	}
+	 
+	function removeChar(event) {
+	    event = event || window.event;
+	    var keyID = (event.which) ? event.which : event.keyCode;
+	    if ( keyID == 8 || keyID == 46 || keyID == 37 || keyID == 39 ) 
+	        return;
+	    else
+	        event.target.value = event.target.value.replace(/[^0-9]/g, "");
+	}
 
 </script>
 
@@ -202,7 +220,8 @@ function SelectOrder(checkboxName) {
 											style="font-size:16pt; color: #666; vertical-align: middle;
 													width: 50px; height: 45px; padding-top: 2px; text-align: center;
 													color:#F23D4C; font-size: 20pt; font-family: 'Do Hyeon', sans-serif;
-													vertical-align: middle;"/></td>
+													vertical-align: middle;" onkeydown ='return onlyNumber(event)' 
+													onkeyup ='removeChar(event)'/></td>
 									<!-- 변경버튼 -->							
 									<td width="50px"><input type="button" value="변경" onclick="countUpdate('count${cart.cartNum}','${cart.cartNum}');"
 													class="bokyung_button_cart_change"/></td>

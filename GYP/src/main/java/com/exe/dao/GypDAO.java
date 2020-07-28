@@ -89,6 +89,18 @@ private SqlSessionTemplate sessionTemplate;
 		return result;
 	}
 
+	// 리뷰 타입 불러오기
+	public List<ReviewDTO> getReviewDTOReadData(String reviewId) {
+		List<ReviewDTO> lists = sessionTemplate.selectList("customerMapper.getReviewReadData", reviewId);
+		return lists;
+	}
+	
+	// 로그인시 값이 존재하는지 확인
+	public int getReviewDataCount(String reviewId) {
+		int result = sessionTemplate.selectOne("customerMapper.getReviewDataCount", reviewId);
+		return result;
+	}
+	
 	// 리뷰 리스트(유저)
 	public List<ReviewDTO> reviewgetList(String reviewId) {
 		List<ReviewDTO> reviewlists = sessionTemplate.selectList("customerMapper.reviewgetLists", reviewId);

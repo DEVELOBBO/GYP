@@ -61,7 +61,8 @@
 				               if($('#cusId').val()!=''){
 				                  alert("중복된 아이디입니다.");
 				                  $('#cusId').val('');
-				                  $('#cusId').focus();
+				                  setTimeout(function(){$('#cusId').focus();}, 1);
+				                  
 				               }
 				            }
 				         }
@@ -99,7 +100,8 @@
 							if ($('#cusTel').val() != '') {
 								alert("중복된 전화번호입니다.");
 								$('#cusTel').val('');
-								$('#cusTel').focus();
+								setTimeout(function(){$('#cusTel').focus();}, 1);
+							
 							}
 						}
 						if (f.mode.value == 'updated') {
@@ -266,6 +268,24 @@
 		f.submit();
 
 	}
+	
+	//개인 회원 탈퇴 (회원정보수정창)
+	function sendDelete() {
+		
+		f = document.myForm;
+		 if (confirm("정말 탈퇴하시겠습니까??") == true){    //확인
+			 
+			 alert("회원탈퇴가 완료되었습니다.")
+			f.action ="/gyp/customerDeleted_ok.action";
+		    f.submit();
+
+		 }else{   //취소
+			 
+		     return false;
+
+		 }	
+	}
+	
 </script>
 </head>
 <body >
@@ -486,7 +506,7 @@
 	<input type="reset" value=" 다시입력 " class="btn2" 
 	onclick="document.myForm.cusId.focus();"/>
 	<input type="button" value=" 작성취소 " class="btn2" 
-	onclick="javascript:location.href='<%=cp%>/list.action';"/>	
+	onclick="javascript:location.href='<%=cp%>/login.action';"/>	
 	
 	</c:if>
 	
@@ -494,10 +514,10 @@
 	
 	<input type="button" value=" 수정하기 " class="btn2" 
 	onclick="sendIt();"/>
-	<input type="reset" value=" 다시입력 " class="btn2" 
-	onclick="document.myForm.cusId.focus();"/>
 	<input type="button" value=" 작성취소 " class="btn2" 
 	onclick="javascript:location.href='<%=cp%>/customerMyPage.action';"/>	
+	<input type="button" value=" 회원탈퇴 " class="btn2" 
+	onclick="sendDelete();"/>
 	</c:if>
 	
 	<!-- 숨겨놓은 모드 -->	

@@ -74,7 +74,8 @@ $(function() {
                 if ($('#gymId').val() != '') {
                    alert("중복된 아이디입니다.");
                    $('#gymId').val('');
-                   $('#gymId').focus();
+                   setTimeout(function(){$('#gymId').focus();}, 1);
+
                 }
              }
           }
@@ -111,7 +112,11 @@ $(function() {
 							
 								alert("중복된 전화번호입니다.");
 								$('#gymTel').val('');
-								$('#gymTel').focus();	
+								setTimeout(function(){$('#gymTel').focus();}, 1);
+								
+								
+								
+									
 							}
 					  }
 						 if (f.mode.value == 'updated') {	
@@ -381,6 +386,24 @@ $(function() {
 		f.submit();
 
 	}
+	
+	//체육관 회원 탈퇴 (회원정보수정창)
+	function sendDelete() {
+		
+		f = document.myForm;
+		 if (confirm("정말 탈퇴하시겠습니까??") == true){    //확인
+			 
+			 alert("회원탈퇴가 완료되었습니다.")
+			f.action ="/gyp/gymDeleted_ok.action";
+		    f.submit();
+
+		 }else{   //취소
+			 
+		     return false;
+
+		 }	
+	}
+	
 </script>
 
 </head>
@@ -1137,9 +1160,11 @@ $(function() {
 			<c:if test="${mode=='updated' }">
 				<div id="bbsCreated_footer">
 					<input type="button" value=" 수정하기 " class="btn2"
-						onclick="sendIt();" /> <input type="button" value=" 작성취소 "
-						class="btn2"
-						onclick="javascript:location.href='/gyp/create.action';" />
+						onclick="sendIt();" /> 
+					<input type="button" value=" 작성취소 "
+						class="btn2" onclick="javascript:location.href='/gyp/gymMyPage.action';" />
+					<input type="button" value=" 회원탈퇴 " class="btn2" 
+						onclick="sendDelete();"/>	
 				</div>
 			</c:if>
 

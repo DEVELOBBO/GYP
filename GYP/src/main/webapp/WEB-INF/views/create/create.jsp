@@ -34,18 +34,20 @@
 	<div style="height: 100px;"></div>
 	
 	<dt>
-	<input type="button" class="fas fa-id-card-alt fa-10x"   style="border: none;font-size:200px;width:250px;height:220px; color: #000042;" value="&#xf47f;" 
+	<input type="button" class="fas fa-id-card-alt fa-10x"   style="cursor: pointer;border: none;font-size:200px;width:250px;height:220px; color: #000042;" value="&#xf47f;" 
 	 onclick="javascript:location.href='<%=cp%>/createCustomer.action';"></input>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	<input type="button" class="fas fa-id-card-alt fa-10x"   style="border: none;font-size:200px;width:250px;height:220px; color:#0BC904" value="&#xf47f;" 
+	<input type="button" class="fas fa-id-card-alt fa-10x"   style="cursor: pointer;border: none;font-size:200px;width:250px;height:220px; color:#0BC904" value="&#xf2c2;" 
 	 onclick="javascript:location.href='<%=cp%>/createGym.action';"></input> 
 	</dt> 
 	
 	<dd>
-	<input type="button" class="btn fitness2-btn btn-2" style="font-size:20px; width:210px;height:50px;" value="개인 회원가입">
+	<input type="button" class="btn fitness2-btn btn-2" style="font-size:20px; width:210px;height:50px;" value="개인 회원가입"
+	 onclick="javascript:location.href='<%=cp%>/createCustomer.action';"/>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	<input type="button" class="btn fitness-btn btn-2" style="font-size:20px; width:210px;height:50px;"  value="체육관 회원가입">
+	<input type="button" class="btn fitness-btn btn-2" style="font-size:20px; width:210px;height:50px;"  value="체육관 회원가입"
+	onclick="javascript:location.href='<%=cp%>/createGym.action';"/>
 	</dd>
 	
 
