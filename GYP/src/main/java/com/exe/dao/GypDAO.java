@@ -10,6 +10,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import com.exe.dto.BookDTO;
 import com.exe.dto.CartDTO;
 import com.exe.dto.ChargeDTO;
+import com.exe.dto.CusProductOrderDTO;
 import com.exe.dto.CustomInfo;
 import com.exe.dto.CustomerDTO;
 import com.exe.dto.GymDTO;
@@ -277,7 +278,7 @@ private SqlSessionTemplate sessionTemplate;
 	
 	// getReviewNumMax : 리뷰 전체의 최댓값 : 데이터 삽입시 필요
 	public int getProductReviewNumMax() {
-	int result = sessionTemplate.selectOne("productMapper.getProductReviewNumMax");
+		int result = sessionTemplate.selectOne("productMapper.getProductReviewNumMax");
 	return result;
 	}
 	
@@ -315,8 +316,38 @@ private SqlSessionTemplate sessionTemplate;
 	return result;
 	}
 	
+	// productpay 불러오기
+	public ProductPayDTO getProductPayData() {
+		ProductPayDTO paydto = sessionTemplate.selectOne("productMapper.getProductPayData");
+		return paydto;
+	}
+
+	// productpay 불러오기
+	public ProductPayDTO getProductPayReadData(String cusId) {
+		ProductPayDTO paydto = sessionTemplate.selectOne("productMapper.getProductPayReadData", cusId);
+		if (paydto == null) { // review 테이블 안에 없는 cusId 로 조회할경우 오류가 나기 때문에 null값으로 보내줌
+			paydto = null;
+		} 
+		return paydto;
+	}
+
+	// 상품결제 리스트
+	public List<ProductPayDetailDTO> getProductPayList(int proPayNum) {
+		List<ProductPayDetailDTO> lists = sessionTemplate.selectList("productMapper.getProductPayList", proPayNum);
+		return lists;
+	}
+
+	// productpatdetail 갯수
+	public int getProductPayDetailDataCount(int proPayNum) {
+		int result = sessionTemplate.selectOne("productMapper.getProductPayDetailDataCount", proPayNum);
+		return result;
+	}
+
+	
+	
 
 	//*******************김세이*******************
+	
 	// getGymList : 체육관 하나의 정보 받아오기
 	public GymDTO getGymData(String gymId){
 		GymDTO gymDto = sessionTemplate.selectOne("gymDetailMapper.getGymData", gymId);
@@ -486,7 +517,13 @@ private SqlSessionTemplate sessionTemplate;
 		}
 		
 	}
-
+	
+	// 마이 페이지 상품 결제 내역 가져오기
+   public List<CusProductOrderDTO> getCusOrderList(String sessionId) {
+      List<CusProductOrderDTO> orderLists  = sessionTemplate.selectList("customerMapper.getCusOrderList",sessionId);
+      return orderLists;
+   }
+	
 
 	//*******************서예지*******************
 

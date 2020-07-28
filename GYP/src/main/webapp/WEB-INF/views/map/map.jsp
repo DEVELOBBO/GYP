@@ -314,21 +314,23 @@ function mapMake() {
                });
                var customContent = '<div class="wrap">' + 
                   '    <div class="info">' + 
-                  '        <div class="title">' + 
+                  '        <div class="title" style="border-bottom:none;" >' + 
                   '            ${dto.gymName}' + 
                   '          <div class="close" onclick="closeOverlay()" title="닫기"></div>' +
                   '        </div>' + 
-                  '        <div class="body">' + 
+                  '        <div class="body" style="font-family: \'Noto Sans KR\', sans-serif;">' + 
                   '            <div class="desc">' + 
                   					/*이미지(리스트)*/
                   '				  		<c:forEach var="images" items="${dto.gymPicAryList }">' +
                   '               	 	<img src="/gyp/sfiles/gymPic/${images }" width="90" height="70">' +
                   /*'						${images }'+*/
                   '				  	 	</c:forEach>'+
-                  '                <div class="ellipsis">${dto.gymAddr}</div>' + 
+                  '				   <div style="height:5px;"></div>' /*여백*/ +
+                  '                <div class="ellipsis" style="font-size:11pt; color:#666; font-weight:bold">'+ 
+                  ' 				${dto.gymAddr}</div>'/*주소*/ + 
                   '                <div>'+
-                  '             	<a href="<%=cp%>/gymDetail.action?gymId=${dto.gymId}" target="_self" class="link">상세페이지</a>' +
-                  '                <a href="https://map.kakao.com/link/to/${dto.gymName},' + xx +',' + yy + '" target="_blank" class="link">길찾기</a>' +
+                  '             	<a href="<%=cp%>/gymDetail.action?gymId=${dto.gymId}" target="_self" class=\"hover_green_detail\">상세페이지</a><i class="fas fa-info-circle"></i>&nbsp;&nbsp;' +
+                  '                <a href="https://map.kakao.com/link/to/${dto.gymName},' + xx +',' + yy + '" target="_blank" class="hover_green_detail">길찾기</a><i class="fas fa-arrow-alt-circle-right"></i>' +
                   '             </div>' +
                   '            </div>' + 
                   '        </div>' + 

@@ -47,6 +47,7 @@ import com.exe.dao.GypDAO;
 import com.exe.dto.BookDTO;
 import com.exe.dto.CartDTO;
 import com.exe.dto.ChargeDTO;
+import com.exe.dto.CusProductOrderDTO;
 import com.exe.dto.CustomInfo;
 import com.exe.dto.CustomerDTO;
 import com.exe.dto.GymDTO;
@@ -360,36 +361,45 @@ public class gypController {
 	}
 
 	// User 마이페이지
-	@RequestMapping(value = "/customerMyPage.action", method = { RequestMethod.GET, RequestMethod.POST })
-	public String customerMyPage(HttpServletRequest request, HttpSession session) {
+   @RequestMapping(value = "/customerMyPage.action", method = { RequestMethod.GET, RequestMethod.POST })
+   public String customerMyPage(HttpServletRequest request, HttpSession session) {
 
-		CustomInfo info = (CustomInfo) session.getAttribute("customInfo");
+      CustomInfo info = (CustomInfo)session.getAttribute("customInfo");
+      if(info==null) {
+         return "redirect:/login.action";
+      }
 
-		// 유저정보
-		CustomerDTO cusdto = dao.getCustromerDTOReadData(info);
+      // 유저정보
+      CustomerDTO cusdto = dao.getCustromerDTOReadData(info);
 
-		// 리뷰 아이디값 검색하기 위해
-		String reviewId = info.getSessionId();
-		// 찜 아이디값 검색하기 위해
-		String jjimId = info.getSessionId();
-		// 예약 아이디값 검색하기 위해
-		String bookId = info.getSessionId();
+      // 리뷰 아이디값 검색하기 위해
+      String reviewId = info.getSessionId();
+      // 찜 아이디값 검색하기 위해
+      String jjimId = info.getSessionId();
+      // 예약 아이디값 검색하기 위해
+      String bookId = info.getSessionId();
+      
 
-		// 체육관 리뷰리스트
-		List<ReviewDTO> reviewlists = dao.reviewgetList(reviewId);
-		// 찜리스트
-		List<JjimDTO> jjimlists = dao.jjimgetList(jjimId);
-		// 예약 리스트
-		List<BookDTO> booklists = dao.bookgetList(bookId);
+      // 체육관 리뷰리스트
+      List<ReviewDTO> reviewlists = dao.reviewgetList(reviewId);
+      // 찜 리스트
+      List<JjimDTO> jjimlists = dao.jjimgetList(jjimId);
+      // 예약 리스트
+      List<BookDTO> booklists = dao.bookgetList(bookId);
+      // 상품 결제 리스트 (S)
+      List<CusProductOrderDTO> orderLists = dao.getCusOrderList(info.getSessionId());
 
-		request.setAttribute("booklists", booklists);
-		request.setAttribute("reviewlists", reviewlists);
-		request.setAttribute("jjimlists", jjimlists);
-		request.setAttribute("cusdto", cusdto);
+      
+      request.setAttribute("booklists", booklists);
+      request.setAttribute("reviewlists", reviewlists);
+      request.setAttribute("jjimlists", jjimlists);
+      request.setAttribute("orderLists", orderLists);
+      request.setAttribute("cusdto", cusdto);
+      request.setAttribute("imagePath", "/gyp/sfiles/product/");
 
-		return "myPage/customerMyPage";
-	}
-
+      return "myPage/customerMyPage";
+   }
+	   
 	// GYM 마이페이지
 	@RequestMapping(value = "/gymMyPage.action", method = { RequestMethod.GET, RequestMethod.POST })
 	public String gymMyPage(HttpServletRequest request, HttpSession session) throws ParseException {
@@ -1587,8 +1597,19 @@ public class gypController {
 
 	// 리뷰 리스트 : 체육관 상세페이지 리뷰 리스트 (ajax)
 	@RequestMapping(value = "/productreviewList.action", method = { RequestMethod.GET, RequestMethod.POST })
-	public String productreviewList(HttpServletRequest request, String productId, HttpSession session) throws Exception {
+	public String productreviewList(HttpServletRequest request, String productId, HttpSession session)
+			throws Exception {
+
 		CustomInfo info = (CustomInfo) session.getAttribute("customInfo");
+
+		String cusId = "";
+
+		if (info == null || info.equals("")) {
+			cusId = "";
+		} else {
+			cusId = info.getSessionId();
+		}
+
 		if (info != null) {
 			request.setAttribute("info", info);
 		}
@@ -1643,15 +1664,53 @@ public class gypController {
 		}
 
 		String pageIndexList = myUtil.pageIndexList(currentPage, totalPage);
-		
+
 		if (info != null) {
 			request.setAttribute("info", info);
 			String cusInfo = info.getSessionId();
+		}
+		
+		// product 데이터 불러오기
+		ProductDTO dto = dao.getProductReadData(productId);
 
-			// Map<String, Object> hMap = new HashMap<String, Object>();
-			hMap.put("cusId", cusInfo);
-			hMap.put("productId", productId);
-			
+		ProductPayDTO paydto = null;
+
+		// productpay 데이터 불러오기
+		if (!cusId.equals("")) { //로그인 했을때 
+
+			paydto = dao.getProductPayReadData(cusId); //테이블 조회한값
+
+			if (paydto != null) { //productpay 테이블을 조회했는데 로그인한 아이디값이 있으면 리뷰작성창이 나오도록
+
+				int proPayNum = paydto.getProPayNum();
+
+				System.out.println(proPayNum);
+				// productpay 데이터 불러오기
+				// ProductPayDetailDTO paydetaildto =
+				// dao.getProductPayDetailReadData(proPayNum);
+
+				List<ProductPayDetailDTO> lists = dao.getProductPayList(proPayNum);
+
+				int result = dao.getProductPayDetailDataCount(proPayNum);
+
+				String[] proId = new String[result];
+
+				int i = 0;
+
+				for (ProductPayDetailDTO paydetaildto : lists) {// 선택한 개수많큼 리스트를 돌린다
+					proId[i] = paydetaildto.getProductId(); // 스트링 배열에 선택한 productId값을 넘겨준다
+					i++;
+				}
+
+				for (i = 0; i < result; i++) {
+
+					if (proId[i].equals(dto.getProductId())) {
+						int reviewaccect = 1;
+						request.setAttribute("reviewaccect", reviewaccect); //구매한 적이 있으면 리뷰 작성이 보여지는 flag
+					}
+
+				}
+			}
 		}
 
 		request.setAttribute("starAvg", starAvg);
@@ -1774,8 +1833,8 @@ public class gypController {
 		
 		//확장for문, 하나씩 꺼내서 글자길이 수정
 		for(ProductDTO dto : productLists) {
-			if(dto.getProductContent().length() > 13) { //프로그램 길면 자르기
-				dto.setProductContent(dto.getProductContent().substring(0, 13) + " ...");
+			if(dto.getProductContent().length() > 11) { //프로그램 길면 자르기
+				dto.setProductContent(dto.getProductContent().substring(0, 11) + " ...");
 			}
 		}
 		

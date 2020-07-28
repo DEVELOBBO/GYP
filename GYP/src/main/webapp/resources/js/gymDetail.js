@@ -72,7 +72,6 @@ function writeReview() {	//리뷰 작성
 			$("#listData").html(args);	//넘어온 데이터를 넣어준다.
 			
 			//초기화 작업
-			$("#rname").val("");
 			$("#rcontent").val("");
 			//라디오버튼 초기화
 			$("input[name='rating']:checked").each(function(){

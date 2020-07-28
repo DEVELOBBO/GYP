@@ -53,42 +53,43 @@ GymDTO dto = (GymDTO)request.getAttribute("dto");
 
 <script type="text/javascript">
 	
+$(function() {
+    //아이디 중복체크
+    $('#checkbutton2').click(function() {
+       $.ajax({
+          type : "POST",
+          url : "gymIdck",
+          data : {
+             "gymId" : $('#gymId').val()
+          },
+          success : function(data) { //data : checkSignup에서 넘겨준 결과값
+             if ($.trim(data) == "YES") {
+                if ($('#gymId').val() != '') {
+                   alert("사용가능한 아이디입니다.");
+                   var ff = $('#gymId').val();
+                   $('#checkgymId').val(ff);
 
-	$(function() {
-		//아이디 중복체크
-		$('#checkbutton2').click(function() {
-			$.ajax({
-				type : "POST",
-				url : "gymIdck",
-				data : {
-					"gymId" : $('#gymId').val()
-				},
-				success : function(data) { //data : checkSignup에서 넘겨준 결과값
-					if ($.trim(data) == "YES") {
-						if ($('#gymId').val() != '') {
-							alert("사용가능한 아이디입니다.");
-							var ff = $('#gymId').val();
-							$('#checkgymId').val(ff);
+                }
+             } else {
+                if ($('#gymId').val() != '') {
+                   alert("중복된 아이디입니다.");
+                   $('#gymId').val('');
+                   $('#gymId').focus();
+                }
+             }
+          }
+       })
+    })
 
-						}
-					} else {
-						if ($('#gymId').val() != '') {
-							alert("중복된 아이디입니다.");
-							$('#gymId').val('');
-							$('#gymId').focus();
-						}
-					}
-				}
-			})
-		})
+ });
 
-	});
 
-	
-	
 	$(function() {
 		//전화번호 중복체크
-		$('#gymTel').blur(function() {
+		$('#telckbutton').click(function() {
+			
+			f = document.myForm;
+			
 			$.ajax({
 				type : "POST",
 				url : "gymTelck",
@@ -100,13 +101,25 @@ GymDTO dto = (GymDTO)request.getAttribute("dto");
 					if ($.trim(data) == "YES") {
 						if ($('#gymTel').val() != '') {
 							alert("사용가능한 전화번호입니다.");
-
+							var ff = $('#gymTel').val();
+							$('#checkgymTel').val(ff);
 						}
-					} else {
+
+					} else {			
+					  if (f.mode.value != 'updated') {	
 						if ($('#gymTel').val() != '') {
-							alert("중복된 전화번호입니다.");
-							$('#gymTel').val('');
-							$('#gymTel').focus();
+							
+								alert("중복된 전화번호입니다.");
+								$('#gymTel').val('');
+								$('#gymTel').focus();	
+							}
+					  }
+						 if (f.mode.value == 'updated') {	
+								if ($('#gymTel').val() != '') {
+									
+									alert("중복된 전화번호입니다.");
+										
+							}
 						}
 					}
 				}
@@ -114,90 +127,7 @@ GymDTO dto = (GymDTO)request.getAttribute("dto");
 		})
 
 	});
-	
 
-	$(function() {
-		//전화번호 중복체크
-		$('#gymTel').blur(function() {
-			
-			 f = document.myForm;
-			
-			$.ajax({
-				type : "POST",
-				url : "gymTelck",
-				data : {
-					"gymTel" : $('#gymTel').val()
-				},
-
-			     success:function(data){	//data : cusidck에서 넘겨준 결과값
-			            if($.trim(data)=="YES"){
-			               if($('#gymTel').val()!=''){ 
-			               	alert("사용가능한 전화번호입니다.");
-			        
-			               }
-			           	}else{
-			             
-			           		if(f.mode.value!="updated"){
-			           		
-			           		if($('#gymTel').val()!=''){
-			                  alert("중복된 전화번호입니다.");
-			                 
-			                  $('#gymTel').val('');				               
-			                  $('#gymTel').focus();
-			           			}  
-			           		}
-			           		if(f.mode.value=="updated"){
-			           			if($('#gymTel').val()!=''){
-					         alert("중복된 전화번호입니다.");
-			           			
-			           			
-			           			}
-			               }
-			            }
-			         }
-			    }) 
-		     })
-		      
-	
-		});
-	/* 
-	$(function() {
-	   $("input[name='gymFacility']").each(function(){
-	var checkboxes = document.getElementsByName('gymFacility');
-	var vals = 0;
-	for (var i=0, n=checkboxes.length;i<n;i++) {
-	       if (checkboxes[i].checked) {
-	           vals += ","+gymFacility[i].value;
-	       }
-	   }
-	   }
-	} 
-	 */
-
-	/* 
-	$(function() {
-	
-	    $("input[name='gymFacility']").each(function(){
-	       var thisVal1 = $("#checkF1").val();
-	      var thisVal2 = $("#checkF2").val();
-	      var thisVal3 = $("#checkF3").val();
-	       if( thisVal1.length > 0 ){
-	          $("#checkF1").attr("checked", true );
-	       
-	       }
-	     if( thisVal2.length > 0 ){
-	        $("#checkF2").attr("checked", true );
-	     
-	     }
-	     if( thisVal3.length > 0 ){
-	        $("#checkF3").attr("checked", true );
-	     
-	     }
-	       
-	    }); 
-	  }
-	}
-	 */
 	//주소 찾기 버튼(Daum카카오 주소API 기반)
 	function sample6_execDaumPostcode() {
 		new daum.Postcode({
@@ -276,15 +206,14 @@ GymDTO dto = (GymDTO)request.getAttribute("dto");
 		
 		
 		 */
-		if (f.mode.value != 'updated') {
-			if (!cc1.test(f.gymId.value)) {
-	
-				alert('아이디 영문소문자/숫자 4~16자 이내로 입력하세요.');
-	
-				f.gymId.focus();
-	
-				return false;
-			}
+
+		if (!cc1.test(f.gymId.value)) {
+
+			alert('아이디 영문소문자/숫자 4~16자 이내로 입력하세요.');
+
+			f.gymId.focus();
+
+			return false;
 		}
 
 		if (f.mode.value != 'updated') {
@@ -305,16 +234,14 @@ GymDTO dto = (GymDTO)request.getAttribute("dto");
 			f.gymName.focus();
 			return;
 		}
-	
-		if (f.mode.value != 'updated') {
-			if (!cc2.test(f.gymPwd.value)) {
-	
-				alert('패스워드 영문 대소문자/숫자 4~16자 이내로 입력하세요.');
-	
-				f.gymPwd.focus();
-	
-				return false;
-			}
+
+		if (!cc2.test(f.gymPwd.value)) {
+
+			alert('패스워드 영문 대소문자/숫자 4~16자 이내로 입력하세요.');
+
+			f.gymPwd.focus();
+
+			return false;
 		}
 
 		if (!f.gymPwd2.value) {
@@ -338,7 +265,13 @@ GymDTO dto = (GymDTO)request.getAttribute("dto");
 
 			return false;
 		}
-
+		if (f.mode.value != "updated") {
+		if ($('#gymTel').val() != $('#checkgymTel').val()) {
+			alert('전화번호 중복체크 버튼을 눌러주세요');
+			f.telckbutton.focus();
+			return false;
+		 }
+		}
 		if (!cc3.test(f.gymTel.value)) {
 
 			alert('전화번호를 바르게 입력하세요');
@@ -359,84 +292,82 @@ GymDTO dto = (GymDTO)request.getAttribute("dto");
 			f.gymType.focus();
 			return;
 		}
-	
+
+		//트레이너명,트레이너사진 업로드 유효성 검사! , 최소 1명이상 등록하라고 alert띄움
+		if (f.gymTrainer1.value != "" && uploads[0].value == "") {
+			alert("1번째 트레이너 사진을 입력해주세요!");
+			f.gymTrainer1.focus();
+			return;
+		}
+		if (f.gymTrainer1.value == "" && uploads[0].value != "") {
+			alert("1번째 트레이너명을 입력하세요 (최소1명 이상).");
+			f.gymTrainer1.focus();
+			return;
+		}
+		if (f.gymTrainer2.value != "" && uploads[1].value == "") {
+			alert("2번째 트레이너 사진을 입력해주세요!");
+			f.gymTrainer2.focus();
+			return;
+		}
+		if (f.gymTrainer2.value == "" && uploads[1].value != "") {
+			alert("2번째 트레이너명을 입력하세요 (최소1명 이상).");
+			f.gymTrainer2.focus();
+			return;
+		}
+		if (f.gymTrainer3.value != "" && uploads[2].value == "") {
+			alert("3번째 트레이너 사진을 입력해주세요!");
+			f.gymTrainer3.focus();
+			return;
+		}
+		if (f.gymTrainer3.value == "" && uploads[2].value != "") {
+			alert("3번째트레이너명을 입력하세요 (최소1명 이상).");
+			f.gymTrainer3.focus();
+			return;
+		}
+		if (f.gymTrainer4.value != "" && uploads[3].value == "") {
+			alert("4번째 트레이너 사진을 입력해주세요!");
+			f.gymTrainer4.focus();
+			return;
+		}
+		if (f.gymTrainer4.value == "" && uploads[3].value != "") {
+			alert("4번째 트레이너명을 입력하세요 (최소1명 이상).");
+			f.gymTrainer4.focus();
+			return;
+		}
+
+		if (!f.gymTrainer1.value) {
+			alert("1번째 트레이너명을 입력하세요 (최소1명 이상).");
+			f.gymTrainer1.focus();
+			return;
+		}
+
+		//체육관 사진등록 제약조건 (최소1장이상)
+		if (uploads2[0].value == "") {
+			alert("첫번째 체육관 사진등록을 해주세요 (최소 1장이상)");
+			f.uploads2[0].focus();
+			return;
+		}
+
+		if (!f.gymProgram.value) {
+			alert("프로그램 내용을 입력하세요 .");
+			f.gymProgram.focus();
+			return;
+		}
+
+		if (f.gymFacility[0].checked == false
+				&& f.gymFacility[1].checked == false
+				&& f.gymFacility[2].checked == false) {
+			alert("이용가능시설을 체크해주세요");
+			return false;
+
+		}
 		if (f.mode.value != 'updated') {
-			//트레이너명,트레이너사진 업로드 유효성 검사! , 최소 1명이상 등록하라고 alert띄움
-			if (f.gymTrainer1.value != "" && uploads[0].value == "") {
-				alert("1번째 트레이너 사진을 입력해주세요!");
-				f.gymTrainer1.focus();
-				return;
-			}
-			if (f.gymTrainer1.value == "" && uploads[0].value != "") {
-				alert("1번째 트레이너명을 입력하세요 (최소1명 이상).");
-				f.gymTrainer1.focus();
-				return;
-			}
-			if (f.gymTrainer2.value != "" && uploads[1].value == "") {
-				alert("2번째 트레이너 사진을 입력해주세요!");
-				f.gymTrainer2.focus();
-				return;
-			}
-			if (f.gymTrainer2.value == "" && uploads[1].value != "") {
-				alert("2번째 트레이너명을 입력하세요 (최소1명 이상).");
-				f.gymTrainer2.focus();
-				return;
-			}
-			if (f.gymTrainer3.value != "" && uploads[2].value == "") {
-				alert("3번째 트레이너 사진을 입력해주세요!");
-				f.gymTrainer3.focus();
-				return;
-			}
-			if (f.gymTrainer3.value == "" && uploads[2].value != "") {
-				alert("3번째트레이너명을 입력하세요 (최소1명 이상).");
-				f.gymTrainer3.focus();
-				return;
-			}
-			if (f.gymTrainer4.value != "" && uploads[3].value == "") {
-				alert("4번째 트레이너 사진을 입력해주세요!");
-				f.gymTrainer4.focus();
-				return;
-			}
-			if (f.gymTrainer4.value == "" && uploads[3].value != "") {
-				alert("4번째 트레이너명을 입력하세요 (최소1명 이상).");
-				f.gymTrainer4.focus();
-				return;
-			}
-	
-			if (!f.gymTrainer1.value) {
-				alert("1번째 트레이너명을 입력하세요 (최소1명 이상).");
-				f.gymTrainer1.focus();
-				return;
-			}
-	
-			//체육관 사진등록 제약조건 (최소1장이상)
-			if (uploads2[0].value == "") {
-				alert("첫번째 체육관 사진등록을 해주세요 (최소 1장이상)");
-				f.uploads2[0].focus();
-				return;
-			}
-	
-			if (!f.gymProgram.value) {
-				alert("프로그램 내용을 입력하세요 .");
-				f.gymProgram.focus();
-				return;
-			}
-	
-			if (f.gymFacility[0].checked == false
-					&& f.gymFacility[1].checked == false
-					&& f.gymFacility[2].checked == false) {
-				alert("이용가능시설을 체크해주세요");
+			if (!f.check.checked) {
+				alert('약관에 동의해주세요');
 				return false;
-	
-			}
-			if (f.mode.value != 'updated') {
-				if (!f.check.checked) {
-					alert('약관에 동의해주세요');
-					return false;
-				}
 			}
 		}
-		
+
 		if (f.mode.value == "updated") {
 			alert("체육관 회원수정이 성공적으로 완료되었습니다.");
 			f.action = "/gyp/gymUpdate_ok.action";
@@ -544,6 +475,8 @@ GymDTO dto = (GymDTO)request.getAttribute("dto");
 						<dd>
 							<input type="text" name="gymTel" id="gymTel" size="35" maxlength="50"
 								class="boxTF" value="${dto.gymTel }"/>
+							<input type="button" id = "telckbutton" name = "telckbutton" value ="중복체크"/>
+							<input type="hidden" id = "checkgymTel" name = "checkgymTel" value =""/>	
 						</dd>
 					</dl>
 				</div>
@@ -1162,28 +1095,27 @@ GymDTO dto = (GymDTO)request.getAttribute("dto");
 						<span style="padding-left: 160px"> 약관동의</span>
 					</p>
 					<br>
-					<textarea rows="20" cols="150" readonly="readonly">미안하다 이거 보여주려고 어그로끌었다.. 
-     나루토 사스케 싸움수준 ㄹㅇ실화냐? 진짜 세계관최강자들의 싸움이다.. 
-     그찐따같던 나루토가 맞나? 
-     진짜 나루토는 전설이다..진짜옛날에 맨날나루토봘는데 왕같은존재인 호카게 되서 세계최강 전설적인 영웅이된나루토보면 
-     진짜내가다 
-     감격스럽고 나루토 노래부터 명장면까지 가슴울리는장면들이 뇌리에 스치면서 가슴이 웅장해진다.. 그리고 극장판에 
-     카카시앞에 
-     운석날라오는 거대한 걸 사스케가 갑자기 순식간에 나타나서 부숴버리곤 개간지나게 나루토가 없다면 마을을 지킬 자는 
-     나밖에 없다 
-     라며 바람처럼 사라진장면은 진짜 나루토처음부터 본사람이면 안울수가없더라 진짜 너무 감격스럽고 보루토를 최근에 알았는데 
-     미안하다.. 지금20화보는데 진짜 나루토세대나와서 너무 감격스럽고 모두어엿하게 큰거보니 내가 다 뭔가 알수없는 
-     추억이라해야되나 그런감정이 이상하게 얽혀있다.. 시노는 말이많아진거같다 좋은선생이고..
-     그리고 보루토왜욕하냐 귀여운데 나루토를보는것같다 성격도 닮았어 그리고버루토에 나루토사스케 둘이싸워도 이기는 
-     신같은존재 나온다는게 사실임?? 그리고인터닛에 쳐봣는디 이거 ㄹㅇㄹㅇ 진짜팩트냐?? 
-     저적이 보루토에 나오는 신급괴물임?ㅡ 나루토사스케 합체한거봐라 진짜 ㅆㅂ 이거보고 개충격먹어가지고
-      와 소리 저절로 나오더라 ;;
-      진짜 저건 개오지는데.. 저게 ㄹㅇ이면 진짜 꼭봐야돼 진짜 세계도 파괴시키는거아니야 .. 와 진짜 
-      나루토사스케가 저렇게 되다니 
-      진짜 눈물나려고했다.. 버루토그라서 계속보는중인데 저거 ㄹㅇ이냐..? 하.. ㅆㅂ 사스케 보고싶다..  
-      진짜언제 이렇게 신급 최강들이 되었을까 옛날생각나고 나 중딩때생각나고 뭔가 슬프기도하고 좋기도하고
-       감격도하고 
-      여러가지감정이 복잡하네.. 아무튼 나루토는 진짜 애니중최거명작임..
+					<textarea rows="20" cols="150" readonly="readonly">1장 총칙
+제1조 (목적)
+본 약관은 (주)GYP(이하 “당사”라 함)가 제공하는 TLX PASS 서비스 이용과 관련하여 당사와 회원의 제반 권리, 의무, 책임사항, 관련 절차, 기타 필요한 사항을 규정하는데 그 목적이 있습니다.
+
+제2조 (용어)
+본 약관에서 사용하는 주요 용어의 정의는 다음과 같습니다.
+1.“서비스”라 함은 구현되는 단말기(PC, TV, 휴대형 단말기 등의 각종 유무선 장치를 포함)와 상관없이 당사와 제휴시설이 “회원”에게 제공하는 TLX PASS 관련 제반 서비스 모두를 의미합니다.
+2."회원"이라 함은 당사의 약관 제5조에 정해진 가입 절차에 따라 가입하여 정상적으로 당사의 제휴시설과 GYP 서비스를 이용할 수 있는 권한을 부여 받은 고객을 말합니다.
+
+
+제2장 회원가입과 멤버십
+
+제3조 (회원가입과 멤버십 구매)
+1.회원 가입은 서비스 홈페이지, 어플리케이션을 통해 가능합니다.
+회원으로 가입하고자 하는 고객은 당사에서 정한 서비스 홈페이지의 회원 가입 신청서에 정해진 사항을 기입한 후 본 약관과 ‘개인정보처리방침(‘개인정보 수집 제공 및 활용 동의’ 등)'에 동의함으로써 회원가입을 신청합니다.
+2.고객으로부터 회원가입 신청이 있는 경우 당사는 자체 기준에 따른 심사를 거친 후 고객에게 회원 자격을 부여 할 수 있으며 회원 자격이 부여된 고객은 당사로부터 가입 완료 공지를 받은 시점부터 회원으로서 지위를 취득하고, 멤버십을 구매/이용할 수 있습니다.
+3.회원은 회원자격을 타인에게 양도하거나 대여 또는 담보의 목적으로 이용할 수 없습니다.
+
+제4조 (멤버십 이용 및 관리)
+1.회원이 GYP 서비스를 당사와 제휴시설에서 이용하고자 할 경우, 어플리케이션/모바일웹/RFID카드를 이용해야 하며, 당사와 제휴시설은 미성년자 여부나 본인 확인 등 합리적인 이유가 있을 때 회원에게 신분증 제시를 요청할 수 있습니다. 회원은 이러한 요청을 있을 경우 요청에 응해야 정상적이고 원활한 GYP 서비스를 제공 받을 수 있습니다.
+2.회원에게 등록된 멤버십은 회원 본인만 사용 가능합니다. 회원 아이디 및 멤버십을 제3자에게 임의적으로 대여 사용하게 하거나 양도 또는 담보의 목적으로 사용 할 수 없으며, 해당 불법 행위로 인해 발생하는 모든 책임은 사용자가 부담합니다.
    </textarea>
 					<br>
 					<input type="checkbox" name="check"> 동의합니다.
@@ -1193,7 +1125,7 @@ GymDTO dto = (GymDTO)request.getAttribute("dto");
 
 			<c:if test="${mode!='updated' }">
 				<div id="bbsCreated_footer">
-					<input type="button" value=" 등록하기 " class="btn2"
+					<input type="button" value=" 등록하기 " class="btn2" id="sendItBtn"
 						onclick="sendIt();" /> <input type="reset" value=" 다시입력 "
 						class="btn2" onclick="document.myForm.cusId.focus();" /> <input
 						type="button" value=" 작성취소 " class="btn2"

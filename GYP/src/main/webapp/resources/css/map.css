@@ -99,6 +99,15 @@ a.hover_green:hover{
 	color:#38b143	
 }
 
+a.hover_green_detail:link{
+	color:#666666!important;
+}
+
+a.hover_green_detail:hover{
+	color:#38b143!important;	
+}
+
+
 .mapListText{
 	font-size: 11pt;
 	display: inline-block;

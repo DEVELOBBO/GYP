@@ -17,6 +17,27 @@
 </script>
 <!-- gymDetail.action에 띄울 체육관 리뷰 리스트 : ajax 사용해 호출 -->
 
+<c:if test="${totalDataCount==0 }">
+	<div style="display: inline-block; width: 100%;">
+	   <!-- Post Title -->
+	   <a href="#" class="post-title" style="font-size:20pt; width: 300px; display: inline-block; vertical-align: bottom; margin-top: 15px;">
+	   체육관 리뷰</a>                                    
+	   <!-- 전체 평점 -->
+	   <div style="text-align: right; float:right; height:36px;">
+	   	   총 0 개의 평가<br>
+		   <!-- 평점 -->  
+		   <div style=" vertical-align: middle; height: 36px; width: 220px; vertical-align: bottom; font-size: 17pt; color: #38b143; font-weight: bold;">
+		   		평균 0 점
+		   </div>
+	    </div>
+	</div>
+	<div style="height: 35px;"></div>
+	<div style="width: 100%; text-align: center; font-size: 12pt; font-weight: bold; color: #38b143;">등록된 리뷰가 없습니다.</div> 
+	<div style="height: 35px;"></div>
+</c:if>
+
+
+
 <c:if test="${totalDataCount!=0 }">
    <div style="display: inline-block; width: 100%;">
 	   <!-- Post Title -->
@@ -41,15 +62,15 @@
 		       <input type="radio" id="starhalfT" name="ratingT" class="total-rating" value="1" /><label class="half" for="starhalfT" title="1점"></label>
 		   </fieldset>
 		   <!-- 평점 -->  
-		   <div style=" vertical-align: middle; height: 36px; width: 190px; vertical-align: bottom; font-size: 17pt; color: #38b143; font-weight: bold;">
-		   		${starAvg }점
+		   <div style=" vertical-align: middle; height: 36px; width: 250px; vertical-align: bottom; font-size: 17pt; color: #38b143; font-weight: bold;">
+		   		평균 ${starAvg }점
 		   </div>
 	    </div>
 	</div>
    <c:forEach var="dto" items="${reviewLists }" varStatus="status">
       <hr>
       <!-- 리뷰 글쓴이 -->
-      <div class="post-meta" style="display: inline-block; width: 400px; margin: 0; margin-top: 10px; font-weight: bold;'">
+      <div class="post-meta" style="display: inline-block; width: 400px; margin: 0; margin-top: 5px; font-weight: bold;'">
 	      	<font style="color:#38b143;">${dto.cusId }</font>&nbsp;님의 리뷰&nbsp;
 	      	<span style="color:#bbbbbb;">[${dto.reCreated }]</span>
 	      	<c:if test="${!empty info.sessionId && info.sessionId == dto.cusId}">
@@ -58,7 +79,7 @@
 	      	</c:if>
       </div>
       <!-- 평점 -->
-      <div style=" width: 190px; height:36px; display: inline-block; float: right; text-align: right;">
+      <div style=" width: 250px; height:36px; display: inline-block; float: right; text-align: right;">
 	      <fieldset class="ratingP" disabled="disabled">
 	          <input type="radio" id="star5P" name="ratingP${status.count}" class="personal-rating${status.count}" value="10" /><label class = "full" for="star5P" title="10점"></label>
 	          <input type="radio" id="star4halfP" name="ratingP${status.count}" class="personal-rating${status.count}" value="9"/><label class="half" for="star4halfP" title="9점"></label>
@@ -72,20 +93,17 @@
 	          <input type="radio" id="starhalfP" name="ratingP${status.count}" class="personal-rating${status.count}" value="1" /><label class="half" for="starhalfP" title="1점"></label>
 	      </fieldset>
 	      <!-- 평점 --> 
-	      <div style=" height: 36px; width: 50px; display:inline-block; font-size: 14pt; color: #888; padding-top: 3px;">
-	         &nbsp;${dto.star}점
+	      <div style=" height: 36px; width: 80px; display:inline-block; font-size: 12pt; color: #888; padding-top: 3px; ">
+	         ${dto.star}점&nbsp;<font style="font-size: 2pt;">(총 10점)</font>
 	      </div> 
           <input type="hidden" id="personalAvgParam-${status.count}" value="${dto.star }"/>
       </div>
-      
       
       <!-- 여백 -->
       <div style="height: 15px;"></div>
       
       <!-- 리뷰 내용 -->
-      <div>
-         ${dto.reContent }
-      </div>
+      <div>${dto.reContent }</div>
       
       <script type="text/javascript">
          //reviewList 개인별 별점
@@ -103,15 +121,12 @@
 	<div style="text-align: center;">${pageIndexList }</div>
 </c:if>
 
-<c:if test="${totalDataCount==0 }">
-   등록된 리뷰가 없습니다. 
-</c:if>
 
 
 
 <!-- ************리뷰 작성************ -->
 <!-- 리뷰 작성 : 회원 세션에 cusId가 올라가있으면서, 해당 페이지의 gymId의 Book 목록에 cusId가 있으면 보이게하기 -->
-<%-- <c:if test="${!empty info.sessionId && timesCusBookedGym!=0 && timesCusReviewedGym<timesCusBookedGym}"> --%>
+<c:if test="${!empty info.sessionId && timesCusBookedGym!=0 && timesCusReviewedGym<timesCusBookedGym}">
 	<!-- 여백 -->
 	<div style="height: 30px;"></div>
 	
@@ -121,10 +136,14 @@
 	
 	
 	<!-- 작성자 및 별정 -->
-	<div style="display: inline-block;">
-	<input type="text" id="rname" size="20" maxlength="20" class="boxTF" value="&nbsp;${info.sessionId }" disabled/>
+	<div style="display: inline-block; width:100%; height: 50px; vertical-align: middle;">
+		<!-- 아이디칸 -->
+		<div style="display: inline-block; width: 200px; margin-bottom: 10px;">
+		<input type="text" id="rname" size="20" maxlength="20" class="boxTF" value="${info.sessionId }" disabled
+		style=" padding-left: 5px;"/>
+		</div>
 		<!-- 별표 -->
-			<div style="text-align: right; width:200px; height:36px; display: inline-block; "> 
+			<div style="text-align: right; width:200px; height:36px; display: inline-block; vertical-align: -12px; "> 
 				<fieldset class="ratingM">
 				      <input type="radio" id="star5" name="rating" value="10" /><label class = "full" for="star5" title="10점"></label>
 				      <input type="radio" id="star4half" name="rating" value="9" /><label class="half" for="star4half" title="9점"></label>
@@ -138,14 +157,17 @@
 				      <input type="radio" id="starhalf" name="rating" value="1" /><label class="half" for="starhalf" title="1점"></label>
 				  </fieldset>
 		   </div>
+		<!-- 등록 버튼 -->
+		<div style="display: inline-block; float: right; height: 36px; padding-top: 3px;">
+			<input type="button" value="등록하기" class="btn fitness-btn m-2" id="rsendButton"
+				style="min-width: 40px!important; height: 30px; margin:0!important; line-height: 0;"
+	            onclick="javascript:writeReview();"/>
+        </div>
 	</div>
 	<!-- 내용 -->
-	<textarea rows="3" cols="84" class="boxTA" style="height:50px;" id="rcontent"></textarea>
+	<textarea rows="3" cols="102" class="boxTA" style="height:50px;" id="rcontent"></textarea>
 	
-	<!-- 등록 버튼 -->
 	
-	<input type="button" value="등록하기" class="btn2" id="rsendButton" 
-            onclick="javascript:writeReview();"/>
 	
 
-<%-- </c:if> --%>
+</c:if>

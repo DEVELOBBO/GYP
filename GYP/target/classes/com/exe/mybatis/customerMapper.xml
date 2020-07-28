@@ -67,4 +67,15 @@ PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
 	delete from BOOK where bookNum=#{bookNum}
 </delete>
 
+<!-- 상품 주문 리스트 -->
+<select id="getCusOrderList" resultType="com.exe.dto.CusProductOrderDTO">
+   select pp.proPayNum,pp.proPayCreated,pp.priceTotal,pp.proPayAddr,pp.proPayTel,pp.cusId,
+   ppd.proPayDetailNum, ppd.productId, ppd.count,
+   p.productName,p.productImg,p.productPrice
+   from product p, productPay pp, productPayDetail ppd
+   where pp.proPayNum = ppd.proPayNum and pp.cusId=#{cusId} and p.productId=ppd.productId 
+   order by proPayCreated desc
+</select>
+
+
 </mapper>

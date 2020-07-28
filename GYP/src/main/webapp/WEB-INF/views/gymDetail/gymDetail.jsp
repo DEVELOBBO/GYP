@@ -109,22 +109,31 @@
                                 </div>
                             </div>
                         
-                        <hr style="width: 100%; margin-left: 0px; text-align: left,border-bottom:0px;">	    
+                        <!-- <hr style="width: 100%; margin-left: 0px; text-align: left,border-bottom:0px;"> -->	    
+                       
                         <!-- 관련 상품 뿌리기 -->
-	                    <div class="col-12">
-		                    <h4>${gymDto.gymType }관련 인기 상품<span>&nbsp;
-		                    <a href="/gyp/productList.action">더보기</a></span></h4>
-                    <!-- 상품리스트로 더보기 (링크 수정 필요) -->
+	                    <div class="col-12" style="vertical-align: bottom; height: 30px;">
+	                    	<div class="single-blog-post mb-100 gymDetailHeadLine" style="display: inline-block;">
+	                    		<a href="#" class="post-title" style="font-size:20pt; display: inline-block;">
+	                    		${gymDto.gymType }&nbsp;관련 인기상품&nbsp;&nbsp;</a>
+	                    		<a href="/gyp/productList.action" style="color: #38b143; display: inline-block;">더보기</a>
+	                    	</div>
 	                    </div>
-		                    <br/><br/>
+                    	<!-- 상품리스트로 더보기 (링크 수정 필요) -->
+		                <br/><br/><br>
 		                    
 		                    <c:forEach var="productDto" items="${productLists }">
-				                <div class="single-price-table mb-100 col-4">
-			                        <img src="/gyp/sfiles/product/${productDto.productImg}" alt="${productDto.productName }">
+				                <div class="single-price-table mb-100 col-4"  style="width: 282px; display: inline-block;">
 			                        <div class="price-table-content">
+			                        	<!-- imgae -->
+			                        	<img src="/gyp/sfiles/product/${productDto.productImg}" alt="${productDto.productName }"
+			                        		style="width: 282px;">
+			                        	<!-- 여백 -->
+	             	 					<div style="height: 10px;"></div>
 			                            <!-- price -->
 			                            <h4 class="price"><span>${productDto.productId }</span></h4>
-			                            <h6>${productDto.productName }</h6>
+			                            <!-- Name -->
+		                				<h5>${productDTO.productName }</h5>
 			                            <!-- Price Data -->
 			                            <ul class="price-data">
 			                                <li><i class="fa fa-circle" aria-hidden="true"></i> &#8361;${productDto.productPrice }</li>
@@ -137,7 +146,7 @@
 		                    </c:forEach>
                         </div>
                     </div>
-
+					
 
                 </div>
 				<!-- -------------좌측 컬럼 끝-------------- -->
@@ -145,26 +154,31 @@
 				
 				<!-- ------------우측 컬럼 시작------------- -->
                 <div class="col-12 col-md-4">
-                    <div class="fitness-blog-sidebar">
+                    <div class="fitness-blog-sidebar" style="width: 300px; margin: 0 auto;"> <!-- 우측컬럼 크기 -->
 					<c:if test="${empty info || info.loginType ne 'gym'}">
-						<div class="row">
+						<div class="row" style="justify-content: center;">
 							<!-- 예약 모달 버튼 -->
-							<div class="single-blog-post mb-100 gymDetailHeadLine">
+							<div class="single-blog-post mb-100 gymDetailHeadLine" style="width: 100px; padding-top: 80px; padding-right: 20px;" >
 								<!--  Post Thumb -->
 								<div class="blog-post-thumb mb-30">
 									<div id="gymBook" class="post-date1" data-toggle="modal"
-										data-target="#bookModal" data-backdrop="static" data-keyboard="false">
+										data-target="#bookModal" data-backdrop="static" data-keyboard="false"
+										style="width: 77px; margin: 0 auto;">
 										<p>
 											<span>${gymDto.gymPass }&nbsp;pass</span>
 										</p>
 									</div>
+									<div style="width: 77px; margin: 0 auto; text-align: center; font-size: 12pt; font-weight: bold; color: #888!important;
+									padding-top: 15px;">
+									예약하기</div>
 								</div>
 							</div>
-
+							
+							
 							<!-- 찜 버튼 -->
-							<div class="single-blog-post mb-100 gymDetailHeadLine">
+							<div class="single-blog-post mb-100 gymDetailHeadLine" style="width: 100px; padding-top: 80px;">
 								<div class="blog-post-thumb mb-30">
-									<div id="gymJjim" class="post-date2">
+									<div id="gymJjim" class="post-date2" style="width: 77px; margin: 0 auto;">
 										<form action="" method="POST" name="JjimForm">
 											<div id="main-content">
 												  <div>
@@ -220,9 +234,13 @@
 											</div>
 										</form>
 									</div>
+									<div style="width: 77px; margin: 0 auto; text-align: center; font-size: 12pt; font-weight: bold; color: #888!important;
+									padding-top: 15px;">
+									찜하기</div>
 								</div>
 							</div>
 						</div>
+					
 					
 						<!-- 예약 모달 -->
                         <div id="bookModal" class="modal fade" role="dialog">
@@ -231,56 +249,68 @@
 						    <!-- Modal content-->
 						    <div class="modal-content">
 							    <form action="" method="post" name="bookForm">
-							      <div class="modal-header">
+							      <div class="modal-header" style="padding-left: 35px;">
 							        <button type="button" class="close" data-dismiss="modal">&times;</button>
 							        <h4 class="modal-title">
-										${gymDto.gymName } 체육관(${gymDto.gymType })을 선택하셨네요!<br/>
-										<span>${gymDto.gymPass }</span>pass가 차감됩니다. 
+										${gymDto.gymName } 체육관(${gymDto.gymType })
+										<font style="font-size:12pt; color: #888!important;">&nbsp;을 예약하시겠습니까?</font><br>
+										
+										
 									</h4>
 							      </div>
-							      <div class="modal-body">
+							      <div class="modal-body" style="font-size: 12pt; padding-left: 35px;">
 							      	<!-- hidden parameters -->
 							      	<input type="hidden" name="gymId" value="${gymDto.gymId }">
-							      
+							      	<div style="height: 30px;"></div>
+							      	
+							      	<!-- 트레이너 선택 -->
 									<div class="modal-body-select">
-							        	<label for="selectTrainer">트레이너 : </label>
-									  <select name="gymTrainerPick" id="selectTrainer">
+							        	<label for="selectTrainer">&nbsp;<i class="fas fa-user"></i>&nbsp;
+							        	트레이너&nbsp;&nbsp;</label>
+										<select name="gymTrainerPick" id="selectTrainer">
 										    <option value="" disabled="disabled" selected="selected">트레이너를 선택해주세요</option>
-										  <c:forEach var="i" begin="0" end="3">
+											<c:forEach var="i" begin="0" end="3">
 										    <option value="${gymTrainer[i]}">${gymTrainer[i]}</option>
-									  	  </c:forEach>
-									  </select>
+									  	  	</c:forEach>
+										</select>
 							        </div> 
 	
+									<div style="height: 20px;"></div>
 									<!-- 예약 날짜 선택 -->
-									<div class="modal-body-select"> 
-							        	<label for="datepicker">날짜 : </label>
-										<div id="datepicker" class="input-group date">
-										    <input class="form-control" type="text" readonly />
+									<div class="modal-body-select" style="display: inline-block; width: 650px;"> 
+							        	<div style="display: inline-block;">
+							        		<label for="datepicker">&nbsp;<i class="far fa-calendar-alt"></i>&nbsp;
+							        		날짜&nbsp;&nbsp;&nbsp;&nbsp;</label>
+							        	</div>
+										<div id="datepicker" class="input-group date" style="display: inline-flex; ">
+										    <input class="form-control" type="text" readonly style="width: 190px;" />
 										    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
 										    <input type="hidden" id="datePick" name="datePick" value=""/>
 										</div>
 							        </div>  
 							         	
 							        <!-- 시간 선택 -->
-							        <div class="modal-body-select">  
-							        	<label for="time-select-style">시간 : </label>
-							        	<div class="time-select-style">
-								        		<select id="select-options-wdays" class="select-options" name="bookHourWd">
+							        <div class="modal-body-select" style="display: inline-block; width: 650px;">
+							        	<div style="display: inline-block; vertical-align: 12px;">
+								        	<label for="time-select-style">&nbsp;<i class="far fa-clock"></i>&nbsp;
+								        	시간&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+								        </div> 
+							        	<div class="time-select-style" style="display: inline-block; width: 190px;" >
+								        		<select id="select-options-wdays" class="select-options" name="bookHourWd" style="width: 190px;">
 										    		<option value="" disabled="disabled" selected="selected">시간을 선택해주세요</option>
 										 		  <c:forEach var="i" begin="0" end="${optionTimes0.size()-1 }">
 												    <option value="${optionTimes0[i] }">${optionTimes0[i] }</option>
 												  </c:forEach>
 											 	</select>
 											 
-											  <select id="select-options-sat" class="select-options" name="bookHourSat">
+											  <select id="select-options-sat" class="select-options" name="bookHourSat" style="width: 190px;">
 										    		<option value="" disabled="disabled" selected="selected">시간을 선택해주세요</option>
 										  		  <c:forEach var="i" begin="0" end="${optionTimes1.size()-1 }">
 												     <option value="${optionTimes1[i] }">${optionTimes1[i] }</option>                                                                                                                                                                                                                                                                                                                                                             ""    <option value="${optionTimes1[i] }">${optionTimes1[i] }</option>
 												  </c:forEach>
 											  </select>
 											    
-											  <select id="select-options-sun" class="select-options" name="bookHourSun">
+											  <select id="select-options-sun" class="select-options" name="bookHourSun" style="width: 190px;">
 										    		<option value="" disabled="disabled" selected="selected">시간을 선택해주세요</option>
 											  	<c:forEach var="i" begin="0" end="${optionTimes2.size()-1 }">
 												    <option value="${optionTimes2[i] }">${optionTimes2[i] }</option>
@@ -290,15 +320,25 @@
 										</div>
 							        </div>
 							        
-							        <div class="modal-body-select">
-							        	<input type="radio" name="bookType" value="online">온라인
-										<input type="radio" name="bookType" value="offline">오프라인
-							        </div>
+							        <div style="height: 15px;"></div>
 							        
+							        <!-- 유형 선택 -->
+							        <div class="modal-body-select">
+							        	&nbsp;<i class="fas fa-location-arrow"></i>
+							        	유형&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							        	<input type="radio" name="bookType" value="online">&nbsp;&nbsp;온라인&nbsp;&nbsp;
+										<input type="radio" name="bookType" value="offline">&nbsp;&nbsp;오프라인
+							        </div>
 							      </div>
-							      <div class="modal-footer">
+							      <div style="height: 30px;"></div>
+							      
+							      <!-- 예약하기 -->
+							      <div class="modal-footer" style="padding-right: 35px;">
+						      		<h5 style="margin: 0;"><span style="color: #38b143">${gymDto.gymPass } PASS</span> 차감됩니다</h5>&nbsp;&nbsp;&nbsp;&nbsp;
 							        <button type="button" class="btn btn-default" 
-							        data-toggle="modal" data-target="#bookConfirmModal" data-backdrop="static" data-keyboard="false">예약하기</button>
+							        data-toggle="modal" data-target="#bookConfirmModal" data-backdrop="static" data-keyboard="false"
+							        style="background-color: #38b143; color: white; font-weight:;">
+							        예약하기</button>
 							      </div>
 						      </form>
 						    </div>
@@ -321,12 +361,21 @@
 						    </div>
 						</div>
 					</c:if>
-						<hr style="width: 100%; margin-left: 0px; text-align: left,border-bottom:0px;">
+					
+						<div style="height: 150px;"></div>
+						
                         <!-- 제휴시설 미리보기 -->
-                        <div class="blog-post-categories mb-100">
-                            <h5>제휴시설 미리보기</h5>
+                        <div class="blog-post-categories mb-100" >
+                            <div class="col-12" style="vertical-align: bottom; height: 30px; padding: 0;">
+		                    	<div class="single-blog-post mb-100 gymDetailHeadLine" style="display: inline-block;">
+		                    		<a href="#" class="post-title" style="font-size:12pt; width:230px; display: inline-block;">
+		                    		제휴시설 미리보기</a>
+		                    	</div>
+		                    </div>
+		                    <!-- 여백 및 줄 -->
+							<hr style="width: 100%; margin-left: 0px; text-align: left,border-bottom:0px; margin-top: 20px; ">
                             <!-- 사진 영역 -->
-                            <div class=right-col-box>
+                            <div class=right-col-box style="width: 320x; ">
                             
 							<c:forEach var="i" begin="1" end="${gymPic.size() }">
 								<div class="column1">
@@ -362,18 +411,25 @@
 									    </div>
 								 	</c:forEach> 
 							 	</div> 
-							 	
 							  </div>
 							</div>
-                            
-                            </div>
+                        </div>
                         </div>
                         
                         
-                        <hr style="width: 100%; margin-left: 0px; text-align: left,border-bottom:0px;">
+                        <div style="height: 200px;"></div>
+                        
                         <!-- 이용가능 시설 -->
-                        <div class="blog-post-categories mb-100">
-                            <h5>이용가능 시설</h5>
+                        <div class="blog-post-categories mb-100" style="height: 150px;">
+                          
+                            <div class="col-12" style="vertical-align: bottom; height: 30px; padding: 0;">
+		                    	<div class="single-blog-post mb-100 gymDetailHeadLine" style="display: inline-block;">
+		                    		<a href="#" class="post-title" style="font-size:12pt; width:230px; display: inline-block;">
+		                    		이용가능 시설</a>
+		                    	</div>
+		                    </div>
+                            
+                            <hr style="width: 100%; margin-left: 0px; text-align: left,border-bottom:0px;">
                             <div class=right-col-box>
                             	<div class="row">
 						                <c:forEach var="i" begin="0" end="3">
@@ -382,19 +438,22 @@
 						                        	<div class="facility-rect">
 						                        	<!-- 문구 수정 필요 -->
 							                        	<c:if test="${gymFacility[i] == '주차'}"><!-- 혹은 '주차시설 완비; -->
-							                        		<img alt="주차" src="/gyp/sfiles/gymFacility/parking.png">
+							                        		<img alt="주차" src="/gyp/sfiles/gymFacility/parking.png" style="opacity: 40%;">
 							                        	</c:if>
 							                        	<c:if test="${gymFacility[i] == '샤워장'}">
-							                        		<img alt="주차" src="/gyp/sfiles/gymFacility/shower.png">
+							                        		<img alt="주차" src="/gyp/sfiles/gymFacility/shower.png" style="opacity: 40%;">
 							                        	</c:if>
 							                        	<c:if test="${gymFacility[i] == '타올'}">
-							                        		<img alt="주차" src="/gyp/sfiles/gymFacility/towel.png">
+							                        		<img alt="주차" src="/gyp/sfiles/gymFacility/towel.png" style="opacity: 40%;">
 							                        	</c:if>
 							                        	<c:if test="${gymFacility[i] == '운동복'}">
-							                        		<img alt="주차" src="/gyp/sfiles/gymFacility/tshirt.png">
+							                        		<img alt="주차" src="/gyp/sfiles/gymFacility/tshirt.png" style="opacity: 40%;">
 							                        	</c:if>
 						                        	</div>
-						                            <h6>${gymFacility[i]}</h6>
+						                            <div style="justify-content: center; width:70px; text-align: center;">
+							                            <font style="color:#999!important; font-size: 12pt; font-weight: bold; align-self: center;">
+							                            ${gymFacility[i]}</font>
+						                            </div>
 						                        </div>
 							                </div>
 						                </c:forEach>
@@ -403,34 +462,42 @@
                         </div>
                         
                         
-                        <hr style="width: 100%; margin-left: 0px; text-align: left,border-bottom:0px;">
                         <!-- 이용 시간 -->
                         <div class="blog-post-categories mb-100">
-                            <h5>이용 시간</h5>
-                            <div class=right-col-box>
-				                <font color="gray">평일</font> &nbsp;${gymHour[0] }
-				                <br/><br/>
-				                <font color="blue">토요일</font> &nbsp;${gymHour[1] }
-				                <br/><br/>
-				                <font color="red">일요일</font> &nbsp;${gymHour[2] }
-				                <br/><br/>
+                           	<div class="col-12" style="vertical-align: bottom; height: 30px; padding: 0;">
+		                    	<div class="single-blog-post mb-100 gymDetailHeadLine" style="display: inline-block;">
+		                    		<a href="#" class="post-title" style="font-size:12pt; width:230px; display: inline-block;">
+		                    		이용 시간</a>
+		                    	</div>
+		                    </div>
+                       		<hr style="width: 100%; margin-left: 0px; text-align: left,border-bottom:0px;">
+                            <div class=right-col-box style="font-weight: bold; color: #888;">
+				                <font color="black">평일</font> &nbsp;&nbsp;&nbsp;&nbsp;${gymHour[0] }<br/>
+				                <font color="#4374D9">토요일</font> &nbsp;${gymHour[1] }<br/>
+				                <font color="#E65C5C">일요일</font> &nbsp;${gymHour[2] }<br/>
+				                
                             </div>
                         </div>
                         
-                        <hr style="width: 100%; margin-left: 0px; text-align: left,border-bottom:0px;">
                         <!-- 연락처 및 주소 -->
                         <div class="blog-post-categories mb-100">
-                 	       <h5>연락처 및 주소</h5>
-                            <div class=right-col-box>
-                            	<div class="row">
-						                ${gymDto.gymTel }
-				                </div>
-				                
-				                <div class="row">
-						                ${gymDto.gymAddr }&nbsp;${gymDto.gymAddrDetail}
-				                </div>
-				                
-				                <div id="map" style="width:350px;height:300px;"></div>
+                        	<div class="col-12" style="vertical-align: bottom; height: 30px; padding: 0;">
+		                    	<div class="single-blog-post mb-100 gymDetailHeadLine" style="display: inline-block;">
+		                    		<a href="#" class="post-title" style="font-size:12pt; width:230px; display: inline-block;">
+		                    		연락처 및 주소</a>
+		                    	</div>
+		                    </div>
+                        	<hr style="width: 100%; margin-left: 0px; text-align: left,border-bottom:0px;">
+                            <div class=right-col-box style="display: inline-block;">
+                            	<!-- 전화 -->
+                            	<div style="display: inline-block; width: 20px;"><i class="fas fa-phone-square-alt" style="color: #999;"></i></div>
+                            	<div style="display: inline-block;">${gymDto.gymTel }</div><br>
+				            	<!-- 주소 -->
+				            	<div style="display: inline-block; vertical-align: 20px; width: 25px;"><i class="fas fa-map-marker-alt" style="color: #999;"></i></div>
+				        		<div style="display: inline-block; width: 250px;">${gymDto.gymAddr }&nbsp;${gymDto.gymAddrDetail}</div>
+				                <!-- 지도 -->
+				                <div style="height: 15px;"></div>
+				                <div id="map" style="width:300px;height:300px;"></div>
                             </div>
                         </div>
                         
@@ -465,6 +532,8 @@
 	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d087512990dd20366e00ecdffb1ea8cd&libraries=services,clusterer,drawing"></script>
     <!-- 짐디테일 -->
     <script src="/gyp/resources/js/gymDetail.js"></script>
+    <!-- font awesome -->
+	<script src="https://kit.fontawesome.com/4badd96a47.js" crossorigin="anonymous"></script>
     
 </body>
 </html>
