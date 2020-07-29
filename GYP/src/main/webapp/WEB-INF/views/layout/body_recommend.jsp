@@ -31,7 +31,7 @@
 		                                <span>PROGRAM. ${gym.gymProgram }</span></li>
 	                            </ul>
 	                            <!-- btn -->
-	                            <a href="#" class="btn fitness-btn mt-30" style="width:260px;">예약하기</a>
+	                            <a href="/gyp/gymDetail.action?gymId=${gym.gymId}" class="btn fitness-btn mt-30" style="width:260px;">예약하기</a>
 	                        </div>
 	                    </div>
 	                </div>

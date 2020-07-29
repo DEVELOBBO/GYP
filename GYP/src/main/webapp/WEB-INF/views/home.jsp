@@ -50,7 +50,7 @@
 		<div style="margin: 0 auto; width:250px; ">
              <div class="elements-title mb-50">
    		         <div class="fitness-buttons-area mb-100">
-                   	  <a href="#" class="btn fitness-btn btn-2 m-2"
+                   	  <a href="/gyp/passCharge.action" class="btn fitness-btn btn-2 m-2"
                    	 	 style="width: 250px; height: 60px; justify-content: center;
                    	 	 padding-top : 6px;
                    	 	 font-size:15pt; margin: 0 auto;">

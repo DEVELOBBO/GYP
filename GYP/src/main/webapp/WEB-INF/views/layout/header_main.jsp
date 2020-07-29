@@ -18,7 +18,7 @@
                                 		&nbsp;&nbsp;이제 집에서 온라인으로 PT를 받아보세요!
                                 	</font> 
                                 </p>
-                                <a href="#" class="btn fitness-btn wel-btn" data-animation="fadeInUp" data-delay="700ms" style="left: 10px;">
+                                <a href="/gyp/howToUse.action" class="btn fitness-btn wel-btn" data-animation="fadeInUp" data-delay="700ms" style="left: 10px;">
                                 	이용방법 안내</a>
                             </div>
                         </div>
@@ -40,7 +40,7 @@
                                 		&nbsp;&nbsp;멀지 않은 곳에 운동할 수 있는 곳이 있습니다
                                 	</font>
                                 </p>
-                                <a href="#" class="btn fitness-btn wel-btn" data-animation="fadeInUp" data-delay="700ms" style="left: 10px;">
+                                <a href="/gyp/map.action" class="btn fitness-btn wel-btn" data-animation="fadeInUp" data-delay="700ms" style="left: 10px;">
                                 	제휴시설 찾기</a>
                             </div>
                         </div>
@@ -62,7 +62,7 @@
                                 		&nbsp;&nbsp;pass 구입 기회를 놓치지 마세요
                                 	</font>
                                 </p>
-                                <a href="#" class="btn fitness-btn wel-btn" data-animation="fadeInUp" data-delay="700ms" style="left: 10px;">
+                                <a href="/gyp/passCharge.action" class="btn fitness-btn wel-btn" data-animation="fadeInUp" data-delay="700ms" style="left: 10px;">
                                 	이용권 구매</a>
                             </div>
                         </div>
