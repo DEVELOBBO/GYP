@@ -104,7 +104,7 @@ public class MyUtil_Map {
         // [Prev] : 총 페이지수가 numPerBlock 이상인 경우 이전 numPerBlock 보여줌
         n = currentPage - numPerBlock;
         if (totalPage > numPerBlock && currentPageSetUp > 0) {
-            strList = strList + "&nbsp;<a onclick='listPage(\""+n+"\",\""+searchKey+"\",\""+searchValue+"\");'>◀이전</a>&nbsp;";
+        	strList = strList + "&nbsp;[<a style='cursor:pointer' onclick='listPage(\""+n+"\",\""+searchKey+"\",\""+searchValue+"\");'>◀</a>]&nbsp;";
         }
 
         // 바로가기 페이지 구현
@@ -114,7 +114,7 @@ public class MyUtil_Map {
                strList = strList + "<font color='#38b143'>&nbsp;&nbsp;"+page+"&nbsp;&nbsp;</font>&nbsp;";
            }
            else {
-               strList = strList +"<a onclick='listPage(\""+page+"\",\""+searchKey+"\",\""+searchValue+"\");'>&nbsp;&nbsp;"+page+"&nbsp;&nbsp;</a>";
+        	   strList = strList +"<a style='cursor:pointer' onclick='listPage(\""+page+"\",\""+searchKey+"\",\""+searchValue+"\");'>&nbsp;&nbsp;"+page+"&nbsp;&nbsp;</a>";
            }
            page++;
         }
@@ -123,7 +123,7 @@ public class MyUtil_Map {
         // n = currentPageSetUp + numPerBlock + 1;
         n = currentPage + numPerBlock;
         if (totalPage - currentPageSetUp > numPerBlock) {
-            strList = strList + "&nbsp;<a onclick='listPage(\""+n+"\",\""+searchKey+"\",\""+searchValue+"\");'>다음▶</a>&nbsp;";
+        	strList = strList + "&nbsp;[<a style='cursor:pointer' onclick='listPage(\""+n+"\",\""+searchKey+"\",\""+searchValue+"\");'>▶</a>]&nbsp;";
         }
 
         return strList;

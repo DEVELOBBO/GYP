@@ -86,12 +86,12 @@ public class LoginCheckFilter implements Filter {
               requestURI.equals("/gyp/adminGymList.action")||requestURI.equals("/gyp/adminCustomerList.action")||
               requestURI.equals("/gyp/adminProductList.action")||requestURI.equals("/gyp/gymMyPage.action")||
               requestURI.equals("/gyp/productreviewCreated.action")||requestURI.equals("/gyp/mapGymJjim.action")) {
-              //로그인 화면으로 보냄
-              response.setContentType("text/html; charset=UTF-8");
-               PrintWriter out = response.getWriter();
-               out.println("<script>alert('로그인 후 이용해주세요');location.href='/gyp/login.action';</script>");
-               out.flush();
-              return;
+        	  //로그인 화면으로 보냄
+        	  response.setContentType("text/html; charset=UTF-8");
+              PrintWriter out = response.getWriter();
+              out.println("<script>alert('로그인 후 이용해주세요');location.href='/gyp/login.action';</script>");
+              out.flush();
+        	  return;
            }
         }
        

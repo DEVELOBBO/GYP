@@ -45,7 +45,7 @@ public class AsyncTaskSample {
         		dao.delFaceLink(dto.getBookNum());
         	}
         	System.out.println("while end");
-        	Thread.sleep(29000); //29초마다 반복
+        	Thread.sleep(25000); //25초마다 반복
         }
     	
     }

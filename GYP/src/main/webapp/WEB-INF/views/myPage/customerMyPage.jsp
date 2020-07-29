@@ -93,31 +93,41 @@
 	<jsp:include page="/WEB-INF/views/layout/header_over.jsp" />
 	<jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
 
-<div id="myPage_wrapper" style="font-family: 'Noto Sans KR', sans-serif;">
-   <div id="content">   
+<div id="myPage_wrapper" style="font-family: 'Noto Sans KR', sans-serif; width: 1120px;">
+   <div id="content" >   
    	  <h5 style="color: green;">CUSTOMER MY PAGE</h5> 
       <h2>마이 페이지</h2>
+	  <div style="height: 20px;"></div>
+		
       
       <!-- 회원정보 --> 
       <div class="container mb-50" id="1"> 
-       
-         <span class="mp_title" style="font-size: 19px;">회원정보</span>
-         <table  border="0" cellpadding="10" cellspacing="10" style="padding: 2em; text-align: center" >
+         <div style="font-size: 14pt; font-weight: bold;">회원정보</div>
+         <table class="table_bokyung"
+         	 width="1120px" border="0" cellpadding="10" cellspacing="10" style="padding: 2em; text-align: center" >
             <tr>
-               <th style="font-size: 20px;" >아이디</th>  
-               <td style="text-align: left;"> ${cusdto.cusId }</td>
+               <td style="font-size: 12pt; text-align: right; padding-right: 20px; font-weight: bold;" width="150px;" height="40px;">
+               아이디</td>  
+               <td style="text-align: left; font-size: 12pt;">
+               ${cusdto.cusId }</td>
             </tr>
             <tr>
-               <th style="font-size: 20px;" >이름</th>
-               <td style="text-align: left;">${cusdto.cusName }</td>
+               <td style="font-size: 12pt; text-align: right; padding-right: 20px; font-weight: bold;" width="150px;" height="40px;">
+               이름</td>
+               <td style="text-align: left;">
+               ${cusdto.cusName }</td>
             </tr>
             <tr>
-               <th style="font-size: 20px;" >연락처</th>
-               <td style="text-align: left;">${cusdto.cusTel }</td>
+               <td style="font-size: 12pt; text-align: right; padding-right: 20px; font-weight: bold;" width="150px;" height="40px;">
+               연락처</td>
+               <td style="text-align: left;">
+               ${cusdto.cusTel }</td>
             </tr>
             <tr>
-               <th style="font-size: 20px;" >주소</th>
-               <td style="text-align: left;">${cusdto.cusAddr }&nbsp;${cusdto.cusAddrDetail }</td>
+               <td style="font-size: 12pt; text-align: right; padding-right: 20px; font-weight: bold;" width="150px;" height="40px;">
+               주소</td>
+               <td style="text-align: left;">
+               ${cusdto.cusAddr }&nbsp;${cusdto.cusAddrDetail }</td>
             </tr>
          </table> 
          
@@ -131,10 +141,10 @@
             </form>
          </div>
       
-      </div>
+      </div><br><br>
       
       
-      <br><br>
+      
       <!-- 이용권 -->
       <div class="container mb-30 col-12" id="2">
          <span class="mp_title mb-30">이용권</span>

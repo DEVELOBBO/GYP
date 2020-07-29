@@ -63,6 +63,12 @@ PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
 	from BOOK,GYM where GYM.gymId=BOOK.gymId and Book.cusId=#{bookId} order by BOOK.bookNum desc
 </select>
 
+<!-- 예약 삭제 시 Pass 환불 -->
+<update id="passRefund" parameterType="hashMap">
+	update CUSTOMER set cusPass=cusPass+#{gymPass} where cusId=#{cusId}
+</update>
+
+
 <!-- 예약 삭제-->
 <delete id="bookdeleteData" parameterType="int">
 	delete from BOOK where bookNum=#{bookNum}

@@ -468,6 +468,17 @@ public class gypController {
 
 		// 예약 리스트
 		List<BookDTO> gymbooklists = dao.gymbookgetList(bookId);
+		//화상링크 생성 (아이디+예약시간+트레이너)
+    	Iterator<BookDTO> iterator = gymbooklists.iterator();
+    	while(iterator.hasNext()) {
+    		String match = "[^\uAC00-\uD7A3xfe0-9a-zA-Z\\s]";
+    		BookDTO dto = iterator.next();
+    		String bookHour = dto.getBookCreated().replaceAll(match, "");
+    		String faceLink = dto.getCusId();
+    		faceLink += bookHour;
+    		faceLink += dto.getGymTrainerPick();
+    		dto.setFaceLink(faceLink);
+    	}
 		// 리뷰리스트
 		List<ReviewDTO> gymreviewlists = dao.gymreviewgetList(reviewId);
 
@@ -1208,8 +1219,18 @@ public class gypController {
 	// 예약 삭제
 	@RequestMapping(value = "/bookDelete.action", method = { RequestMethod.GET, RequestMethod.POST })
 	public String bookDelete(HttpServletRequest request, HttpSession session) {
+		//예약 삭제
 		int bookNum = Integer.parseInt(request.getParameter("bookNum"));
 		dao.bookdeleteData(bookNum);
+		
+		//환불
+		HashMap<String, Object> hashMap = new HashMap<String, Object>();
+		String cusId = request.getParameter("cusId");
+		String gymPass = request.getParameter("gymPass");
+		hashMap.put("cusId", cusId);
+		hashMap.put("gymPass", gymPass);
+		dao.passRefund(hashMap);
+		
 		return "redirect:/gymMyPage.action";
 	}
 	
@@ -2073,7 +2094,7 @@ public class gypController {
 
 	// 체육관 찜하기
 	@RequestMapping(value="/gymJjim.action")
-	public String gymJjim(HttpServletRequest request, JjimDTO dto,HttpSession session) throws Exception{
+	public String gymJjim(HttpServletRequest request, HttpServletResponse response,JjimDTO dto,HttpSession session) throws Exception{
 			
 			CustomInfo info = (CustomInfo)session.getAttribute("customInfo");
 			if(info==null) {//돌발적 로그아웃 대비
@@ -2090,17 +2111,48 @@ public class gypController {
 				
 				dto.setCusId(cusId);
 				dto.setGymId(gymId);
-				
 				dao.insertJjimData(dto);
 				
 			} else {
-				
 				dao.deleteJjimData(gymId);
-				
 			}
-			
 			return "redirect:/gymDetail.action?gymId="+gymId;
 		}
+	
+	// 맵에서 체육관 찜하기
+	@RequestMapping(value="/mapGymJjim.action")
+	public void mapGymJjim(HttpServletRequest request, HttpServletResponse response,JjimDTO dto,HttpSession session) throws Exception{
+				
+		CustomInfo info = (CustomInfo)session.getAttribute("customInfo");
+		String cusId = null;
+		String gymId = null;
+		if(info!=null) {
+			cusId = info.getSessionId();
+			gymId = request.getParameter("gymId");
+		}
+		//-----------------map.action에서 찜하기(경기민)----------------------
+		
+					response.setContentType("text/html; charset=UTF-8");
+				    PrintWriter out = response.getWriter();
+					HashMap<String, Object> hashMap = new HashMap<String, Object>();
+					hashMap.put("cusId", cusId);
+					hashMap.put("gymId", gymId);
+							
+					int count = dao.countJjimData(hashMap);
+					if(count==0) {
+						dto.setCusId(cusId);
+						dto.setGymId(gymId);
+						dao.insertJjimData(dto);
+						out.println("찜 추가!");
+						out.flush();
+								            
+					}else {
+									
+						dao.deleteJjimData(gymId);
+						out.println("찜 제거!");
+						out.flush();
+					}
+	}
 	
 	// 패스 선택
 	@RequestMapping(value="/passCharge.action", method = {RequestMethod.GET, RequestMethod.POST})
@@ -2130,7 +2182,6 @@ public class gypController {
         
 		return "payment/passCharge";
 	}
-	
 	
 	// 결제하기(창)
 	@RequestMapping(value="/payment.action", method = {RequestMethod.GET, RequestMethod.POST})
@@ -2309,8 +2360,6 @@ public class gypController {
    		System.out.println("상품 결제 완료");
    		return;
    	}
-	
-	
 	
 	// 결제 완료 (창)
 	@RequestMapping(value="/payment_ok.action")

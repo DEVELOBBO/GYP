@@ -150,13 +150,9 @@
 							<td>${bookdto.cusId }</td>
 							<td>${bookdto.gymTrainerPick }</td>
 							<td>${bookdto.bookCreated }</td>
-							<c:if test="${!empty bookdto.faceLink }">
-								<td style="text-align: center;"><a href="https://gyp.herokuapp.com/#${bookdto.faceLink }" class="bokyung_mypage_link">수업하기</a></td>
-							</c:if>
-							<c:if test="${empty bookdto.faceLink }">
-								<td style="text-align: center;"><a href="/gyp/gymMyPage.action" class="bokyung_mypage_link">수업 준비중</a></td>
-							</c:if>
-							<td style="text-align: left;"><a href="<%=cp %>/bookDelete.action?bookNum=${bookdto.bookNum}"
+							<td style="text-align: center;"><a href="https://gyp.herokuapp.com/#${bookdto.faceLink}" class="bokyung_mypage_link">수업하기</a></td>
+							<td style="text-align: left;"><a
+								href="<%=cp %>/bookDelete.action?bookNum=${bookdto.bookNum}&gymPass=${gymdto.gymPass}&cusId=${bookdto.cusId}"
 								class="bokyung_mypage_link_D">거절</a></td>
 						</tr>
 					</c:forEach>

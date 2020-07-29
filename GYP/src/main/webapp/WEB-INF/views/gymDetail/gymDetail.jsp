@@ -140,7 +140,9 @@
 			                                <li><i class="fa fa-circle" aria-hidden="true"></i>${productDto.productContent }</li>
 			                            </ul>
 			                            <!-- btn -->
-			                            <a href="/gyp/productDetail.action?productId=${productDto.productId }" class="btn fitness-btn mt-30">자세히 보기</a>
+			                            <a href="/gyp/productDetail.action?productId=${productDto.productId }&searchValueCategory=<c:if test="${gymDto.gymType eq '헬스'}">H</c:if><c:if test="${gymDto.gymType eq '요가'}">Y</c:if><c:if test="${gymDto.gymType eq '필라테스'}">P</c:if>&pageNum=1" 
+			                            class="btn fitness-btn mt-30">
+			                            자세히 보기</a>
 			                        </div>
 			                    </div>
 		                    </c:forEach>

@@ -32,7 +32,7 @@
 			<dd>
 				<c:if test="${loginType == '' || loginType == 'customer' }">
 					
-					<a href="<%=cp%>/gymJjim.action?gymId=${dto.gymId}" target="_blank">
+					<a href='javascript:void(0);' onclick="jjim('${dto.gymId}');">
 					<img alt="찜하기" src="/gyp/resources/img/core-img/mapLikeIcon.JPG" style="width: 30px">&nbsp;
 					<font style="color:#F29DAA; vertical-align:-2px;">찜하기</font></a>
 					&nbsp;&nbsp;&nbsp;&nbsp;

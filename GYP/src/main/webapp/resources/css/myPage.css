@@ -30,9 +30,9 @@ hr#main_hr{
 	margin: 10px;
 }
 
-table {
+.table_bokyung {
 	margin: 1em auto;
-	background-color: #DFDFEB;
+	background-color: #C7D989; /*테이블 배경색*/
 	width: 100%;
 	border-radius: 10px;
 	border-collapse: collapse;

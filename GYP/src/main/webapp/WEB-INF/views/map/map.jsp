@@ -52,8 +52,8 @@ String cp = request.getContextPath();
 			      </select>
 			      <input type="text" name="searchValue" id="searchValue" value="${tempSearchValue}" placeholder="&nbsp;검색어"
 			        class="textField" onkeyup="sendKeyword();" onkeydown="enter('send');">
-			      <input type="button" value=" 검색 " id="sendButton" onclick="searchMap('send');"/>
-			      <input type="button" value=" MY " id="myButton" onclick="searchMap('my');"/>
+			      <input type="button" value=" 검색 " id="sendButton" onclick="searchMap('send');" style="cursor: pointer;/>
+			      <input type="button" value=" MY " id="myButton" onclick="searchMap('my');" style="cursor: pointer;" />
 			      <input type="hidden" id="tempSearchKey" value="${tempSearchKey}"/>
 			      <input type="hidden" id="tempSearchValue" value="${tempSearchValue}"/>
 			      <input type="hidden" id="cusAddrGoo" value="${cusAddrGoo}"/>

@@ -145,6 +145,11 @@ private SqlSessionTemplate sessionTemplate;
 	public void bookdeleteData(int bookNum) {
 		sessionTemplate.delete("customerMapper.bookdeleteData", bookNum);
 	}
+	
+	// 예약 삭제 시 Pass환불
+	public void passRefund(HashMap<String, Object> map) {
+		sessionTemplate.update("customerMapper.passRefund", map);
+	}
 
 	// 예약 데이터 개수
 	public int bookgetDataCount(Map<String, Object> hMap) {
