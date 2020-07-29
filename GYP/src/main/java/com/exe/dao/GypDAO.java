@@ -339,9 +339,9 @@ private SqlSessionTemplate sessionTemplate;
 		return paydto;
 	}
 
-	// productpay 불러오기
-	public ProductPayDTO getProductPayReadData(String cusId) {
-		ProductPayDTO paydto = sessionTemplate.selectOne("productMapper.getProductPayReadData", cusId);
+	// productpay 리스트로 불러오기
+	public List<ProductPayDTO> getProductPayReadData(String cusId) {
+		List<ProductPayDTO> paydto = sessionTemplate.selectList("productMapper.getProductPayReadData", cusId);
 		if (paydto == null) { // review 테이블 안에 없는 cusId 로 조회할경우 오류가 나기 때문에 null값으로 보내줌
 			paydto = null;
 		} 
@@ -349,14 +349,20 @@ private SqlSessionTemplate sessionTemplate;
 	}
 
 	// 상품결제 리스트
-	public List<ProductPayDetailDTO> getProductPayList(int proPayNum) {
+	public List<ProductPayDetailDTO> getProductPayList(int proPayNum[]) {
 		List<ProductPayDetailDTO> lists = sessionTemplate.selectList("productMapper.getProductPayList", proPayNum);
 		return lists;
 	}
 
 	// productpatdetail 갯수
-	public int getProductPayDetailDataCount(int proPayNum) {
+	public int getProductPayDetailDataCount(int proPayNum[]) {
 		int result = sessionTemplate.selectOne("productMapper.getProductPayDetailDataCount", proPayNum);
+		return result;
+	}
+	
+	// productpay 갯수
+	public int getProductPayDataCount(String cusId) {
+		int result = sessionTemplate.selectOne("productMapper.getProductPayDataCount", cusId);
 		return result;
 	}
 
