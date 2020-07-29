@@ -108,6 +108,23 @@ String cp = request.getContextPath();
 	
    
    <script type="text/javascript">
+  
+  function jjim(id) {
+      var sessionId = $("#sessionId").val();
+      var loginType = $("#loginType").val();
+      if(sessionId==""||loginType=="gym"||sessionId=="admin"){
+           alert("일반 회원 로그인이 필요합니다!");
+           return;
+      }
+      var url = "<%=cp%>/mapGymJjim.action";
+            $.post(url,{
+               gymId : id
+               },function(args){
+                  alert(args);
+            });
+   }
+  
+  
    function enter(mode) {
       if (window.event.keyCode == 13) {
          searchMap(mode);
@@ -254,6 +271,7 @@ String cp = request.getContextPath();
       window.onload = function() {
          hide();
       }
+      
 </script>
 <script type="text/javascript"
    src="//dapi.kakao.com/v2/maps/sdk.js?appkey=cf7aec95ee469f062ba92f1f9e4a1b4a&libraries=services,clusterer"></script>

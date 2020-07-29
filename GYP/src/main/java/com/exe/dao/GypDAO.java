@@ -354,20 +354,17 @@ private SqlSessionTemplate sessionTemplate;
 		return lists;
 	}
 
-	// productpatdetail 갯수
-	public int getProductPayDetailDataCount(int proPayNum[]) {
-		int result = sessionTemplate.selectOne("productMapper.getProductPayDetailDataCount", proPayNum);
-		return result;
-	}
-	
-	// productpay 갯수
-	public int getProductPayDataCount(String cusId) {
-		int result = sessionTemplate.selectOne("productMapper.getProductPayDataCount", cusId);
-		return result;
-	}
-
-	
-	
+   // productpaydetail 갯수
+   public int getProductPayDetailDataCount(int proPayNum[]) {
+      int result = sessionTemplate.selectOne("productMapper.getProductPayDetailDataCount", proPayNum);
+      return result;
+   }
+   
+   // productpay 갯수
+   public int getProductPayDataCount(String cusId) {
+      int result = sessionTemplate.selectOne("productMapper.getProductPayDataCount", cusId);
+      return result;
+   }
 
 	//*******************김세이*******************
 	

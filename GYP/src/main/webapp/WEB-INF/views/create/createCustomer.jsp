@@ -4,7 +4,6 @@
 <%
 	request.setCharacterEncoding("UTF-8");
 	String cp = request.getContextPath();
-
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -17,7 +16,8 @@
 	<!-- Core Stylesheet -->
 	<link rel="stylesheet" href="/gyp/resources/css/createStyle.css">
 	<link rel="stylesheet" href="/gyp/resources/css/createCustomer.css">
-	 <link rel="stylesheet" href="/gyp/resources/css/customer.css"> 
+	<link rel="stylesheet" href="/gyp/resources/css/customer.css"> 
+	<!-- <link rel="stylesheet" href="/gyp/resources/css/qna.css"> -->
 	<!-- font -->
 	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400&display=swap" rel="stylesheet">
 	
@@ -140,10 +140,10 @@
 		f = document.myForm;
 
 		//아이디 제약조건
-		var cc1 = /^[a-z0-9]{1,16}$/;
+		var cc1 = /^[a-z0-9]{4,16}$/;
 
 		//패스워드 제약조건
-		var cc2 = /^[A-Za-z0-9]{1,16}$/;
+		var cc2 = /^[A-Za-z0-9]{4,16}$/;
 
 		//전화번호 제약조건
 		var cc3 = /^(01[016789]{1}|02|0[3-9]{1}[0-9]{1})-[0-9]{3,4}-[0-9]{4}$/;
@@ -156,7 +156,7 @@
 			var chk = f.check.checked;
 
 		if (!cc1.test(f.cusId.value)) {
-			alert('아이디 영문소문자/숫자 1~16자 이내로 입력하세요.');
+			alert('아이디 영문소문자/숫자 4~16자 이내로 입력하세요.');
 			f.cusId.focus();
 			return false;
 		}
@@ -176,7 +176,7 @@
 		}
 
 		if (!cc2.test(f.cusPwd.value)) {
-			alert('패스워드 영문 대소문자/숫자 1~16자 이내로 입력하세요.');
+			alert('패스워드 영문 대소문자/숫자 4~16자 이내로 입력하세요.');
 			f.cusPwd.focus();
 			return false;
 		}
@@ -278,188 +278,176 @@
 	
 </script>
 </head>
-<body >
+<body style="font-family: 'Noto Sans KR', sans-serif;" >
 	
 	<jsp:include page="/WEB-INF/views/layout/header_over.jsp" />
 	<jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
-<%-- <c:if test="${mode!='updated' }">
-<div id="bbs">
-	<div id="bbs_title">
-	개인회원 회원가입창☆	
-	</div>
-</div>
-</c:if>
 	
-<c:if test="${mode=='updated' }">	
-<div id="bbs">
-	<div id="bbs_title">
-	회원정보수정창☆	
-	</div>
-</div>	
-</c:if> --%>
-<center>
- 	<br/><br/><br/>
-	
-	<form action="" name="myForm" method="post">
-		<table align="center" style="font-size: 15pt; color: #888"
-		width="800" cellpadding="0" cellspacing="0" border="0">
-	
-		<c:if test="${mode!='updated' }">		
-			<td colspan="3" class="section-heading">	
-					<div class="our-newsletter-area mb-100" style="width: 1100px; margin: 0 auto;">
-						<div class="section-heading">
-							<h6>CUSTOMER JOIN</h6>
-							<h2>개인회원 회원가입</h2>
-						</div>
-					</div>
-			</td>
-		</c:if>
 		
-		<c:if test="${mode=='updated' }">		
-			<td colspan="3" class="section-heading">	
-				<div class="our-newsletter-area mb-100" style="width: 1100px; margin: 0 auto;">
-					<div class="section-heading">
-						<h6>CUSTOMER JOIN</h6>
-						<h2>개인회원 회원정보수정</h2>
+	<div class="contact-area section-padding-100">
+		<div class="container">
+		
+			<!-- 제목 -->
+			<div class="row">
+				<div style="width: 730px; margin: 0 auto;">
+					<div class="col-12" >
+						<c:if test="${mode!='updated' }">
+							<div class="section-heading">
+							<h6>CUSTOMER JOIN</h6>
+							<h4>개인회원 회원가입</h4><hr/>
+							</div>
+						</c:if>
+					
+						<c:if test="${mode=='updated' }">
+							<div class="section-heading">
+							<h6>CUSTOMER INFO UPDATE</h6>
+							<h4>개인회원 회원정보 수정</h4><hr/>
+							</div>
+						</c:if>
+						
+						
 					</div>
 				</div>
-			</td>
-		</c:if>
-	 
-
-		<tr>
-			<td style="font-size: 14pt; color: #888; padding-left: 10px; padding-bottom: 10px;">
-			아이디</td>
+			</div>
 			
-			<c:if test="${mode=='updated' }">	
-				<td><input type="text"  size="40" maxlength="50"  class="bokyung_member_text" value="${sessionScope.customInfo.sessionId }"
-				 disabled/></td>
-				<input type="hidden"  name="cusId" id="cusId" value="${sessionScope.customInfo.sessionId }"/>
-			</c:if>
-				
-			<c:if test="${mode!='updated' }">
-				<td><input type="text" name="cusId" id="cusId" size="40" maxlength="50" class="bokyung_member_text"
-				value="${sessionScope.customInfo.sessionId }"/>
-				<input type="button" id = "checkbutton1" name = "checkbutton1" value ="중복체크"/></td>
-				<input type="hidden" id = "checkcusId" name = "checkcusId" value =""/>
-			</c:if>
-		</tr>		
+			
+			<div class="row">
+				<div class="col-12">
+				<div class="contact-content">
+				<div class="contact-form-area">
+					<form action="" name="myForm" method="post" style="width: 700px; margin: 0 auto;">
+					
+						<div>
+							<dl>
+								<dt style="margin-bottom: 5px;">아이디</dt>
+
+								<c:if test="${mode=='updated' }">
+									<div class="form-group">
+									<input type="text" size="40" maxlength="50" class="form-control" style="margin-bottom: 0px;"
+										value="${sessionScope.customInfo.sessionId }" disabled /></div>
+									<input type="hidden"  name="cusId" id="cusId" value="${sessionScope.customInfo.sessionId }"/>
+								</c:if>
+
+								<c:if test="${mode!='updated' }">
+									<div class="form-group" style="display: inline-block; width: 450px;" >
+									<input type="text" name="cusId" id="cusId" size="40" 
+										maxlength="50" class="form-control" style="margin-bottom: 0px;"/></div>
+									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="button" id="checkbutton1" name="checkbutton1" class="btn fitness-btn" value="중복체크" style="display: inline-block;"/>
+									<input type="hidden" id="checkcusId" name="checkcusId" value="" />
+								</c:if>
+							</dl>
+							<hr style="margin-top: 0px;">
+						</div>
+						
+						<div>
+							<dl>
+								<dt style="margin-bottom: 5px;">이름</dt>
+								<dd style="height: 45px;">
+									<div class="form-group" style="display: inline-block; width: 100%;">
+									<input type="text" name="cusName" size="35" maxlength="20" style="margin-bottom: 0px;"
+										class="form-control" value = "${dto.cusName }"/>
+									</div>
+								</dd>
+							</dl>
+							<hr style="margin-top: 0px;">
+						</div>
+						
+						<div>
+							<dl>
+								<dt style="margin-bottom: 5px;">비밀번호</dt>
+								<dd style="height: 45px;">
+									<div class="form-group" style="display: inline-block; width: 100%;">
+									<input type="password" name="cusPwd" size="35" maxlength="50" style="margin-bottom: 0px;"
+										class="form-control" value = "${dto.cusPwd }" />
+									</div>
+								</dd>
+							</dl>
+						</div>
 		
-		
-		<!-- 선 --><tr height="1"><td colspan="2" bgcolor="#cccccc"></td>
-		
-		<tr>
-			<td style="font-size: 14pt; color: #888; padding-left: 10px; padding-bottom: 10px;">
-			이름</td>
-			<td><input type="text" name="cusName" size="35" maxlength="20" class="bokyung_member_text"  value="${dto.cusName }"/>
-		</tr>
-		
-		<!-- 선 --><tr height="1"><td colspan="2" bgcolor="#cccccc"></td>
-		
-		
-		<tr>
-			<td class="bokyung_td_left">비밀번호</td>
-				<td>
-					<input type="password" name="cusPwd" size="35" maxlength="50" class="bokyung_member_text" value="${dto.cusPwd }"/>
-				</td>							
-			</td>		
-		</tr>
-		
-		<!-- 선 -->
-		<tr height="1"><td colspan="2" bgcolor="#cccccc"></td>
-		
-		<tr>
-			<td class="bokyung_td_left" style="font-size: 13pt">비밀번호 확인</dt>
-				<td>
-					<input type="password" name="cusPwd2" size="35" maxlength="50" class="bokyung_member_text" value="${dto.cusPwd }"/>
-				</td>							
-			</td>		
-		</tr>
-		
-		<!-- 선 -->
-		<tr height="1"><td colspan="2" bgcolor="#cccccc"></td>
-		
-		<tr>
-			<td class="bokyung_td_left">이메일</td>
-				<td>
-					<input type="text" name="cusEmail" size="35" maxlength="50" class="bokyung_member_text" value="${dto.cusEmail }"/>
-				</td>							
-			</td>		
-		</tr>
-		
-		<!-- 선 -->
-		<tr height="1"><td colspan="2" bgcolor="#cccccc"></td>
-		
-		<tr>
-			<td class="bokyung_td_left">전화번호</td>
-				<td>
-					<input type="text" name="cusTel" id="cusTel" size="35" class="bokyung_member_text" maxlength="50"  value="${dto.cusTel }"/>
-					<input type="button" id = "telckbutton" name = "telckbutton" value ="중복체크"/>
-					</td>
-					<input type="hidden" id = "checkcusTel" name = "checkcusTel" value =""/>
-											
-			</td>		
-		</tr>
-		
-		<!-- 선 -->
-		<tr height="1"><td colspan="2" bgcolor="#cccccc"></td>
-		
-		<c:if test="${mode!='updated' }">	
-		
-		<tr>
-			<td class="bokyung_td_left">주소</td>
-				<td>
-					<input type="text" name="cusAddrJibun" style="width : 540px; maxlength="50" 
-					class="bokyung_member_text"  id="sample6_address" readonly="readonly"/>
-					<input type="button" size="35" maxlength="50"
-					 onclick = "sample6_execDaumPostcode();" value="주소 찾기" />		
-				</td>							
-		</tr>
-		</c:if>
-		
-		
-		<c:if test="${mode=='updated' }">	
-		<tr>
-			<td class="bokyung_td_left">주소</td>
-				<td>
-					<input type="text" name="cusAddr" style="width : 540px; maxlength="50" 
-					class="bokyung_member_text"  id="sample6_address" value="${dto.cusAddr }"/>
-					<input type="button" size="35" maxlength="50"
-					 onclick = "sample6_execDaumPostcode();" value="주소 찾기" />		
-				</td>							
-		</tr>
-		</c:if>
-		 
-		 
-		 <tr>
-			<td class="bokyung_td_left"></td>
-			<td>	
-				<input type="text" name="cusAddrDetail" value="${dto.cusAddrDetail }" 
-				style="width : 540px; maxlength="50" 
-				class="bokyung_member_text"  placeholder="상세주소를 입력해주세요" />
-			</td>
-		</tr>
-		 
-		</table>
-		
-		 
- 	<c:if test="${mode!='updated' }">
-	<table>	
-	<tr>
-		<td width="100%" height="50%" align="center">
-   
-		
-		<span>약관동의</span>
-		</br>
-		<textarea 
-	     rows="20" cols="110" readonly="readonly" class="jong_textarea">1장 총칙
+						<div>
+							<dl>
+								<dt style="margin-bottom: 5px;">비밀번호 확인</dt>
+								<dd style="height: 45px;">
+									<div class="form-group" style="display: inline-block; width: 100%;">
+									<input type="password" name="cusPwd2" size="35" maxlength="50" style="margin-bottom: 0px;"
+										class="form-control" value="${dto.cusPwd }" />
+									</div>
+								</dd>
+							</dl>
+							<hr style="margin-top: 0px;">
+						</div>
+						
+						<div>
+							<dl>
+								<dt style="margin-bottom: 5px;">이메일</dt>
+								<dd style="height: 45px;">
+									<div class="form-group" style="display: inline-block; width: 100%;">
+									<input type="text" name="cusEmail" size="35" maxlength="50" style="margin-bottom: 0px;"
+										class="form-control" value="${dto.cusEmail }" />
+									</div>
+								</dd>
+							</dl>
+							<hr style="margin-top: 0px;">
+						</div>
+						
+						<div>
+							<dl>
+								<dt style="margin-bottom: 5px;">전화번호</dt>
+								<dd style="height: 45px;">
+									<div class="form-group" style="display: inline-block; width: 450px;">
+									<input type="text" name="cusTel" id="cusTel" size="35" value="${dto.cusTel }"
+										maxlength="50" class="form-control" style="margin-bottom: 0px;"/></div>
+									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="button" id="telckbutton" name="telckbutton" value ="중복체크"  
+									class="btn fitness-btn" style="display: inline-block;"/>
+									<input type="hidden" id = "checkcusTel" name = "checkcusTel" value =""/>
+								</dd>
+							</dl>
+							<hr style="margin-top: 0px;">
+						</div>
+						
+						<div>
+							<dl style="height: 142px;">
+								<dt style="margin-bottom: 5px;">주소</dt>
+								<dd style="height: 90px;">
+									<div class="form-group" style="display: inline-block; width: 100%;">
+									<c:if test="${mode!='updated' }">	
+									<input type="text" name="cusAddrJibun" size="35" maxlength="50" style="margin-bottom: 0px;"
+													class="boxTF form-control" id="sample6_address" 
+													placeholder="주소 찾기" onclick = "sample6_execDaumPostcode();" readonly="readonly"/>
+									</c:if>
+									
+									<c:if test="${mode=='updated' }">	
+									<input type="text" name="cusAddr" size="35" maxlength="50" style="margin-bottom: 0px;"
+													class="boxTF form-control" value="${dto.cusAddr }" id="sample6_address" 
+													placeholder="주소 찾기" onclick = "sample6_execDaumPostcode();" readonly="readonly"/>
+									</c:if>
+									
+									</div>
+									<div style="height: 5px;"></div><!-- 여백 -->
+									<div class="form-group" style="display: inline-block; width: 100%;">
+									<input type="text" name="cusAddrDetail" value="${dto.cusAddrDetail }"  style="margin-bottom: 0px;"
+										maxlength="50" class="boxTF form-control"  placeholder="상세주소를 입력해주세요" />
+									</div>
+								</dd>
+							</dl>
+							<hr style="margin-top: 0px;">
+						</div>
+						
+					<c:if test="${mode!='updated' }">
+						<div>
+							<dl>
+								<dt style="margin-bottom: 10px;"><label for="agreement">약관동의</label></dt>
+								<dd><textarea rows="20" readonly="readonly" class="form-control" id="agreement" style="overflow:auto">
+1장 총칙
 제1조 (목적)
 본 약관은 (주)GYP(이하 “당사”라 함)가 제공하는 TLX PASS 서비스 이용과 관련하여 당사와 회원의 제반 권리, 의무, 책임사항, 관련 절차, 기타 필요한 사항을 규정하는데 그 목적이 있습니다.
 
 제2조 (용어)
 본 약관에서 사용하는 주요 용어의 정의는 다음과 같습니다.
 1.“서비스”라 함은 구현되는 단말기(PC, TV, 휴대형 단말기 등의 각종 유무선 장치를 포함)와 상관없이 당사와 제휴시설이 “회원”에게 제공하는 TLX PASS 관련 제반 서비스 모두를 의미합니다.
-2."회원"이라 함은 당사의 약관 제5조에 정해진 가입 절차에 따라 가입하여 정상적으로 당사의 제휴시설과 GYP 서비스를 이용할 수 있는 권한을 부여 받은 고객을 말합니다.
+2."회원"이라 함은 당사의 약관 제5조에 정해진 가입 절차에 따라 가입하여 정상적으로 당사의 제휴시설과 TLX PASS 서비스를 이용할 수 있는 권한을 부여 받은 고객을 말합니다.
 
 
 제2장 회원가입과 멤버십
@@ -471,57 +459,53 @@
 3.회원은 회원자격을 타인에게 양도하거나 대여 또는 담보의 목적으로 이용할 수 없습니다.
 
 제4조 (멤버십 이용 및 관리)
-1.회원이 GYP 서비스를 당사와 제휴시설에서 이용하고자 할 경우, 어플리케이션/모바일웹/RFID카드를 이용해야 하며, 당사와 제휴시설은 미성년자 여부나 본인 확인 등 합리적인 이유가 있을 때 회원에게 신분증 제시를 요청할 수 있습니다. 회원은 이러한 요청을 있을 경우 요청에 응해야 정상적이고 원활한 GYP 서비스를 제공 받을 수 있습니다.
+1.회원이 TLX PASS 서비스를 당사와 제휴시설에서 이용하고자 할 경우, 어플리케이션/모바일웹/RFID카드를 이용해야 하며, 당사와 제휴시설은 미성년자 여부나 본인 확인 등 합리적인 이유가 있을 때 회원에게 신분증 제시를 요청할 수 있습니다. 회원은 이러한 요청을 있을 경우 요청에 응해야 정상적이고 원활한 TLX PASS 서비스를 제공 받을 수 있습니다.
 2.회원에게 등록된 멤버십은 회원 본인만 사용 가능합니다. 회원 아이디 및 멤버십을 제3자에게 임의적으로 대여 사용하게 하거나 양도 또는 담보의 목적으로 사용 할 수 없으며, 해당 불법 행위로 인해 발생하는 모든 책임은 사용자가 부담합니다.
-		</textarea><br>
-		<input type="checkbox" name="check"> 약관에 동의합니다.
-	
-		</td>
-	</tr>
-	</table>
-   	</c:if>
-	<table>
-	
-	<!-- 수정 시, 약관 숨김 -->
-	<c:if test="${mode=='updated' }">
-   		&nbsp;
-   </c:if>
-
- 
-	
-	<c:if test="${mode!='updated' }">
-
-	<input type="button" value=" 등록하기 " class="btn2" 
-	onclick="sendIt();"/>
-	<input type="reset" value=" 다시입력 " class="btn2" 
-	onclick="document.myForm.cusId.focus();"/>
-	<input type="button" value=" 작성취소 " class="btn2" 
-	onclick="javascript:location.href='<%=cp%>/login.action';"/>	
-	
-	</c:if>
-	
-	<c:if test="${mode=='updated' }">
-	
-	<input type="button" value=" 수정하기 " class="btn2" 
-	onclick="sendIt();"/>
-	<input type="button" value=" 작성취소 " class="btn2" 
-	onclick="javascript:location.href='<%=cp%>/customerMyPage.action';"/>	
-	<input type="button" value=" 회원탈퇴 " class="btn2" 
-	onclick="sendDelete();"/>
-	</c:if>
-	
-	<!-- 숨겨놓은 모드 -->	
-	<input type="hidden" name="mode" value="${mode }"/> 
-		</table>
-	</form>
-</center>	
- 
-	
-	
+								</textarea>
+								<input type="checkbox" name="check"> 동의합니다.</dd>
+							</dl>
+						</div>
+						<hr style="margin-top: 0px;">
+					</c:if>
+					
+					<c:if test="${mode!='updated' }">
+						<div id="bbsCreated_footer" style="justify-content: center; text-align: center;">
+							<input type="button" value=" 등록하기 " class="btn fitness-btn btn-2 mt-30" 
+								onclick="sendIt();" /> 
+							<input type="reset" value=" 다시입력 " class="btn fitness-btn btn-2 mt-30"
+								onclick="document.myForm.cusId.focus();" /> 
+							<input type="button" value=" 작성취소 " class="btn fitness-btn btn-2 mt-30"
+								onclick="javascript:location.href='/gyp/create.action';" />
+						</div>
+					</c:if>
+		
+		
+					<c:if test="${mode=='updated' }">
+						<div id="bbsCreated_footer" style="justify-content: center; text-align: center;">
+							<input type="button" value=" 수정하기 " class="btn fitness-btn btn-2 mt-30"
+								onclick="sendIt();" /> 
+							<input type="button" value=" 작성취소 "
+								class="btn fitness-btn btn-2 mt-30"
+								onclick="javascript:location.href='<%=cp%>/customerMyPage.action';"/>
+							<input type="button" value=" 회원탈퇴 " class="btn fitness-btn btn-1 mt-30"
+								onclick="sendDelete();" />
+						</div>
+					</c:if>
+		
+					<!-- 숨겨놓은 모드 -->
+					<input type="hidden" name="mode" value="${mode }" />
+		
+					</form>
+				</div>
+				</div>
+				</div>
+			</div>
+		
+		</div>
+	</div>
 	
 	<jsp:include page="/WEB-INF/views/layout/footer.jsp" />
 
-	
     <!-- ##### All Javascript Script ##### -->
     <!-- jQuery-2.2.4 js -->
     <script src="/gyp/resources/js/jquery/jquery-2.2.4.min.js"></script>
@@ -533,8 +517,6 @@
     <script src="/gyp/resources/js/plugins/plugins.js"></script>
     <!-- Active js -->
     <script src="/gyp/resources/js/active.js"></script>
-    
-
 
 </body>
 </html>

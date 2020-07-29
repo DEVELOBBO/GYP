@@ -72,7 +72,8 @@
     			  priceTotal_rows.not(":eq(0)").remove();
     			  deliverInfo_rows.not(":eq(0)").remove();
     			  
-    			  var style = "border-bottom:1px solid gray; padding-bottom: 10px;";
+    			  /*hr*/
+    			  var style = "border-bottom:1px solid #C8C8C8; padding-bottom: 10px;";
         		  productImg_rows.eq(len).attr("style",style);
     			  productInfo_rows.eq(len).attr("style",style);
     			  review_rows.eq(len).attr("style",style);
@@ -101,216 +102,264 @@
 		
       
       <!-- 회원정보 --> 
-      <div class="container mb-50" id="1"> 
+      <div class="container mb-50" id="1" style="padding: 0;"> 
          <div style="font-size: 14pt; font-weight: bold;">회원정보</div>
          <table class="table_bokyung"
          	 width="1120px" border="0" cellpadding="10" cellspacing="10" style="padding: 2em; text-align: center" >
             <tr>
-               <td style="font-size: 12pt; text-align: right; padding-right: 20px; font-weight: bold;" width="150px;" height="40px;">
+               <td width="150px;" height="40px;" class="title">
                아이디</td>  
-               <td style="text-align: left; font-size: 12pt;">
+               <td style="text-align: left;  font-weight: bold;">
                ${cusdto.cusId }</td>
             </tr>
             <tr>
-               <td style="font-size: 12pt; text-align: right; padding-right: 20px; font-weight: bold;" width="150px;" height="40px;">
+               <td width="150px;" height="40px;" class="title">
                이름</td>
-               <td style="text-align: left;">
+               <td style="text-align: left;  font-weight: bold;">
                ${cusdto.cusName }</td>
             </tr>
             <tr>
-               <td style="font-size: 12pt; text-align: right; padding-right: 20px; font-weight: bold;" width="150px;" height="40px;">
+               <td width="150px;" height="40px;" class="title">
                연락처</td>
-               <td style="text-align: left;">
+               <td style="text-align: left; font-weight: bold;">
                ${cusdto.cusTel }</td>
             </tr>
             <tr>
-               <td style="font-size: 12pt; text-align: right; padding-right: 20px; font-weight: bold;" width="150px;" height="40px;">
+               <td width="150px;" height="40px;" class="title">
                주소</td>
-               <td style="text-align: left;">
+               <td style="text-align: left; font-weight: bold;">
                ${cusdto.cusAddr }&nbsp;${cusdto.cusAddrDetail }</td>
             </tr>
          </table> 
          
-         <div class="right_float">
+         
+         <!-- 정보수정 -->
+         <div class="right_float" style="margin: 0; padding: 0;">
             <form action="" name="myForm" method="post">
                <input type="hidden" name="cusPwdck" value=${cusdto.cusPwd }>
-               비밀번호 입력: &nbsp;
-               <input type="password" name="cusPwd" class="bokyung_mypage_text"/>&nbsp;&nbsp;
+               <font class="title2">비밀번호 입력 :&nbsp;&nbsp; </font>
+               <input type="password" name="cusPwd" class="bokyung_mypage_text" 
+               style="background-color: #ecf1f4; border: none; border-radius:5px; padding: 3px; height: 35px; vertical-align: middle;"/>&nbsp;&nbsp;
                <input type="button" value="회원정보 수정" onclick="javascript:toUpdate()" 
-               class="btn fitness-btn btn-white mt-10" style="min-width: 50px;"/>
+               class="btn fitness-btn btn-white mt-10" style="min-width: 50px; min-height: 40px; width:150px; height: 40px; line-height: 25px;"/>
             </form>
          </div>
-      
       </div><br><br>
       
       
       
       <!-- 이용권 -->
-      <div class="container mb-30 col-12" id="2">
-         <span class="mp_title mb-30">이용권</span>
-         <div class="form-group mt-10" >
-         	<div class="row">
-	         	<div class="form-control col-6" style="background-color: #dfdfeb; border:none; padding-top:10px; margin-left:15px;">
-	         		&nbsp;&nbsp;&nbsp; 패스 현황: ${cusdto.cusPass } PASS  (${cusdto.cusPass*5000 }원)
+      <div class="container mb-30 col-12" id="2" style="padding: 0;">
+         <div style="font-size: 14pt; font-weight: bold;">이용권</div>
+         <div style="height: 10px;"></div>
+         <div class="form-group mt-10" style="height: 40px;">
+	         	<div class="form-control col-6" style="background-color: #DAE6C3; border: none; display:inline-block;
+	         		border-radius:5px; padding: 3px; height: 40px; max-width:85.3%; margin-top: 2px;">
+	         		<div style="margin-top: 4px;"><font class="title2">
+	         		&nbsp;&nbsp;&nbsp; ${cusdto.cusPass } PASS가 남아있습니다  ( ${cusdto.cusPass*5000 }원 )
+	         		</font></div>
 	       		</div>
-	       		<div class="custom-form-control col-4" style="">
-	       			<button onclick="location.href='/gyp/passCharge.action'" class="btn fitness-btn btn-white mt-10"">충전하기</button>
-	       		</div>
-         	</div>
+	       		<input type="button" value="충전하기" onclick="location.href='/gyp/passCharge.action'"
+    	           	class="btn fitness-btn btn-white mt-10" style="min-width: 50px; min-height: 40px;width:150px; height: 40px; 
+    	           	line-height: 25px; display:inline-block; float: right; vertical-align: middle;" />
          </div>
-         
-      </div>
+      </div><br><br>
       
       
-      <br><br>
-      <!-- 예약 -->
-      <div class="container mb-30" id="3">
-         <span class="mp_title">예약내역</span>
-         <table class="table01" border="0" cellpadding="10" cellspacing="10">
-            <tr style="text-align: center">
-               <th width="70">번호</th>
-               <th>예약타입</th>
-               <th width="180">체육관</th>
-               <th width="180">트레이너</th>
-               <th width="170">등록일</th>
-               <th width="170">수업일정</th>
-               <th colspan="2" align="left">&nbsp;수업하기</th>
-            </tr>
-            
-            <c:forEach var="bookdto" items="${ booklists }">
-               <tr class="tr_white" align="center">
-                  <td>${bookdto.bookNum }</td>
-                  <td>${bookdto.bookType }</td>
-                  <td><a href="/gyp/gymDetail.action?gymId=${bookdto.gymId }" style="font-weight: lighter;">${bookdto.gymName }</a></td>
-                  <td>${bookdto.gymTrainerPick }</td>
-                  <td>${bookdto.bookCreated }</td>
-                  <td>${bookdto.bookHour }</td>
-                  <td style="text-align: center;"><a href="/gyp/faceLink.action" class="bokyung_mypage_link">수업하기</a></td>
-                  <td></td>
-                  <%-- <td style="text-align: left;"><a href="<%=cp %>/bookDelete.action?bookNum=${bookdto.bookNum}" class="bokyung_mypage_link_D">삭제</a></td> --%>
-               </tr>
-            </c:forEach>
-         </table>
-         <div class="check">
-            <c:if test="${empty booklists }">
-               등록된 예약이 없습니다.
+		
+		<!-- 예약 -->
+		<div class="container mb-30 col-12" id="2" style="padding: 0; margin: 0!important;">
+	        <div style="font-size: 14pt; font-weight: bold;">예약 내역</div>
+		</div>
+		<div style="height: 10px;"></div>
+        <table class="table_bokyung" style="padding: 2em; text-align: center; margin: 0;"
+        	width="1120px" border="0" cellpadding="10" cellspacing="10"  >
+		     <tr style="text-align: center; height: 40px;">
+		        <th width="70">번호</th>
+		        <th>예약타입</th>
+		        <th width="180">체육관</th>
+		        <th width="180">트레이너</th>
+		        <th width="170">등록일</th>
+		        <th width="170">수업일정</th>
+		        <th colspan="2" align="left">&nbsp;수업하기</th>
+		     </tr>
+		     
+		     <c:forEach var="bookdto" items="${ booklists }">
+		        <tr style="text-align: center; height: 40px; background-color: white;">
+		           <td>${bookdto.bookNum }</td>
+		           <td>${bookdto.bookType }</td>
+		           <td><a href="/gyp/gymDetail.action?gymId=${bookdto.gymId }" style="font-weight: lighter;">${bookdto.gymName }</a></td>
+		           <td>${bookdto.gymTrainerPick }</td>
+		           <td>${bookdto.bookCreated }</td>
+		           <td>${bookdto.bookHour }</td>
+		           <td style="text-align: center;">
+			          <c:if test="${not empty bookdto.faceLink}">
+	                  <a href="/gyp/faceLink.action" class="bokyung_mypage_link">수업링크</a>
+	                  </c:if>
+	                  <c:if test="${empty bookdto.faceLink }">
+	                  	<c:if test="${bookdto.bookType eq 'online' }">
+	                  		링크 생성 예정
+	                  	</c:if>
+	                  	<c:if test="${bookdto.bookType eq 'offline' }">
+	                  		오프라인 수업
+	                  	</c:if>
+	                  </c:if>
+	               </td>
+		        </tr>
+		     </c:forEach>
+          	 <c:if test="${empty booklists }">
+	             <tr style="text-align: center; height: 40px; background-color: white;">
+			     	<td colspan="7" style="color:#888; font-size: 12pt;" height="80px">
+			     	예약 내역이 없습니다</td>
+			     </tr>
             </c:if>
-         </div>
-      </div>
+        </table><br><br>
       
       
-      <br><br>
+      
       <!-- 리뷰 -->
-      <div class="container mb-30" id="4">
-         <span class="mp_title">리뷰 목록</span>
-         <table class="table01" border="0" cellpadding="10" cellspacing="10">
-            <tr align="left" style="text-align: center;">
-               <th width="70">리뷰번호</th>
-               <th width="180">체육관</th>
-               <th width="170">등록일</th>
-               <th width="170">평점</th>
-               <th width="170">내용</th> 
-               <th width="170">게시글 관리</th>
-            </tr>
-            
-            <c:forEach var="reviewdto" items="${reviewlists }">
-            	<c:if test="${reviewdto.gymId!=null}">
-	               <tr class="tr_white" style="text-align: center;">
+      	<div class="container mb-30 col-12" id="2" style="padding: 0; margin: 0!important;">
+        	<div style="font-size: 14pt; font-weight: bold;">리뷰 목록</div>
+		</div>
+		<div style="height: 10px;"></div>
+	    <table class="table_bokyung" style="padding: 2em; text-align: center; margin: 0;"
+	        	width="1120px" border="0" cellpadding="10" cellspacing="10"  >
+		    <tr style="text-align: center; height: 40px;">
+		        <th width="70">번호</th>
+		        <th width="70">리뷰타입</th>
+		        <th width="150">이름</th>
+		        <th width="150">등록일</th>
+		        <th width="170">평점</th>
+		        <th width="170">내용</th>
+		        <th width="170">게시글 관리</th>
+		    </tr>
+           	<c:if test="${reviewlists!=null}">
+	            <c:forEach var="reviewdto" items="${reviewlists }">
+	               <tr class="tr_white" style="text-align: center; height: 40px;">
 	                  <td>${reviewdto.reNum }</td>
-	                  <td><a href="/gyp/gymDetail.action?gymId=${reviewdto.gymId }" style="font-weight: lighter;">${reviewdto.gymName }</a></td>
+	                  <td>${reviewdto.reType }</td>
+    				  <td><a href="/gyp/gymDetail.action?gymId=${reviewdto.gymId }" style="font-weight: lighter;">
+    				  	  ${reviewdto.gymName }</a>
+    				  	  <a href="/gyp/productDetail.action?productId=${reviewdto.productName }" style="font-weight: lighter;">
+    				  	  ${reviewdto.productName }</a></td>
 	                  <td>${reviewdto.reCreated }</td>
 	                  <td>${reviewdto.star }</td>
 	                  <td width="350" style="padding-right: 20px">${reviewdto.reContent }</td>
 	                  <td><a href="<%=cp %>/reviewDelete.action?reNum=${reviewdto.reNum}" class="bokyung_mypage_link_D">삭제</a></td>
 	               </tr>
-               </c:if>
-               <c:if test="${reviewDto.gymId!=null}">
-               		등록된 체육관 리뷰가 없습니다. 
-               </c:if>
-            </c:forEach>
-            
-            
-         </table>
-         <div class="check">
-            <c:if test="${empty reviewlists }">
-               등록된 리뷰 게시물이 없습니다.
-            </c:if>
-         </div>
-      </div>
+	            </c:forEach>
+           	</c:if>
+           	<c:if test="${empty reviewlists}">
+           		<tr style="text-align: center; height: 40px; background-color: white;">
+			     	<td colspan="8" style="color:#888; font-size: 12pt;" height="80px">
+			     	등록된 리뷰가 없습니다</td>
+			     </tr>
+           	</c:if>
+	            
+	    </table>
+      	<br><br>
       
       
-      <br><br>
-      <!-- Q&A -->
-      <div class="container mb-30" id="5">
-         <span class="mp_title">제휴시설 찜목록</span>
-         <table class="table01" border="0" cellpadding="10" cellspacing="10">
-            <tr style="text-align: center;">
-               <th align="center">체육관</th>
-               <th>주소</th>
-               <th>전화번호</th>
-               <th colspan="2" align="left">&nbsp;게시글 관리</th>
-            </tr>
-             
-            <c:forEach var="jjimdto" items="${ jjimlists }">
-               <tr class="tr_white" style="text-align: center; cursor: pointer;
-               onclick="location.href='/gyp/gymDetail.action?gymId=${jjimdto.gymId}'">
-                  <td>${jjimdto.gymName}</td>
-                  <td>${jjimdto.gymAddr}</td>
-                  <td>${jjimdto.gymTel}</td>
-                  <td><a href="<%=cp %>/jjimDelete.action?gymId=${jjimdto.gymId}" class="bokyung_mypage_link_D">삭제</a></td>
-               </tr>
-            </c:forEach>
-         </table>
-         <div class="check">
-            <c:if test="${empty jjimlists }">
-               등록된 찜 게시물이 없습니다.
-            </c:if>
-         </div>
-      </div>
       
-      <br><br> 
+	    <!-- 찜목록 -->
+	    <div class="container mb-30 col-12" id="2" style="padding: 0; margin: 0!important;">
+	   		<div style="font-size: 14pt; font-weight: bold;">제휴시설 찜 목록</div>
+		</div>
+		<div style="height: 10px;"></div>
+        <table class="table_bokyung" style="padding: 2em; text-align: center; margin: 0;"
+       	width="1120px" border="0" cellpadding="10" cellspacing="10"  >
+		     <tr style="text-align: center; height: 40px;">
+		        <th width="150">체육관</th>
+		        <th width="350">주소</th>
+		        <th width="350">전화번호</th>
+		        <th width="150">찜 삭제</th>
+		     </tr>
+	           <c:forEach var="jjimdto" items="${ jjimlists }">
+	           	<tr class="tr_white" style="text-align: center; height: 40px;">
+	                 <td><a class="bokyung_mypage_link"
+	                 href="location.href='/gyp/gymDetail.action?gymId=${jjimdto.gymId}'">${jjimdto.gymName}</a></td>
+	                 <td>${jjimdto.gymAddr}</td>
+	                 <td>${jjimdto.gymTel}</td>
+	                 <td><a href="<%=cp %>/jjimDelete.action?gymId=${jjimdto.gymId}" class="bokyung_mypage_link_D">삭제</a></td>
+	              </tr>
+	           </c:forEach>
+	           <c:if test="${empty jjimlists }">
+               <tr style="text-align: center; height: 40px; background-color: white;">
+			     	<td colspan="4" style="color:#888; font-size: 12pt;" height="80px">
+			     	찜한 제휴시설이 없습니다</td>
+		  	   </tr>
+	           </c:if>
+    	</table>
+    	<br><br>
+      
+       
       <!-- 상품 주문 내역 -->
-      <div class="container mb-30" id="6">
-         <span class="mp_title">상품 주문 내역</span>
-         <table class="table01 table_Oproduct" border="0" cellpadding="10" cellspacing="10">
-            <tr style="text-align: center;">
-               <th>주문 번호</th>
-               <th colspan="2">주문 상품</th><!-- 사진, 상품명, 수량, -->
-               <th>결제 금액</th><!-- 총금액 -->
-               <th>배송 정보</th>
-               <th>리뷰</th>  
-            </tr> 
-               
-            <c:forEach var="orderDto" items="${orderLists }">
-               <tr class="tr_white" style="text-align: center;" >
-                  <td class="td_proPayNum">주문번호: ${orderDto.proPayNum}<br/>(${orderDto.proPayCreated })</td>
-                  <td class="td_productImg">
-                  	<img alt="${orderDto.productName }" src="${imagePath }${orderDto.productImg }" style="width:120px; height:120px;">
-                  </td> 
-                  <td class="td_productInfo">
-                  <a href="/gyp/productDetail?pageNum=1&productId=${orderDto.productId }">[${orderDto.productId }] ${orderDto.productName }</a>
-                  	&nbsp;&nbsp;
-                  	(${orderDto.productPrice}원) X ${orderDto.count }개
-                  </td>
-                  <td class="td_priceTotal">${orderDto.priceTotal}</td>
-                  <td class="td_deliverInfo">${orderDto.proPayTel }<br/>${orderDto.proPayAddr }</td>
-                  <td class="td_review"><a href="/gyp/productDetail.action?pageNum=1&productId=${orderDto.productId }">리뷰쓰기</a></td>
-               </tr>
-            </c:forEach> 
-         </table>  
-         <div class="check">
-            <c:if test="${empty orderLists }">
-               결제한 상품이 없습니다.
-            </c:if>
-         </div>
-      </div>
-   </div>
-</div>
+      <div class="container mb-30 col-12" id="2" style="padding: 0; margin: 0!important;">
+       		<div style="font-size: 14pt; font-weight: bold;">상품 주문 내역</div>
+	  </div>
+	  <div style="height: 10px;"></div>
+       <table class="table_bokyung" style="padding: 2em; text-align: center; margin: 0;"
+       	width="1120px" border="0" cellpadding="10" cellspacing="10"  >
+		   <tr style="text-align: center; height: 40px;">
+		        <th width="100">번호(시간)</th>
+		        <th width="200">상품 이미지</th>
+		        <th width="200">주문 내역</th>
+		        <th width="150">가격</th>
+		        <th width="300">주문자 정보</th>
+		        <th width="180">리뷰쓰기</th>
+		   </tr>
+           <c:forEach var="orderDto" items="${orderLists }">
+              <tr class="tr_white" style="text-align: center;" >
+                 <!-- 번호와 시간 --><td class="td_proPayNum">
+                 <font style="font-weight: bold; color:#22741C ">${orderDto.proPayNum}</font>
+                 <br><br>&nbsp;(${orderDto.proPayCreated })</td>
+                 <!-- 이미지 -->
+                 <td class="td_productImg">
+                 	<img alt="${orderDto.productName }" src="${imagePath }${orderDto.productImg }" 
+                 	style="width:100px; height:100px; margin: 10px;"></td>
+                 <!-- 주문내역 -->
+                 <td class="td_productInfo">
+	                 <a href="/gyp/productDetail?pageNum=1&productId=${orderDto.productId }">
+	                 [${orderDto.productId }] ${orderDto.productName }</a>&nbsp;&nbsp;X&nbsp;&nbsp;
+	                 ${orderDto.count }개
+                 </td>
+                 <!-- 가격 -->
+                 <td class="td_priceTotal" style="font-weight: bold;">
+                 	${orderDto.priceTotal}원
+                 </td>
+                 <!-- 주문자 정보 -->
+                 <td class="td_deliverInfo">
+                 	${orderDto.proPayTel }<br/>${orderDto.proPayAddr }
+                 </td>
+                 <!-- 리뷰 쓰기 -->
+                 <td class="td_review">
+	                 <a href="/gyp/productDetail.action?pageNum=1&productId=${orderDto.productId }" class="bokyung_mypage_link">
+	                 리뷰쓰기</a>
+	             </td>
+              </tr>
+           </c:forEach> 
+	       	<c:if test="${empty orderLists }">
+	          	<tr style="text-align: center; height: 40px; background-color: white;">
+			     	<td colspan="7" style="color:#888; font-size: 12pt;" height="80px">
+			     	주문 내역이 없습니다</td>
+		  	   </tr>
+	       	</c:if>
+       	</table>  
+        	
+         	
+         	
+		</div>
+	</div>
 
-<div style="height: 70px;">&nbsp;</div>
-	<jsp:include page="/WEB-INF/views/layout/footer.jsp" />
 
- <!-- ##### All Javascript Script ##### -->
+
+
+
+
+	<div style="height: 70px;">&nbsp;</div>
+	<jsp:include page="/WEB-INF/views/layout/footer.jsp"/>
+
+ 	<!-- ##### All Javascript Script ##### -->
     <!-- Popper js -->
     <script src="/gyp/resources/js/bootstrap/popper.min.js"></script>
     <!-- Bootstrap js -->
@@ -319,5 +368,6 @@
     <script src="/gyp/resources/js/plugins/plugins.js"></script>
     <!-- Active js -->
     <script src="/gyp/resources/js/active.js"></script>
+    
 </body>
 </html>

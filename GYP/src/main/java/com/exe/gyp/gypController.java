@@ -315,9 +315,6 @@ public class gypController {
 		String custel = request.getParameter("custel");
 		CustomerDTO dto = dao.getLoginReadData(cusId);
 		
-		System.out.println(cusId);
-		System.out.println(custel);
-		
 		if (dto == null || !dto.getCusTel().equals(custel)) { // 아이디가 틀리거나 전화번호가 틀린경우
 			request.setAttribute("message", "아이디 또는 전화번호가 일치하지 않습니다");
 			return "login/searchpw";
@@ -1617,136 +1614,138 @@ public class gypController {
 	}
 
 	// 리뷰 리스트 : 체육관 상세페이지 리뷰 리스트 (ajax)
-	@RequestMapping(value = "/productreviewList.action", method = { RequestMethod.GET, RequestMethod.POST })
-	public String productreviewList(HttpServletRequest request, String productId, HttpSession session)
-			throws Exception {
+   @RequestMapping(value = "/productreviewList.action", method = { RequestMethod.GET, RequestMethod.POST })
+   public String productreviewList(HttpServletRequest request, String productId, HttpSession session)
+         throws Exception {
 
-		CustomInfo info = (CustomInfo) session.getAttribute("customInfo");
+      CustomInfo info = (CustomInfo) session.getAttribute("customInfo");
+      String cusId = "";
 
-		String cusId = "";
+      if (info == null || info.equals("")) {
+         cusId = "";
+      } else {
+         cusId = info.getSessionId();
+      }
 
-		if (info == null || info.equals("")) {
-			cusId = "";
-		} else {
-			cusId = info.getSessionId();
-		}
+      if (info != null) {
+         request.setAttribute("info", info);
+      }
+      if (productId == null || productId.equals("")) {
+         productId = request.getParameter("productId");
+      }
 
-		if (info != null) {
-			request.setAttribute("info", info);
-		}
+      int numPerPage = 3;
+      int totalPage = 0;
+      int totalDataCount = 0;
+      String pageNum = request.getParameter("pageNum");
+      int currentPage = 1;
 
-		if (productId == null || productId.equals("")) {
-			productId = request.getParameter("productId");
-		}
+      if (pageNum != null && pageNum != "") {
+         currentPage = Integer.parseInt(pageNum);
+      } else {
+         pageNum = "1";
+      }
 
-		int numPerPage = 3;
-		int totalPage = 0;
-		int totalDataCount = 0;
+      // 전체 데이터 갯수
+      totalDataCount = dao.getProductReviewNum(productId);
 
-		String pageNum = request.getParameter("pageNum");
+      if (totalDataCount != 0) {
+         totalPage = myUtil.getPageCount(numPerPage, totalDataCount);
+      }
+      if (currentPage > totalPage) {
+         currentPage = totalPage;
+      }
 
-		int currentPage = 1;
+      Map<String, Object> hMap = new HashMap<String, Object>();
 
-		if (pageNum != null && pageNum != "") {
-			currentPage = Integer.parseInt(pageNum);
-		} else {
-			pageNum = "1";
-		}
+      int start = (currentPage - 1) * numPerPage + 1;
+      int end = currentPage * numPerPage;
 
-		// 전체 데이터 갯수
-		totalDataCount = dao.getProductReviewNum(productId);
+      hMap.put("start", start);
+      hMap.put("end", end);
+      hMap.put("productId", productId);
 
-		if (totalDataCount != 0) {
-			totalPage = myUtil.getPageCount(numPerPage, totalDataCount);
-		}
+      List<ReviewDTO> productreviewLists = dao.getProductReviewList(hMap);
 
-		if (currentPage > totalPage) {
-			currentPage = totalPage;
-		}
+      Iterator<ReviewDTO> it = productreviewLists.iterator();
+      // 전체 평점 평균
+      int starAvg = dao.getProductAvgReview(productId);
 
-		Map<String, Object> hMap = new HashMap<String, Object>();
+      while (it.hasNext()) {
+         ReviewDTO vo = (ReviewDTO) it.next();
+         vo.setReContent(vo.getReContent().replaceAll("\n", "<br/>"));
+      }
 
-		int start = (currentPage - 1) * numPerPage + 1;
-		int end = currentPage * numPerPage;
+      String pageIndexList = myUtil.pageIndexList(currentPage, totalPage);
 
-		hMap.put("start", start);
-		hMap.put("end", end);
-		hMap.put("productId", productId);
+      if (info != null) {
+         request.setAttribute("info", info);
+         String cusInfo = info.getSessionId();
+      }
 
-		List<ReviewDTO> productreviewLists = dao.getProductReviewList(hMap);
+      // product 데이터 불러오기
+      ProductDTO dto = dao.getProductReadData(productId);
+      List<ProductPayDTO> paydto = null;
+      int su = dao.getProductPayDataCount(cusId);//proPayNum 배열값 지정
+      
+      if(su == 0) { //구매한적이 없으면
+         su = 99;
+      }
 
-		Iterator<ReviewDTO> it = productreviewLists.iterator();
-		// 전체 평점 평균
-		int starAvg = dao.getProductAvgReview(productId);
+      // productpay 데이터 불러오기
+      if (!cusId.equals("")) { //로그인 했을때 
 
-		while (it.hasNext()) {
-			ReviewDTO vo = (ReviewDTO) it.next();
-			vo.setReContent(vo.getReContent().replaceAll("\n", "<br/>"));
-		}
+         paydto = dao.getProductPayReadData(cusId); //테이블 조회한값
 
-		String pageIndexList = myUtil.pageIndexList(currentPage, totalPage);
+         if (paydto != null) { //productpay 테이블을 조회했는데 로그인한 아이디값이 있으면 리뷰작성창이 나오도록
 
-		if (info != null) {
-			request.setAttribute("info", info);
-			String cusInfo = info.getSessionId();
-		}
-		
-		// product 데이터 불러오기
-		ProductDTO dto = dao.getProductReadData(productId);
+        	int proPayNum[] = new int[99];
+            if(su==99) {
+               
+               request.setAttribute("starAvg", starAvg);
+               request.setAttribute("productreviewLists", productreviewLists);
+               request.setAttribute("pageIndexList", pageIndexList);
+               request.setAttribute("totalDataCount", totalDataCount);
+               request.setAttribute("pageNum", pageNum);
+               return "product/productreviewList";
+            }
+            
+            int n = 0;
+            Iterator<ProductPayDTO> iterator = paydto.iterator();
+            while (iterator.hasNext()) {
+               ProductPayDTO dto2 = iterator.next();
+               proPayNum[n] = dto2.getProPayNum();
+               n++;
+            }
+            
 
-		List<ProductPayDTO> paydto = null;
-		int su = dao.getProductPayDataCount(cusId);//proPayNum 배열값 지정
-		
-		// productpay 데이터 불러오기
-		if (!cusId.equals("")) { //로그인 했을때 
+            List<ProductPayDetailDTO> lists = dao.getProductPayList(proPayNum);
+            int result = dao.getProductPayDetailDataCount(proPayNum);
+            String[] proId = new String[result];
+            int i = 0;
 
-			paydto = dao.getProductPayReadData(cusId); //테이블 조회한값
+            for (ProductPayDetailDTO paydetaildto : lists) {// 선택한 개수많큼 리스트를 돌린다
+               proId[i] = paydetaildto.getProductId(); // 스트링 배열에 선택한 productId값을 넘겨준다
+               i++;
+            }
 
-			if (paydto != null) { //productpay 테이블을 조회했는데 로그인한 아이디값이 있으면 리뷰작성창이 나오도록
+            for (i = 0; i < result; i++) {
+               if (proId[i].equals(dto.getProductId())) {
+                  int reviewaccect = 1;
+                  request.setAttribute("reviewaccect", reviewaccect);
+               }
+            }
+         }
+      }
 
-				
-				int proPayNum[] = new int[su];
-				
-				int n = 0;
-				Iterator<ProductPayDTO> iterator = paydto.iterator();
-				while (iterator.hasNext()) {
-					ProductPayDTO dto2 = iterator.next();
-					proPayNum[n] = dto2.getProPayNum();
-					n++;
-				}
-				
-				List<ProductPayDetailDTO> lists = dao.getProductPayList(proPayNum);
+      request.setAttribute("starAvg", starAvg);
+      request.setAttribute("productreviewLists", productreviewLists);
+      request.setAttribute("pageIndexList", pageIndexList);
+      request.setAttribute("totalDataCount", totalDataCount);
+      request.setAttribute("pageNum", pageNum);
 
-				int result = dao.getProductPayDetailDataCount(proPayNum);
-
-				String[] proId = new String[result];
-
-				int i = 0;
-
-				for (ProductPayDetailDTO paydetaildto : lists) {// 선택한 개수많큼 리스트를 돌린다
-					proId[i] = paydetaildto.getProductId(); // 스트링 배열에 선택한 productId값을 넘겨준다
-					i++;
-				}
-
-				for (i = 0; i < result; i++) {
-
-					if (proId[i].equals(dto.getProductId())) {
-						int reviewaccect = 1;
-						request.setAttribute("reviewaccect", reviewaccect); //구매한 적이 있으면 리뷰 작성이 보여지는 flag
-					}
-
-				}
-			}
-		}
-
-		request.setAttribute("starAvg", starAvg);
-		request.setAttribute("productreviewLists", productreviewLists);
-		request.setAttribute("pageIndexList", pageIndexList);
-		request.setAttribute("totalDataCount", totalDataCount);
-		request.setAttribute("pageNum", pageNum);
-
-		return "product/productreviewList";
-	}
+      return "product/productreviewList";
+   }
 
 	// 리뷰 삭제 : 체육관 상세페이지 리뷰 삭제 (ajax)
 	@RequestMapping(value = "/productreviewDeleted.action")
@@ -1868,8 +1867,8 @@ public class gypController {
 		
 		//확장for문, 하나씩 꺼내서 글자길이 수정
 		for(ProductDTO dto : productLists) {
-			if(dto.getProductContent().length() > 13) { //프로그램 길면 자르기
-				dto.setProductContent(dto.getProductContent().substring(0, 13) + " ...");
+			if(dto.getProductContent().length() > 11) { //프로그램 길면 자르기
+				dto.setProductContent(dto.getProductContent().substring(0, 11) + " ...");
 			}
 		}
 		
@@ -2015,6 +2014,7 @@ public class gypController {
 	@RequestMapping(value="/gymBook.action")
 	public String gymBook(HttpServletRequest request, HttpServletResponse response,
 			BookDTO dto,HttpSession session) throws IOException {
+		
 		CustomInfo info = (CustomInfo)session.getAttribute("customInfo");
 		if(info==null) {//돌발적 로그아웃 대비
 			return "redirect:/login.action";
@@ -2024,13 +2024,17 @@ public class gypController {
 		int cusPassLeft = dao.getCusPassLeft(cusId);
 		// 체육관 정보
 		GymDTO gymDto = dao.getGymData(dto.getGymId());
-			
+         
 		String datePick = request.getParameter("datePick");
 		String bookHourWd = request.getParameter("bookHourWd");
 		String bookHourSat = request.getParameter("bookHourSat");
 		String bookHourSun = request.getParameter("bookHourSun");
 		String bookHour = "";
 		
+		System.out.println(bookHourWd);
+		System.out.println(bookHourSat);
+		System.out.println(bookHourSun);
+      
 		if(!bookHourWd.equals("") && bookHourWd!=null) {
 			bookHour = datePick + "," + bookHourWd;
 		}
@@ -2040,18 +2044,18 @@ public class gypController {
 		if(!bookHourSun.equals("") && bookHourSun!=null) {
 			bookHour = datePick + "," + bookHourSun;
 		}
-		
-		
+      
+      
 		int numMax = dao.getBookNumMax(); //삽입용 전체 예약 최댓값
-		
+      
 		dto.setBookNum(numMax + 1);
 		dto.setCusId(info.getSessionId());
 		dto.setBookHour(bookHour);
-		
+      
 		// 중복 확인
 		// gymId와 bookHour gymTrainerPick bookType bookOk가 일치하면 중복이라 간주하고 예약 취소하기
 		int checkDuplicateBook = dao.checkDuplicateBook(dto);
-		
+      
 		if(checkDuplicateBook>0) {
 			response.setContentType("text/html; charset=utf-8");
 			PrintWriter out = response.getWriter();
@@ -2063,33 +2067,33 @@ public class gypController {
 			out.close();
 			return "gymDetail/gymDetail";
 		}
-		
-		//사용자 pass 수 차감하기
-		if(cusPassLeft<gymDto.getGymPass()) {
-			//alert후 상세페이지로 돌아가기
-			response.setContentType("text/html; charset=utf-8");
-			PrintWriter out = response.getWriter();
-			out.println("<script>");
-			out.println("alert('잔여 pass 수가 부족합니다!');");
-			out.println("history.back();");
-			out.println("</script>");
-			out.close();
-			return "gymDetail/gymDetail";
-		}
-		
-		//사용자 pass수 차감하여 update하기
-		cusPassLeft = cusPassLeft - gymDto.getGymPass();
-		
-		Map<String, Object> hMap = new HashMap<String, Object>();
-		hMap.put("cusId",cusId);
-		hMap.put("cusPass",cusPassLeft);
-		
-		dao.updateCusPass(hMap);
-		
-		dao.insertBookData(dto);
-		
-		return "redirect:/gymBook_ok.action";
-	}
+      
+      //사용자 pass 수 차감하기
+      if(cusPassLeft<gymDto.getGymPass()) {
+         //alert후 상세페이지로 돌아가기
+         response.setContentType("text/html; charset=utf-8");
+         PrintWriter out = response.getWriter();
+         out.println("<script>");
+         out.println("alert('잔여 pass 수가 부족합니다!');");
+         out.println("history.back();");
+         out.println("</script>");
+         out.close();
+         return "gymDetail/gymDetail";
+      }
+      
+      //사용자 pass수 차감하여 update하기
+      cusPassLeft = cusPassLeft - gymDto.getGymPass();
+      
+      Map<String, Object> hMap = new HashMap<String, Object>();
+      hMap.put("cusId",cusId);
+      hMap.put("cusPass",cusPassLeft);
+      
+      dao.updateCusPass(hMap);
+      
+      dao.insertBookData(dto);
+      
+      return "redirect:/gymBook_ok.action";
+   }
 	
 	// 체육관 예약 완료
 	@RequestMapping(value="/gymBook_ok.action", method = {RequestMethod.GET, RequestMethod.POST})
@@ -2222,10 +2226,8 @@ public class gypController {
 	   }
 	   
 	   String productSelected = request.getParameter("productSelected");
-	   System.out.println("productSelected: "+productSelected);
 	   //상품상세에서 결제하기
 	   if(productSelected!=null) {
-		   System.out.println("상품상세에서 넘어옴");
 
 		   String productId = request.getParameter("productId");
 		   int count = Integer.parseInt(request.getParameter("count"));
@@ -2247,7 +2249,7 @@ public class gypController {
 	   String totPrice = request.getParameter("totPrice2"); //나중에 결제 금액 넘김
 	   String[] chkNums = request.getParameterValues("cartChk"); // 배열에 선택한 cartNum값이 들어온다
       
-	   for (int i = 0; i < chkNums.length; i++) { System.out.println(chkNums[i]); }//debug array of product
+	   /*for (int i = 0; i < chkNums.length; i++) { System.out.println(chkNums[i]); }*/ //debug array of product
       
 	   //결제할 상품 정보 리스트
 	   int[] numI = null;
@@ -2281,10 +2283,8 @@ public class gypController {
       
    		CustomInfo info = (CustomInfo)session.getAttribute("customInfo");
    		String cusId = info.getSessionId();
-      
+   		
    		String params = request.getParameter("params");
-   		System.out.println(params);
-      
    		String item = params.substring(params.indexOf("item=")+"item=".length(),params.indexOf("&"));
       
    		// pass 결제시
@@ -2316,14 +2316,12 @@ public class gypController {
    			//charge 테이블 업데이트
    			dao.updateCusPass(hMap);
 
-   			System.out.println("패스 결제 완료");
    			return;
    		}      
       
    		// 상품 결제시 -> item이 pass_로 시작하지 않으면
       
    		int proPayNumMax = dao.getProPayNumMax();
-   		System.out.println("proPayNumMax: " + proPayNumMax);
 
    		String amount = params.substring(params.indexOf("amount=")+"amount=".length(),params.indexOf("&",params.indexOf("amount=")));
    		//String payMethod = params.substring(params.indexOf("payMethod=")+"payMethod=".length(),params.indexOf("&",params.indexOf("payMethod=")));
@@ -2361,8 +2359,6 @@ public class gypController {
 
    		//장바구니에서 삭제
    		dao.deleteFromCartAfterPayment(productIdList,cusId);
-      
-   		System.out.println("상품 결제 완료");
    		return;
    	}
 	
@@ -2477,12 +2473,10 @@ public class gypController {
 				info.setSessionId(sessionId); //세션에 값 입력
 				info.setLoginType(loginType);//로그인 타입(customer, gym )
 				session.setAttribute("customInfo", info); // 세션에 info에 들어가있는정보(userid,username)이 올라간다.
-				System.out.println("로그인 완료");
 				return "home";
 				
 		      }else {  // 에러 발생
 		    	  br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
-		    	  System.out.println("로그인 실패 : " + br);
 		    	  return "login/login";
 		      }
 		    } catch (Exception e) {
@@ -2780,16 +2774,18 @@ public class gypController {
 		String searchKey = "qnaType";
 		
 		//검색값 없을 경우
-		if(searchValue == null) {
+		if(searchValue == null || searchValue2 == null) {
 			searchKey = "qnaType";
 			searchValue = "";
 			searchValue2 = "";
 		}
+		
 		//검색값 있을 경우 한글디코딩
 		if(request.getMethod().equalsIgnoreCase("GET")){
 			searchValue = URLDecoder.decode(searchValue,"UTF-8");
-			
+			searchValue2 = URLDecoder.decode(searchValue2,"UTF-8");
 		}
+		
 		
 		//페이징
 		int currentPage = 1;
@@ -2828,10 +2824,12 @@ public class gypController {
 		String listUrl = "";
 		String articleUrl = "";
 		
-		if(!searchValue.equals("")) {
+		if(!searchValue.equals("") || !searchValue2.equals("")) {
 			searchValue = URLEncoder.encode(searchValue,"UTF-8");
-			params = "searchKey=" + searchKey + "&searchValue=" + searchValue+ "&searchValue2=" + searchValue2;
-		}
+			searchValue2 = URLEncoder.encode(searchValue2,"UTF-8");
+			params = "searchKey=" + searchKey + "&searchValue=" + searchValue+
+			"&searchValue2=" + searchValue2;
+			}
 		
 		if(params.equals("")) {
 			listUrl = cp + "/qnaList.action";
@@ -2871,6 +2869,13 @@ public class gypController {
 		int qnaNumMax = dao.getQnaMaxNum();
 		dto.setQnaNum(qnaNumMax+1);
 		dto.setCusId(cusId);
+		
+		String searchKey="qnaType";
+		String searchValue="";
+		String searchValue2="";
+
+		int listNumMax = dao.getQnaDataCount(searchKey, searchValue,searchValue2);
+		dto.setListNum(listNumMax+1);
 		
 		request.setAttribute("dto", dto);
 		request.setAttribute("mode", "insert");
@@ -2930,6 +2935,7 @@ public class gypController {
 		//searchKey는 qnaType으로 고정
 		String searchKey = "qnaType";
 		String searchValue = request.getParameter("searchValue");
+		String searchValue2 = request.getParameter("searchValue2");
 		
 		//에러방지
 		int groupNum = 0;
@@ -2943,6 +2949,7 @@ public class gypController {
 		//검색값 인코딩
 		if(request.getMethod().equalsIgnoreCase("GET")) {
 			searchValue = URLDecoder.decode(searchValue,"UTF-8");
+			searchValue2 = URLDecoder.decode(searchValue2,"UTF-8");
 		}
 		
 		//qna 객체 가져오기
@@ -2974,10 +2981,12 @@ public class gypController {
 		
 		//파람 생성
 		String params = "pageNum=" +pageNum;
-		if(!searchValue.equals("")) {
+		if(!searchValue.equals("") || !searchValue2.equals("")) {
 			searchValue = URLEncoder.encode(searchValue,"UTF-8");
-			params += "&searchKey=" + searchKey + "&searchValue=" + searchValue; 
+			searchValue2 = URLEncoder.encode(searchValue2,"UTF-8");
+			params += "&searchKey=" + searchKey + "&searchValue=" + searchValue + "&searchValue2=" + searchValue2; 
 		}
+		
 		request.setAttribute("result", result);
 		request.setAttribute("dto", dto);
 		request.setAttribute("preQnaNum", preQnaNum);
@@ -3007,6 +3016,14 @@ public class gypController {
 		if(dto==null) {
 			return "redirect:/qnaList.action?pageNum=" + pageNum;
 		}
+		
+		String searchKey="qnaType";
+		String searchValue="";
+		String searchValue2="";
+
+		int listNumMax = dao.getQnaDataCount(searchKey, searchValue,searchValue2);
+		dto.setListNum(listNumMax+1);
+		
 		request.setAttribute("mode", "update");
 		request.setAttribute("pageNum", pageNum);
 		request.setAttribute("dto", dto);
@@ -3051,6 +3068,13 @@ public class gypController {
 		//답변 구분
 		String temp = "\r\n\r\n----------------------------------------\r\n\r\n";
 		temp += "Re: \r\n";
+		
+		String searchKey="qnaType";
+		String searchValue="";
+		String searchValue2="";
+
+		int listNumMax = dao.getQnaDataCount(searchKey, searchValue,searchValue2);
+		dto.setListNum(listNumMax+1);
 		
 		//dto에 제목,내용을 넣는다.(위의 temp도 함께)
 		dto.setQnaTitle("Re: " + dto.getQnaTitle());
@@ -3292,8 +3316,6 @@ public class gypController {
 		gymHour += gymHour1 + ",";
 		gymHour += gymHour2 + ",";
 		gymHour += gymHour3 ;
-		
-		System.out.println(gymHour);
 		
 		//dto에 setting
 		dto.setGymHour(gymHour);			
@@ -3741,7 +3763,6 @@ public class gypController {
 		
 		while( itr.hasNext() ) {
 			dto = itr.next();
-			
 			dto.setGymTrainerAry(dto.getGymTrainer().split(",")); 
 			dto.setGymTrainerPicAry(dto.getGymTrainerPic().split(","));
 			dto.setGymPicAry(dto.getGymPic().split(","));
@@ -3752,10 +3773,8 @@ public class gypController {
 		//param 생성
 		String param = "";
 		if (!searchValue.equals("")) {
-
 			param = "searchKey=" + searchKey;
 			param += "&searchValue=" + URLEncoder.encode(searchValue, "UTF-8");
-
 		}
 
 		String listUrl = cp + "/adminGymList.action";
@@ -3769,8 +3788,7 @@ public class gypController {
 				myUtil.pageIndexList(currentPage, totalPage, listUrl);
 
 		//이미지
-		cp = cp + "/resources/img/test";
-		String imgPath = cp;
+		String imgPath = "/gyp/sfiles";
 
 		//request set
 		request.setAttribute("lists", lists);

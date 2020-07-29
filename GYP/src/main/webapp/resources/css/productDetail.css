@@ -199,13 +199,13 @@ body {
   transition: all 0.5s ease;
 }
 
-.gallery_item_preview a:before {
-  content: "크게 보기"; 			/*마우스 hover 글자 */
+/* .gallery_item_preview a:before {
+  content: "크게 보기"; 			마우스 hover 글자
   position: absolute;
   top: 0.5em;
   left: -30em;
-  background-color: #8080ff;			/*마우스 hover 배경색*/
-  color: #fff;							/*마우스 hover 글자색*/
+  background-color: #8080ff;			마우스 hover 배경색
+  color: #fff;							마우스 hover 글자색
   padding: 0.56em 1em;
 
   -webkit-border-radius: 5px 0 0 0;
@@ -217,7 +217,7 @@ body {
   -moz-transition: all 1s ease;
   -o-transition: all 1s ease;
   transition: all 1s ease;
-}
+} */
 
 .gallery_item_preview a:hover:before {
   left: 0.5em;
@@ -563,8 +563,7 @@ body {
     height: 600px;
     display: inline-block;
     vertical-align: top;
-    margin-left: 50px;
-    margin-top: 50px;
+    margin-left: 40px;
   
   }
 
@@ -649,12 +648,12 @@ body {
   padding: 10px; 
   font-family: 'Do Hyeon', sans-serif; 
   font-size: 12pt;
-  background-color: #7a7ebf; 
+  background-color: #38b143; 
   color : white; 
   border: 0; 
-  border-radius: 30px;
+  border-radius: 10px;
   vertical-align: middle;
-  width: 60px;
+  width: 120px;
   height: 60px;
   float: right;
   }

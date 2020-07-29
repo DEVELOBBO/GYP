@@ -148,8 +148,6 @@
 		                    </c:forEach>
                         </div>
                     </div>
-					
-
                 </div>
 				<!-- -------------좌측 컬럼 끝-------------- -->
 				
@@ -364,15 +362,16 @@
 						</div>
 					</c:if>
 						
-						<!-- 일반회원이면 여백 -->
-						<c:if test="${empty info || info.loginType ne 'gym'}">
+						<!-- 로그인 안했거나, 일반회원이면 여백 -->
+						<c:if test="${empty info || info.loginType eq 'custom'}">
 							<div style="height: 150px;"></div>
 						</c:if>
 						
 						<!-- 체육관회원이면 여백 -->
-						<c:if test="${empty info || info.loginType == 'gym'}">
+						<c:if test="${!empty info && info.loginType eq 'gym'}">
 							<div style="height: 50px;"></div>
 						</c:if>
+
 						
                         <!-- 제휴시설 미리보기 -->
                         <div class="blog-post-categories mb-100" >

@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%
 	request.setCharacterEncoding("UTF-8");
 	String cp = request.getContextPath();
@@ -113,7 +114,8 @@ function makeQuestion(){
 							&nbsp;&nbsp;
 						</c:forEach>
 					</c:if>
-					<a href="${articleUrl}&qnaNum=${dto.qnaNum}">${dto.qnaTitle }</a>
+					<c:set var="qnaType" value="${dto.qnaType}"/>
+					<a href="${articleUrl}&qnaNum=${dto.qnaNum}">[${fn:substring(qnaType,0,3)}] ${dto.qnaTitle }</a>
 					<!-- 날짜 및 질문자-->
 					<div style="width:250px; float: right; margin: 0; text-align: right;">${dto.qnaCreated }&nbsp;(질문자 : ${dto.cusId })&nbsp;&nbsp;&nbsp;&nbsp;</div>	
 				</div>

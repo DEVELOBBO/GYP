@@ -102,6 +102,52 @@ $(function() {
    }
  }
   */
+  
+  $(function() {
+		//전화번호 중복체크
+		$('#telckbutton').click(function() {
+
+			f = document.myForm;
+
+			$.ajax({
+				type : "POST",
+				url : "gymTelck",
+				data : {
+					"gymTel" : $('#gymTel').val()
+				},
+
+				success : function(data) { //data : cusidck에서 넘겨준 결과값
+					if ($.trim(data) == "YES") {
+						if ($('#gymTel').val() != '') {
+							alert("사용가능한 전화번호입니다.");
+							var ff = $('#gymTel').val();
+							$('#checkgymTel').val(ff);
+						}
+					} else {
+						if (f.mode.value != 'updated') {
+							if ($('#gymTel').val() != '') {
+								alert("중복된 전화번호입니다.");
+								$('#gymTel').val('');
+								setTimeout(function(){$('#gymTel').focus();}, 1);
+							
+							}
+						}
+						if (f.mode.value == 'updated') {
+							if ($('#gymTel').val() != '') {
+
+								alert("중복된 전화번호입니다.");
+
+							}
+						}
+
+					}
+				}
+			})
+		})
+
+	});
+  
+  
     //주소 찾기 버튼(Daum카카오 주소API 기반)
       function sample6_execDaumPostcode() {
           new daum.Postcode({
@@ -137,10 +183,10 @@ $(function() {
     f = document.myForm;
 
     //아이디 제약조건
-    var cc1 = /^[a-z0-9]{1,16}$/;
+    var cc1 = /^[a-z0-9]{4,16}$/;
 
     //패스워드 제약조건
-    var cc2 = /^[A-Za-z0-9]{1,16}$/;
+    var cc2 = /^[A-Za-z0-9]{4,16}$/;
 
     //전화번호 제약조건
     var cc3 = /^(01[016789]{1}|02|0[3-9]{1}[0-9]{1})-[0-9]{3,4}-[0-9]{4}$/;
@@ -186,7 +232,7 @@ $(function() {
 
     if (!cc1.test(f.gymId.value)) {
 
-       alert('아이디 영문소문자/숫자 1~16자 이내로 입력하세요.');
+       alert('아이디 영문소문자/숫자 4~16자 이내로 입력하세요.');
 
        f.gymId.focus();
 
@@ -214,7 +260,7 @@ $(function() {
 
     if (!cc2.test(f.gymPwd.value)) {
 
-       alert('패스워드 영문 대소문자/숫자 1~16자 이내로 입력하세요.');
+       alert('패스워드 영문 대소문자/숫자 4~16자 이내로 입력하세요.');
 
        f.gymPwd.focus();
 
@@ -223,7 +269,8 @@ $(function() {
 
     if (!f.gymPwd2.value) {
        alert("비밀번호를 한번 더 입력하세요.");
-       f.gymPwd2.value.focus();
+       f.gymPwd2.focus();
+       return false;
     }
 
     if (f.gymPwd.value != f.gymPwd2.value) {
@@ -232,6 +279,7 @@ $(function() {
        f.gymPwd.value = "";
        f.gymPwd2.value = "";
        f.gymPwd.focus();
+       return false;
     }
 
     if (!cc4.test(f.gymEmail.value)) {
@@ -476,10 +524,13 @@ $(function() {
 							<dl>
 								<dt style="margin-bottom: 5px;">전화번호</dt>
 								<dd style="height: 45px;">
-									<div class="form-group" style="display: inline-block; width: 100%;">
-									<input type="text" name="gymTel" size="35" maxlength="50" style="margin-bottom: 0px;"
-										class="form-control" value="${dto.gymTel }"/>
-									</div>
+									<div class="form-group" style="display: inline-block; width: 450px;">
+									<input type="text" name="gymTel" id="gymTel" size="35" value="${dto.gymTel }"
+										maxlength="50" class="form-control" style="margin-bottom: 0px;"/></div>
+									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="button" id="telckbutton" name="telckbutton" value ="중복체크"  
+									class="btn fitness-btn" style="display: inline-block;"/>
+									<input type="hidden" id = "checkgymTel" name = "checkgymTel" value =""/>
 								</dd>
 							</dl>
 							<hr style="margin-top: 0px;">
@@ -994,7 +1045,7 @@ $(function() {
 								  <div class="input-group-prepend">
 								    <span class="input-group-text " id="">토요일</span>
 								  </div>
-								  <select name="gymHour1_1" class="custom-select" >
+								  <select name="gymHour2_1" class="custom-select" >
 										<option value="01:00 ">01:00 ~ </option>
 										<option value="02:00 ">02:00 ~ </option>
 										<option value="03:00 ">03:00 ~ </option>
@@ -1020,7 +1071,7 @@ $(function() {
 										<option value="23:00 ">23:00 ~ </option>
 										<option value="24:00 ">24:00 ~ </option>
 									</select>
-								  	<select name="gymHour1_2" class="custom-select" >
+								  	<select name="gymHour2_2" class="custom-select" >
 										<option value="~ 01:00">01:00</option>
 										<option value="~ 02:00">02:00</option>
 										<option value="~ 03:00">03:00</option>
@@ -1053,7 +1104,7 @@ $(function() {
 								  <div class="input-group-prepend">
 								    <span class="input-group-text " id="">일요일</span>
 								  </div>
-								  <select name="gymHour1_1" class="custom-select" >
+								  <select name="gymHour3_1" class="custom-select" >
 										<option value="01:00 ">01:00 ~ </option>
 										<option value="02:00 ">02:00 ~ </option>
 										<option value="03:00 ">03:00 ~ </option>
@@ -1079,7 +1130,7 @@ $(function() {
 										<option value="23:00 ">23:00 ~ </option>
 										<option value="24:00 ">24:00 ~ </option>
 									</select>
-								  	<select name="gymHour1_2" class="custom-select" >
+								  	<select name="gymHour3_2" class="custom-select" >
 										<option value="~ 01:00">01:00</option>
 										<option value="~ 02:00">02:00</option>
 										<option value="~ 03:00">03:00</option>
@@ -1196,39 +1247,5 @@ $(function() {
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

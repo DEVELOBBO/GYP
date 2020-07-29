@@ -7,7 +7,7 @@
    String cp = request.getContextPath();
 
 %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -34,51 +34,51 @@
    <jsp:include page="/WEB-INF/views/layout/header_over.jsp" />
    <jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
    
-   <div class="blog-area mt-50 section-padding-100">
+   
+    <!-- ##### Contact Area Start ##### -->
+    <section class="contact-area section-padding-100">
         <div class="container">
-           <div class="row justify-content-center">
-           
-              <div class="row">
+        <div style="width: 750px; margin: 0 auto;">
+            <div class="row" >
                 <div class="col-12">
                     <div class="contact-title">
-                        <h3>결제 완료</h3>
+                        <h3 style="text-align: center;">결제 완료</h3>
                     </div>
                 </div>
-               </div>
-   
-               <div class="row">
-                   <div class="col-12">
-                       <div class="contact-content">
-                           <!-- Contact Form Area -->
-                           <div class="contact-form-area">
-                              <div class="row">
-                                 <div class="col-2">
-                                    <img alt="reservation-check" src="/gyp/resources/img/check.png" width="180px" >
-                                 </div>
-                                   <div class="mb-70 col-10">
-                              <h4>고객님의 상품 주문이 완료되었습니다.</h4>
-                              <h6>주문내역은 마이페이지에서 확인할 수 있습니다.</h6>
-                              주문 내역 및 배송에 관한 문의는 <a href="#">Q&A</a> 게시판으로 <br/>
-                              문의해주시기 바랍니다. 
-                           </div>
-                              </div> 
-                           
-                        <!-- 임시 링크..! 링크 수정 필요 -->
-                          <div class="fitness-buttons-area mb-100">
-                              <!-- 운동용품 쇼핑하기 -->   
-                              <a href="/gyp/productList.action" class="btn fitness-btn btn-2 m-2">운동용품 쇼핑하기</a>
-                              <!-- 체육관 둘러보기 -->
-                              <a href="/gyp/map.action" class="btn fitness-btn btn-2 m-2">더 둘러보기</a>
-                              <!-- 예약 확인하기 -->
-                              <a href="/gyp/myPage.action" class="btn fitness-btn btn-2 m-2">예약 확인하기</a>
-                          </div>
-                           </div>
-                       </div>
-                   </div>
-           </div>
-          </div>
-    </div>
+            </div>
 
+            <div class="row"> 
+                <div class="col-12">
+                    <div class="contact-content">
+                        <!-- Contact Form Area -->
+                        <div class="contact-form-area">
+                        	<div class="row" align="center" style="text-align: center; justify-content: center;">
+	                        		<img alt="reservation-check" src="/gyp/resources/img/check.png"
+	                        		style="width:110px; height:110px; margin-right: 40px;">
+	                          	<div class="mb-70"> 
+									  <h4>고객님의 상품 주문이 완료되었습니다.</h4>
+		                              <h6>주문내역은 마이페이지에서 확인할 수 있습니다.</h6>
+		                              주문 내역 및 배송에 관한 문의는 <a href="#">Q&amp;A</a> 게시판으로 <br/>
+		                              문의해주시기 바랍니다. 
+								</div>
+                        	</div> 
+								
+						     <div class="fitness-buttons-area mb-100" style="text-align: center;">
+						   		<!-- 운동용품 쇼핑하기 -->	
+						         <a href="/gyp/productList.action" class="btn fitness-btn btn-2 m-2">운동용품 쇼핑하기</a>
+						         <!-- 더 둘러보기 -->
+						         <a href="/gyp/map.action" class="btn fitness-btn btn-2 m-2">더 둘러보기</a>
+						         <!-- 예약 확인하기 -->
+						         <a href="/gyp/customerMyPage.action#2" class="btn fitness-btn btn-2 m-2">예약 확인하기</a>
+						     </div>
+                        </div>
+                    </div>
+                </div>
+           </div> 
+           </div>
+        </div>
+    </section>
+    
    <jsp:include page="/WEB-INF/views/layout/footer.jsp" />
 
    

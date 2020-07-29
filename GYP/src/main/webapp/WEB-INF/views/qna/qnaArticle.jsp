@@ -110,7 +110,7 @@ function sendData() {
 				<input type="button" class="btn fitness-btn btn-2 mt-30" value="삭제" onclick="deleteData();">
 			</c:if>
 			<!-- 로그인안했을때 -->
-			<input type="button" class="btn fitness-btn btn-2 mt-30" value="목록" onclick="javascript:location.href='/gyp/qnaList.action?pageNum=${pageNum }';" />
+			<input type="button" class="btn fitness-btn btn-2 mt-30" value="목록" onclick="javascript:location.href='/gyp/qnaList.action?${params }';" />
 		</div>
 		</div>
 		</div>

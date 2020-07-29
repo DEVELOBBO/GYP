@@ -12,39 +12,39 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	select gymId, gymType,gymName,gymTel,gymAddr,gymPic,gymHour,gymPass,gymOk
 	from gym where ${searchKey} like '%' || #{searchValue} || '%') data)
 <![CDATA[
-	where rnum>=#{start} and rnum<=#{end}
+	where rnum>=#{start} and rnum<=#{end} and gymok='true'
 ]]>
 </select>
 
 <select id="getMapDataCount" parameterType="hashMap" resultType="int">
 	select nvl(count(*),0) from gym
-	where ${searchKey} like '%' || #{searchValue} || '%'
+	where ${searchKey} like '%' || #{searchValue} || '%' and gymok='true'
 </select>
 
 <select id="getSearchName" parameterType="hashMap" resultType="com.exe.dto.GymDTO">
 	select * from (
 	select rownum rnum, data.* from (
-	select distinct gymName from gym where (gymName like '%' || #{searchValue} || '%')) data)
+	select distinct gymName from gym where (gymName like '%' || #{searchValue} || '%' and gymok='true')) data)
 <![CDATA[
 	where rnum>=#{start} and rnum<=#{end}
 ]]>
 </select>
 
 <select id="getSearchGoo" parameterType="hashMap" resultType="com.exe.dto.GymDTO">
-	select * from(
-	select rownum rnum, gymAddr from(
-	select distinct substr(gymAddr,1,instr(gymAddr,'구 ')) gymAddr from(
-	select substr(gymAddr,instr(gymAddr,' ')+1) gymAddr from gym))
-	where (gymAddr like #{searchValue} || '%구' or gymAddr like #{searchValue} and gymAddr is not null))
+   select * from(
+   select rownum rnum, gymAddr from(
+   select distinct substr(gymAddr,1,instr(gymAddr,'구 ')) gymAddr from(
+   select substr(gymAddr,instr(gymAddr,' ')+1) gymAddr from gym where gymok='true'))
+   where (gymAddr like #{searchValue} || '%구' or gymAddr like #{searchValue} and gymAddr is not null))
 <![CDATA[
-	where rnum>=#{start} and rnum<=#{end}
+   where rnum>=#{start} and rnum<=#{end}
 ]]>
 </select>
 
 <select id="getSearchType" parameterType="hashMap" resultType="com.exe.dto.GymDTO">
 	select * from (
 	select rownum rnum, data.* from (
-	select distinct gymType	from gym where (gymType like '%' || #{searchValue} || '%')) data)
+	select distinct gymType	from gym where (gymType like '%' || #{searchValue} || '%' and gymok='true')) data)
 <![CDATA[
 	where rnum>=#{start} and rnum<=#{end}
 ]]>

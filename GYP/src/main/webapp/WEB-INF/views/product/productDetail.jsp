@@ -1,11 +1,12 @@
 <%@page import="com.exe.dto.CustomInfo"%>
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%
 	request.setCharacterEncoding("UTF-8");
 	String cp = request.getContextPath();
 %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -23,7 +24,8 @@
 <link
 	href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400&display=swap"
 	rel="stylesheet">
-
+<!-- jQuery-2.2.4 js -->
+<script src="/gyp/resources/js/jquery/jquery-2.2.4.min.js"></script>
 <!-- 상품상세 CSS -->
 <link rel="stylesheet" href="/gyp/resources/css/productDetail.css"
 	type="text/css">
@@ -107,6 +109,32 @@
 	}
 	
 	
+	$(function(){
+		
+		var oldVal = $("#count-product").val();
+		var proPrice = $("#price").val();
+		
+		$("#count-product").on("propertychange change keyup paste input", function() {
+		    var currentVal = $(this).val();
+		    if(currentVal == oldVal) {
+		        return;
+		    }
+		 
+		    oldVal = currentVal;
+		    
+		    if(oldVal<1){
+		    	alert("1개이상의 상품을 구매하셔야 합니다");
+		    	$("#count-product").val(1);
+		    	return;
+		    }
+		    
+		    var result = oldVal * proPrice;
+		    	
+		    $("#tot-product").val(result + "원");
+		    
+		});
+	});
+	
 	
 </script>
 
@@ -115,102 +143,108 @@
 <body style="font-family: 'Noto Sans KR', sans-serif;">
 
 	<jsp:include page="/WEB-INF/views/layout/header_over.jsp" />
-	<jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
+	<jsp:include page="/WEB-INF/views/layout/header_below.jsp" /> 
 
-
-	<div class="wrapper" style="font-family: 'Noto Sans KR', sans-serif;">
-		<div class="wrapper_inner">
-			<!-- Gallery -->
-			<font color="#7a7ebf" size="3pt">&nbsp;&nbsp;상품코드 -
-				${dto.productId } | 조회수 - ${dto.productHit } </font>
-			<section class="gallery">
-
-
-
-			<div class="gallery_article gallery_item_preview">
-
-				<a href="${imagePath }/${dto.productImg}"> <img alt="그림"
-					src="${imagePath }/${dto.productImg}" width="250" height="250"></a>
-
-			</div>
-
-
-			<div class="article_item">
-				<form action="" name="myForm" method="post">
-					<!-- 제목 -->
-					<input type="hidden" id="productId" name="productId" value="${dto.productId }">
-					<input type="hidden" id="cusId" name="cusId" value="${info.sessionId }" /> 
-					<input type="hidden" id="price" name="price" value="${dto.productPrice }">
-					<font size="4pt" color="#BDBDBD">상품코드&nbsp;${dto.productId}&nbsp;
-					</font><br> <font style="font-size: 35pt" color="black">${dto.productName}</font>
-					<br>
-					<hr>
-
-					<!-- 가격 -->
-					<font size="6pt" color="#2E338C">${dto.productPrice }원&nbsp;</font>
-
-
-					<font size="4pt">&nbsp;|&nbsp;조회:${dto.productHit } </font>
-
-					<!-- 옵션 -->
-					<br> <br> <br> <input type="hidden" name="pid"
-						value="${dto.productId }" />
+	<div class="blog-area mt-20 section-padding-100"> 
+		<div class="container">
+			<div class="wrapper_inner" style="">
+				<font color="#5bb248" size="3pt">&nbsp;&nbsp; 
+					상품코드 - ${dto.productId } &nbsp;|&nbsp; 조회수 - ${dto.productHit } </font>   
+				
+				<hr/>
+				<div class="gallery mt-30 col-12 row mt-50">
+					<!-- 상품 사진 -->
+					<div class="gallery_article gallery_item_preview col-6">
+						<a href="${imagePath }/${dto.productImg}">  
+						<img alt="그림" src="${imagePath }/${dto.productImg}" style="height:460px; width:460px; object-fit: cover; border: 1px solid #5bb248; box-shadow: 0px 0px 20px #000;
+						margin:auto;"></a>
+					</div>
+		 	
+					<!-- 상품 정보 -->
+					<div class="col-6">
+						<form action="" name="myForm" method="post" style="margin-left: 15px;">
 						
-					<!-- 수량 -->
-					<font style="font-size: 16pt; color: #666; vertical-align: middle;">
-
-						갯수&nbsp;&nbsp;</font> <input type="text" name="count" value="1"
-						style="width: 50px; height: 45px; padding-top: 2px; text-align: center; color: #F23D4C; font-size: 20pt; vertical-align: middle;"
-						onkeydown='return onlyNumber(event)' onkeyup='removeChar(event)'>
-					<br> <br>
-					<hr>
-					<br>
-					<!-- 버튼 -->
-					<input type="button" class="btn fitness-btn btn-white mt-10"
-						style="min-width: 100px;" value=" 장바구니 " onclick="sendIt();" /> <input
-						type="button" class="btn fitness-btn btn-white mt-10"
-						style="min-width: 100px;" value=" 구매하기" onclick="buyNow();" /> <br>
-					<br>
-
-					<!-- 상품설명 -->
-					<font size="4px" color="#8C8C8C">&nbsp;${dto.productContent }&nbsp;</font>
-					<br><br><br><br><br>
+							<!-- hidden parameters -->
+							<input type="hidden" id="productId" name="productId" value="${dto.productId }" />
+							<input type="hidden" id="cusId" name="cusId" value="${info.sessionId }" />  
+							<input type="hidden" id="price" name="price" value="${dto.productPrice }"/>
+						
+							<!-- 제목 -->
+							<font style="font-size: 16pt" color="#BDBDBD">&nbsp;${dto.productId})&nbsp;</font>
+							<font style="font-size: 20pt" color="black">${dto.productName}</font>
+							<br>
+							<hr>
+							
+							<!-- 상품설명 -->
+							<font size="4px" color="#8C8C8C">&nbsp;${dto.productContent }&nbsp;</font>
+							<br><br><hr/>
+		 
+							<!-- 가격 --> 
+							<font size="5pt" color="#38b143"><fmt:formatNumber value="${dto.productPrice }" pattern="#,###" />원&nbsp;
+							<font style="font-size: 12pt" color="#BDBDBD">/&nbsp;개</font></font>
+		
+							<!-- 옵션 -->
+							<br> <br> <br> <input type="hidden" name="pid"  
+								value="${dto.productId }" />
+								
+							<!-- 수량 -->
+							<div class="row">
+								<label for="count-product" class="col-2 col-form-label" style="font-size: 20px">갯수: </label>
+								<div class="col-10">
+									<input class="form-control" type="number" value="1" name="count" id="count-product"
+									style="text-align: center; font-size: 15pt; vertical-align: middle;">
+								</div>
+							</div>
+								<!-- <input type="text" name="count" value="1"   
+								style="width: 50px; height: 45px; padding-top: 2px; text-align: center; color: #F23D4C; font-size: 20pt; vertical-align: middle;"
+								onkeydown='return onlyNumber(event)' onkeyup='removeChar(event)'> -->
+							<br>
+							
+							<!-- 총 상품 금액 -->
+							<div class="row">
+								<label for="tot-product" class="col-4 col-form-label" style="font-size: 20px">총 상품 금액: </label>
+								<div class="col-8">
+									<input class="form-control" type="text" id="tot-product" readonly="readonly" 
+									style="text-align: right; font-size: 30pt; vertical-align: middle; border: none; background-color: white; color: #38b143; font-weight: bold;" 
+									value="${dto.productPrice }원">
+								</div>
+							</div> 
+							
+							<br> 
+							<div style="text-align: right;"> 
+								<!-- 버튼 --> 
+								<input type="button" class="btn fitness-btn btn-white mt-10" 
+									style="min-width: 150px;" value=" 장바구니 " onclick="sendIt();" /> 
+								<input type="button" class="btn fitness-btn btn-white mt-10"
+									style="min-width: 150px;" value=" 구매하기" onclick="buyNow();" /> 
+							</div>   
+							<br><hr>
+						</form>  
+					</div>
 					
-					<!-- 목록으로 -->
-					<input type="button" class="bokyung_back" value="◀목록으로"
+					<div class="col-12" style="text-align: right;">
+						<!-- 목록으로 --> 
+						<input type="button" class="btn fitness-btn btn-2 mt-30" value="목록으로" style="min-width: 100px; border-radius: 15px;" 
 						onclick="javascript:location.href='<%=cp%>/productList.action?searchValueCategory=${searchValueCategory }&searchValueWord=${searchValueWord }&pageNum=${pageNum }';" />
-
-				</form>
+					</div>
+				</div> 
 			</div>
-			</section>
-		</div>
 		<br><br>
-		<div class="col-12">
-			<div class="single-blog-post mb-100 gymDetailHeadLine">
-				<!-- Post Title -->
-				<a href="#" class="post-title">상품 리뷰</a> <br>
-
-				<!-- ajax를 이용한 리뷰 리스트 및 리뷰 작성 : reviewList.jsp 참조 -->
+		<div class="col-12 mt-50">
+			<div class="single-blog-post mb-100 gymDetailHeadLine"> 
+				<!-- ajax를 이용한 리뷰 리스트 및 리뷰 작성 : reviewList.jsp 참조 --> 
 				<span id="listData" style="display: none"></span>
 
 			</div>
 		</div>
+		
+		</div>
 	</div>
-
-	<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-	<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-
-
-
-
-
 
 	<jsp:include page="/WEB-INF/views/layout/footer.jsp" />
 
 
 	<!-- ##### All Javascript Script ##### -->
-	<!-- jQuery-2.2.4 js -->
-	<script src="/gyp/resources/js/jquery/jquery-2.2.4.min.js"></script>
 	<!-- Popper js -->
 	<script src="/gyp/resources/js/bootstrap/popper.min.js"></script>
 	<!-- Bootstrap js -->
@@ -227,7 +261,6 @@
 		src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
 	<!-- 상품디테일 -->
 	<script src="/gyp/resources/js/productDetail.js"></script>
-
 
 </body>
 </html>

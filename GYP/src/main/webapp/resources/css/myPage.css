@@ -55,9 +55,20 @@ table td:last-child{
 	border-right: 0;
 }
 
-table th{
-	color: #0F168C; 
-	font-weight: normal;
+.title{
+	font-size: 12pt;
+	text-align :right;
+	padding-right: 30px; 
+	font-weight: bold; 
+	color: #22741C;
+}
+
+.title2{
+	font-size: 12pt;
+	text-align :right;
+	font-weight: bold; 
+	color: #22741C;
+	vertical-align: middle;
 }
 
 
@@ -96,22 +107,22 @@ input.bokyung_mypage_button{
 }
 
 /*수정, 쓰기*/
-a.bokyung_mypage_link:link
-	{color:#4DB3B3;}
+a.bokyung_mypage_link
+	{color:#22741C;}
 
 a.bokyung_mypage_link:visited
-	{color:#4DB3B3; text-decoration:none;}
+	{color:#22741C; text-decoration:none;}
 
 a.bokyung_mypage_link:hover
-	{color:#00D8FF; text-decoration:none;}
+	{color:#38b143; text-decoration:none;}
 
 
 /*삭제*/
 a.bokyung_mypage_link_D:link
-	{color:#D96277;}
+	{color:#E6738A;}
 
 a.bokyung_mypage_link_D:hover
-	{color:red; text-decoration:none;}
+	{color:#FF0000; text-decoration:none;}
 	
 /*보기*/
 a.bokyung_mypage_link_see:link

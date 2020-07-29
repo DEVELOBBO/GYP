@@ -63,7 +63,9 @@ function sendIt() {
 	f.submit();
 }
 
+
 function qnaTypeCheck(){
+	/*
 	var chkcount = document.getElementsByName("qnaType").length;
 	
 	for(var i=0;i<chkcount;i++){
@@ -72,6 +74,7 @@ function qnaTypeCheck(){
 			$('input[name=qnaTitle]').attr('value','['+qnaTypeChk+']');
 		}
 	}
+	*/
 }
 
 </script>
@@ -103,7 +106,7 @@ function qnaTypeCheck(){
 				<!-- 번호 -->
 				<div class="form-group">
 					<font class = "bokyung_qnaCreatedFont">질문 번호</font>
-					<input type="text" name="qnaNum" class="form-control" value="${dto.qnaNum }" disabled="disabled"
+					<input type="text" name="listNum" class="form-control" value="${dto.listNum }" disabled="disabled"
 					style="margin-top: 10px; font-size: 12pt;"/>
 				</div>
 				
