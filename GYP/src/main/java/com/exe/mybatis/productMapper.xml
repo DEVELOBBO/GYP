@@ -172,12 +172,23 @@ PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
 <!-- productpaydetail 데이터 불러오기 -->
 <select id="getProductPayList" parameterType="int" resultType="com.exe.dto.ProductPayDetailDTO"> 
 	select proPayDetailNum,productId,proPayNum,count
-	from PRODUCTPAYDETAIL where proPayNum=#{proPayNum}
+	from PRODUCTPAYDETAIL where proPayNum in
+	<foreach collection="array" item="proPayNum" index="index"  open="(" close=")" separator=",">
+       #{proPayNum}
+    </foreach>
 </select>
 
-<!-- 한 체육관의 리뷰 갯수 -->
+<!-- 갯수 -->
 <select id="getProductPayDetailDataCount" parameterType="int" resultType="int">
-	select nvl(count(*),0) from PRODUCTPAYDETAIL where proPayNum=#{proPayNum}
+	select nvl(count(*),0) from PRODUCTPAYDETAIL where proPayNum in 
+	<foreach collection="array" item="proPayNum" index="index"  open="(" close=")" separator=",">
+       #{proPayNum}
+    </foreach>
+</select>
+
+<!-- 로그인한 유저가 구매한 상품 갯수 -->
+<select id="getProductPayDataCount" parameterType="String" resultType="int">
+	select nvl(count(*),0) from PRODUCTPAY where cusId=#{cusId}
 </select>
 
 </mapper>

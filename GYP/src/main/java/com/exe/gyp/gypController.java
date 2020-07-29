@@ -1648,7 +1648,9 @@ public class gypController {
 		// product 데이터 불러오기
 		ProductDTO dto = dao.getProductReadData(productId);
 
-		ProductPayDTO paydto = null;
+		List<ProductPayDTO> paydto = null;
+		
+		int su = dao.getProductPayDataCount(cusId);//proPayNum 배열값 지정
 
 		// productpay 데이터 불러오기
 		if (!cusId.equals("")) { //로그인 했을때 
@@ -1657,17 +1659,20 @@ public class gypController {
 
 			if (paydto != null) { //productpay 테이블을 조회했는데 로그인한 아이디값이 있으면 리뷰작성창이 나오도록
 
-				int proPayNum = paydto.getProPayNum();
-
-				System.out.println(proPayNum);
-				// productpay 데이터 불러오기
-				// ProductPayDetailDTO paydetaildto =
-				// dao.getProductPayDetailReadData(proPayNum);
-
+				int proPayNum[] = new int[su];
+				
+				int n = 0;
+				Iterator<ProductPayDTO> iterator = paydto.iterator();
+				while (iterator.hasNext()) {
+					ProductPayDTO dto2 = iterator.next();
+					proPayNum[n] = dto2.getProPayNum();
+					n++;
+				}
+				
 				List<ProductPayDetailDTO> lists = dao.getProductPayList(proPayNum);
 
 				int result = dao.getProductPayDetailDataCount(proPayNum);
-
+				
 				String[] proId = new String[result];
 
 				int i = 0;
@@ -1678,12 +1683,14 @@ public class gypController {
 				}
 
 				for (i = 0; i < result; i++) {
-
+					
+					System.out.println(proId[i]);
+					
 					if (proId[i].equals(dto.getProductId())) {
 						int reviewaccect = 1;
 						request.setAttribute("reviewaccect", reviewaccect);
 					}
-
+					
 				}
 			}
 		}

@@ -45,11 +45,15 @@ String cp = request.getContextPath();
 		f.submit();
 	}
 	
+	window.history.forward();
+	
+	function noBack(){window.history.forward();}
+	
 </script>
 
 
 </head>
-<body style="font-family: 'Noto Sans KR', sans-serif;">
+<body style="font-family: 'Noto Sans KR', sans-serif;" onload="noBack();" onpageshow="if(event.persisted) noBack();" onunload="">
 	
 	<jsp:include page="/WEB-INF/views/layout/header_over.jsp" />
 	<jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
