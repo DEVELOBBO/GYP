@@ -50,8 +50,6 @@ function makeQuestion(){
 	<!-- 메인 : header_main.jsp / 그외 : header_below.jsp -->
 	<jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
 	
-	<!-- 여백 -->
-	<div style="height: 50px;"></div>
 	
 	<!-- 큐엔에이 시작 -->
 	<section class="contact-area section-padding-100">

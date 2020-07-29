@@ -148,15 +148,16 @@
 	<div class="blog-area mt-20 section-padding-100"> 
 		<div class="container">
 			<div class="wrapper_inner" style="">
-				<font color="#5bb248" size="3pt">&nbsp;&nbsp; 
+				<font color="#888" size="3pt">&nbsp;&nbsp; 
 					상품코드 - ${dto.productId } &nbsp;|&nbsp; 조회수 - ${dto.productHit } </font>   
 				
 				<hr/>
-				<div class="gallery mt-30 col-12 row mt-50">
+				<div class="gallery mt-30 col-12 row mt-50" style="margin: 0;">
 					<!-- 상품 사진 -->
 					<div class="gallery_article gallery_item_preview col-6">
 						<a href="${imagePath }/${dto.productImg}">  
-						<img alt="그림" src="${imagePath }/${dto.productImg}" style="height:460px; width:460px; object-fit: cover; border: 1px solid #5bb248; box-shadow: 0px 0px 20px #000;
+						<img alt="그림" src="${imagePath }/${dto.productImg}" 
+						style="height:460px; width:460px; object-fit: cover; border: 7px double #dae6c3;
 						margin:auto;"></a>
 					</div>
 		 	
@@ -170,62 +171,54 @@
 							<input type="hidden" id="price" name="price" value="${dto.productPrice }"/>
 						
 							<!-- 제목 -->
-							<font style="font-size: 16pt" color="#BDBDBD">&nbsp;${dto.productId})&nbsp;</font>
-							<font style="font-size: 20pt" color="black">${dto.productName}</font>
+							<font style="font-size: 10pt" color="gray">[${dto.productId}]</font>&nbsp;&nbsp;
+							<font style="font-size: 20pt; font-weight:bolder;" color="#38b143">${dto.productName}</font>
 							<br>
 							<hr>
 							
 							<!-- 상품설명 -->
-							<font size="4px" color="#8C8C8C">&nbsp;${dto.productContent }&nbsp;</font>
+							<font size="4px" color="#8C8C8C">${dto.productContent }&nbsp;</font>
 							<br><br><hr/>
 		 
 							<!-- 가격 --> 
-							<font size="5pt" color="#38b143"><fmt:formatNumber value="${dto.productPrice }" pattern="#,###" />원&nbsp;
-							<font style="font-size: 12pt" color="#BDBDBD">/&nbsp;개</font></font>
+							<div style="display: inline-block; width: 100%; vertical-align: middle;">
+								<div style="display: inline-block;">
+								<input class="form-control" type="number" value="1" name="count" id="count-product"
+									style="text-align: center; width:100px; font-size: 15pt; vertical-align: middle; 
+									padding-left: 22px;"></div>
+								<div style="display: inline-block;"><font style="font-size: 20px;">&nbsp;&nbsp;개</font></div>
+								<div style="display: inline-block; float: right; padding-top: 7px;">
+								<font style="font-size: 20px;" color="#38b143"><fmt:formatNumber value="${dto.productPrice }" pattern="#,###" />원&nbsp;</font>
+								<font style="font-size: 20px;" color="#BDBDBD">(1개당)</font></div>
+							</div>
+							
 		
 							<!-- 옵션 -->
-							<br> <br> <br> <input type="hidden" name="pid"  
-								value="${dto.productId }" />
-								
-							<!-- 수량 -->
-							<div class="row">
-								<label for="count-product" class="col-2 col-form-label" style="font-size: 20px">갯수: </label>
-								<div class="col-10">
-									<input class="form-control" type="number" value="1" name="count" id="count-product"
-									style="text-align: center; font-size: 15pt; vertical-align: middle;">
-								</div>
-							</div>
-								<!-- <input type="text" name="count" value="1"   
-								style="width: 50px; height: 45px; padding-top: 2px; text-align: center; color: #F23D4C; font-size: 20pt; vertical-align: middle;"
-								onkeydown='return onlyNumber(event)' onkeyup='removeChar(event)'> -->
-							<br>
+							<br> <br> <br> <br> <input type="hidden" name="pid" value="${dto.productId }" />  
 							
 							<!-- 총 상품 금액 -->
-							<div class="row">
-								<label for="tot-product" class="col-4 col-form-label" style="font-size: 20px">총 상품 금액: </label>
-								<div class="col-8">
-									<input class="form-control" type="text" id="tot-product" readonly="readonly" 
-									style="text-align: right; font-size: 30pt; vertical-align: middle; border: none; background-color: white; color: #38b143; font-weight: bold;" 
-									value="${dto.productPrice }원">
-								</div>
+							<div class="row" style="display: inline-block; width:100%; vertical-align: middle; float:right; padding-right: 15px;">
+									<font  type="text" id="tot-product" readonly="readonly" 
+									style="text-align: right; font-size: 30pt; vertical-align: middle; border: none; 
+									background-color: white; color: #38b143; font-weight: bold; padding-right: 0; float: right;">  
+									<font style="text-align: right; font-size: 15pt; color: gray; font-weight: lighter;">
+									총 금액</font>&nbsp;&nbsp;${dto.productPrice }원</font>
 							</div> 
-							
-							<br> 
-							<div style="text-align: right;"> 
-								<!-- 버튼 --> 
+							<div style="height: 105px;"></div>
+
+														 
+							<!-- 버튼 --> 
+							<div class="col-12" style="text-align: right; vertical-align: middle; padding: 0;"> 
 								<input type="button" class="btn fitness-btn btn-white mt-10" 
-									style="min-width: 150px;" value=" 장바구니 " onclick="sendIt();" /> 
+									style="min-width: 150px;" value=" 장바구니 " onclick="sendIt();" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      
 								<input type="button" class="btn fitness-btn btn-white mt-10"
-									style="min-width: 150px;" value=" 구매하기" onclick="buyNow();" /> 
+									style="min-width: 150px;" value=" 구매하기" onclick="buyNow();" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    
+								<input type="button" class="btn fitness-btn btn-2 mt-30" value="목록으로" 
+									style="min-width: 150px; margin-top: 0!important;" 
+									onclick="javascript:location.href='<%=cp%>/productList.action?searchValueCategory=${searchValueCategory }&searchValueWord=${searchValueWord }&pageNum=${pageNum }';" />
 							</div>   
-							<br><hr>
+							<br><hr style="margin: 0;">
 						</form>  
-					</div>
-					
-					<div class="col-12" style="text-align: right;">
-						<!-- 목록으로 --> 
-						<input type="button" class="btn fitness-btn btn-2 mt-30" value="목록으로" style="min-width: 100px; border-radius: 15px;" 
-						onclick="javascript:location.href='<%=cp%>/productList.action?searchValueCategory=${searchValueCategory }&searchValueWord=${searchValueWord }&pageNum=${pageNum }';" />
 					</div>
 				</div> 
 			</div>

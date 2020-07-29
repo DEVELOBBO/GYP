@@ -31,7 +31,7 @@ String cp = request.getContextPath();
 	
 	<center>
 	
-	<div style="height: 130px;"></div>
+	<div style="height: 80px;"></div>
 	
 	
 	   <div class="mapContainerWrap">

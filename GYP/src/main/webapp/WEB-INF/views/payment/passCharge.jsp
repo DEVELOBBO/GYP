@@ -34,33 +34,49 @@
 	<jsp:include page="/WEB-INF/views/layout/header_over.jsp" />
 	<jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
 
-	<div class="blog-area mt-50 section-padding-100">
-		<div class="container">
-			<h4>Pass Charge</h4>
-			<h1>이용권 구입</h1>
+	<!-- 제목 시작 -->
+	<section class="contact-area section-padding-100">
+	<div class="container">
+	<div class="row">
+	<div class="col-12">
+	<div class="contact-title">
+		<h5 style="color:#38b143;">PASS CHARGE</h5>
+		<form name="myForm" method="post">
+		<h2>이용권 구입&nbsp;&nbsp;&nbsp;
+		<input type="hidden" value="${customInfo}" name="customInfo">
+		</h2>
+		</form>
+	</div>
+	</div>
+	</div>
+	</div>	
 
-			<div class="row justify-content-center mt-100">
-				<c:forEach var="i" begin="0" end="${passKind.size()-1}">
-					<!-- Single Price Table -->
-					<div class="col-12 col-md-6 col-lg-4">
-						<div class="single-price-table mb-100">
-							<div class="price-table-content">
-								<h2 class="price">
-									${passKind[i]}<span> &nbsp;pass</span>
-								</h2>
-								<h5>
-									<span>&#8361;<fmt:formatNumber value="${passKind[i] * pricePerPass}" pattern="#,###" /></span>
-								</h5>
-								<div class="description">&nbsp;${passDescription[i] }</div>
-								<a href="/gyp/payment.action?pass=pass_${passKind[i] }"
-									class="btn fitness-btn mt-30">구매하기</a>
-							</div>
+
+
+	<div class="container">
+		<div class="row justify-content-center mt-100" style="margin-top: 30px!important; margin-bottom: 70px;">
+			<c:forEach var="i" begin="0" end="${passKind.size()-1}">
+				<!-- Single Price Table -->
+				<div class="col-12 col-md-6 col-lg-4">
+					<div class="single-price-table mb-100">
+						<div class="price-table-content">
+							<h2 class="price">
+								${passKind[i]}<span> &nbsp;pass</span>
+							</h2>
+							<h5>
+								<span>&#8361;<fmt:formatNumber value="${passKind[i] * pricePerPass}" pattern="#,###" /></span>
+							</h5>
+							<div class="description" style="font-size: 12pt; color:#bbbbbb;">&nbsp;${passDescription[i] }</div>
+							<a href="/gyp/payment.action?pass=pass_${passKind[i] }"
+								class="btn fitness-btn mt-30">구매하기</a>
 						</div>
 					</div>
-				</c:forEach>
-			</div>
+				</div>
+			</c:forEach>
 		</div>
 	</div>
+		
+	
 
 	<jsp:include page="/WEB-INF/views/layout/footer.jsp" />
 

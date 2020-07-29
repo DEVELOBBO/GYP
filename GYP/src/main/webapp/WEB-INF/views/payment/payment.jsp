@@ -35,17 +35,26 @@
    <jsp:include page="/WEB-INF/views/layout/header_over.jsp" />
    <jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
 
-       <!-- ##### Contact Area Start ##### -->
-    <section class="contact-area section-padding-100">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <div class="title mb-100">
-                        <h3>결제하기</h3>
-                    </div>
-                </div>
-            </div>
+	<!-- 제목 시작 -->
+	<section class="contact-area section-padding-100" style="padding-bottom: 30px!important;">
+	<div class="container">
+	<div class="row">
+	<div class="col-12">
+	<div class="contact-title">
+		<h5 style="color:#38b143;">PAYMENT</h5>
+		<form name="myForm" method="post">
+		<h2>결제하기&nbsp;&nbsp;&nbsp;
+		<input type="hidden" value="${customInfo}" name="customInfo">
+		</h2>
+		</form>
+	</div>
+	</div>
+	</div>
+	</div>	
+	</section>
 
+    <!-- ##### Contact Area Start ##### -->
+        <div class="container" style="width: 1110px;">
             <div class="row">
                <!-- ------------좌측 컬럼 시작------------- -->
                 <div class="col-12 col-md-8" id="paymentLeftCol">
@@ -57,13 +66,14 @@
                             <form action="/getForm4Pay.action" method="post" name="payForm" id="payForm">
                             
                                <!-- 주문 상품 -->
-                               <hr/>
+                               <hr style="margin-top: 0;"/>
                                <h6>주문상품</h6>
                                <div id="주문 상품">
                                   <div class="form-group">
                                      		<!-- 패스 구매시 -->
 											<c:if test="${not empty passSelected and empty productToBuy}">
-												<span class="form-control" id="item">${passSelected }</span>
+												<span class="form-control" id="item" style="font-size: 12pt;">
+												${passSelected }</span>
 												<input type="hidden" id="itemVal" value="${passSelected }">
 											</c:if>
 											
@@ -72,15 +82,15 @@
 												<span id="item" style="display: none;">운동용품</span>
 													<table id="buying_items">
 														<tr>
-															<th width="70px">상품ID</th>
+															<th width="100px">상품ID</th>
 															<th width="200px">이미지</th>
 															<th width="180px">상품명</th>
 															<th width="100px">상품가격</th>
 															<th width="50px">갯수</th>
 														</tr> 
-															<tr> 
-																<td>${productToBuy.productId}<input type="hidden"
-																	name="productIdArr" value="${productToBuy.productId}"></td>
+															<tr style="font-size: 10pt; font-weight: bold;"> 
+																<td>${productToBuy.productId}
+																	<input type="hidden" name="productIdArr" value="${productToBuy.productId}"></td>
 																<td><img src="${imagePath }/${productToBuy.productImg }"
 																	style="width: 120px; height: 120px;" /></td>
 																<td>${productToBuy.productName }</td>
@@ -97,14 +107,14 @@
 													<span id="item" style="display: none;">운동용품</span>
 													<table id="buying_items">
 														<tr>
-															<th width="70px">상품ID</th>
-															<th width="200px">이미지</th>
-															<th width="180px">상품명</th>
+															<th width="100px">상품ID</th>
+															<th width="130px">이미지</th>
+															<th width="100px">상품명</th>
 															<th width="100px">상품가격</th>
-															<th width="50px">갯수</th>
+															<th width="100px">갯수</th>
 														</tr>
 														<c:forEach var="dto" items="${listsToBuy }">
-															<tr>
+															<tr style="font-size: 10pt; font-weight: bold;">
 																<td>${dto.productId}<input type="hidden"
 																	name="productIdArr" value="${dto.productId}"></td>
 																<td><img src="${imagePath }/${dto.productImg }"
@@ -126,10 +136,12 @@
                                <h6>주문자</h6>
                                <div id="주문자">
                                   <div class="form-group">
-                                       <input type="text" class="form-control" id="buyer_name" placeholder="이름" disabled="disabled" value="${cusName }" />
+                                       <input type="text" class="form-control" id="buyer_name" placeholder="이름" disabled="disabled" value="${cusName }" 
+                                       style="font-size: 12pt;"/>
                                    </div>
                                    <div class="form-group">
-                                       <input type="text" class="form-control" id="buyer_tel" name="buyerTel" placeholder="전화번호" value="${cusTel }">
+                                       <input type="text" class="form-control" id="buyer_tel" name="buyerTel" placeholder="전화번호" value="${cusTel }"
+                                       style="font-size: 12pt;">
                                    </div>
                                    <div>
                                       <input type="hidden" id="buyer_addr" value="${cusAddr }">
@@ -144,16 +156,20 @@
                                   <h6>배송지</h6>
                                    <!-- c:if문 써서 주문 상품이 운동용품일때만 보이기 -->
                                    <div id="배송지">
-                              <input type="radio" name="deliveryInfo" value="originalDeliver" onclick="copyCusInfo();" checked="checked" >
+                              <div style="height: 10px;"></div>
+                              <input type="radio" name="deliveryInfo" value="originalDeliver" onclick="copyCusInfo();" checked="checked"
+                              style="font-size: 12pt;" >
                               주문자 정보와 동일&nbsp;
                               <input type="radio" name="deliveryInfo" value="newDeliver" onclick="resetValue();">새로 입력
-                              
+                              <div style="height: 10px;"></div>
                                       <div class="form-group">
-                                          <input type="text" class="form-control" id="receiver_name" name="receiverName" placeholder="수령인"/>
-                                          <input type="text" class="form-control" id="receiver_tel" name="receiverTel" placeholder="연락처"/>
-                                          <input type="text" class="form-control" id="sample6_address" name="receiverAddr" 
+                                          <input type="text" class="form-control" id="receiver_name" name="receiverName" placeholder="수령인"
+                                          style="font-size: 12pt;"/>
+                                          <input type="text" class="form-control" id="receiver_tel" name="receiverTel" placeholder="연락처"
+                                          style="font-size: 12pt;"/>
+                                          <input type="text" class="form-control" id="sample6_address" name="receiverAddr" style="font-size: 12pt;"
                                           onclick = "sample6_execDaumPostcode();" readonly="readonly" placeholder="배송지 주소"/>
-                                          <input type="text" class="form-control" id="detail_address" name="receiverDetailAddr" 
+                                          <input type="text" class="form-control" id="detail_address" name="receiverDetailAddr" style="font-size: 12pt;"
                                           placeholder="상세주소"/>
                                       </div> 
                                    </div>
@@ -164,11 +180,12 @@
                               <br/><hr/>
                                <h6>결제수단</h6>
                               <div id="결제수단" class="form-group">
-                                 <select name="payMethod" id="payMethod" class="form-control" style="height: auto; padding:10px;">
-                              <option value="card" selected="selected">신용카드</option>
-                              <option value="trans">실시간계좌이체</option>
-                              <option value="vbank">가상계좌</option>
-                           </select>
+                                 <select name="payMethod" id="payMethod" class="form-control" 
+                                 style="height: auto; padding:10px; font-size: 12pt; color: #22741;">
+	                              <option value="card" selected="selected">신용카드</option>
+	                              <option value="trans">실시간계좌이체</option>
+	                              <option value="vbank">가상계좌</option>
+                           		</select>
                               </div>
                             </form>
                         </div>
@@ -178,18 +195,19 @@
                 </div>
                <!-- ------------좌측 컬럼 끝------------- -->
                <!-- ------------우측 컬럼 시작------------- -->
-                <div class="col-12 col-md-4" id="paymentRightCol">
+                <div class="col-12 col-md-4" id="paymentRightCol" style="padding: 0;">
                    
                         <!-- 결제 -->
-                        <div id="결제">
-                            <div style="margin:10px 0;">
+                        <div id="결제" style=" margin: 0;">
+                            <div style="margin:10px 0; padding: 20px;">
                               <!-- <span class="pay-left">결제 상품:&nbsp; </span><br/> --> 
                               <h6>결제 상품: </h6>
                               <c:if test="${not empty passSelected }">
-                                 <div style="text-align-last: right;" >
+                                 <div style="text-align-last: right; font-size: 12pt;" >
                                     <c:set var="string" value="${passSelected }"/>
                               <c:set var="passNum" value="${fn:substringAfter(string, '_')}" />
-                              pass 이용권 ${passNum}개
+                              <font style="font-size: 12pt;">
+                              pass 이용권 ${passNum}개</font>
                                  </div>
                               </c:if>
                               
@@ -201,9 +219,9 @@
                                  </div>
                               </c:if>
                             </div>
-                            <hr/>
+                            <hr style="margin: 10px 15px 10px 15px;"/>
                             <!-- 최종 결제 금액 -->
-                              <div style="margin:10px 0;">
+                              <div style="margin:10px 0; padding: 20px;">
                                  <h6>최종 결제 금액 : </h6>
                                  <!-- <span class="pay-left">최종 결제 금액 : </span><br/> -->
                                  <span class="pay-right" style="font-size:40px;">&#8361;<fmt:formatNumber value="${finalPayVal }" pattern="#,###" /></span>
@@ -211,16 +229,17 @@
                               </div>
                            <!-- 주문하기 -->
                            <input class="btn fitness-btn btn-2 mt-30" type="button" value="주문하기" id="buyit"
-                              style="width: 100%; margin:10px 0;" />
+                              style="width: 90%; margin-left:15px; margin-bottom: 15px;"  />
                         </div>
                 
                 </div>
                <!-- ------------우측 컬럼 끝------------- -->
             </div>
         </div>
-    </section>
     <!-- ##### Contact Area End ##### -->
-
+	
+	<div style="height: 120px;"></div>
+	
    <jsp:include page="/WEB-INF/views/layout/footer.jsp" />
 
    

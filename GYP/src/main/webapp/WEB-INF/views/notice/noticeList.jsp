@@ -27,8 +27,6 @@
 	<!-- 메인 : header_main.jsp / 그외 : header_below.jsp -->
 	<jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
 	
-	<!-- 여백 -->
-	<div style="height: 50px;"></div>
 	<!-- 공지사항 시작 -->
 	<section class="contact-area section-padding-100">
 	<div class="container">
