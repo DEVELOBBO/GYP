@@ -131,7 +131,6 @@ body {
   -webkit-box-shadow: 0px 1px 2px #AFAFAF;
   -moz-box-shadow: 0 1px 2px #AFAFAF;
   box-shadow: 2px 2px 5px #AFAFAF;
-
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
@@ -198,12 +197,12 @@ body {
 }
 
 .gallery_item_preview a:before {
-  content: "Click to view"; 			/*마우스 hover 글자 */
+  content: "상품보기"; 			/*마우스 hover 글자 */
   font-weight:bold;
   position: absolute;
   top: 0.5em;
   left: -30em;
-  background-color: #8080ff;			/*마우스 hover 배경색*/
+  background-color: #38b143;			/*마우스 hover 배경색*/
   color: #fff;							/*마우스 hover 글자색*/
   padding: 0.56em 1em;
 
