@@ -33,9 +33,9 @@
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
 <script type="text/javascript">
-	
+
+//아이디 중복체크 (신규일때만 버튼 나타남)
 $(function() {
-    //아이디 중복체크
     $('#checkbutton2').click(function() {
        $.ajax({
           type : "POST",
@@ -63,48 +63,9 @@ $(function() {
     })
 
  });
- /* 
- $(function() {
-    $("input[name='gymFacility']").each(function(){
- var checkboxes = document.getElementsByName('gymFacility');
- var vals = 0;
- for (var i=0, n=checkboxes.length;i<n;i++) {
-        if (checkboxes[i].checked) {
-            vals += ","+gymFacility[i].value;
-        }
-    }
-    }
- } 
- */
- 
- 
- /* 
- $(function() {
- 
-     $("input[name='gymFacility']").each(function(){
-        var thisVal1 = $("#checkF1").val();
-       var thisVal2 = $("#checkF2").val();
-       var thisVal3 = $("#checkF3").val();
-        if( thisVal1.length > 0 ){
-           $("#checkF1").attr("checked", true );
-        
-        }
-      if( thisVal2.length > 0 ){
-         $("#checkF2").attr("checked", true );
-      
-      }
-      if( thisVal3.length > 0 ){
-         $("#checkF3").attr("checked", true );
-      
-      }
-        
-     }); 
-   }
- }
-  */
-  
+
+//전화번호 중복체크 (신규일때만 버튼 나타남)
   $(function() {
-		//전화번호 중복체크
 		$('#telckbutton').click(function() {
 
 			f = document.myForm;
@@ -173,8 +134,6 @@ $(function() {
               }
           }).open();
       }
- 
-  
 
   
  //실행 함수 
@@ -204,32 +163,9 @@ $(function() {
     if (f.mode.value != 'updated')
        var chk = f.check.checked;
 
-    /*
-    for(var i=0;i<uploads.length;i++){
-       if(uploads[i].value!=""&&gymTrainer[i].value==""){
-          alert((i+1)+"번째 트레이너 정보가 부족합니다");
-          gymTrainer[i].focus();
-          return;
-       }else if(uploads[i].value==""&&gymTrainer[i].value!=""){
-          alert((i+1)+"번째 트레이너 정보가 부족합니다");
-          uploads[i].focus();
-          return;
-       }else if(uploads[i].value!=""&&gymTrainer[i].value!=""){
-          f.tot.value=+1;
-          return;
-       }
-    }
-    
-    
-    if(f.tot.value<1){
-       alert("한명 이상의 트레이너 정보를 넣어야 합니다.");
-       return;
-    }
-    
-    
-    
-     */
 
+    
+    //신규&수정 둘다
     if (!cc1.test(f.gymId.value)) {
 
        alert('아이디 영문소문자/숫자 1~16자 이내로 입력하세요.');
@@ -238,7 +174,8 @@ $(function() {
 
        return false;
     }
-
+	
+    //신규일때만
     if (f.mode.value != 'updated') {
        if ($('#gymId').val() != $('#checkgymId').val()) {
 
@@ -247,11 +184,10 @@ $(function() {
           f.checkbutton2.focus();
 
           return false;
-
        }
-
     }
-
+	
+  	//신규&수정 둘다 (253행까지)
     if (!f.gymName.value) {
        alert("체육관 이름을 입력하세요.");
        f.gymName.focus();
@@ -266,7 +202,7 @@ $(function() {
 
        return false;
     }
-
+	
     if (!f.gymPwd2.value) {
        alert("비밀번호를 한번 더 입력하세요.");
        f.gymPwd2.focus();
@@ -315,69 +251,160 @@ $(function() {
     }
 	
     
+    /*
+    신규(회원가입시)
+    	트레이너이름 input name  : gymTrainer1,2,3,4 
+    	파일 input name			 : upload
+    	체육관 사진 iput name 	 : upload2 
+    
+    
+    수정일때
+	    트레이너이름 input name  : trainerName1,2,3,4 
+		파일 input name			 : newTrainerImage1,2,3,4
+		체육관 사진 iput name 	 : newGymImage1,2,3,4
+    */
+    
+    
+    
+    
+    //회원가입일떄
     //트레이너명,트레이너사진 업로드 유효성 검사! , 최소 1명이상 등록하라고 alert띄움
-    /* if (f.gymTrainer1.value != "" && uploads[0].value == "") {
-       alert("1번째 트레이너 사진을 입력해주세요!");
-       f.gymTrainer1.focus();
-       return;
-    }
-    if (f.gymTrainer1.value == "" && uploads[0].value != "") {
-       alert("1번째 트레이너명을 입력하세요 (최소1명 이상).");
-       f.gymTrainer1.focus();
-       return;
-    }
-    if (f.gymTrainer2.value != "" && uploads[1].value == "") {
-       alert("2번째 트레이너 사진을 입력해주세요!");
-       f.gymTrainer2.focus();
-       return;
-    }
-    if (f.gymTrainer2.value == "" && uploads[1].value != "") {
-       alert("2번째 트레이너명을 입력하세요 (최소1명 이상).");
-       f.gymTrainer2.focus();
-       return;
-    }
-    if (f.gymTrainer3.value != "" && uploads[2].value == "") {
-       alert("3번째 트레이너 사진을 입력해주세요!");
-       f.gymTrainer3.focus();
-       return;
-    }
-    if (f.gymTrainer3.value == "" && uploads[2].value != "") {
-       alert("3번째트레이너명을 입력하세요 (최소1명 이상).");
-       f.gymTrainer3.focus();
-       return;
-    }
-    if (f.gymTrainer4.value != "" && uploads[3].value == "") {
-       alert("4번째 트레이너 사진을 입력해주세요!");
-       f.gymTrainer4.focus();
-       return;
-    }
-    if (f.gymTrainer4.value == "" && uploads[3].value != "") {
-       alert("4번째 트레이너명을 입력하세요 (최소1명 이상).");
-       f.gymTrainer4.focus();
-       return;
-    }
-
-    if (!f.gymTrainer1.value) {
-       alert("1번째 트레이너명을 입력하세요 (최소1명 이상).");
-       f.gymTrainer1.focus();
-       return;
-    } */
-
-    //체육관 사진등록 제약조건 (최소1장이상)
-    if (f.mode.value != 'updated') {
+    if(f.mode.value != 'updated') {
+	    if (f.gymTrainer1.value != "" && uploads[0].value == "") {
+	       alert("1번째 트레이너 사진을 입력해주세요!");
+	       f.gymTrainer1.focus();
+	       return;
+	    }
+	    if (f.gymTrainer1.value == "" && uploads[0].value != "") {
+	       alert("1번째 트레이너명을 입력하세요 (최소1명 이상).");
+	       f.gymTrainer1.focus();
+	       return;
+	    }
+	    if (f.gymTrainer2.value != "" && uploads[1].value == "") {
+	       alert("2번째 트레이너 사진을 입력해주세요!");
+	       f.gymTrainer2.focus();
+	       return;
+	    }
+	    if (f.gymTrainer2.value == "" && uploads[1].value != "") {
+	       alert("2번째 트레이너명을 입력하세요 (최소1명 이상).");
+	       f.gymTrainer2.focus();
+	       return;
+	    }
+	    if (f.gymTrainer3.value != "" && uploads[2].value == "") {
+	       alert("3번째 트레이너 사진을 입력해주세요!");
+	       f.gymTrainer3.focus();
+	       return;
+	    }
+	    if (f.gymTrainer3.value == "" && uploads[2].value != "") {
+	       alert("3번째트레이너명을 입력하세요 (최소1명 이상).");
+	       f.gymTrainer3.focus();
+	       return;
+	    }
+	    if (f.gymTrainer4.value != "" && uploads[3].value == "") {
+	       alert("4번째 트레이너 사진을 입력해주세요!");
+	       f.gymTrainer4.focus();
+	       return;
+	    }
+	    if (f.gymTrainer4.value == "" && uploads[3].value != "") {
+	       alert("4번째 트레이너명을 입력하세요 (최소1명 이상).");
+	       f.gymTrainer4.focus();
+	       return;
+	    }
+	
+	    if (!f.gymTrainer1.value) {
+	       alert("1번째 트레이너명을 입력하세요 (최소1명 이상).");
+	       f.gymTrainer1.focus();
+	       return;
+	    }
+	
+    	//체육관 사진등록 제약조건 (최소1장이상)
 	    if (uploads2[0].value == "") {
 	       alert("첫번째 체육관 사진등록을 해주세요 (최소 1장이상)");
 	       f.uploads2[0].focus();
 	       return;
 	    }
     }
-
+    
+    /*
+    신규(회원가입시)
+    	트레이너이름 input name  : gymTrainer1,2,3,4 
+    	파일 input name			 : upload
+    	체육관 사진 iput name 	 : upload2 
+    
+    
+    수정일때
+	    트레이너이름 input name  : trainerName1,2,3,4 
+		파일 input name			 : newTrainerImage1,2,3,4
+		체육관 사진 iput name 	 : newGymImage1,2,3,4
+    */
+    
+    
+  	//수정일때
+    if(f.mode.value == 'updated') {
+	    if (f.trainerName1.value != "" && f.newTrainerImage1.value == "") {
+	       alert("1번째 트레이너 사진을 입력해주세요!");
+	       f.gymTrainer1.focus();
+	       return;
+	    }
+	    if (f.trainerName1.value == "" && f.newTrainerImage1.value != "") {
+	       alert("1번째 트레이너명을 입력하세요 (최소1명 이상).");
+	       f.gymTrainer1.focus();
+	       return;
+	    }
+	    if (f.trainerName2.value != "" && f.newTrainerImage2.value == "") {
+	       alert("2번째 트레이너 사진을 입력해주세요!");
+	       f.gymTrainer2.focus();
+	       return;
+	    }
+	    if (f.trainerName2.value == "" && f.newTrainerImage2.value != "") {
+	       alert("2번째 트레이너명을 입력하세요 (최소1명 이상).");
+	       f.gymTrainer2.focus();
+	       return;
+	    }
+	    if (f.trainerName3.value != "" && f.newTrainerImage3.value == "") {
+	       alert("3번째 트레이너 사진을 입력해주세요!");
+	       f.gymTrainer3.focus();
+	       return;
+	    }
+	    if (f.trainerName3.value == "" && f.newTrainerImage3.value != "") {
+	       alert("3번째트레이너명을 입력하세요 (최소1명 이상).");
+	       f.gymTrainer3.focus();
+	       return;
+	    }
+	    if (f.trainerName4.value != "" && f.newTrainerImage4.value == "") {
+	       alert("4번째 트레이너 사진을 입력해주세요!");
+	       f.gymTrainer4.focus();
+	       return;
+	    }
+	    if (f.trainerName4.value == "" && f.newTrainerImage4.value != "") {
+	       alert("4번째 트레이너명을 입력하세요 (최소1명 이상).");
+	       f.gymTrainer4.focus();
+	       return;
+	    }
+	
+	    if (!f.trainerName1.value) {
+	       alert("1번째 트레이너명을 입력하세요 (최소1명 이상).");
+	       f.gymTrainer1.focus();
+	       return;
+	    }
+	
+    	//체육관 사진등록 제약조건 (최소1장이상)
+	    if (!f.newGymImage1.value) {
+	       alert("첫번째 체육관 사진등록을 해주세요 (최소 1장이상)");
+	       f.uploads2[0].focus();
+	       return;
+	    }
+    	
+    }
+    
+    //신규&수정 둘다
     if (!f.gymProgram.value) {
        alert("프로그램 내용을 입력하세요 .");
        f.gymProgram.focus();
        return;
     }
 	
+  	//신규&수정 둘다
     if (f.gymFacility[0].checked == false
           && f.gymFacility[1].checked == false
           && f.gymFacility[2].checked == false) {
@@ -385,17 +412,21 @@ $(function() {
        return false;
 
     }
+  	
+  	//신규일때만
     if (f.mode.value != 'updated') {
        if (!f.check.checked) {
           alert('약관에 동의해주세요');
           return false;
        }
     }
-
+	
+  	//수정
     if (f.mode.value == "updated") {
        alert("체육관 회원수정이 성공적으로 완료되었습니다.");
        f.action = "/gyp/gymUpdate_ok.action";
-
+	
+    //신규
     } else {
        alert("체육관 회원가입이 성공적으로 완료되었습니다.");
        f.action = "/gyp/createGym_ok.action";
@@ -661,7 +692,9 @@ $(function() {
 									</c:forEach>
 									<c:forEach var="i" begin="${startNumberForTrainer }" end="4" step="1" varStatus="status" >
 										<dd>
+											<c:if test="${i!=0 }">
 											*추가할 이름(${i }) : <input type="text" name="trainerName${i }" class="boxTF" style="background-color: #ecf1f4; border: none; border-radius:5px; padding: 3px;"/>
+											</c:if>
 										</dd>
 									</c:forEach>
 									<dd style="height: 10px;"></dd>
@@ -669,7 +702,8 @@ $(function() {
 										<dd>
 											*기존 트레이너 사진 : <input type="text" name="oldTrainerImage${status.count }" value="${oldTrainerImage }"
 													style="background-color: #ecf1f4; border: none; border-radius:5px; padding: 3px;" size="25" maxlength="7"/>
-											<input type="button" value=" 삭제 " style="background-color: #38b143; color: white; border-radius: 5px; border: 0; height: 27px; width: 40px;"
+											<input type="button" value=" 삭제 " id="deleteTrainerPic${status.count }" 
+											style="background-color: #38b143; color: white; border-radius: 5px; border: 0; height: 27px; width: 40px;"
 											onclick="javascript:location.href='/gyp/gymImageDelete.action?whatToDelete=oldTrainerImage${status.count }'">
 											<br><div style="height: 5px;"></div><!-- 여백 -->
 											 &nbsp;수정할 사진 : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -679,8 +713,10 @@ $(function() {
 									<!-- 4개보다 적으면 -->
 									<c:forEach var="i" begin="${startNumberForTrainer }" end="4" step="1" varStatus="status" >
 										<dd>
+											<c:if test="${i!=0 }">
 											*추가할 사진(${i }) :  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 											<input type="file" name="newTrainerImage${i }" class="boxTF" />
+											</c:if>
 										</dd>
 									</c:forEach>
 								</c:if>
@@ -720,7 +756,8 @@ $(function() {
 										<dd>
 										*기존 체육관 사진 : <input type="text" name="oldGymImage${status.count }" value="${oldGymImage}" size="25" maxlength="20" 
 											class="boxTF" style="background-color: #ecf1f4; border: none; border-radius:5px; padding: 3px;"/>
-										<input type="button" name="deleteTrainer" value=" 삭제 " style="background-color: #38b143; color: white; border-radius: 5px; border: 0; height: 27px; width: 40px;"
+										<input type="button" name="deleteGymPic${status.count }" value=" 삭제 " id="deleteGymPic" 
+										style="background-color: #38b143; color: white; border-radius: 5px; border: 0; height: 27px; width: 40px;"
 										onclick="javascript:location.href='/gyp/gymImageDelete.action?whatToDelete=oldGymImage${status.count }'">
 										<br><div style="height: 5px;"></div><!-- 여백 -->
 										&nbsp;수정할 사진 : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

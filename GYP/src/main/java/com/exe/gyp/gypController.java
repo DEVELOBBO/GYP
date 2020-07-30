@@ -576,14 +576,30 @@ public class gypController {
 			mode = "updated";
 		}
 		
+		System.out.println(info.getSessionId());
+		
+		
 		//기존 트레이너 이름 뿌릴 준비
-		List<String> gymTrainerLists = Arrays.asList(dto.getGymTrainer().split(","));
+		if(dto.getGymTrainer()!=null && !dto.getGymTrainer().equals("")) {
+			List<String> gymTrainerLists = Arrays.asList(dto.getGymTrainer().split(","));
+			int startNumberForTrainer = gymTrainerLists.size()+1;//배열관련 숫자
+			request.setAttribute("startNumberForTrainer", startNumberForTrainer);
+			request.setAttribute("gymTrainerLists", gymTrainerLists);
+		}
 		
 		//기존 트레이너 사진명 뿌릴 준비
-		List<String> gymTrainerPicLists = Arrays.asList(dto.getGymTrainerPic().split(","));
+		if( dto.getGymTrainerPic()!=null && !dto.getGymTrainerPic().equals("")) {
+			List<String> gymTrainerPicLists = Arrays.asList(dto.getGymTrainerPic().split(","));
+			request.setAttribute("gymTrainerPicLists", gymTrainerPicLists);
+		}
 		
 		//기존 체육관 사진명 뿌릴 준비
-		List<String> gymPicLists = Arrays.asList(dto.getGymPic().split(","));
+		if(dto.getGymPic()!=null && !dto.getGymPic().equals("")) {
+			List<String> gymPicLists = Arrays.asList(dto.getGymPic().split(","));
+			int startNumberForGymPic = gymPicLists.size()+1;
+			request.setAttribute("startNumberForGymPic", startNumberForGymPic);
+			request.setAttribute("gymPicLists", gymPicLists);
+		}
 		
 		//기존 체육관 시간 뿌릴 준비
 		List<String> gymHourListsString = Arrays.asList(dto.getGymHour().split(","));
@@ -619,15 +635,7 @@ public class gypController {
 			beforeAfter.add(after);
 		}
 
-		//배열관련 숫자
-		int startNumberForTrainer = gymTrainerLists.size()+1;
-		int startNumberForGymPic = gymPicLists.size()+1;
-		request.setAttribute("startNumberForTrainer", startNumberForTrainer);
-		request.setAttribute("startNumberForGymPic", startNumberForGymPic);
 		//리스트
-		request.setAttribute("gymTrainerLists", gymTrainerLists);
-		request.setAttribute("gymTrainerPicLists", gymTrainerPicLists);
-		request.setAttribute("gymPicLists", gymPicLists);
 		request.setAttribute("gymHourListsInt", gymHourListsInt);
 		request.setAttribute("beforeAfter", beforeAfter);
 		//기타
@@ -1104,11 +1112,16 @@ public class gypController {
 			}
 			//마지막 쉼표 처리
 			//마지막 쉼표면, 쉼표 빼고 dto에 setting
-			String lastWord = gymTrainerNameCombine.substring(gymTrainerNameCombine.length()-1, gymTrainerNameCombine.length());
-			
-			while(lastWord.equals(",")) {
-				gymTrainerNameCombine = gymTrainerNameCombine.substring(0, gymTrainerNameCombine.length()-1);
-				lastWord = gymTrainerNameCombine.substring(gymTrainerNameCombine.length()-1, gymTrainerNameCombine.length());//마지막 글자 다시 세팅
+
+			//oldTrainerImage1 하나만 기존에 있었는데, 다 지울 경우에 예외처리
+			if(!whatToDelete.equals("oldTrainerImage1") && gymTrainerNameLists.length==1 ) {
+				
+				String lastWord = gymTrainerNameCombine.substring(gymTrainerNameCombine.length()-1, gymTrainerNameCombine.length());
+				
+				while(lastWord.equals(",")) {
+					gymTrainerNameCombine = gymTrainerNameCombine.substring(0, gymTrainerNameCombine.length()-1);
+					lastWord = gymTrainerNameCombine.substring(gymTrainerNameCombine.length()-1, gymTrainerNameCombine.length());//마지막 글자 다시 세팅
+				}
 			}
 			//dto에 세팅
 			dto.setGymTrainer(gymTrainerNameCombine);
@@ -1135,11 +1148,15 @@ public class gypController {
 			}
 			//마지막 쉼표 처리
 			//마지막 쉼표면, 쉼표 빼고 dto에 setting
-			lastWord = gymTrainerPicCombine.substring(gymTrainerPicCombine.length()-1, gymTrainerPicCombine.length());
 			
-			while(lastWord.equals(",")) {
-				gymTrainerPicCombine = gymTrainerPicCombine.substring(0, gymTrainerPicCombine.length()-1);
-				lastWord = gymTrainerPicCombine.substring(gymTrainerPicCombine.length()-1, gymTrainerPicCombine.length());//마지막 글자 다시 세팅
+			//oldTrainerImage1 하나만 기존에 있었는데, 다 지울 경우에 예외처리
+			if(!whatToDelete.equals("oldTrainerImage1") && gymTrainerNameLists.length!=1 ) {
+				String lastWord = gymTrainerPicCombine.substring(gymTrainerPicCombine.length()-1, gymTrainerPicCombine.length());
+				
+				while(lastWord.equals(",")) {
+					gymTrainerPicCombine = gymTrainerPicCombine.substring(0, gymTrainerPicCombine.length()-1);
+					lastWord = gymTrainerPicCombine.substring(gymTrainerPicCombine.length()-1, gymTrainerPicCombine.length());//마지막 글자 다시 세팅
+				}
 			}
 			//dto에 세팅
 			dto.setGymTrainerPic(gymTrainerPicCombine);
@@ -1169,11 +1186,16 @@ public class gypController {
 			}
 			//마지막 쉼표 처리
 			//마지막 쉼표면, 쉼표 빼고 dto에 setting
-			String lastWord = gymPicCombine.substring(gymPicCombine.length()-1, gymPicCombine.length());
-			
-			while(lastWord.equals(",")) {
-				gymPicCombine = gymPicCombine.substring(0, gymPicCombine.length()-1);
-				lastWord = gymPicCombine.substring(gymPicCombine.length()-1, gymPicCombine.length());//마지막 글자 다시 세팅
+
+			//oldGymImage1 하나만 기존에 있었는데, 다 지울 경우에 예외처리
+			if(!whatToDelete.equals("oldTrainerImage1") && gymImageLists.length!=1 ) {
+				
+				String lastWord = gymPicCombine.substring(gymPicCombine.length()-1, gymPicCombine.length());
+				
+				while(lastWord.equals(",")) {
+					gymPicCombine = gymPicCombine.substring(0, gymPicCombine.length()-1);
+					lastWord = gymPicCombine.substring(gymPicCombine.length()-1, gymPicCombine.length());//마지막 글자 다시 세팅
+				}
 			}
 			
 			//dto에 세팅

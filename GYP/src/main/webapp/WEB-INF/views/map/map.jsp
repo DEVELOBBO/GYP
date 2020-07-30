@@ -312,15 +312,16 @@ function mapMake() {
                yy = result[0].x;
                xx = result[0].y;
                
-             //리스트 첫번째에 있는 체육관으로 좌표지정
-             <c:if test="${searchKey eq 'gymAddr'}">
-                  <c:if test="${status.first}">
-                        map.setCenter(coords);
-                        <c:if test="${status.first eq status.last}">
-                        map.setLevel(3);
-                        </c:if>
-                  </c:if>
-              </c:if>
+              //리스트 첫번째에 있는 체육관으로 좌표지정
+              <c:if test="${status.first}">
+              	<c:if test="${searchKey eq 'gymAddr'}">
+                  map.setCenter(coords);
+              	</c:if>
+              	<c:if test="${status.last}">
+                  map.setCenter(coords);
+                 map.setLevel(3);
+                </c:if>
+              </c:if>   
                // 결과값으로 받은 위치를 마커로 표시
                var marker = new kakao.maps.Marker({
                   map: map,
