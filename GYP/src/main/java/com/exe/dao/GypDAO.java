@@ -636,10 +636,11 @@ private SqlSessionTemplate sessionTemplate;
 	}
 	
 	//Q&A 이전글
-	public QnaDTO getQnaPreReadData(int qnaNum,String searchKey,String searchValue,int groupNum,String orderNo){
+	public QnaDTO getQnaPreReadData(int qnaNum,String searchKey,String searchValue,String searchValue2,int groupNum,String orderNo){
 		HashMap<String,Object> params = new HashMap<String,Object>();
 		params.put("searchKey", searchKey);
 		params.put("searchValue", searchValue);
+		params.put("searchValue2", searchValue2);
 		params.put("groupNum", groupNum);
 		params.put("orderNo",orderNo);
 		params.put("qnaNum", qnaNum);
@@ -649,10 +650,11 @@ private SqlSessionTemplate sessionTemplate;
 	}
 
 	//Q&A 다음글
-	public QnaDTO getQnaNextReadData(int qnaNum,String searchKey,String searchValue,int groupNum,String orderNo){
+	public QnaDTO getQnaNextReadData(int qnaNum,String searchKey,String searchValue,String searchValue2,int groupNum,String orderNo){
 		HashMap<String,Object> params = new HashMap<String,Object>();
 		params.put("searchKey", searchKey);
 		params.put("searchValue", searchValue);
+		params.put("searchValue2", searchValue2);
 		params.put("groupNum", groupNum);
 		params.put("orderNo",orderNo);
 		params.put("qnaNum", qnaNum);

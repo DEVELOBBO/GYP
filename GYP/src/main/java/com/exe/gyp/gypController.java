@@ -2941,9 +2941,11 @@ public class gypController {
 		int groupNum = 0;
 		String orderNo = request.getParameter("orderNo");
 		
-		if(searchValue==null) {
+		//검색값 없을 경우
+		if(searchValue == null || searchValue2 == null) {
 			searchKey = "qnaType";
 			searchValue = "";
+			searchValue2 = "";
 		}
 		
 		//검색값 인코딩
@@ -2962,7 +2964,7 @@ public class gypController {
 		dto.setQnaContent(dto.getQnaContent().replaceAll("\r\n", "<br/>"));
 		
 		//이전글
-		QnaDTO preReadData = (QnaDTO)dao.getQnaPreReadData(qnaNum,searchKey,searchValue,groupNum,orderNo);
+		QnaDTO preReadData = (QnaDTO)dao.getQnaPreReadData(qnaNum,searchKey,searchValue,searchValue2,groupNum,orderNo);
 		int preQnaNum = 0;
 		String preQnaTitle = "";
 		if(preReadData!=null) {
@@ -2971,7 +2973,7 @@ public class gypController {
 		}
 		
 		//다음글
-		QnaDTO nextReadData = (QnaDTO)dao.getQnaNextReadData(qnaNum,searchKey,searchValue,groupNum,orderNo);
+		QnaDTO nextReadData = (QnaDTO)dao.getQnaNextReadData(qnaNum,searchKey,searchValue,searchValue2,groupNum,orderNo);
 		int nextQnaNum = 0;
 		String nextQnaTitle = "";
 		if(nextReadData!=null) {
