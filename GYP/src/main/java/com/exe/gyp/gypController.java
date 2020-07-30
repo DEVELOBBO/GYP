@@ -242,7 +242,8 @@ public class gypController {
 		history = history.substring(history.lastIndexOf("/"), history.length()); // 주소의 마지막 슬래시 추출
 
 		// 회원가입 후, 로그인창으로 이동했을때, 로그인하고 이전페이지(회원가입 등)으로 돌아가기 방지
-		if (history.equals("/createCustomer.action") || history.equals("/login.action") || history.equals("/searchpw.action")) {
+		if (history.equals("/createCustomer.action") || history.equals("/createGym.action")  
+				|| history.equals("/login.action") || history.equals("/searchpw.action")) {
 			history = "/";
 		}
 		// 제품 상세에서 로그인 안했을 경우, 로그인 창으로 이동했다가 productId를 못갖고 와서 에러 뜨는것 방지
@@ -2383,7 +2384,7 @@ public class gypController {
 		    String clientSecret = "Q_VuYrdAQN";//애플리케이션 클라이언트 시크릿값";
 		    String code = request.getParameter("code");
 		    String state = request.getParameter("state");
-		    String redirectURI = URLEncoder.encode("http://192.168.16.25:8000/gyp/naverLogin_ok.action", "UTF-8");
+		    String redirectURI = URLEncoder.encode("http://192.168.16.9:8000/gyp/naverLogin_ok.action", "UTF-8");
 		    String apiURL;
 		    apiURL = "https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&";
 		    apiURL += "client_id=" + clientId;
@@ -2967,7 +2968,7 @@ public class gypController {
 		dto.setQnaContent(dto.getQnaContent().replaceAll("\r\n", "<br/>"));
 		
 		//이전글
-		QnaDTO preReadData = (QnaDTO)dao.getQnaPreReadData(qnaNum,searchKey,searchValue,groupNum,orderNo);
+		QnaDTO preReadData = (QnaDTO)dao.getQnaPreReadData(qnaNum,searchKey,searchValue,searchValue2,groupNum,orderNo);
 		int preQnaNum = 0;
 		String preQnaTitle = "";
 		if(preReadData!=null) {
@@ -2976,7 +2977,7 @@ public class gypController {
 		}
 		
 		//다음글
-		QnaDTO nextReadData = (QnaDTO)dao.getQnaNextReadData(qnaNum,searchKey,searchValue,groupNum,orderNo);
+		QnaDTO nextReadData = (QnaDTO)dao.getQnaNextReadData(qnaNum,searchKey,searchValue,searchValue2,groupNum,orderNo);
 		int nextQnaNum = 0;
 		String nextQnaTitle = "";
 		if(nextReadData!=null) {

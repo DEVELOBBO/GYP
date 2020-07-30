@@ -54,8 +54,8 @@ function updateData(){
 	<jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
 
 	<section class="contact-area section-padding-100">
-		<div class="container"">
-		<div class="col-12"">
+		<div class="container">
+		<div class="col-12" style="padding: 0;">
 		<div class="contact-form-area row" style="width: 1140px; margin: 0 auto;">
 			<div style="width: 1140px; font-size:25px; font-weight: bold; colspan:4; height: 50px;" >
 				<!-- 제목 -->
@@ -94,7 +94,7 @@ function updateData(){
 	</div>
 	</section>
 
-
+	<div style="height: 50px;"></div>
 	<jsp:include page="/WEB-INF/views/layout/footer.jsp" />
 
 	<!-- ##### All Javascript Script ##### -->

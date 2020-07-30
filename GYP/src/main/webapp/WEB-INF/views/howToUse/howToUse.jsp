@@ -31,7 +31,7 @@
 	
 	<div style="height: 50px;"></div>
 	
-	<div style="margin: 0 auto; width:1070px;">
+	<div style="margin: 0 auto; width:1110px;">
 		<img  alt="브랜드 소개" align="middle" src="resources/img/imagePage/gyp_howToUse.jpg">
 	</div>
 	

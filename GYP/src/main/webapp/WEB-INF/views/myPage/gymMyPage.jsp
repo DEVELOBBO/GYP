@@ -122,11 +122,12 @@
 	               class="btn fitness-btn btn-white mt-10" style="min-width: 50px; min-height: 40px; width:150px; height: 40px; line-height: 25px;"/>
 	            </form>
 	         </div>
-	      </div><br><br>
+	      </div>
+	      <div style="height: 80px;" id="2"></div>
 	      
 	      
 	      <!-- 누적 매출 -->
-	      <div class="container mb-30 col-12" id="2" style="padding: 0;">
+	      <div class="container mb-30 col-12" style="padding: 0;">
 	         <div style="font-size: 14pt; font-weight: bold;">누적 매출</div>
 	         <div style="height: 10px;"></div>
 	         <div class="form-group mt-10" style="height: 40px;">
@@ -156,10 +157,11 @@
 					</tr>
 					</table>
 	         </div>
-	      </div><br><br>
+	      </div>
+	      <div style="height: 80px;" id="3"></div>
 	      
 	      <!-- 예약 -->
-		<div class="container mb-30 col-12" id="2" style="padding: 0; margin: 0!important;">
+		<div class="container mb-30 col-12" style="padding: 0; margin: 0!important;">
 	        <div style="font-size: 14pt; font-weight: bold;">예약 현황</div>
 		</div>
 		<div style="height: 10px;"></div>
@@ -203,11 +205,12 @@
 			     	예약 내역이 없습니다</td>
 			     </tr>
             </c:if>
-        </table><br><br>  
+        </table>
+        <div style="height: 80px;" id="4"></div>
 	    
 	    
 	    <!-- 리뷰 -->
-      	<div class="container mb-30 col-12" id="2" style="padding: 0; margin: 0!important;">
+      	<div class="container mb-30 col-12" style="padding: 0; margin: 0!important;">
         	<div style="font-size: 14pt; font-weight: bold;">리뷰 목록</div>
 		</div>
 		<div style="height: 10px;"></div>

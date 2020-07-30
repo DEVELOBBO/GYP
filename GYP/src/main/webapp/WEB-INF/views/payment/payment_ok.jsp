@@ -27,6 +27,22 @@
    <!-- 결제 -->
    <link rel="stylesheet" href="/gyp/resources/css/payment.css">
    
+   <style type="text/css">
+   
+   /*수정, 쓰기*/
+	a.bokyung_mypage_link
+		{color:#7a7ebf;}
+	
+	a.bokyung_mypage_link:visited
+		{color:#7a7ebf; text-decoration:none;}
+	
+	a.bokyung_mypage_link:hover
+		{color:#2E338C; text-decoration:none;}
+   
+   </style>
+   
+   
+   
 <title>GYP</title>
 </head>
 <body style="font-family: 'Noto Sans KR', sans-serif;">
@@ -35,18 +51,21 @@
    <jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
    
    
+   <div style="height: 100px;"></div>
+	
+	<div class="our-newsletter-area mb-100" style="width: 630px; margin: 0 auto; margin-bottom: 15px!important;">
+		<div class="section-heading">
+			<h6 align="center">THANK YOU</h6>
+			<h2 align="center">결제 완료</h2>
+			<div style="height: 10px;"></div>
+			<hr>
+		</div>
+	</div>
+   
     <!-- ##### Contact Area Start ##### -->
-    <section class="contact-area section-padding-100">
+    <section class="contact-area section-padding-100" style="padding-top: 0;">
         <div class="container">
         <div style="width: 750px; margin: 0 auto;">
-            <div class="row" >
-                <div class="col-12">
-                    <div class="contact-title">
-                        <h3 style="text-align: center;">결제 완료</h3>
-                    </div>
-                </div>
-            </div>
-
             <div class="row"> 
                 <div class="col-12">
                     <div class="contact-content">
@@ -55,15 +74,14 @@
                         	<div class="row" align="center" style="text-align: center; justify-content: center;">
 	                        		<img alt="reservation-check" src="/gyp/resources/img/check.png"
 	                        		style="width:110px; height:110px; margin-right: 40px;">
-	                          	<div class="mb-70"> 
-									  <h4>고객님의 상품 주문이 완료되었습니다.</h4>
+	                          	<div class="mb-70" style="margin-top: 15px;">
+									  <h4 style="color: #38b143">고객님의 상품 주문이 완료되었습니다.</h4>
 		                              <h6>주문내역은 마이페이지에서 확인할 수 있습니다.</h6>
-		                              주문 내역 및 배송에 관한 문의는 <a href="#">Q&amp;A</a> 게시판으로 <br/>
-		                              문의해주시기 바랍니다. 
+		                              기타 문의는 <a href="/gyp/qnaList.action" class="bokyung_mypage_link">Q&amp;A 게시판</a>을 이용해주세요. 
 								</div>
                         	</div> 
 								
-						     <div class="fitness-buttons-area mb-100" style="text-align: center;">
+						     <div class="fitness-buttons-area mb-100" style="text-align: center; margin-bottom: 20px!important;">
 						   		<!-- 운동용품 쇼핑하기 -->	
 						         <a href="/gyp/productList.action" class="btn fitness-btn btn-2 m-2">운동용품 쇼핑하기</a>
 						         <!-- 더 둘러보기 -->

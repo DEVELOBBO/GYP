@@ -95,7 +95,6 @@
                                     
                                     <!-- 관리자 로그인 -->
                                     <c:if test="${sessionScope.customInfo.sessionId =='admin' }">
-                                    	<li><a href="/gyp/map.action">제휴시설 찾기</a></li>
                                     	<li><a href="/gyp/howToUse.action">이용방법</a></li>
                                     	<li><a href="/gyp/noticeList.action">공지사항</a></li>
                                     	<li><a href="/gyp/qnaList.action">Q&A</a></li>

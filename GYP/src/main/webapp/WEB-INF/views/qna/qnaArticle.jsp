@@ -67,7 +67,7 @@ function sendData() {
 
 	<section class="contact-area section-padding-100">
 		<div class="container" style="width: 1140px;">
-		<div class="col-12" style="width: 1140px;">
+		<div class="col-12" style="padding:0px;">
 		<div class="contact-form-area">
 			<div style="font-size:25px;font-weight: bold;colspan:4; height: 50px;'">
 			<!-- 제목 -->
@@ -84,14 +84,14 @@ function sendData() {
 		<div>
 			<font style="color: green; font-weight: bold;">이전글 : </font>
 			<c:if test="${!empty preQnaTitle  }">
-				<a href="<%=cp%>/qnaArticle.action?pageNum=${pageNum }&qnaNum=${preQnaNum}"> ${preQnaTitle } </a>
+				<a href="<%=cp%>/qnaArticle.action?${params }&qnaNum=${preQnaNum}"> ${preQnaTitle } </a>
 			</c:if>
 		</div>
 
 		<div>
 			<font style="color: green; font-weight: bold;">다음글 : </font>
 			<c:if test="${!empty nextQnaTitle  }">
-				<a href="<%=cp%>/qnaArticle.action?pageNum=${pageNum }&qnaNum=${nextQnaNum}"> ${nextQnaTitle } </a>
+				<a href="<%=cp%>/qnaArticle.action?${params }&qnaNum=${nextQnaNum}"> ${nextQnaTitle } </a>
 			</c:if>
 			<input type="hidden" value="${dto.qnaNum }">
 		</div>

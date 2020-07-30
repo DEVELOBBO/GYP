@@ -42,7 +42,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <![CDATA[
 	select rownum, data.* from (
 	select qnaNum,qnaTitle from qna 
-	where (${searchKey} like '%' || #{searchValue} || '%') 
+	where (${searchKey} like '%' || #{searchValue} || '%' and qnaTitle like '%' || #{searchValue2} || '%')  
 	and (qnaNum > #{qnaNum}) order by qnaNum asc,qnaOrderNo desc) data 
 	where rownum=1
 ]]>	
@@ -52,7 +52,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <![CDATA[
 	select rownum, data.* from (
 	select qnaNum,qnaTitle from qna 
-	where (${searchKey} like '%' || #{searchValue} || '%') 
+	where (${searchKey} like '%' || #{searchValue} || '%' and qnaTitle like '%' || #{searchValue2} || '%')  
 	and (qnaNum < #{qnaNum}) order by qnaNum desc,qnaOrderNo asc) data 
 	where rownum=1
 ]]>	

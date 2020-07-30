@@ -164,28 +164,16 @@ function SelectOrder(checkboxName) {
 	<jsp:include page="/WEB-INF/views/layout/header_over.jsp" />
 	<jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
 	
-	<!-- 제목 시작 -->
-		<section class="contact-area section-padding-100" style="padding-bottom: 30px!important;">
-		<div class="container">
-		<div class="row">
-		<div class="col-12">
-		<div class="contact-title">
-			<h5 style="color:#38b143;">CART</h5>
-			<form name="myForm" method="post">
-			<h2>장바구니&nbsp;&nbsp;&nbsp;
-			<input type="hidden" value="${customInfo}" name="customInfo">
-			</h2>
-			<hr>
-			</form>
-		</div>
-		</div>
-		</div>
-		</div>	
-		</section>
 	
-	
-	<div class="blog-area mt-20 section-padding-100" style="padding-top: 0!important">
+	<div class="blog-area mt-20 section-padding-100">
         <div class="container colspan-12">
+        	<!-- 제목 -->
+           <div class="mb-50 colspan-12">
+              <h5 style="color: #38B143;">CART</h5> 
+               <h2>장바구니</h2>
+               <hr/>
+           </div>
+        
 	        <!-- 장바구니 기능 -->
 	        <div>
 	        	<form method="post" name="myForm" style="width: 1100px;">

@@ -51,7 +51,7 @@
              f.action = "<%=cp%>/customerUpdate.action";
              f.submit();
       }
-      
+       
       $(function(){
     	  
     	  $(".td_proPayNum").each(function() {
@@ -72,20 +72,19 @@
     			  priceTotal_rows.not(":eq(0)").remove();
     			  deliverInfo_rows.not(":eq(0)").remove();
     			  
-    			  /*hr*/
-    			  var style = "border-bottom:1px solid #C8C8C8; padding-bottom: 10px;";
+    			  /* var style = "border-bottom:1px solid #C8C8C8; padding-bottom: 10px;";
         		  productImg_rows.eq(len).attr("style",style);
     			  productInfo_rows.eq(len).attr("style",style);
     			  review_rows.eq(len).attr("style",style);
     			  proPayNum_rows.eq(0).attr("style",style);
     			  priceTotal_rows.eq(0).attr("style",style);
-    			  deliverInfo_rows.eq(0).attr("style",style);
+    			  deliverInfo_rows.eq(0).attr("style",style); */
     		  }
     		  
     		  
     		});
     	  
-      });
+      }); 
       
    </script>
 </head>
@@ -204,6 +203,7 @@
 	                  		오프라인 수업
 	                  	</c:if>
 	                  </c:if>
+	                 
 	               </td>
 		        </tr>
 		     </c:forEach>
@@ -213,12 +213,12 @@
 			     	예약 내역이 없습니다</td>
 			     </tr>
             </c:if>
-        </table><br><br>
+        </table></div>
+      	<div style="height: 80px;" id="3"></div>
       
-      
-      
-      <!-- 리뷰 -->
-      	<div class="container mb-30 col-12" id="2" style="padding: 0; margin: 0!important;">
+      	
+     	 <!-- 리뷰 -->
+      	<div class="container mb-30 col-12"style="padding: 0; margin: 0!important;">
         	<div style="font-size: 14pt; font-weight: bold;">리뷰 목록</div>
 		</div>
 		<div style="height: 10px;"></div>
@@ -257,12 +257,12 @@
            	</c:if>
 	            
 	    </table>
-      	<br><br>
+      	<div style="height: 80px;" id="4"></div>
       
       
       
 	    <!-- 찜목록 -->
-	    <div class="container mb-30 col-12" id="2" style="padding: 0; margin: 0!important;">
+	    <div class="container mb-30 col-12" style="padding: 0; margin: 0!important;">
 	   		<div style="font-size: 14pt; font-weight: bold;">제휴시설 찜 목록</div>
 		</div>
 		<div style="height: 10px;"></div>
@@ -290,11 +290,11 @@
 		  	   </tr>
 	           </c:if>
     	</table>
-    	<br><br>
+    	<div style="height: 80px;" id="5"></div>
       
        
       <!-- 상품 주문 내역 -->
-      <div class="container mb-30 col-12" id="2" style="padding: 0; margin: 0!important;">
+      <div class="container mb-30 col-12" style="padding: 0; margin: 0!important;">
        		<div style="font-size: 14pt; font-weight: bold;">상품 주문 내역</div>
 	  </div>
 	  <div style="height: 10px;"></div>
@@ -308,36 +308,41 @@
 		        <th width="300">주문자 정보</th>
 		        <th width="180">리뷰쓰기</th>
 		   </tr>
-           <c:forEach var="orderDto" items="${orderLists }">
-              <tr class="tr_white" style="text-align: center;" >
-                 <!-- 번호와 시간 --><td class="td_proPayNum">
-                 <font style="font-weight: bold; color:#22741C ">${orderDto.proPayNum}</font>
-                 <br><br>&nbsp;(${orderDto.proPayCreated })</td>
-                 <!-- 이미지 -->
-                 <td class="td_productImg">
-                 	<img alt="${orderDto.productName }" src="${imagePath }${orderDto.productImg }" 
-                 	style="width:100px; height:100px; margin: 10px;"></td>
-                 <!-- 주문내역 -->
-                 <td class="td_productInfo">
-	                 <a href="/gyp/productDetail?pageNum=1&productId=${orderDto.productId }">
-	                 [${orderDto.productId }] ${orderDto.productName }</a>&nbsp;&nbsp;X&nbsp;&nbsp;
-	                 ${orderDto.count }개
-                 </td>
-                 <!-- 가격 -->
-                 <td class="td_priceTotal" style="font-weight: bold;">
-                 	${orderDto.priceTotal}원
-                 </td>
-                 <!-- 주문자 정보 -->
-                 <td class="td_deliverInfo">
-                 	${orderDto.proPayTel }<br/>${orderDto.proPayAddr }
-                 </td>
-                 <!-- 리뷰 쓰기 -->
-                 <td class="td_review">
-	                 <a href="/gyp/productDetail.action?pageNum=1&productId=${orderDto.productId }" class="bokyung_mypage_link">
-	                 리뷰쓰기</a>
-	             </td>
-              </tr>
-           </c:forEach> 
+           <c:forEach var="orderDto" items="${orderLists }" varStatus="status">
+              <c:set var="nextDto" value="${orderLists[status.index+1]}" />
+              <c:set var="tempProPayNum" value="${nextDto.proPayNum}" />
+                 <tr style="text-align: center; background: white;" >
+                    <!-- 번호와 시간 --><td class="td_proPayNum">
+                    <font style="font-weight: bold; color:#22741C ">${orderDto.proPayNum}</font>
+                    <br><br>&nbsp;(${orderDto.proPayCreated })</td>
+                    <!-- 이미지 -->
+                    <td class="td_productImg">
+                       <img alt="${orderDto.productName }" src="${imagePath }${orderDto.productImg }" 
+                       style="width:100px; height:100px; margin: 10px;"></td>
+                    <!-- 주문내역 -->
+                    <td class="td_productInfo">
+                       <a href="/gyp/productDetail?pageNum=1&productId=${orderDto.productId }">
+                       [${orderDto.productId }] ${orderDto.productName }</a>&nbsp;&nbsp;X&nbsp;&nbsp;
+                       ${orderDto.count }개
+                    </td>
+                    <!-- 가격 -->
+                    <td class="td_priceTotal" style="font-weight: bold;">
+                       ${orderDto.priceTotal}원
+                    </td>
+                    <!-- 주문자 정보 -->
+                    <td class="td_deliverInfo">
+                       ${orderDto.proPayTel }<br/>${orderDto.proPayAddr }
+                    </td>
+                    <!-- 리뷰 쓰기 -->
+                    <td class="td_review">
+                       <a href="/gyp/productDetail.action?pageNum=1&productId=${orderDto.productId }" class="bokyung_mypage_link">
+                       리뷰쓰기</a>
+                   </td>
+                 </tr>
+              <c:if test="${orderDto.proPayNum != tempProPayNum}">
+                 <tr style="border-bottom: 1px solid #38b143;background-color: #fff;"><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+              </c:if>
+            </c:forEach>
 	       	<c:if test="${empty orderLists }">
 	          	<tr style="text-align: center; height: 40px; background-color: white;">
 			     	<td colspan="7" style="color:#888; font-size: 12pt;" height="80px">
