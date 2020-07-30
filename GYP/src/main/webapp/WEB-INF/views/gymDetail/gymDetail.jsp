@@ -140,14 +140,14 @@
 			                                <li><i class="fa fa-circle" aria-hidden="true"></i>${productDto.productContent }</li>
 			                            </ul>
 			                            <!-- btn -->
-			                            <a href="/gyp/productDetail.action?productId=${productDto.productId }&searchValueCategory=<c:if test="${gymDto.gymType eq '헬스'}">H</c:if><c:if test="${gymDto.gymType eq '요가'}">Y</c:if><c:if test="${gymDto.gymType eq '필라테스'}">P</c:if>&pageNum=1" 
-			                            class="btn fitness-btn mt-30">
-			                            자세히 보기</a>
+			                            <a href="/gyp/productDetail.action?productId=${productDto.productId }" class="btn fitness-btn mt-30">자세히 보기</a>
 			                        </div>
 			                    </div>
 		                    </c:forEach>
                         </div>
                     </div>
+					
+
                 </div>
 				<!-- -------------좌측 컬럼 끝-------------- -->
 				
@@ -305,8 +305,8 @@
 											 
 											  <select id="select-options-sat" class="select-options" name="bookHourSat" style="width: 190px;">
 										    		<option value="" disabled="disabled" selected="selected">시간을 선택해주세요</option>
-										  		  <c:forEach var="i" begin="0" end="${optionTimes1.size()-1 }">
-												     <option value="${optionTimes1[i] }">${optionTimes1[i] }</option>                                                                                                                                                                                                                                                                                                                                                             ""    <option value="${optionTimes1[i] }">${optionTimes1[i] }</option>
+											  	<c:forEach var="i" begin="0" end="${optionTimes1.size()-1 }">
+												    <option value="${optionTimes1[i] }">${optionTimes1[i] }</option>
 												  </c:forEach>
 											  </select>
 											    
@@ -371,7 +371,6 @@
 						<c:if test="${!empty info && info.loginType eq 'gym'}">
 							<div style="height: 50px;"></div>
 						</c:if>
-
 						
                         <!-- 제휴시설 미리보기 -->
                         <div class="blog-post-categories mb-100" >

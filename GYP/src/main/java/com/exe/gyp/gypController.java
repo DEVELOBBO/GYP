@@ -2037,10 +2037,10 @@ public class gypController {
       
 		if(!bookHourWd.equals("") && bookHourWd!=null) {
 			bookHour = datePick + "," + bookHourWd;
-		}
+		}else
 		if(!bookHourSat.equals("") && bookHourSat!=null) {
 			bookHour = datePick + "," + bookHourSat;
-		}
+		}else
 		if(!bookHourSun.equals("") && bookHourSun!=null) {
 			bookHour = datePick + "," + bookHourSun;
 		}
@@ -2946,6 +2946,11 @@ public class gypController {
 			searchValue = "";
 		}
 		
+		//검색값 없을 경우
+	    if(searchValue2 == null) {
+	         searchValue2 = "";
+	    }
+	    
 		//검색값 인코딩
 		if(request.getMethod().equalsIgnoreCase("GET")) {
 			searchValue = URLDecoder.decode(searchValue,"UTF-8");

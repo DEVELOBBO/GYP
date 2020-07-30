@@ -6,7 +6,7 @@
 	String cp = request.getContextPath();
 
 %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -163,111 +163,156 @@ function SelectOrder(checkboxName) {
 	
 	<jsp:include page="/WEB-INF/views/layout/header_over.jsp" />
 	<jsp:include page="/WEB-INF/views/layout/header_below.jsp" />
-
 	
-	<div id="wrapper_cart" style="font-family: 'Noto Sans KR', sans-serif;">
-		<form method="post" name="myForm">
-			<br>
-			<br>
-			<br>
-			<table style="font-size: 15pt; color: #888" border="0" width="1250"
-				cellspacing="3" cellpadding="3">
-				<tr valign="top">
-					<td colspan="10" align="left"><font
-						style="font-size: 20pt; color: black;">&nbsp;&nbsp;장바구니</font>
-						<hr>
-						<br></td>
-
-					<c:if test="${empty cartLists}">
-						<tr>
-							<td><br>
-							<font color="#F23D4C">담은 물건이 없습니다!</font></td>
-					</c:if>
-
+	<!-- 제목 시작 -->
+		<section class="contact-area section-padding-100" style="padding-bottom: 30px!important;">
+		<div class="container">
+		<div class="row">
+		<div class="col-12">
+		<div class="contact-title">
+			<h5 style="color:#38b143;">CART</h5>
+			<form name="myForm" method="post">
+			<h2>장바구니&nbsp;&nbsp;&nbsp;
+			<input type="hidden" value="${customInfo}" name="customInfo">
+			</h2>
+			<hr>
+			</form>
+		</div>
+		</div>
+		</div>
+		</div>	
+		</section>
+	
+	
+	<div class="blog-area mt-20 section-padding-100" style="padding-top: 0!important">
+        <div class="container colspan-12">
+	        <!-- 장바구니 기능 -->
+	        <div>
+	        	<form method="post" name="myForm" style="width: 1100px;">
+	        	<table style="font-size: 10pt; color: #888; width: 100%; border-radius: 10px;" border="0"
+					cellspacing="3" cellpadding="3">
 					<c:if test="${!empty cartLists}">
+						<tr style="font-size: 12pt; height: 80px;">
+							<td colspan="3">
+								&nbsp;&nbsp;&nbsp;<input type="checkbox" id="chkAll"
+								class="selectAllCarts" onclick="fn_AllCheck(this);">
+								<label for="chkAll" style="font:large;">&nbsp;&nbsp;&nbsp;전체선택</label> 
+							</td>
+							<td colspan="3">
+								<input type="hidden" name="totPrice" value="${totPrice }">
+							</td>
+							<td colspan="2" style="text-align: right; vertical-align: middle;" >
+								<input align="right" type="button" value="선택삭제"
+								onclick="SelectDelete('cartChk');" class="btn fitness-btn btn-white"
+								style="border-radius: 8px; min-width: 195px; height: 45px; margin: 10px 0; ">
+							</td>
+						</tr> 
+					</c:if>
+					
+					<tr style="text-align: center; height: 40px; background-color: #38b143; color: white; font-size: 16px;">
+						<th colspan="2" width="150" align="center">선택</th>
+						<th width="350">상품사진</th>
+						<th colspan="2">갯수</th>
+						<th width="250">상품명</th>
+						<th width="150">상품가격</th>
+						<th width="300"></th>
+					</tr>
 
-						<tr>
-							<td>&nbsp;&nbsp;&nbsp;<input type="checkbox" id="chkAll"
-								class="selectAllCarts" onclick="fn_AllCheck(this);"></td>
-							<td colspan="8"><label for="chkAll">전체선택</label> 
-							<input type="hidden" name="totPrice" value="${totPrice }"></td>
-							<td><input align="right" type="button" value="선택삭제"
-								onclick="SelectDelete('cartChk');" class="bokyung_button_cart1"
-								style="background-color: #555"></td>
+					<!-- 장바구니 비었을때 -->
+	        	<c:if test="${empty cartLists}">
+					<tr><td><font color="#F23D4C">담은 물건이 없습니다!</font></td></tr>
+				</c:if>
+				
+				<!-- 장바구니 안비었을때 -->
+				<c:if test="${!empty cartLists}">
+					<c:forEach var="cart" items="${cartLists }">
+						<tr height="130px" style="font-size: 12pt; vertical-align: middle;">	
+							<!-- 체크박스 -->
+							<td width="30px" >
+								<input type="hidden" name="cartNum" value="${cart.cartNum}" />
+								&nbsp;&nbsp;
+								<input type="checkbox" id="cartChk${cart.cartNum}" name="cartChk" value="${cart.cartNum}"
+									onchange="price('cartChk${cart.cartNum}','won${cart.cartNum}')" /> <!-- pid -->
+							</td>
+							<!-- 체크박스 라벨 - 상품 ID -->
+							<td align="left" width="70px">
+								&nbsp;&nbsp;&nbsp;<label for="cartChk${cart.cartNum}" style="margin-bottom: 0">${cart.productId}</label>
+							</td>
+							<!-- 상품 이미지 -->
+							<td width="250px" align="center">
+								<img alt="그림" src="${imagePath }/${cart.productImg}" style="height: 120px; width: 120px; margin: 10px;">
+							</td>
+							<!-- 갯수 -->
+							<td align="center" width="100px">
+								<%-- <input type="text" name="count${cart.cartNum}" value="${cart.count}" 
+								style="font-size:16pt; color: #666; vertical-align: middle;
+										width: 50px; height: 45px; padding-top: 2px; text-align: center;
+										color:#F23D4C; font-size: 20pt; font-family: 'Do Hyeon', sans-serif;
+										vertical-align: middle;" onkeydown ='return onlyNumber(event)' 
+										onkeyup ='removeChar(event)'/> --%>
+								<input class="form-control" type="number" name="count${cart.cartNum}" value="${cart.count}"
+									style="text-align: center; font-size: 13pt; vertical-align: middle; width: 75px; border: 3px solid #38b143; 
+									border-radius: 10px; padding-left: 25px;">
+							</td>
+							<!-- 변경버튼 -->
+							<td width="100px">
+								<input type="button" value="변경" onclick="countUpdate('count${cart.cartNum}','${cart.cartNum}');"
+								class="btn fitness-btn btn-2" style="min-width: 60px;  height:42px; padding: 0; width: 70px;"/>
+							</td>
+							<!-- 상품명 + 상품상세페이지로 이동 링크 -->
+							<td style="text-align: center;" width="280px">
+								<a href="javascript:location.href='<%=cp%>/productDetail.action?productId=${cart.productId}&pageNum=1'">
+								<h6>${cart.productName }</h6></a> 
+							</td>
+							<!-- 가격 -->
+							<td style="text-align: center;" width="80px">${cart.productPrice}원
+								<input type="hidden" id="won${cart.cartNum}" value="${cart.productPrice * cart.count}"/>
+							</td>	
+							<!-- 구매/삭제버튼 -->
+							<td>
+								<input type="button" value="구매하기"
+								class="btn fitness-btn btn-2"
+								style="min-width: 80px; float: right; margin: 10px 5px 10px 5px; padding: 5px; border-radius: 10px; vertical-align: middle; line-height: 0;"
+								onclick="OneOrder('count${cart.cartNum}','cartChk${cart.cartNum}','won${cart.cartNum }');">
+							
+								<input type="button" value="삭제하기"
+								class="btn fitness-btn btn-white"
+								style="min-width: 80px; float: right; margin: 10px 25px 10px 0px; padding: 5px; border-radius: 10px; vertical-align: middle; line-height: 0;"
+								onclick="location.href='<%=cp%>/cart_Onedelete.action?cartNum=${cart.cartNum}'">
+							</td>
+							
 						</tr>
+						
 						<!-- 선 -->
 						<tr height="1">
-							<td colspan="10" bgcolor="#cccccc"></td>
-
-							<c:forEach var="cart" items="${cartLists}">
-								<tr height="120px">
-									<td width="70px">
-										<input type="hidden" name="cartNum" value="${cart.cartNum}"> &nbsp;&nbsp; 
-										<input type="checkbox" id="cartChk${cart.cartNum}" name="cartChk"
-												value="${cart.cartNum}"
-												onchange="price('cartChk${cart.cartNum}','won${cart.cartNum}')" /> <!-- pid -->
-									</td>
-									<td align="left"><label for="cartChk${cart.cartNum}">${cart.productId}</label></td>
-									<!-- 이미지 -->
-									<td>&nbsp;&nbsp;&nbsp;</td>
-									<td width="100px" align="right">
-									<img alt="그림" src="${imagePath }/${cart.productImg}">
-									</td>
-									
-									<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-									<!-- 수량> -->
-									<td align="center" width="50px"><input type="text" name="count${cart.cartNum}" value="${cart.count}" 
-											style="font-size:16pt; color: #666; vertical-align: middle;
-													width: 50px; height: 45px; padding-top: 2px; text-align: center;
-													color:#F23D4C; font-size: 20pt; font-family: 'Do Hyeon', sans-serif;
-													vertical-align: middle;" onkeydown ='return onlyNumber(event)' 
-													onkeyup ='removeChar(event)'/></td>
-									<!-- 변경버튼 -->							
-									<td width="50px"><input type="button" value="변경" onclick="countUpdate('count${cart.cartNum}','${cart.cartNum}');"
-													class="bokyung_button_cart_change"/></td>
-									<td width="500px" style="text-align: center;"><a href="javascript:location.href='<%=cp%>/productDetail.action?productId=${cart.productId}&pageNum=1'">
-									<h4>${cart.productName }</h4></a></td>
-
-									<td width="400px" style="text-align: center;">${cart.productPrice}원
-									<input type="hidden" id="won${cart.cartNum}" value="${cart.productPrice * cart.count}"/></td>
-									
-
-									<td><input type="button" value="구매하기"
-										class="btn fitness-btn btn-white mt-10"
-										style="min-width: 50px; float: right; margin: 10px 5px 10px 5px; padding: 5px; border-radius: 30px; vertical-align: middle;"
-										onclick="OneOrder('count${cart.cartNum}','cartChk${cart.cartNum}','won${cart.cartNum }');">
-
-										<input type="button" value="삭제하기"
-										class="btn fitness-btn btn-white mt-10"
-										style="min-width: 50px; float: right; margin: 10px 5px 10px 5px; padding: 5px; border-radius: 30px; vertical-align: middle;"
-										onclick="location.href='<%=cp%>/cart_Onedelete.action?cartNum=${cart.cartNum}'">
-									</td>
-								</tr>
-
-								<!-- 선 -->
-								<tr height="1">
-									<td colspan="10" bgcolor="#cccccc"></td>
-								</tr>
-
-							</c:forEach>
+							<td colspan="8" bgcolor="#cccccc"></td>
 						</tr>
-						<tr valign="bottom" height="150">
-							<td colspan="8" align="right" style="padding-bottom: 15px;">
-								<font color="black">선택한 상품금액 : <input type="text" readonly="readonly" value="0" id="totPrice" name="totPrice2"
-									style="border: 0; background-color: #DFDFEB; padding-top: 2px; padding-right: 15px; width: 150px; height: 35px; 
-									font-size: 15pt; font-family: 'Do Hyeon'; text-align: right;">&nbsp;&nbsp;원
+					</c:forEach>
+					
+					<tr valign="bottom" height="100">
+						<td colspan="7" align="right" style="padding-bottom: 0px;">
+							<font color="black" size="5pt">선택한 상품금액 : 
+								<input type="text" readonly="readonly" value="0" id="totPrice" name="totPrice2"
+								style="border: 0; background-color: #d7efda; padding-top: 2px; padding-right: 15px; padding-bottom:5px;  width: 150px; height: 45px; border-radius: 10px;
+								font-size: 15pt; font-family: 'Do Hyeon'; text-align: right;">&nbsp;&nbsp;원&nbsp;&nbsp;&nbsp;&nbsp;
 							</font>
-							</td>
-							<td colspan="2" align="right"><input type="button"
-								value="선택주문" onclick="SelectOrder('cartChk');"
-								class="bokyung_button_cart2"></td>
-						</tr>
-
-					</c:if>
-			</table>
-		</form>
+						</td>
+						<td align="right">
+							<input type="button" style="min-width: 195px;"
+							value="선택주문" onclick="SelectOrder('cartChk');"
+							class="btn fitness-btn btn-2">
+						</td>
+					</tr>						
+				</c:if>
+				</table>
+				</form>
+	        </div>
+		</div>
 	</div>
-
+	
+	<div style="height: 100px;"></div>
+	
+		
 	<jsp:include page="/WEB-INF/views/layout/footer.jsp" />
 
 	
