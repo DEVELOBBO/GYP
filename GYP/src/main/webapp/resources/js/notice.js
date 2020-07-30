@@ -1,4 +1,3 @@
-----noticeArticle.jsp-----
 function deleteData(){
 		
 		var notiNum = "${dto.notiNum}";
@@ -21,7 +20,6 @@ function deleteData(){
 		
 	}
 	
-----noticeCreated.jsp---
 
 	function sendIt(){
 		

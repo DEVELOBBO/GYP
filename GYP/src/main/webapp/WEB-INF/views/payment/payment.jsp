@@ -72,8 +72,7 @@
                                   <div class="form-group">
                                      		<!-- 패스 구매시 -->
 											<c:if test="${not empty passSelected and empty productToBuy}">
-												<span class="form-control" id="item" style="font-size: 12pt;">
-												${passSelected }</span>
+												<span class="form-control" id="item" style="font-size: 12pt;">${passSelected }</span>
 												<input type="hidden" id="itemVal" value="${passSelected }">
 											</c:if>
 											

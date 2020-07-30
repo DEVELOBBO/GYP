@@ -1,4 +1,3 @@
-------qnaList.jsp-----
 function sendIt(){
 		
 	f = document.searchForm;
@@ -7,7 +6,6 @@ function sendIt(){
 	f.submit();
 }
 
-----qnaCreated.jsp---
 	function sendIt() {
 
 		f = document.myForm;
@@ -63,7 +61,6 @@ function sendIt(){
 		
 	}
 
--------------qnaArticle.jsp-----------------
 	function deleteData() {
 
 		var qnaNum = "${dto.qnaNum}";

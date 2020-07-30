@@ -35,23 +35,6 @@ html,body {
 :-ms-input-placeholder {
   color: #FFF;
 }
-/*  SCROLLBAR
--------------------*/
-::-webkit-scrollbar {
-  width: 0.2em;
-  background: #e74c3c;
-}
-
-::-webkit-scrollbar-track {
-}
-
-::-webkit-scrollbar-thumb {
-  background: #fff;
-}
-
-::-webkit-scrollbar-thumb:window-inactive {
-  background: #fff;
-}
 /*  SELECTION
 -------------------*/
 ::selection {

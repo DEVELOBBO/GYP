@@ -186,15 +186,18 @@
 		           <td>${bookdto.bookCreated }</td>
 		           <td>${bookdto.bookHour }</td>
 		           <td style="text-align: center;">
-			          <c:if test="${bookdto.bookType eq 'online' && empty bookdto.faceLink}">
-		                  <a href="/gyp/faceLink.action" class="bokyung_mypage_link">
-		                  수업링크 생성</a>&nbsp;&nbsp;
+			          <c:if test="${bookdto.bookType eq 'online'}">
+		                  <a href="https://gyp.herokuapp.com/#${bookdto.faceLink }" class="bokyung_mypage_link">
+		                  수업링크</a>&nbsp;&nbsp;
 		                  <a href="<%=cp %>/bookDelete.action?bookNum=${bookdto.bookNum}&gymPass=${gymdto.gymPass}&cusId=${bookdto.cusId}" 
 		                  class="bokyung_mypage_link_D">
 						  거절</a>
 	                  </c:if>
-	                  <c:if test="${bookdto.bookType eq 'online' && !empty bookdto.faceLink}">
-	                      <font style="font-weight: bold; color:#22741C;">수업링크 생성 완료</font> 
+	                  <c:if test="${bookdto.bookType eq 'offline'}">
+	                      <font style="font-weight: bold; color:gray;">오프라인</font>&nbsp;&nbsp;
+	                      <a href="<%=cp %>/bookDelete.action?bookNum=${bookdto.bookNum}&gymPass=${gymdto.gymPass}&cusId=${bookdto.cusId}" 
+		                  class="bokyung_mypage_link_D">
+						  거절</a>
 	                  </c:if>
 	               </td>
 		        </tr>

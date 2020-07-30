@@ -183,10 +183,10 @@ $(function() {
     f = document.myForm;
 
     //아이디 제약조건
-    var cc1 = /^[a-z0-9]{4,16}$/;
+    var cc1 = /^[a-z0-9]{1,16}$/;
 
     //패스워드 제약조건
-    var cc2 = /^[A-Za-z0-9]{4,16}$/;
+    var cc2 = /^[A-Za-z0-9]{1,16}$/;
 
     //전화번호 제약조건
     var cc3 = /^(01[016789]{1}|02|0[3-9]{1}[0-9]{1})-[0-9]{3,4}-[0-9]{4}$/;
@@ -232,7 +232,7 @@ $(function() {
 
     if (!cc1.test(f.gymId.value)) {
 
-       alert('아이디 영문소문자/숫자 4~16자 이내로 입력하세요.');
+       alert('아이디 영문소문자/숫자 1~16자 이내로 입력하세요.');
 
        f.gymId.focus();
 
@@ -260,7 +260,7 @@ $(function() {
 
     if (!cc2.test(f.gymPwd.value)) {
 
-       alert('패스워드 영문 대소문자/숫자 4~16자 이내로 입력하세요.');
+       alert('패스워드 영문 대소문자/숫자 1~16자 이내로 입력하세요.');
 
        f.gymPwd.focus();
 
@@ -305,15 +305,18 @@ $(function() {
        f.gymAddr.focus();
        return;
     }
-
-    if (!f.gymType.value) {
-       alert("체육관 유형을 선택해주세요.");
-       f.gymType.focus();
-       return;
+	
+    if(f.mode.value != 'updated') {
+	    if (!f.gymType.value) {
+	       alert("체육관 유형을 선택해주세요.");
+	       f.gymType.focus();
+	       return;
+	    }
     }
-
+	
+    
     //트레이너명,트레이너사진 업로드 유효성 검사! , 최소 1명이상 등록하라고 alert띄움
-    if (f.gymTrainer1.value != "" && uploads[0].value == "") {
+    /* if (f.gymTrainer1.value != "" && uploads[0].value == "") {
        alert("1번째 트레이너 사진을 입력해주세요!");
        f.gymTrainer1.focus();
        return;
@@ -358,13 +361,15 @@ $(function() {
        alert("1번째 트레이너명을 입력하세요 (최소1명 이상).");
        f.gymTrainer1.focus();
        return;
-    }
+    } */
 
     //체육관 사진등록 제약조건 (최소1장이상)
-    if (uploads2[0].value == "") {
-       alert("첫번째 체육관 사진등록을 해주세요 (최소 1장이상)");
-       f.uploads2[0].focus();
-       return;
+    if (f.mode.value != 'updated') {
+	    if (uploads2[0].value == "") {
+	       alert("첫번째 체육관 사진등록을 해주세요 (최소 1장이상)");
+	       f.uploads2[0].focus();
+	       return;
+	    }
     }
 
     if (!f.gymProgram.value) {
@@ -372,7 +377,7 @@ $(function() {
        f.gymProgram.focus();
        return;
     }
-
+	
     if (f.gymFacility[0].checked == false
           && f.gymFacility[1].checked == false
           && f.gymFacility[2].checked == false) {
@@ -1170,12 +1175,12 @@ $(function() {
 								<dd><textarea rows="20" readonly="readonly" class="form-control" id="agreement" style="overflow:auto">
 1장 총칙
 제1조 (목적)
-본 약관은 (주)GYP(이하 “당사”라 함)가 제공하는 TLX PASS 서비스 이용과 관련하여 당사와 회원의 제반 권리, 의무, 책임사항, 관련 절차, 기타 필요한 사항을 규정하는데 그 목적이 있습니다.
+본 약관은 (주)GYP(이하 “당사”라 함)가 제공하는 GYP PASS 서비스 이용과 관련하여 당사와 회원의 제반 권리, 의무, 책임사항, 관련 절차, 기타 필요한 사항을 규정하는데 그 목적이 있습니다.
 
 제2조 (용어)
 본 약관에서 사용하는 주요 용어의 정의는 다음과 같습니다.
-1.“서비스”라 함은 구현되는 단말기(PC, TV, 휴대형 단말기 등의 각종 유무선 장치를 포함)와 상관없이 당사와 제휴시설이 “회원”에게 제공하는 TLX PASS 관련 제반 서비스 모두를 의미합니다.
-2."회원"이라 함은 당사의 약관 제5조에 정해진 가입 절차에 따라 가입하여 정상적으로 당사의 제휴시설과 TLX PASS 서비스를 이용할 수 있는 권한을 부여 받은 고객을 말합니다.
+1.“서비스”라 함은 구현되는 단말기(PC, TV, 휴대형 단말기 등의 각종 유무선 장치를 포함)와 상관없이 당사와 제휴시설이 “회원”에게 제공하는 GYP PASS 관련 제반 서비스 모두를 의미합니다.
+2."회원"이라 함은 당사의 약관 제5조에 정해진 가입 절차에 따라 가입하여 정상적으로 당사의 제휴시설과 GYP PASS 서비스를 이용할 수 있는 권한을 부여 받은 고객을 말합니다.
 
 
 제2장 회원가입과 멤버십
@@ -1187,7 +1192,7 @@ $(function() {
 3.회원은 회원자격을 타인에게 양도하거나 대여 또는 담보의 목적으로 이용할 수 없습니다.
 
 제4조 (멤버십 이용 및 관리)
-1.회원이 TLX PASS 서비스를 당사와 제휴시설에서 이용하고자 할 경우, 어플리케이션/모바일웹/RFID카드를 이용해야 하며, 당사와 제휴시설은 미성년자 여부나 본인 확인 등 합리적인 이유가 있을 때 회원에게 신분증 제시를 요청할 수 있습니다. 회원은 이러한 요청을 있을 경우 요청에 응해야 정상적이고 원활한 TLX PASS 서비스를 제공 받을 수 있습니다.
+1.회원이 GYP PASS 서비스를 당사와 제휴시설에서 이용하고자 할 경우, 어플리케이션/모바일웹/RFID카드를 이용해야 하며, 당사와 제휴시설은 미성년자 여부나 본인 확인 등 합리적인 이유가 있을 때 회원에게 신분증 제시를 요청할 수 있습니다. 회원은 이러한 요청을 있을 경우 요청에 응해야 정상적이고 원활한 GYP PASS 서비스를 제공 받을 수 있습니다.
 2.회원에게 등록된 멤버십은 회원 본인만 사용 가능합니다. 회원 아이디 및 멤버십을 제3자에게 임의적으로 대여 사용하게 하거나 양도 또는 담보의 목적으로 사용 할 수 없으며, 해당 불법 행위로 인해 발생하는 모든 책임은 사용자가 부담합니다.
 								</textarea>
 								<input type="checkbox" name="check"> 동의합니다.</dd>

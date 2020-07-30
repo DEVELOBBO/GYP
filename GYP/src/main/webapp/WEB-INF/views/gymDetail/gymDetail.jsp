@@ -160,7 +160,7 @@
 							<!-- 예약 모달 버튼 -->
 							<div class="single-blog-post mb-100 gymDetailHeadLine" style="width: 100px; padding-top: 80px; padding-right: 20px;" >
 								<!--  Post Thumb -->
-								<div class="blog-post-thumb mb-30">
+								<div class="blog-post-thumb mb-30" style=" cursor: pointer;">
 									<div id="gymBook" class="post-date1" data-toggle="modal"
 										data-target="#bookModal" data-backdrop="static" data-keyboard="false"
 										style="width: 77px; margin: 0 auto;">
@@ -177,7 +177,7 @@
 							
 							<!-- 찜 버튼 -->
 							<div class="single-blog-post mb-100 gymDetailHeadLine" style="width: 100px; padding-top: 80px;">
-								<div class="blog-post-thumb mb-30">
+								<div class="blog-post-thumb mb-30" style=" cursor: pointer;">
 									<div id="gymJjim" class="post-date2" style="width: 77px; margin: 0 auto;">
 										<form action="" method="POST" name="JjimForm">
 											<div id="main-content">

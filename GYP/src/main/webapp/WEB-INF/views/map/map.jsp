@@ -52,7 +52,7 @@ String cp = request.getContextPath();
 			      </select>
 			      <input type="text" name="searchValue" id="searchValue" value="${tempSearchValue}" placeholder="&nbsp;검색어"
 			        class="textField" onkeyup="sendKeyword();" onkeydown="enter('send');">
-			      <input type="button" value=" 검색 " id="sendButton" onclick="searchMap('send');" style="cursor: pointer;/>
+			      <input type="button" value=" 검색 " id="sendButton" onclick="searchMap('send');" style="cursor: pointer;"/>
 			      <input type="button" value=" MY " id="myButton" onclick="searchMap('my');" style="cursor: pointer;" />
 			      <input type="hidden" id="tempSearchKey" value="${tempSearchKey}"/>
 			      <input type="hidden" id="tempSearchValue" value="${tempSearchValue}"/>
@@ -161,29 +161,26 @@ String cp = request.getContextPath();
    }
    
    function searchMap(mode) {
-      var searchForm = document.searchForm;
-      if(sessionId==""||loginType=="gym"||sessionId=="admin"){
-          alert("일반 회원 로그인이 필요합니다!");
-          return;
-       }
-      var searchValue = $("#searchValue").val();
-      var loginType = $("#loginType").val();
-      if(mode=='send'){
-         searchForm.action = "<%=cp%>/mapReload.action";
-         searchForm.submit();
-         return;
-      }
-      if(sessionId==""||loginType=="gym"||sessionId=="admin"){
-          alert("일반 회원 로그인이 필요합니다!");
-         return;
-      }else{
-         var cusAddrGoo = $("#cusAddrGoo").val(); 
-         $("#searchKey").val("gymAddr");
-         $("#searchValue").val(cusAddrGoo);
-      }
-      searchForm.action = "<%=cp%>/mapReload.action";
-      searchForm.submit();
-   }
+	      var searchForm = document.searchForm;
+	      var sessionId = $("#sessionId").val();
+	      var searchValue = $("#searchValue").val();
+	      var loginType = $("#loginType").val();
+	      if(mode=='send'){
+	         searchForm.action = "<%=cp%>/mapReload.action";
+	         searchForm.submit();
+	         return;
+	      }
+	      if(sessionId==""||loginType=="gym"||sessionId=="admin"){
+	         alert("일반 회원 로그인이 필요합니다!");
+	         return;
+	      }else{
+	         var cusAddrGoo = $("#cusAddrGoo").val(); 
+	         $("#searchKey").val("gymAddr");
+	         $("#searchValue").val(cusAddrGoo);
+	      }
+	      searchForm.action = "<%=cp%>/mapReload.action";
+	      searchForm.submit();
+	   }
    
    function searchPage() {
       var Key = $("#tempSearchKey").val();
@@ -315,12 +312,15 @@ function mapMake() {
                yy = result[0].x;
                xx = result[0].y;
                
-               //리스트 첫번째에 있는 체육관으로 좌표지정
-               <c:if test="${searchKey eq 'gymAddr'}">
-	               <c:if test="${status.first}">
-	               		map.setCenter(coords);
-	               </c:if>
-	           </c:if>
+             //리스트 첫번째에 있는 체육관으로 좌표지정
+             <c:if test="${searchKey eq 'gymAddr'}">
+                  <c:if test="${status.first}">
+                        map.setCenter(coords);
+                        <c:if test="${status.first eq status.last}">
+                        map.setLevel(3);
+                        </c:if>
+                  </c:if>
+              </c:if>
                // 결과값으로 받은 위치를 마커로 표시
                var marker = new kakao.maps.Marker({
                   map: map,
@@ -450,8 +450,6 @@ function mapSetCenter(gymAddr) {
     <script src="/gyp/resources/js/plugins/plugins.js"></script>
     <!-- Active js -->
     <script src="/gyp/resources/js/active.js"></script>
-	<!-- qna.js -->
-	<script src="/gyp/resources/js/qna.js"></script>
 	<jsp:include page="/WEB-INF/views/layout/footer.jsp" />
 </body>
 </html>

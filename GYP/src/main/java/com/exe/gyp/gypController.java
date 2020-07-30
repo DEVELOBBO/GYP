@@ -398,121 +398,121 @@ public class gypController {
       return "myPage/customerMyPage";
    }
 	   
-	// GYM 마이페이지
-	@RequestMapping(value = "/gymMyPage.action", method = { RequestMethod.GET, RequestMethod.POST })
-	public String gymMyPage(HttpServletRequest request, HttpSession session) throws ParseException {
+   	// GYM 마이페이지
+   	@RequestMapping(value = "/gymMyPage.action", method = { RequestMethod.GET, RequestMethod.POST })
+   	public String gymMyPage(HttpServletRequest request, HttpSession session) throws ParseException {
 
-		CustomInfo info = (CustomInfo) session.getAttribute("customInfo");
+      CustomInfo info = (CustomInfo) session.getAttribute("customInfo");
 
-		// 리뷰 아이디값 검색하기 위해
-		String reviewId = info.getSessionId();
-		// 예약 아이디값 검색하기 위해
-		String bookId = info.getSessionId();
-		// 체육관 아이디
-		String gymId = info.getSessionId();
-		// 넘어오는값
-		String strYear = request.getParameter("year");
-		// 넘어오는값
-		String strMonth = request.getParameter("month");
+      // 리뷰 아이디값 검색하기 위해
+      String reviewId = info.getSessionId();
+      // 예약 아이디값 검색하기 위해
+      String bookId = info.getSessionId();
+      // 체육관 아이디
+      String gymId = info.getSessionId();
+      // 넘어오는값
+      String strYear = request.getParameter("year");
+      // 넘어오는값
+      String strMonth = request.getParameter("month");
 
-		// 캘린더 사용
-		Calendar cal = Calendar.getInstance();
-		// 현재 년도
-		int year = cal.get(Calendar.YEAR);
-		// 현재 월
-		int month = cal.get(Calendar.MONTH) + 1;
+      // 캘린더 사용
+      Calendar cal = Calendar.getInstance();
+      // 현재 년도
+      int year = cal.get(Calendar.YEAR);
+      // 현재 월
+      int month = cal.get(Calendar.MONTH) + 1;
 
-		// 넘어오는 값이 없을 경우에, 현재 날짜 넣어줌
-		if (strYear == null || strYear.equals(""))
-			strYear = Integer.toString(year);
-		if (strMonth == null || strMonth.equals(""))
-			strMonth = Integer.toString(month);
+      // 넘어오는 값이 없을 경우에, 현재 날짜 넣어줌
+      if (strYear == null || strYear.equals(""))
+         strYear = Integer.toString(year);
+      if (strMonth == null || strMonth.equals(""))
+         strMonth = Integer.toString(month);
 
-		// 숫자로 변환
-		year = Integer.parseInt(strYear);
-		month = Integer.parseInt(strMonth);
+      // 숫자로 변환
+      year = Integer.parseInt(strYear);
+      month = Integer.parseInt(strMonth);
 
-		// book타입
-		String type = "true";
+      // book타입
+      String type = "true";
 
-		// 범위 검색하기위한 변수 생성
-		String beforemonthdate = "";
-		String aftermonthdate = "";
+      // 범위 검색하기위한 변수 생성
+      String beforemonthdate = "";
+      String aftermonthdate = "";
 
-		// 달이 7이렇게 넘어오면 안되므로 07 이렇게 넘어와야 하므로 해준 조건식
-		if (strMonth.length() == 2) {
-			beforemonthdate = year + "-" + (month - 1);
-		} else if (strMonth.length() == 1) {
-			beforemonthdate = year + "-0" + (month - 1);
-		}
-		if (strMonth.length() == 2) {
-			aftermonthdate = year + "-" + month;
-		} else if (strMonth.length() == 1) {
-			aftermonthdate = year + "-0" + month;
-		}
+      // 달이 7이렇게 넘어오면 안되므로 07 이렇게 넘어와야 하므로 해준 조건식
+      if (strMonth.length() == 2) {
+         beforemonthdate = year + "-" + (month - 1);
+      } else if (strMonth.length() == 1) {
+         beforemonthdate = year + "-0" + (month - 1);
+      }
+      if (strMonth.length() == 2) {
+         aftermonthdate = year + "-" + month;
+      } else if (strMonth.length() == 1) {
+         aftermonthdate = year + "-0" + month;
+      }
 
-		// 체육관 정보
-		GymDTO gymdto = dao.getgymReadData(info.getSessionId());
+      // 체육관 정보
+      GymDTO gymdto = dao.getgymReadData(info.getSessionId());
 
-		// 데이터 넘겨주기
-		Map<String, Object> hMap = new HashMap<String, Object>();
-		hMap.put("gymId", gymId);
-		hMap.put("beforemonthdate", beforemonthdate);
-		hMap.put("aftermonthdate", aftermonthdate);
-		hMap.put("type", type);// 타입 값 검색하기위해
+      // 데이터 넘겨주기
+      Map<String, Object> hMap = new HashMap<String, Object>();
+      hMap.put("gymId", gymId);
+      hMap.put("beforemonthdate", beforemonthdate);
+      hMap.put("aftermonthdate", aftermonthdate);
+      hMap.put("type", type);// 타입 값 검색하기위해
 
-		// 예약 데이터 개수
-		int bookdataCount = dao.bookgetDataCount(hMap);
+      // 예약 데이터 개수
+      int bookdataCount = dao.bookgetDataCount(hMap);
 
-		// 예약 리스트
-		List<BookDTO> gymbooklists = dao.gymbookgetList(bookId);
-		//화상링크 생성 (아이디+예약시간+트레이너)
-    	Iterator<BookDTO> iterator = gymbooklists.iterator();
-    	while(iterator.hasNext()) {
-    		String match = "[^\uAC00-\uD7A3xfe0-9a-zA-Z\\s]";
-    		BookDTO dto = iterator.next();
-    		String bookHour = dto.getBookCreated().replaceAll(match, "");
-    		String faceLink = dto.getCusId();
-    		faceLink += bookHour;
-    		faceLink += dto.getGymTrainerPick();
-    		dto.setFaceLink(faceLink);
-    	}
-		// 리뷰리스트
-		List<ReviewDTO> gymreviewlists = dao.gymreviewgetList(reviewId);
+      // 예약 리스트
+      List<BookDTO> gymbooklists = dao.gymbookgetList(bookId);
+      //화상링크 생성 (아이디+예약시간+트레이너)
+       Iterator<BookDTO> iterator = gymbooklists.iterator();
+       while(iterator.hasNext()) {
+          String match = "[^\uAC00-\uD7A3xfe0-9a-zA-Z\\s]";
+          BookDTO dto = iterator.next();
+          String bookHour = dto.getBookHour().substring(0,13).replaceAll(match, "");
+          String faceLink = dto.getCusId();
+          faceLink += bookHour;
+          faceLink += dto.getGymTrainerPick();
+          dto.setFaceLink(faceLink);
+       }
+      // 리뷰리스트
+      List<ReviewDTO> gymreviewlists = dao.gymreviewgetList(reviewId);
 
-		////////////////////////////////////////////////////////////////////////
+      ////////////////////////////////////////////////////////////////////////
 
-		// 오늘 날짜 구하기
-		// 이전버튼키(◀)
-		int preYear = year;
-		int preMonth = month - 1;
-		if (preMonth < 1) {
-			preYear = year - 1;
-			preMonth = 12;
-		}
-		// 다음버튼키(▶)
-		int nextYear = year;
-		int nextMonth = month + 1;
-		if (nextMonth > 12) {
-			nextYear = year + 1;
-			nextMonth = 1;
-		}
+      // 오늘 날짜 구하기
+      // 이전버튼키(◀)
+      int preYear = year;
+      int preMonth = month - 1;
+      if (preMonth < 1) {
+         preYear = year - 1;
+         preMonth = 12;
+      }
+      // 다음버튼키(▶)
+      int nextYear = year;
+      int nextMonth = month + 1;
+      if (nextMonth > 12) {
+         nextYear = year + 1;
+         nextMonth = 1;
+      }
 
-		////////////////////////////////////////////////////////////////////////
+      ////////////////////////////////////////////////////////////////////////
 
-		request.setAttribute("gymbooklists", gymbooklists);
-		request.setAttribute("gymreviewlists", gymreviewlists);
-		request.setAttribute("gymdto", gymdto);
-		request.setAttribute("bookdataCount", bookdataCount);
-		request.setAttribute("year", year);
-		request.setAttribute("month", month);
-		request.setAttribute("preMonth", preMonth);
-		request.setAttribute("nextMonth", nextMonth);
-		request.setAttribute("preYear", preYear);
-		request.setAttribute("nextYear", nextYear);
-		
-		return "myPage/gymMyPage";
-	}
+      request.setAttribute("gymbooklists", gymbooklists);
+      request.setAttribute("gymreviewlists", gymreviewlists);
+      request.setAttribute("gymdto", gymdto);
+      request.setAttribute("bookdataCount", bookdataCount);
+      request.setAttribute("year", year);
+      request.setAttribute("month", month);
+      request.setAttribute("preMonth", preMonth);
+      request.setAttribute("nextMonth", nextMonth);
+      request.setAttribute("preYear", preYear);
+      request.setAttribute("nextYear", nextYear);
+      
+      return "myPage/gymMyPage";
+   }
 
 	// 유저 수정창으로 이동
 	@RequestMapping(value = "/customerUpdate.action", method = { RequestMethod.GET, RequestMethod.POST })
@@ -1343,7 +1343,7 @@ public class gypController {
 	// 제품상세 페이지
 	@RequestMapping(value = "/productDetail.action", method = { RequestMethod.GET, RequestMethod.POST })
 	public String productDetail(HttpServletRequest request) throws Exception {
-
+		
 		String cp = request.getContextPath();
 
 		// 넘어오는값
@@ -1365,7 +1365,12 @@ public class gypController {
 		} else if (request.getMethod().equalsIgnoreCase("GET")) {
 			searchValueWord = URLDecoder.decode(searchValueWord, "UTF-8");
 		}
-
+		
+		// 페이지 번호가 안넘어올때 (홈에서 상세 들어갈때)
+	    if(pageNum==null) {
+	    	pageNum="1";
+	    }
+		
 		// product 데이터 불러오기
 		ProductDTO dto = dao.getProductReadData(productId);
 

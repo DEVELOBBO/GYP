@@ -177,9 +177,10 @@ function SelectOrder(checkboxName) {
 	        <!-- 장바구니 기능 -->
 	        <div>
 	        	<form method="post" name="myForm" style="width: 1100px;">
+					
+				<c:if test="${!empty cartLists}">
 	        	<table style="font-size: 10pt; color: #888; width: 100%; border-radius: 10px;" border="0"
 					cellspacing="3" cellpadding="3">
-					<c:if test="${!empty cartLists}">
 						<tr style="font-size: 12pt; height: 80px;">
 							<td colspan="3">
 								&nbsp;&nbsp;&nbsp;<input type="checkbox" id="chkAll"
@@ -195,7 +196,6 @@ function SelectOrder(checkboxName) {
 								style="border-radius: 8px; min-width: 195px; height: 45px; margin: 10px 0; ">
 							</td>
 						</tr> 
-					</c:if>
 					
 					<tr style="text-align: center; height: 40px; background-color: #38b143; color: white; font-size: 16px;">
 						<th colspan="2" width="150" align="center">선택</th>
@@ -205,10 +205,16 @@ function SelectOrder(checkboxName) {
 						<th width="150">상품가격</th>
 						<th width="300"></th>
 					</tr>
+					</c:if>
 
 					<!-- 장바구니 비었을때 -->
 	        	<c:if test="${empty cartLists}">
-					<tr><td><font color="#F23D4C">담은 물건이 없습니다!</font></td></tr>
+	        		<table style="font-size: 10pt; color: #888; width: 100%; border-radius: 10px;" border="0"
+					cellspacing="3" cellpadding="3">
+						<tr height="40px;">
+						<td colspan="7" align="center" style="font-size: 15pt; color:#999;">
+						&nbsp;담은 물건이 없습니다!</td></tr>
+					</table>
 				</c:if>
 				
 				<!-- 장바구니 안비었을때 -->

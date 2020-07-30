@@ -49,7 +49,7 @@
 	<!-- for file upload ,CHAEJONG -->
 	<beans:bean id="multipartResolver" 
             class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-            <beans:property name="maxUploadSize" value="10240000" /><!-- fileSize -->
+            <beans:property name="maxUploadSize" value="10240000000" /><!-- fileSize -->
             <beans:property name="maxInMemorySize" value="1024000"/><!-- bufferSize -->
             <beans:property name="defaultEncoding" value="utf-8"/>
     </beans:bean>
