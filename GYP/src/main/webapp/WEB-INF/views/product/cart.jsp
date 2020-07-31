@@ -244,7 +244,7 @@ function SelectOrder(checkboxName) {
 										color:#F23D4C; font-size: 20pt; font-family: 'Do Hyeon', sans-serif;
 										vertical-align: middle;" onkeydown ='return onlyNumber(event)' 
 										onkeyup ='removeChar(event)'/> --%>
-								<input class="form-control" type="number" name="count${cart.cartNum}" value="${cart.count}"
+								<input class="form-control" type="number" name="count${cart.cartNum}" value="${cart.count}" min="1" max="100"
 									style="text-align: center; font-size: 13pt; vertical-align: middle; width: 75px; border: 3px solid #38b143; 
 									border-radius: 10px; padding-left: 25px;">
 							</td>

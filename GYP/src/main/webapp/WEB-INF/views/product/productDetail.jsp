@@ -108,34 +108,6 @@
 		f.submit();
 	}
 	
-	
-	$(function(){
-		
-		var oldVal = $("#count-product").val();
-		var proPrice = $("#price").val();
-		
-		$("#count-product").on("propertychange change keyup paste input", function() {
-		    var currentVal = $(this).val();
-		    if(currentVal == oldVal) {
-		        return;
-		    }
-		 
-		    oldVal = currentVal;
-		    
-		    if(oldVal<1){
-		    	alert("1개이상의 상품을 구매하셔야 합니다");
-		    	$("#count-product").val(1);
-		    	return;
-		    }
-		    
-		    var result = oldVal * proPrice;
-		    	
-		    $("#tot-product").val(result + "원");
-		    
-		});
-	});
-	
-	
 </script>
 
 <title>GYP</title>
@@ -183,7 +155,7 @@
 							<!-- 가격 --> 
 							<div style="display: inline-block; width: 100%; vertical-align: middle;">
 								<div style="display: inline-block;">
-								<input class="form-control" type="number" value="1" name="count" id="count-product"
+								<input class="form-control" type="number" value="1" name="count" id="count-product" min="1" max="100"
 									style="text-align: center; width:100px; font-size: 15pt; vertical-align: middle; 
 									padding-left: 22px;"></div>
 								<div style="display: inline-block;"><font style="font-size: 20px;">&nbsp;&nbsp;개</font></div>
@@ -199,7 +171,7 @@
 							<!-- 총 상품 금액 -->
 							<div class="row" style="display: inline-block; width:100%; vertical-align: middle; float:right; padding-right: 15px;">
 									<font  type="text" id="tot-product" readonly="readonly" 
-									style="text-align: right; font-size: 30pt; vertical-align: middle; border: none; 
+									style="text-align: right; font-size: 30pt; vertical-align: middle; border: none;
 									background-color: white; color: #38b143; font-weight: bold; padding-right: 0; float: right;">  
 									<font style="text-align: right; font-size: 15pt; color: gray; font-weight: lighter;">
 									총 금액</font>&nbsp;&nbsp;${dto.productPrice }원</font>

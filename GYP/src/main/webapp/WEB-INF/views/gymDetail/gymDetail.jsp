@@ -387,7 +387,7 @@
                             
 							<c:forEach var="i" begin="1" end="${gymPic.size() }">
 								<div class="column1">
-								<img src="/gyp/sfiles/gymPic/${gymPic[i-1] }" style="width:100%" onclick="openModal();currentSlide(${i})" class="hover-shadow cursor">
+								<img src="/gyp/sfiles/gymPic/${gymPic[i-1] }" style="width:150px; height: 100px; overflow: hidden;" onclick="openModal();currentSlide(${i})" class="hover-shadow cursor">
 								</div>
 								<c:if test="i%2==0">
 									</div><div class="row">

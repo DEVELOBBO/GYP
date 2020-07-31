@@ -341,42 +341,42 @@ $(function() {
     
   	//수정일때
     if(f.mode.value == 'updated') {
-	    if (f.trainerName1.value != "" && f.newTrainerImage1.value == "") {
+	    if (f.trainerName1.value != "" && f.newTrainerImage1.value == "" && !f.oldTrainerImage1.value) {
 	       alert("1번째 트레이너 사진을 입력해주세요!");
 	       f.gymTrainer1.focus();
 	       return;
 	    }
-	    if (f.trainerName1.value == "" && f.newTrainerImage1.value != "") {
+	    if (f.trainerName1.value == "" && f.newTrainerImage1.value != "" && !f.oldTrainerImage1.value) {
 	       alert("1번째 트레이너명을 입력하세요 (최소1명 이상).");
 	       f.gymTrainer1.focus();
 	       return;
 	    }
-	    if (f.trainerName2.value != "" && f.newTrainerImage2.value == "") {
+	    if (f.trainerName2.value != "" && f.newTrainerImage2.value == "" && !f.oldTrainerImage2.value) {
 	       alert("2번째 트레이너 사진을 입력해주세요!");
 	       f.gymTrainer2.focus();
 	       return;
 	    }
-	    if (f.trainerName2.value == "" && f.newTrainerImage2.value != "") {
+	    if (f.trainerName2.value == "" && f.newTrainerImage2.value != "" && !f.oldTrainerImage2.value) {
 	       alert("2번째 트레이너명을 입력하세요 (최소1명 이상).");
 	       f.gymTrainer2.focus();
 	       return;
 	    }
-	    if (f.trainerName3.value != "" && f.newTrainerImage3.value == "") {
+	    if (f.trainerName3.value != "" && f.newTrainerImage3.value == "" && !f.oldTrainerImage3.value) {
 	       alert("3번째 트레이너 사진을 입력해주세요!");
 	       f.gymTrainer3.focus();
 	       return;
 	    }
-	    if (f.trainerName3.value == "" && f.newTrainerImage3.value != "") {
+	    if (f.trainerName3.value == "" && f.newTrainerImage3.value != "" && !f.oldTrainerImage3.value) {
 	       alert("3번째트레이너명을 입력하세요 (최소1명 이상).");
 	       f.gymTrainer3.focus();
 	       return;
 	    }
-	    if (f.trainerName4.value != "" && f.newTrainerImage4.value == "") {
+	    if (f.trainerName4.value != "" && f.newTrainerImage4.value == "" && !f.oldTrainerImage4.value ) {
 	       alert("4번째 트레이너 사진을 입력해주세요!");
 	       f.gymTrainer4.focus();
 	       return;
 	    }
-	    if (f.trainerName4.value == "" && f.newTrainerImage4.value != "") {
+	    if (f.trainerName4.value == "" && f.newTrainerImage4.value != "" && !f.oldTrainerImage4.value) {
 	       alert("4번째 트레이너명을 입력하세요 (최소1명 이상).");
 	       f.gymTrainer4.focus();
 	       return;
@@ -389,7 +389,7 @@ $(function() {
 	    }
 	
     	//체육관 사진등록 제약조건 (최소1장이상)
-	    if (!f.newGymImage1.value) {
+	    if (!f.newGymImage1.value && !f.oldGymImage1.value) {
 	       alert("첫번째 체육관 사진등록을 해주세요 (최소 1장이상)");
 	       f.uploads2[0].focus();
 	       return;

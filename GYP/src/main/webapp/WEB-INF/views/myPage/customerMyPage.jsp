@@ -277,7 +277,7 @@
 	           <c:forEach var="jjimdto" items="${ jjimlists }">
 	           	<tr class="tr_white" style="text-align: center; height: 40px;">
 	                 <td><a class="bokyung_mypage_link"
-	                 href="location.href='/gyp/gymDetail.action?gymId=${jjimdto.gymId}'">${jjimdto.gymName}</a></td>
+	                 href="/gyp/gymDetail.action?gymId=${jjimdto.gymId}">${jjimdto.gymName}</a></td>
 	                 <td>${jjimdto.gymAddr}</td>
 	                 <td>${jjimdto.gymTel}</td>
 	                 <td><a href="<%=cp %>/jjimDelete.action?gymId=${jjimdto.gymId}" class="bokyung_mypage_link_D">삭제</a></td>
