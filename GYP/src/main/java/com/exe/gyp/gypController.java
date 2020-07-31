@@ -1940,7 +1940,7 @@ public class gypController {
 		if(info!=null) {
 			request.setAttribute("info", info);
 		}
-      
+		
 		if(gymId==null||gymId.equals("")) {
 			gymId = request.getParameter("gymId");
 		}
@@ -1958,20 +1958,16 @@ public class gypController {
 		} else {
 			pageNum = "1";
 		}
-      
+		
 		//전체 데이터 갯수
 		totalDataCount = dao.getReviewNum(gymId);
-      
-		if(totalDataCount==0) {
-			request.setAttribute("totalDataCount",totalDataCount);
-			return "gymDetail/reviewList";
-		}
-      
+		
+		
 		totalPage = myUtil.getPageCount(numPerPage, totalDataCount);
       
 		if(currentPage>totalPage) {
 			currentPage = totalPage;
-		}
+		}   
       
 		Map<String, Object> hMap = new HashMap<String, Object>();
       
@@ -1998,7 +1994,7 @@ public class gypController {
 		}
       
 		String pageIndexList = myUtil.pageIndexList(currentPage, totalPage);
-      
+		
 		if(info!=null) {
 			request.setAttribute("info", info);
 			String cusInfo = info.getSessionId();
@@ -2013,12 +2009,16 @@ public class gypController {
 			int timesCusReviewedGym = dao.getTimesCusReviewedGym(hMap);
 			request.setAttribute("timesCusReviewedGym", timesCusReviewedGym);
 		}
-      
+		
+		if(totalDataCount==0) {
+			request.setAttribute("totalDataCount",totalDataCount);
+			return "gymDetail/reviewList";
+		}
 		request.setAttribute("reviewLists", lists);
 		request.setAttribute("pageIndexList",pageIndexList);
 		request.setAttribute("pageNum",pageNum);
 		request.setAttribute("totalDataCount",totalDataCount);
-      
+		
 		return "gymDetail/reviewList";
 	}
 
